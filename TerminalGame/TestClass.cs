@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+
+namespace TerminalGame
+{
+    class TestClass
+    {
+        private static Random rnd = new Random(DateTime.Now.Millisecond);
+        private static string[] strings = new string[] { "Test", "Hello", "WATMAN", "lol pixelated text" };
+
+        public static string PrintStuff()
+        {
+            return strings[rnd.Next(0, strings.Length)];
+        }
+
+        public static int ShakeStuff(int Interval)
+        {
+            return rnd.Next(-Interval, Interval + 1);
+        }
+    }
+}

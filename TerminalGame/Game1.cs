@@ -11,11 +11,16 @@ namespace TerminalGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        
+        SpriteFont testFont;
+
+        string GameTitle;
+        string testString;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            GameTitle = "Terminal Game";
         }
 
         /// <summary>
@@ -27,7 +32,7 @@ namespace TerminalGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            this.Window.Title = GameTitle;
             base.Initialize();
         }
 
@@ -39,6 +44,9 @@ namespace TerminalGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            testFont = Content.Load<SpriteFont>("Fonts/Roboto-Regular");
+
+            testString = TestClass.PrintStuff();
 
             // TODO: use this.Content to load your game content here
         }
@@ -76,6 +84,12 @@ namespace TerminalGame
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+
+            spriteBatch.Begin();
+            Vector2 textMiddlePoint = testFont.MeasureString(testString) / 2;
+            Vector2 position = new Vector2(Window.ClientBounds.Width / 2 + TestClass.ShakeStuff(2), Window.ClientBounds.Height / 2 + TestClass.ShakeStuff(2));
+            spriteBatch.DrawString(testFont, testString, position, Color.White, 0, textMiddlePoint, 5.0f, SpriteEffects.None, 0.5f);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
