@@ -10,7 +10,6 @@ namespace TerminalGame
 {
     class TestParser
     {
-        Utilities.KeyboardManager keyMan;
         StringBuilder sb;
         List<string> parseOut;
         KeyboardState previousState;
@@ -19,7 +18,6 @@ namespace TerminalGame
             sb = new StringBuilder();
             parseOut = new List<string>();
             previousState = Keyboard.GetState();
-            keyMan = new Utilities.KeyboardManager(game);
         }
 
         public List<string> Parse(KeyboardState state)
