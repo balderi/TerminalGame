@@ -16,10 +16,47 @@
 #begin Fonts/Roboto-Regular.ttf
 /copy:Fonts/Roboto-Regular.ttf
 
-#begin Fonts/Roboto-Regular.spritefont
+#begin Fonts/Roboto-Regular-20pt.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:Fonts/Roboto-Regular.spritefont
+/build:Fonts/Roboto-Regular-20pt.spritefont
+
+#begin Fonts/F25_Bank_Printer.ttf
+/copy:Fonts/F25_Bank_Printer.ttf
+
+#begin Fonts/jackinput.ttf
+/copy:Fonts/jackinput.ttf
+
+#begin Fonts/whiterabbit.ttf
+/copy:Fonts/whiterabbit.ttf
+
+#begin Fonts/WhiteRabbitRegular12pt.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/WhiteRabbitRegular12pt.spritefont
+
+#begin Fonts/f25regular12pt.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/f25regular12pt.spritefont
+
+#begin Fonts/JackInputRegular12pt.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/JackInputRegular12pt.spritefont
+
+#begin Fonts/terminalFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/terminalFont.spritefont
 

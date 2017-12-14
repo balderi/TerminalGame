@@ -10,7 +10,7 @@ namespace TerminalGame
     class TestClass
     {
         private static Random rnd = new Random(DateTime.Now.Millisecond);
-        private static string[] strings = new string[] { "Test", "Hello", "WATMAN", "lol pixelated text" };
+        private static string[] strings = new string[] { "Test", "Hello", "WATMAN", "shaky text lol" };
 
         public static string PrintStuff()
         {
