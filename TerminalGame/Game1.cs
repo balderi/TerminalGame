@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
 using TerminalGame.Utilities.TextHandler;
 
@@ -13,20 +14,21 @@ namespace TerminalGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        SpriteBatch outputSprites;
 
         private TextBox terminalInput;
-        private TextBox terminalOutput;
-        private SpriteFont font;
+        //private TextBox terminalOutput;
+        private SpriteFont font, fontXL, testfont;
         private Rectangle inputViewport;
         private Rectangle outputViewport;
+
+        private Song bgm;
 
         TestParser parser;
 
         int linesToDraw;
-
-        SpriteFont testFont;
-        string GameTitle;
-        string testString;
+        
+        string GameTitle, testString, terminalOutput;
 
         string outPrepend;
 
@@ -37,7 +39,7 @@ namespace TerminalGame
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             GameTitle = "Terminal Game";
-
+            this.IsFixedTimeStep = false;
         }
 
         /// <summary>
@@ -48,15 +50,24 @@ namespace TerminalGame
         /// </summary>
         protected override void Initialize()
         {
-            System.Console.WriteLine("Initializing...");
+            //System.Console.WriteLine("Initializing...");
             // TODO: Add your initialization logic here
             IsMouseVisible = true;
             KeyboardInput.Initialize(this, 500f, 20);
             Window.Title = GameTitle;
             parser = new TestParser(this);
             outPrepend = "root@localhost > ";
+            outPrepend = "> ";
+            terminalOutput = "";
+
+            //Set game to fullscreen
+            //graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            //graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            //graphics.IsFullScreen = true;
+            //graphics.ApplyChanges();
+
             base.Initialize();
-            System.Console.WriteLine("Done initializing");
+            //System.Console.WriteLine("Done initializing");
         }
 
         /// <summary>
@@ -65,41 +76,61 @@ namespace TerminalGame
         /// </summary>
         protected override void LoadContent()
         {
-            System.Console.WriteLine("Loading content...");
+            //System.Console.WriteLine("Loading content...");
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            outputSprites = new SpriteBatch(GraphicsDevice);
 
             font = Content.Load<SpriteFont>("Fonts/terminalFont");
+            fontXL = Content.Load<SpriteFont>("Fonts/terminalFontXL");
+            testfont = Content.Load<SpriteFont>("Fonts/terminalFontXS");
 
-            inputViewport = new Rectangle(15, graphics.PreferredBackBufferHeight - 20, 400, (int)(font.MeasureString("MEASURE ME").Y * 1.1));
+            inputViewport = new Rectangle(19, graphics.PreferredBackBufferHeight - 20, 400, (int)(font.MeasureString("MEASURE ME").Y * 1.1));
             terminalInput = new TextBox(inputViewport, 44, "", GraphicsDevice, font, Color.LightGray, Color.DarkGreen, 30);
 
-            outputViewport = new Rectangle(5, 5, 400, (int)inputViewport.Y - 10);
-            terminalOutput = new TextBox(outputViewport, 2048, "", GraphicsDevice, font, Color.LightGray, Color.DarkGreen, 30);
-
-            testFont = Content.Load<SpriteFont>("Fonts/Roboto-Regular-20pt");
+            outputViewport = new Rectangle(5, 5, 600, graphics.PreferredBackBufferHeight - inputViewport.Height);
+            
             testString = TestClass.PrintStuff();
 
             linesToDraw = (int)(outputViewport.Height / font.MeasureString("MEASURE THIS").Y);
 
             history = new List<string>(new string[linesToDraw]);
 
+            bgm = Content.Load<Song>("Audio/Music/bgm");
+            MediaPlayer.Play(bgm);
+
             terminalInput.EnterDown += OnEnterDown;
 
+            //terminalInput.Text.String = "root@localhost";
+
+
+            float margin = 3;
+            terminalInput.Area = new Rectangle((int)(inputViewport.X + margin), inputViewport.Y, (int)(inputViewport.Width - margin), inputViewport.Height);
+            terminalInput.Renderer.Color = Color.LightGray;
+            terminalInput.Cursor.Selection = new Color(Color.PeachPuff, .4f);
+            
+            terminalInput.Active = true;
+            
             // TODO: use this.Content to load your game content here
-            System.Console.WriteLine("Done loading");
+            //System.Console.WriteLine("Done loading");
         }
         
         void OnEnterDown(object sender, KeyboardInput.KeyEventArgs e)
         {
-            if (terminalInput.Text.String != "")
-            {
-                history.Add(outPrepend + terminalInput.Text.String);
-                System.Console.WriteLine("CMD: " + terminalInput.Text.String);
-            }
+            history.Add(outPrepend + terminalInput.Text.String);
+            //System.Console.WriteLine("CMD: " + terminalInput.Text.String);
             if (history.Count > linesToDraw)
             {
                 history.RemoveAt(0);
+            }
+            if (history.Count > 0)
+            {
+                string holder = "";
+                foreach (string s in history)
+                {
+                    holder += s + "\n";
+                }
+                terminalOutput = holder;
             }
             terminalInput.Clear();
         }
@@ -126,38 +157,14 @@ namespace TerminalGame
             // TODO: Add your update logic here
 
             KeyboardInput.Update();
-
-            float margin = 3;
-            terminalInput.Area = new Rectangle((int)(inputViewport.X + margin), inputViewport.Y, (int)(inputViewport.Width - margin), inputViewport.Height);
-            terminalInput.Renderer.Color = Color.White;
-            terminalInput.Cursor.Selection = new Color(Color.Purple, .4f);
-
-            terminalOutput.Area = new Rectangle((int)(outputViewport.X + margin), outputViewport.Y, (int)(outputViewport.Width - margin), outputViewport.Height);
-            terminalOutput.Renderer.Color = Color.White;
-            terminalOutput.Cursor.Selection = new Color(Color.Purple, .4f);
-
-
+            
             float lerpAmount = (float)(gameTime.TotalGameTime.TotalMilliseconds % 500f / 500f);
             terminalInput.Cursor.Color = Color.Lerp(Color.DarkGray, Color.LightGray, lerpAmount);
 
-            terminalInput.Active = true;
-            terminalOutput.Active = false;
-            
-            if(history.Count > 0)
-            {
-                string holder = "";
-                foreach(string s in history)
-                {
-                    holder += s + "\n";
-                }
-                terminalOutput.Text.String = holder;
-            }
-
             terminalInput.Update();
-            terminalOutput.Update();
 
             testString = terminalInput.Text.String;
-
+                        
             base.Update(gameTime);
         }
 
@@ -168,25 +175,32 @@ namespace TerminalGame
         protected override void Draw(GameTime gameTime)
         {
             //GraphicsDevice.Clear(Color.CornflowerBlue);
-            GraphicsDevice.Clear(Color.Black);
+            //GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.TransparentBlack);
 
             // TODO: Add your drawing code here
 
+            var fps = 1 / gameTime.ElapsedGameTime.TotalSeconds;
+
+            Window.Title = fps.ToString() + " " + gameTime.ElapsedGameTime.Ticks.ToString();
+
             spriteBatch.Begin();
-
-
+            
             Vector2 position = new Vector2(Window.ClientBounds.Width / 2 + TestClass.ShakeStuff(1), Window.ClientBounds.Height / 2 + TestClass.ShakeStuff(1));
-            Vector2 textMiddlePoint = testFont.MeasureString(testString) / 2;
+            Vector2 textMiddlePoint = fontXL.MeasureString(testString) / 2;
             Vector2 position2 = new Vector2(Window.ClientBounds.Width / 2 + TestClass.ShakeStuff(3), Window.ClientBounds.Height / 2 + TestClass.ShakeStuff(3));
             Vector2 caretPos = new Vector2(8, graphics.PreferredBackBufferHeight - 20);
-            spriteBatch.DrawString(testFont, testString, position2, Color.DarkGray, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
-            spriteBatch.DrawString(testFont, testString, position, Color.LightGray, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
+            spriteBatch.DrawString(fontXL, testString, position2, Color.ForestGreen, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
+            spriteBatch.DrawString(fontXL, testString, position, Color.LightGray, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
             
             spriteBatch.DrawString(font, "> ", caretPos, Color.LightGray, 0, new Vector2(0f), 1.0f, SpriteEffects.None, 0.5f);
 
             terminalInput.Draw(spriteBatch);
-            terminalOutput.Draw(spriteBatch);
             spriteBatch.End();
+
+            outputSprites.Begin();
+            outputSprites.DrawString(font, terminalOutput, new Vector2(outputViewport.X + 3, outputViewport.Y), Color.LightGray);
+            outputSprites.End();
 
             base.Draw(gameTime);
         }
