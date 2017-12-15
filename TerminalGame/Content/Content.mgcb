@@ -47,3 +47,17 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/terminalFontXS.spritefont
 
+#begin Fonts/terminalFontT.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/terminalFontT.spritefont
+
+#begin Fonts/terminalFontL.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/terminalFontL.spritefont
+

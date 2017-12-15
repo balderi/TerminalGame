@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
+using TerminalGame.Utilities;
 using TerminalGame.Utilities.TextHandler;
 
 namespace TerminalGame
@@ -39,7 +40,7 @@ namespace TerminalGame
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             GameTitle = "Terminal Game";
-            this.IsFixedTimeStep = false;
+            this.IsFixedTimeStep = true;
         }
 
         /// <summary>
@@ -50,9 +51,9 @@ namespace TerminalGame
         /// </summary>
         protected override void Initialize()
         {
-            //System.Console.WriteLine("Initializing...");
+            System.Console.WriteLine("Initializing...");
             // TODO: Add your initialization logic here
-            IsMouseVisible = true;
+            IsMouseVisible = false;
             KeyboardInput.Initialize(this, 500f, 20);
             Window.Title = GameTitle;
             parser = new TestParser(this);
@@ -67,7 +68,7 @@ namespace TerminalGame
             //graphics.ApplyChanges();
 
             base.Initialize();
-            //System.Console.WriteLine("Done initializing");
+            System.Console.WriteLine("Done initializing");
         }
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace TerminalGame
         /// </summary>
         protected override void LoadContent()
         {
-            //System.Console.WriteLine("Loading content...");
+            System.Console.WriteLine("Loading content...");
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             outputSprites = new SpriteBatch(GraphicsDevice);
@@ -94,7 +95,13 @@ namespace TerminalGame
 
             linesToDraw = (int)(outputViewport.Height / font.MeasureString("MEASURE THIS").Y);
 
-            history = new List<string>(new string[linesToDraw]);
+            System.Console.WriteLine("INIT: 0x000000" + linesToDraw);
+
+            history = new List<string>();
+            for(int i = 0; i < linesToDraw + 1; i++)
+            {
+                history.Add("\n");
+            }
 
             bgm = Content.Load<Song>("Audio/Music/bgm");
             MediaPlayer.Play(bgm);
@@ -112,23 +119,33 @@ namespace TerminalGame
             terminalInput.Active = true;
             
             // TODO: use this.Content to load your game content here
-            //System.Console.WriteLine("Done loading");
+            System.Console.WriteLine("Done loading");
         }
         
         void OnEnterDown(object sender, KeyboardInput.KeyEventArgs e)
         {
-            history.Add(outPrepend + terminalInput.Text.String);
-            //System.Console.WriteLine("CMD: " + terminalInput.Text.String);
-            if (history.Count > linesToDraw)
+            string o = CommandParser.ParseCommand(terminalInput.Text.String);
+            history.Add(outPrepend + terminalInput.Text.String + "\n");
+            if(o != "")
+                history.Add(o);
+            System.Console.WriteLine("CMD: " + terminalInput.Text.String);
+            //if (history.Count > linesToDraw)
+            //{
+            //    history.RemoveAt(0);
+            //}
+            int counter = 0;
+            while(history.Count > linesToDraw)
             {
                 history.RemoveAt(0);
+                counter++;
             }
+            System.Console.WriteLine("Purged " + counter + " lines from history");
             if (history.Count > 0)
             {
                 string holder = "";
                 foreach (string s in history)
                 {
-                    holder += s + "\n";
+                    holder += s;
                 }
                 terminalOutput = holder;
             }
@@ -175,14 +192,9 @@ namespace TerminalGame
         protected override void Draw(GameTime gameTime)
         {
             //GraphicsDevice.Clear(Color.CornflowerBlue);
-            //GraphicsDevice.Clear(Color.Black);
-            GraphicsDevice.Clear(Color.TransparentBlack);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
-
-            var fps = 1 / gameTime.ElapsedGameTime.TotalSeconds;
-
-            Window.Title = fps.ToString() + " " + gameTime.ElapsedGameTime.Ticks.ToString();
 
             spriteBatch.Begin();
             
