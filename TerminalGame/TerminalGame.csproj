@@ -50,7 +50,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestClass.cs" />
-    <Compile Include="TestParser.cs" />
     <Compile Include="Utilities\CommandParser.cs" />
     <Compile Include="Utilities\TextHandler\Cursor.cs" />
     <Compile Include="Utilities\TextHandler\Extensions.cs" />

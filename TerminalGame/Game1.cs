@@ -24,8 +24,7 @@ namespace TerminalGame
         private Rectangle outputViewport;
 
         private Song bgm;
-
-        TestParser parser;
+        
 
         int linesToDraw;
         
@@ -56,7 +55,6 @@ namespace TerminalGame
             IsMouseVisible = false;
             KeyboardInput.Initialize(this, 500f, 20);
             Window.Title = GameTitle;
-            parser = new TestParser(this);
             outPrepend = "root@localhost > ";
             outPrepend = "> ";
             terminalOutput = "";
