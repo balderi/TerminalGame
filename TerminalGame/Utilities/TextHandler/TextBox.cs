@@ -45,7 +45,7 @@ namespace TerminalGame.Utilities.TextHandler
                 Color = Color.Black
             };
 
-            Cursor = new Cursor(this, cursorColor, selectionColor, new Rectangle(0, 0, 1, 1), ticksPerToggle);
+            Cursor = new Cursor(this, cursorColor, selectionColor, new Rectangle(0, 5, (int)spriteFont.MeasureString("_").Length()/2, (int)spriteFont.MeasureString("_").Length() / 2), ticksPerToggle);
 
             KeyboardInput.CharPressed += CharacterTyped;
             KeyboardInput.KeyPressed += KeyPressed;
@@ -155,6 +155,26 @@ namespace TerminalGame.Utilities.TextHandler
                                         Cursor.TextCursor++;
                                     }
                                 }
+                            }
+                        }
+                        break;
+                    case Keys.D2:
+                        if(KeyboardInput.CtrlDown && KeyboardInput.AltDown)
+                        {
+                            if (Text.Length < Text.MaxLength)
+                            {
+                                Text.InsertCharacter(Cursor.TextCursor, '@');
+                                Cursor.TextCursor++;
+                            }
+                        }
+                        break;
+                    case Keys.D4:
+                        if (KeyboardInput.CtrlDown && KeyboardInput.AltDown)
+                        {
+                            if (Text.Length < Text.MaxLength)
+                            {
+                                Text.InsertCharacter(Cursor.TextCursor, '$');
+                                Cursor.TextCursor++;
                             }
                         }
                         break;

@@ -36,13 +36,29 @@ namespace TerminalGame.Utilities
                     {
                         if (data.Length > 1)
                         {
-                            return data[1].Trim('"') + "\n";
+                            return command.Split('"')[1] + "\n";
                         }
                         return "\n";
                     }
                 case "sudo":
                     {
                         return data[0] + ": username is not in the sudoers file. This incident will be reported.\n";
+                    }
+                case "rm":
+                    {
+                        if (data.Length > 1)
+                        {
+                            return data[0] + ": cannot remove \'" + data[1] + "\': no such file or directory\n";
+                        }
+                        return data[0] + ": missing operand\n";
+                    }
+                case "man":
+                    {
+                        if (data.Length > 1)
+                        {
+                            return "No manual entry for " + data[1] + "\n";
+                        }
+                        return "What manual page do you want?\n";
                     }
                 default:
                     return data[0] + ": command not found\n";
