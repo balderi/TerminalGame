@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TerminalGame.Utilities
+﻿namespace TerminalGame.Utilities
 {
     public static class CommandParser
     {
@@ -19,6 +13,7 @@ namespace TerminalGame.Utilities
                     {
                         return "I'm sorry Dave, I'm afraid I can't do that.\n";
                     }
+                case "":
                 case "ls":
                     {
                         return "";

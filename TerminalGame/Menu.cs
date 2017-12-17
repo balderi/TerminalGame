@@ -1,19 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
-using TerminalGame.Utilities;
-using TerminalGame.Utilities.TextHandler;
 using TerminalGame.UI;
-using System;
 
 namespace TerminalGame
 {
     class Menu
     {
         public delegate void ButtonPressedEventHandler(ButtonPressedEventArgs e);
-        List<Button> buttons;
+        List<MainMenuButton> buttons;
         public event ButtonPressedEventHandler ButtonClicked;
 
         private string gameTitle;
@@ -28,26 +23,26 @@ namespace TerminalGame
             int height = 50;
             int counter = 0;
 
-            Button newGame = new Button("New Game", width, height, font, graphics)
+            MainMenuButton newGame = new MainMenuButton("New Game", width, height, font, graphics)
             {
             };
-            Button loadGame = new Button("Load Game", width, height, font, graphics)
+            MainMenuButton loadGame = new MainMenuButton("Load Game", width, height, font, graphics)
             {
             };
-            Button settings = new Button("Settings", width, height, font, graphics)
+            MainMenuButton settings = new MainMenuButton("Settings", width, height, font, graphics)
             {
             };
-            Button quit = new Button("Quit Game", width, height, font, graphics)
+            MainMenuButton quit = new MainMenuButton("Quit Game", width, height, font, graphics)
             {
             };
-            buttons = new List<Button>()
+            buttons = new List<MainMenuButton>()
             {
                 newGame,
                 loadGame,
                 settings,
                 quit,
             };
-            foreach(Button b in buttons)
+            foreach(MainMenuButton b in buttons)
             {
                 b.Position = new Vector2(leftMargin, (topMargin + counter * height + counter * spacing));
                 counter++;
@@ -80,7 +75,7 @@ namespace TerminalGame
 
         public void Update()
         {
-            foreach (Button b in buttons)
+            foreach (MainMenuButton b in buttons)
             {
                 b.Update();
             }
@@ -93,7 +88,7 @@ namespace TerminalGame
             spriteBatch.DrawString(Font, gameTitle, position2, Color.Green, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
             spriteBatch.DrawString(Font, gameTitle, position, Color.LightGray, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
 
-            foreach (Button b in buttons)
+            foreach (MainMenuButton b in buttons)
             {
                 b.Draw(spriteBatch);
             }

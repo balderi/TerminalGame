@@ -1,75 +1,68 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using System.Collections.Generic;
-using TerminalGame.Utilities;
-using TerminalGame.Utilities.TextHandler;
 using System;
+using TerminalGame.Utilities;
 
 namespace TerminalGame.UI
 {
-    class Button : Component
+    public class Button : Component
     {
         private MouseState currentMouseState, previousMouseState;
-        private bool isHovering;
-        private SpriteFont font;
-        private string text;
-        private GraphicsDevice graphics;
-        private int width, height;
+        private bool isHovering, isClicked;
         private Texture2D texture;
+        private SpriteFont font;
+        private Color fontColor, backColor, hoverColor, activeColor, currentColor;
+        private Rectangle container;
+        private string text;
 
         public delegate void ButtonPressedEventHandler(ButtonPressedEventArgs e);
         public event ButtonPressedEventHandler Click;
-        public bool Clicked { get; private set; }
-        public Color FontColor { get; set; }
-        public Vector2 Position { get; set; }
-        public Rectangle Rectangle
-        {
-            get
-            {
-                return new Rectangle((int)Position.X, (int)Position.Y, width, height);
-            }
-        }
-        public string Text { get; set; }
-        
-        public Button(string Text, int Width, int Height, SpriteFont Font, GraphicsDevice GraphicsDevice)
-        {
-            font = Font;
-            text = Text;
-            width = Width;
-            height = Height;
-            graphics = GraphicsDevice;
+        public Vector2 Position { get; }
 
-            texture = Drawing.DrawBlankTexture(graphics);
-            FontColor = Color.Black;
+        public Button(string Text, Rectangle Container, SpriteFont Font, Color FontColor, Color BackColor, Color HoverColor, Color ActiveColor, GraphicsDevice GraphicsDevice)
+        {
+            text = Text;
+            container = Container;
+            font = Font;
+            fontColor = FontColor;
+            backColor = BackColor;
+            hoverColor = HoverColor;
+            activeColor = ActiveColor;
+            texture = Drawing.DrawBlankTexture(GraphicsDevice);
+        }
+
+        public Button(string Text, Rectangle Container, SpriteFont Font, GraphicsDevice GraphicsDevice)
+        {
+            text = Text;
+            container = Container;
+            font = Font;
+            fontColor = Color.Black;
+            backColor = Color.Gray;
+            hoverColor = Color.LightGray;
+            activeColor = Color.DarkGray;
+            texture = Drawing.DrawBlankTexture(GraphicsDevice);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            var color = Color.DarkGray;
-
-            if(isHovering)
+            currentColor = backColor;
+            if (isHovering)
             {
-                color = Color.LightGray;
+                currentColor = hoverColor;
+                if (isClicked)
+                    currentColor = activeColor;
             }
-
+            
             if(!string.IsNullOrEmpty(text))
             {
-                var x = (Rectangle.X + 15);
-                var y = (Rectangle.Y + (Rectangle.Height / 2)) - ((font.MeasureString(text).Y / 2) - 5);
+                int stringHeight = (int)font.MeasureString(text).Y;
+                int stringWidth = (int)font.MeasureString(text).X;
+                var x = container.X + (container.Width / 2 - stringWidth / 2);
+                var y = container.Y + (container.Height / 2 - stringHeight / 2);
 
-                if(isHovering)
-                {
-                    spriteBatch.Draw(texture, new Rectangle(Rectangle.X + 2 + TestClass.ShakeStuff(3), Rectangle.Y + 2 + TestClass.ShakeStuff(3), Rectangle.Width - 4, Rectangle.Height - 4), Color.Green);
-                }
-                else
-                {
-                    spriteBatch.Draw(texture, Rectangle, Color.Gray);
-                }
-                spriteBatch.Draw(texture, new Rectangle(Rectangle.X + 2, Rectangle.Y + 2, Rectangle.Width - 4, Rectangle.Height - 4), color);
-
-                spriteBatch.DrawString(font, text, new Vector2(x, y), Color.Black);
+                spriteBatch.Draw(texture, container, currentColor);
+                spriteBatch.DrawString(font, text, new Vector2(x, y), fontColor);
             }
         }
 
@@ -81,12 +74,16 @@ namespace TerminalGame.UI
             var mouseRectangle = new Rectangle(currentMouseState.X, currentMouseState.Y, 1, 1);
 
             isHovering = false;
+            isClicked = false;
 
-            if(mouseRectangle.Intersects(Rectangle))
+            if (mouseRectangle.Intersects(container))
             {
                 isHovering = true;
 
-                if(currentMouseState.LeftButton == ButtonState.Released && previousMouseState.LeftButton == ButtonState.Pressed)
+                if(currentMouseState.LeftButton == ButtonState.Pressed)
+                    isClicked = true;
+
+                if (currentMouseState.LeftButton == ButtonState.Released && previousMouseState.LeftButton == ButtonState.Pressed)
                 {
                     ButtonPressedEventArgs bp = new ButtonPressedEventArgs()
                     {
@@ -97,6 +94,7 @@ namespace TerminalGame.UI
             }
         }
     }
+
     public class ButtonPressedEventArgs : EventArgs
     {
         public string Button { get; set; }
