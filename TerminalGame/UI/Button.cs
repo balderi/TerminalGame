@@ -17,6 +17,7 @@ namespace TerminalGame.UI
         private string text;
         private GraphicsDevice graphics;
         private int width, height;
+        private Texture2D texture;
 
         public delegate void ButtonPressedEventHandler(ButtonPressedEventArgs e);
         public event ButtonPressedEventHandler Click;
@@ -40,14 +41,8 @@ namespace TerminalGame.UI
             height = Height;
             graphics = GraphicsDevice;
 
+            texture = Drawing.DrawBlankTexture(graphics);
             FontColor = Color.Black;
-        }
-        
-        private Texture2D renderButton()
-        {
-            Texture2D retval = new Texture2D(graphics, 1, 1);
-            retval.SetData(new[] { Color.White });
-            return retval;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -66,13 +61,13 @@ namespace TerminalGame.UI
 
                 if(isHovering)
                 {
-                    spriteBatch.Draw(renderButton(), new Rectangle(Rectangle.X + 2 + TestClass.ShakeStuff(3), Rectangle.Y + 2 + TestClass.ShakeStuff(3), Rectangle.Width - 4, Rectangle.Height - 4), Color.Green);
+                    spriteBatch.Draw(texture, new Rectangle(Rectangle.X + 2 + TestClass.ShakeStuff(3), Rectangle.Y + 2 + TestClass.ShakeStuff(3), Rectangle.Width - 4, Rectangle.Height - 4), Color.Green);
                 }
                 else
                 {
-                    spriteBatch.Draw(renderButton(), Rectangle, Color.Gray);
+                    spriteBatch.Draw(texture, Rectangle, Color.Gray);
                 }
-                spriteBatch.Draw(renderButton(), new Rectangle(Rectangle.X + 2, Rectangle.Y + 2, Rectangle.Width - 4, Rectangle.Height - 4), color);
+                spriteBatch.Draw(texture, new Rectangle(Rectangle.X + 2, Rectangle.Y + 2, Rectangle.Width - 4, Rectangle.Height - 4), color);
 
                 spriteBatch.DrawString(font, text, new Vector2(x, y), Color.Black);
             }

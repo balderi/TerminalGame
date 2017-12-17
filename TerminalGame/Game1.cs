@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
 using TerminalGame.Utilities;
 using TerminalGame.Utilities.TextHandler;
+using TerminalGame.UI.Modules;
 using System;
 using System.Threading;
 
@@ -20,7 +21,7 @@ namespace TerminalGame
         Menu mainMenu;
 
         private TextBox terminalInput;
-        private SpriteFont font, fontXL, testfont, menuFont;
+        private SpriteFont font, fontXL, testfont, menuFont, fontS;
         private Rectangle connAdd;
         private Rectangle inputViewport;
         private Rectangle outputViewport;
@@ -33,6 +34,12 @@ namespace TerminalGame
         enum GameState { Menu, Game }
 
         GameState gameState;
+
+        Terminal terminal;
+
+        Rectangle bgR;
+        TestModule module;
+        Texture2D bg;
 
         public Game1()
         {
@@ -65,7 +72,7 @@ namespace TerminalGame
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
             graphics.IsFullScreen = true;
             graphics.ApplyChanges();
-            
+
             base.Initialize();
             Console.WriteLine("Done initializing");
         }
@@ -85,6 +92,7 @@ namespace TerminalGame
             menuFont = Content.Load<SpriteFont>("Fonts/terminalFontL");
             fontXL = Content.Load<SpriteFont>("Fonts/terminalFontXL");
             testfont = Content.Load<SpriteFont>("Fonts/terminalFontXS");
+            fontS = Content.Load<SpriteFont>("Fonts/terminalFontS");
 
             connAdd = new Rectangle(5, graphics.PreferredBackBufferHeight - 30, (int)(font.MeasureString(connectedAddress).X), (int)(font.MeasureString("MEASURE ME").Y * 1.1));
             inputViewport = new Rectangle(connAdd.Width, graphics.PreferredBackBufferHeight - 30, 400, (int)(font.MeasureString("MEASURE ME").Y * 1.1));
@@ -118,7 +126,30 @@ namespace TerminalGame
             terminalInput.Cursor.Selection = new Color(Color.PeachPuff, .4f);
             
             terminalInput.Active = true;
-            
+
+            bg = Content.Load<Texture2D>("Textures/bg");
+            bgR = new Rectangle(new Point(0, 0), new Point(bg.Width, bg.Height));
+
+            terminal = new Terminal(GraphicsDevice)
+            {
+                Rectangle = new Rectangle(2, 2, 600, graphics.PreferredBackBufferHeight - 4),
+                BackgroundColor = Color.Black * 0.75f,
+                BorderColor = Color.RoyalBlue * 0.25f,
+                HeaderColor = Color.RoyalBlue,
+                Title = "Terminal v0.1",
+                Font = fontS,
+            };
+
+            module = new TestModule(GraphicsDevice)
+            {
+                Rectangle = new Rectangle(1000, 600, 400, 200),
+                BackgroundColor = Color.RoyalBlue * 0.5f,
+                BorderColor = Color.DarkSlateGray,
+                HeaderColor = Color.DarkSlateGray,
+                Title = "Modular Window",
+                Font = fontS,
+            };
+
             Console.WriteLine("Done loading");
         }
 
@@ -243,7 +274,7 @@ namespace TerminalGame
             if (isExiting)
             {
                 Exit();
-                Thread.Sleep(2000);
+                //Thread.Sleep(2000);
             }
             base.Update(gameTime);
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -299,7 +330,10 @@ namespace TerminalGame
                         {
                         GraphicsDevice.Clear(Color.Black);
 
-                        spriteBatch.Begin();
+
+                        base.Draw(gameTime);
+                        spriteBatch.Begin(blendState: BlendState.AlphaBlend);
+                        spriteBatch.Draw(bg, bgR, Color.White);
 
                         Vector2 position = new Vector2(Window.ClientBounds.Width / 2, Window.ClientBounds.Height / 2);
                         Vector2 textMiddlePoint = fontXL.MeasureString(testString) / 2;
@@ -308,15 +342,15 @@ namespace TerminalGame
                         spriteBatch.DrawString(fontXL, testString, position2, Color.Green, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
                         spriteBatch.DrawString(fontXL, testString, position, Color.LightGray, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
 
+                        terminal.Draw(spriteBatch);
                         spriteBatch.DrawString(font, connectedAddress, new Vector2(connAdd.X, connAdd.Y), Color.LightGray);
-
                         spriteBatch.DrawString(font, terminalOutput, new Vector2(outputViewport.X + 3 + TestClass.ShakeStuff(1), outputViewport.Y + TestClass.ShakeStuff(1)), Color.Green);
                         spriteBatch.DrawString(font, terminalOutput, new Vector2(outputViewport.X + 3, outputViewport.Y), Color.LightGray);
-
                         terminalInput.Draw(spriteBatch);
-                        spriteBatch.End();
 
-                        base.Draw(gameTime);
+                        module.Draw(spriteBatch);
+
+                        spriteBatch.End();
                         break;
                     }
                 default:
