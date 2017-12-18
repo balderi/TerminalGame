@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using TerminalGame.UI.Modules;
 using TerminalGame.Utilities.TextHandler;
+using TerminalGame.Computers;
 
 namespace TerminalGame
 {
@@ -29,6 +30,8 @@ namespace TerminalGame
         GameState gameState;
 
         Terminal terminal;
+
+        Computer playerComp;
 
         Rectangle bgR;
         TestModule module;
@@ -187,6 +190,8 @@ namespace TerminalGame
 
             MediaPlayer.Play(bgm_game);
 
+            playerComp = new Computer(Computer.Type.Workstation, "127.0.0.1", "localhost", "pasword");
+
             bgR = new Rectangle(new Point(0, 0), new Point(bg.Width, bg.Height));
 
             terminal = new Terminal(GraphicsDevice, new Rectangle(3, 3, 700, graphics.PreferredBackBufferHeight - 6), font)
@@ -207,6 +212,8 @@ namespace TerminalGame
                 Font = fontS,
             };
 
+            Computers.Computers.DoComputers();
+            playerComp.Connect();
             terminal.Init();
             Console.WriteLine("Game started");
         }

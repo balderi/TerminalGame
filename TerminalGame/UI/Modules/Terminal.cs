@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using TerminalGame.Utilities;
 using TerminalGame.Utilities.TextHandler;
+using TerminalGame.Computers;
 
 namespace TerminalGame.UI.Modules
 {
@@ -19,6 +20,8 @@ namespace TerminalGame.UI.Modules
         private List<string> history, output;
         private SpriteFont terminalFont;
         private bool isMultiLine;
+        private Computer connectedComputer;
+
 
         public override SpriteFont Font { get; set; }
         public override Color BackgroundColor { get; set; }
@@ -51,6 +54,7 @@ namespace TerminalGame.UI.Modules
 
         private void TerminalInput_EnterDown(object sender, KeyboardInput.KeyEventArgs e)
         {
+            Console.WriteLine("CMD: " + terminalInput.Text.String);
             string pars = "";
             if (!string.IsNullOrEmpty(terminalInput.Text.String))
                 pars = TextWrap(CommandParser.ParseCommand(terminalInput.Text.String));
@@ -64,7 +68,6 @@ namespace TerminalGame.UI.Modules
                     output.Add(o[i]);
                 }
             }
-            Console.WriteLine("CMD: " + terminalInput.Text.String);
             UpdateOutput();
             terminalInput.Clear();
             if (isMultiLine)
@@ -92,6 +95,7 @@ namespace TerminalGame.UI.Modules
 
         public void Init()
         {
+            connectedComputer = Player.GetInstance().ConnectedComputer;
             connectedAddress = "root@localhost > ";
             terminalOutput = "";
             history = new List<string>();
@@ -116,6 +120,15 @@ namespace TerminalGame.UI.Modules
             terminalInput.UpArrow += TerminalInput_UpArrow;
             terminalInput.DnArrow += TerminalInput_DnArrow;
             terminalInput.TabDown += TerminalInput_TabDown;
+            connectedComputer.Connected += ConnectedComputer_Connected;
+        }
+
+        private void ConnectedComputer_Connected(object sender, ConnectEventArgs e)
+        {
+            Console.WriteLine("*** CONNECTION EVENT FIRED");
+            output.Add("[EVENT] Connected to " + e.ConnectionString);
+            UpdateOutput();
+            connectedAddress = e.IsRoot ? "Root@" + e.ConnectionString : "User@" + e.ConnectionString;
         }
 
         public void UpdateOutput()

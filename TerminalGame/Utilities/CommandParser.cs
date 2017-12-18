@@ -55,6 +55,30 @@
                         }
                         return "What manual page do you want?\n";
                     }
+                case "connect":
+                    {
+                        if(data.Length > 1)
+                        {
+                            return Programs.Connect.connect(data[1]) + "\n";
+                        }
+                        return "Usage: " + data[0] + " [IP]\n";
+                    }
+                case "dc":
+                case "disconnect":
+                    {
+                        return Programs.Connect.disconnect() + "\n";
+                    }
+                case "ip":
+                    {
+                        if(data.Length > 2 && data[1] == "addr" && data[2] == "show")
+                        {
+                            return "IP: " + Player.GetInstance().ConnectedComputer.IP + "\n";
+                        }
+                        else
+                        {
+                            return "Unkown arguments\n";
+                        }
+                    }
                 default:
                     return data[0] + ": command not found\n";
             }

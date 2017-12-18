@@ -45,8 +45,12 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Computers\Computer.cs" />
+    <Compile Include="Computers\Computers.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Menu.cs" />
+    <Compile Include="Player.cs" />
+    <Compile Include="Programs\Connect.cs" />
     <Compile Include="Programs\Program.cs" />
     <Compile Include="UI\MainMenuButton.cs" />
     <Compile Include="UI\Modules\Module.cs" />

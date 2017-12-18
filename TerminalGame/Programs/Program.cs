@@ -8,8 +8,11 @@ using Microsoft.Xna.Framework.Input;
 
 namespace TerminalGame.Programs
 {
-    public abstract class Program
+    class Program
     {
-        //TODO: program base
+        public Program()
+        {
+
+        }
     }
 }
