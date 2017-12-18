@@ -22,6 +22,9 @@ namespace TerminalGame.Utilities.TextHandler
         public readonly Cursor Cursor;
 
         public event EventHandler<KeyboardInput.KeyEventArgs> EnterDown;
+        public event EventHandler<KeyboardInput.KeyEventArgs> UpArrow;
+        public event EventHandler<KeyboardInput.KeyEventArgs> DnArrow;
+        public event EventHandler<KeyboardInput.KeyEventArgs> TabDown;
 
         private string clipboard;
 
@@ -72,6 +75,15 @@ namespace TerminalGame.Utilities.TextHandler
                 {
                     case Keys.Enter:
                         EnterDown?.Invoke(this, e);
+                        break;
+                    case Keys.Up:
+                        UpArrow?.Invoke(this, e);
+                        break;
+                    case Keys.Down:
+                        DnArrow?.Invoke(this, e);
+                        break;
+                    case Keys.Tab:
+                        TabDown?.Invoke(this, e);
                         break;
                     case Keys.Left:
                         if (KeyboardInput.CtrlDown)

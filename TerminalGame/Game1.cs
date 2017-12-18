@@ -17,15 +17,10 @@ namespace TerminalGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Menu mainMenu;
-
-        //private TextBox terminalInput;
+        
         private SpriteFont font, fontXL, testfont, menuFont, fontS;
-        //private Rectangle connAdd;
-        //private Rectangle inputViewport;
-        //private Rectangle outputViewport;
         private Song bgm_game, bgm_menu;
-        //private int linesToDraw;
-        private string GameTitle/*, testString, terminalOutput, connectedAddress*/;
+        private string GameTitle;
         private List<string> history;
         private bool isExiting;
 
@@ -57,11 +52,8 @@ namespace TerminalGame
         protected override void Initialize()
         {
             Console.WriteLine("Initializing...");
-            // TODO: Add your initialization logic here
             KeyboardInput.Initialize(this, 500f, 20);
             Window.Title = GameTitle;
-            //connectedAddress = "root@localhost > ";
-            //terminalOutput = "";
             
             IsMouseVisible = true;
 
@@ -188,38 +180,6 @@ namespace TerminalGame
         /// </summary>
         /// <param name="sender">Sender object</param>
         /// <param name="e">EventArgs</param>
-        //void OnEnterDown(object sender, KeyboardInput.KeyEventArgs e)
-        //{
-        //    string o = CommandParser.ParseCommand(terminalInput.Text.String);
-        //    history.Add(connectedAddress + terminalInput.Text.String + "\n");
-        //    if (o != "")
-        //        history.Add(o);
-        //    Console.WriteLine("CMD: " + terminalInput.Text.String);
-
-        //    UpdateOutput();
-
-        //    terminalInput.Clear();
-        //}
-
-        //public void UpdateOutput()
-        //{
-        //    int counter = 0;
-        //    while (history.Count > linesToDraw)
-        //    {
-        //        history.RemoveAt(0);
-        //        counter++;
-        //    }
-        //    if (history.Count > 0)
-        //    {
-        //        string holder = "";
-        //        foreach (string s in history)
-        //        {
-
-        //            holder += s;
-        //        }
-        //        terminalOutput = holder;
-        //    }
-        //}
 
         private void StartNewGame()
         {
@@ -227,38 +187,12 @@ namespace TerminalGame
 
             MediaPlayer.Play(bgm_game);
 
-            //connAdd = new Rectangle(5, graphics.PreferredBackBufferHeight - 30, (int)(font.MeasureString(connectedAddress).X), (int)(font.MeasureString("MEASURE ME").Y * 1.1));
-            //inputViewport = new Rectangle(connAdd.Width, graphics.PreferredBackBufferHeight - 30, 400, (int)(font.MeasureString("MEASURE ME").Y * 1.1));
-            //terminalInput = new TextBox(inputViewport, 44, "", GraphicsDevice, font, Color.LightGray, Color.DarkGreen, 30);
-
-            //outputViewport = new Rectangle(3, 5, 600, graphics.PreferredBackBufferHeight - (inputViewport.Height + 3));
-
-            //testString = "";
-
-            //linesToDraw = (int)(outputViewport.Height / font.MeasureString("MEASURE THIS").Y);
-
-            //Console.WriteLine("INIT: 0x4C54443D" + linesToDraw);
-
-            //for (int i = 0; i < linesToDraw + 1; i++)
-            //{
-            //    history.Add("\n");
-            //}
-
-            //float margin = 3;
-            //terminalInput.Area = new Rectangle((int)(inputViewport.X + margin), inputViewport.Y, (int)(inputViewport.Width - margin), inputViewport.Height);
-            //terminalInput.Renderer.Color = Color.LightGray;
-            //terminalInput.Cursor.Selection = new Color(Color.PeachPuff, .4f);
-
-            //terminalInput.Active = true;
-
-            //terminalInput.EnterDown += OnEnterDown;
-
             bgR = new Rectangle(new Point(0, 0), new Point(bg.Width, bg.Height));
 
-            terminal = new Terminal(GraphicsDevice, new Rectangle(2, 2, 700, graphics.PreferredBackBufferHeight - 4), font)
+            terminal = new Terminal(GraphicsDevice, new Rectangle(3, 3, 700, graphics.PreferredBackBufferHeight - 6), font)
             {
                 BackgroundColor = Color.Black * 0.75f,
-                BorderColor = Color.RoyalBlue * 0.25f,
+                BorderColor = Color.RoyalBlue,
                 HeaderColor = Color.RoyalBlue,
                 Title = "Terminal v0.1",
                 Font = fontS,

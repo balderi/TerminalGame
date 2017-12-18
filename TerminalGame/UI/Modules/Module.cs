@@ -9,7 +9,7 @@ namespace TerminalGame.UI.Modules
         public abstract Color BackgroundColor { get; set; }
         public abstract Color BorderColor { get; set; }
         public abstract Color HeaderColor { get; set; }
-        public abstract bool isActive { get; set; }
+        public abstract bool IsActive { get; set; }
         public abstract string Title { get; set; }
         
         protected GraphicsDevice graphics;
@@ -21,7 +21,7 @@ namespace TerminalGame.UI.Modules
             container = Container;
         }
 
-        protected abstract Rectangle renderHeader();
+        protected abstract Rectangle RenderHeader();
         public abstract void Update(GameTime gameTime);
         public abstract void Draw(SpriteBatch spriteBatch);
     }

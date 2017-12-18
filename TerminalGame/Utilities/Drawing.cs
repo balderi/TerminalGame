@@ -28,9 +28,9 @@ namespace TerminalGame.Utilities
         /// <param name="BorderColor">Color of the border. Use eg. Color.Red * 0.5f to make border 50% transparent</param>
         public static void DrawBorder(SpriteBatch spriteBatch, Rectangle Object, Texture2D Texture, int BorderWidth, Color BorderColor)
         {
-            spriteBatch.Draw(Texture, new Rectangle(Object.Left, Object.Top, BorderWidth, Object.Height), BorderColor); // Left
-            spriteBatch.Draw(Texture, new Rectangle(Object.Right, Object.Top, BorderWidth, Object.Height + BorderWidth), BorderColor); // Right
-            spriteBatch.Draw(Texture, new Rectangle(Object.Left, Object.Top, Object.Width, BorderWidth), BorderColor); // Top
+            spriteBatch.Draw(Texture, new Rectangle(Object.Left - BorderWidth, Object.Top - BorderWidth, BorderWidth, Object.Height + 2 * BorderWidth), BorderColor); // Left
+            spriteBatch.Draw(Texture, new Rectangle(Object.Right, Object.Top - BorderWidth, BorderWidth, Object.Height + 2 * BorderWidth), BorderColor); // Right
+            spriteBatch.Draw(Texture, new Rectangle(Object.Left, Object.Top - BorderWidth, Object.Width, BorderWidth), BorderColor); // Top
             spriteBatch.Draw(Texture, new Rectangle(Object.Left, Object.Bottom, Object.Width, BorderWidth), BorderColor); // Bottom
         }
     }

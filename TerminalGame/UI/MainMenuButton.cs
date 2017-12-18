@@ -52,7 +52,7 @@ namespace TerminalGame.UI
                 color = Color.LightGray;
             }
             if (Clicked)
-                color = Color.DarkGray;
+                color = Color.SlateGray;
 
             if (!string.IsNullOrEmpty(text))
             {

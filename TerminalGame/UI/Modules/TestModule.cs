@@ -10,7 +10,7 @@ namespace TerminalGame.UI.Modules
         public override Color BackgroundColor { get; set; }
         public override Color BorderColor { get; set; }
         public override Color HeaderColor { get; set; }
-        public override bool isActive { get; set; }
+        public override bool IsActive { get; set; }
         public override string Title { get; set; }
 
         private Button button;
@@ -62,14 +62,14 @@ namespace TerminalGame.UI.Modules
             Texture2D texture = Drawing.DrawBlankTexture(graphics);
             Drawing.DrawBorder(spriteBatch, container, texture, 1, BorderColor);
             spriteBatch.Draw(texture, container, BackgroundColor);
-            spriteBatch.Draw(texture, renderHeader(), HeaderColor);
-            spriteBatch.DrawString(Font, Title, new Vector2(renderHeader().X + 5, renderHeader().Y + 2), Color.White);
+            spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
+            spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y + 2), Color.White);
             spriteBatch.DrawString(Font, buttonClicks, new Vector2(container.X + (container.Width / 2) - Font.MeasureString(buttonClicks).X / 2, container.Y + (container.Height / 2) - Font.MeasureString(buttonClicks).Y / 2), Color.White);
             
             button.Draw(spriteBatch);
         }
 
-        protected override Rectangle renderHeader()
+        protected override Rectangle RenderHeader()
         {
             return new Rectangle(container.X + 1, container.Y + 1, container.Width - 1, (int)Font.MeasureString(Title).Y);
         }
