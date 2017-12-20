@@ -9,13 +9,12 @@ namespace TerminalGame
 {
     class Player
     {
-        private string name;
-
+        //private string name;
         
         private static Player instance;
 
         public Computer ConnectedComputer { get; set; }
-        public Computer PlayersComputer { get; private set; }
+        public Computer PlayersComputer { get; set; }
 
         private Player() { }
 

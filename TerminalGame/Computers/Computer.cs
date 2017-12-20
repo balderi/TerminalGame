@@ -19,47 +19,78 @@ namespace TerminalGame.Computers
         public string RootPassword { get; private set; }
         public bool IsPlayerConnected { get; private set; }
         public bool PlayerHasRoot { get; private set; }
+
         public event EventHandler<ConnectEventArgs> Connected;
         public event EventHandler<ConnectEventArgs> Disonnected;
 
         public Computer(Type type, string IP, string Name, string RootPassword)
         {
+            Console.WriteLine("Create: Computer with IP " + IP + " and Name: " + Name);
             this.type = type;
             this.IP = IP;
             this.Name = Name;
+            this.RootPassword = RootPassword;
         }
 
-        public string Connect()
+        /// <summary>
+        /// Sets the player's current connection to this computer
+        /// </summary>
+        /// <param name="GoingHome">Don't disconnect before connecting. Only used during game start, as there is no computer to disconnect from</param>
+        public void Connect(bool GoingHome = false)
         {
-            Player.GetInstance().ConnectedComputer = this;
-            IsPlayerConnected = true;
+            if (GoingHome)
+            {
+                Console.WriteLine("*** CONN: GOING HOME");
+                Player.GetInstance().ConnectedComputer = this;
+                IsPlayerConnected = true;
+                //return "Connected to " + IP;
+            }
+            else
+            {
+                Player.GetInstance().ConnectedComputer.Disconnect(true);
+                Player.GetInstance().ConnectedComputer = this;
+                IsPlayerConnected = true;
+            }
+
+            Console.WriteLine("CONN: Calling Connected?.Invoke with IP:" + IP + " and PHR: " + PlayerHasRoot.ToString());
             Connected?.Invoke(null, new ConnectEventArgs(IP, PlayerHasRoot));
-            Console.WriteLine("Connected to " + IP);
-            return "Connected to " + IP;
+            Console.WriteLine("CONN: Connected to " + IP);
         }
 
-        public string Disconnect()
+        /// <summary>
+        /// Disconnects the player from this computer.
+        /// </summary>
+        /// <param name="reconnect">Only set to true when called from Connect.</param>
+        public void Disconnect(bool reconnect = false)
         {
-            Player.GetInstance().ConnectedComputer = Player.GetInstance().PlayersComputer;
             IsPlayerConnected = false;
-            Console.WriteLine("Disconnected from " + IP);
-            return "Disconnected";
+
+            Console.WriteLine("DISC: Calling Disconnected?.Invoke");
+            Disonnected?.Invoke(null, new ConnectEventArgs(IP, PlayerHasRoot));
+            Console.WriteLine("DISC: Disconnected from " + IP);
+
+            if (reconnect)
+            {
+                Console.WriteLine("DISC: RECONNECT");
+            }
+            else
+            {
+                Console.WriteLine("*** DISC: GOING HOME");
+                Player.GetInstance().PlayersComputer.Connect(true);
+            }
+        }
+
+        /// <summary>
+        /// Grant the player eleveted (root) permission on this computer.
+        /// </summary>
+        public void GetRoot()
+        {
+            PlayerHasRoot = true;
         }
 
         public void Update(GameTime gameTime)
         {
             access = PlayerHasRoot ? AccessLevel.root : AccessLevel.user;
-        }
-    }
-    public class ConnectEventArgs : EventArgs
-    {
-        public string ConnectionString { get; private set; }
-        public bool IsRoot { get; private set; }
-
-        public ConnectEventArgs(string connectionString, bool isRoot)
-        {
-            ConnectionString = connectionString;
-            IsRoot = isRoot;
         }
     }
 }

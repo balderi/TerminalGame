@@ -22,7 +22,6 @@ namespace TerminalGame
         private SpriteFont font, fontXL, testfont, menuFont, fontS;
         private Song bgm_game, bgm_menu;
         private string GameTitle;
-        private List<string> history;
         private bool isExiting;
 
         enum GameState { Menu, Game }
@@ -43,7 +42,6 @@ namespace TerminalGame
             Content.RootDirectory = "Content";
             GameTitle = "TerminalGame v0.1a";
             IsFixedTimeStep = true;
-            history = new List<string>();
         }
 
         /// <summary>
@@ -192,6 +190,14 @@ namespace TerminalGame
 
             playerComp = new Computer(Computer.Type.Workstation, "127.0.0.1", "localhost", "pasword");
 
+            Computers.Computers.DoComputers();
+            Computers.Computers.computerList.Add(playerComp);
+
+            playerComp.GetRoot();
+            playerComp.Connect(true);
+
+            Player.GetInstance().PlayersComputer = playerComp;
+
             bgR = new Rectangle(new Point(0, 0), new Point(bg.Width, bg.Height));
 
             terminal = new Terminal(GraphicsDevice, new Rectangle(3, 3, 700, graphics.PreferredBackBufferHeight - 6), font)
@@ -212,8 +218,9 @@ namespace TerminalGame
                 Font = fontS,
             };
 
-            Computers.Computers.DoComputers();
-            playerComp.Connect();
+            Console.WriteLine("INIT: Name:" + playerComp.Name);
+            Console.WriteLine("INIT: Connect: " + playerComp.IsPlayerConnected);
+            Console.WriteLine("CHK: Connect: " + (Player.GetInstance().PlayersComputer != null).ToString());
             terminal.Init();
             Console.WriteLine("Game started");
         }
@@ -234,8 +241,6 @@ namespace TerminalGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 MediaPlayer.Stop();
-                //history.Add("Kernel panic - not syncing: Fatal exception in interrupt\n");
-                //UpdateOutput();
                 isExiting = true;
             }
             

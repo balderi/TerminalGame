@@ -59,25 +59,28 @@
                     {
                         if(data.Length > 1)
                         {
-                            return Programs.Connect.connect(data[1]) + "\n";
+                            Programs.Connect.connect(data[1]);
+                            return "Connecting to " + data[1] + "\n";
                         }
                         return "Usage: " + data[0] + " [IP]\n";
                     }
                 case "dc":
                 case "disconnect":
                     {
-                        return Programs.Connect.disconnect() + "\n";
+                        if (!Player.GetInstance().PlayersComputer.IsPlayerConnected)
+                        {
+                            Programs.Connect.disconnect();
+                            return "Disconnecting\n";
+                        }
+                        return "Cannot disconnect from gateway\n";
                     }
-                case "ip":
+                case "ifconfig":
                     {
-                        if(data.Length > 2 && data[1] == "addr" && data[2] == "show")
-                        {
-                            return "IP: " + Player.GetInstance().ConnectedComputer.IP + "\n";
-                        }
-                        else
-                        {
-                            return "Unkown arguments\n";
-                        }
+                        return "IP: " + Player.GetInstance().ConnectedComputer.IP + "\n";
+                    }
+                case "conch":
+                    {
+                        return Player.GetInstance().PlayersComputer.IsPlayerConnected.ToString() + "\n";
                     }
                 default:
                     return data[0] + ": command not found\n";

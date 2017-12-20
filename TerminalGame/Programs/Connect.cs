@@ -10,22 +10,32 @@ namespace TerminalGame.Programs
 {
     class Connect
     {
-        public static string connect(string IP)
+        /// <summary>
+        /// Call the COnnect method on the computer with the given IP address
+        /// </summary>
+        /// <param name="IP"></param>
+        public static void connect(string IP)
         {
             Console.WriteLine("Running connect on " + IP + " ...");
+            bool conn = false;
             foreach(Computer c in Computers.Computers.computerList)
             {
-                if (c.IP == IP)
+                if (c.IP == IP || c.Name == IP)
                 {
-                    return c.Connect();
+                    c.Connect(false);
+                    conn = true;
                 }
             }
-            Console.WriteLine("Could not connect to " + IP);
-            return "Could not connect to " + IP;
+            if(!conn)
+                Console.WriteLine("Could not connect to " + IP);
+            //return "Could not connect to " + IP;
         }
-        public static string disconnect()
+        /// <summary>
+        /// Call the Disconnect method on the computer with the given IP address
+        /// </summary>
+        public static void disconnect()
         {
-            return Player.GetInstance().ConnectedComputer.Disconnect();
+            Player.GetInstance().ConnectedComputer.Disconnect(false);
         }
     }
 }

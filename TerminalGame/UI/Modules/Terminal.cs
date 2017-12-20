@@ -55,11 +55,11 @@ namespace TerminalGame.UI.Modules
         private void TerminalInput_EnterDown(object sender, KeyboardInput.KeyEventArgs e)
         {
             Console.WriteLine("CMD: " + terminalInput.Text.String);
+            output.Add(connectedAddress + terminalInput.Text.String + "\n");
             string pars = "";
             if (!string.IsNullOrEmpty(terminalInput.Text.String))
                 pars = TextWrap(CommandParser.ParseCommand(terminalInput.Text.String));
             string[] o = pars.Split('§');
-            output.Add(connectedAddress + terminalInput.Text.String + "\n");
             history.Insert(0, terminalInput.Text.String);
             if (!string.IsNullOrEmpty(o[0]))
             {
@@ -68,6 +68,8 @@ namespace TerminalGame.UI.Modules
                     output.Add(o[i]);
                 }
             }
+            if (terminalInput.Text.String == "clear")
+                Clear();
             UpdateOutput();
             terminalInput.Clear();
             if (isMultiLine)
@@ -93,6 +95,20 @@ namespace TerminalGame.UI.Modules
             terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
         }
 
+        /// <summary>
+        /// Clear the terminal window
+        /// </summary>
+        public void Clear()
+        {
+            for (int i = 0; i < linesToDraw + 1; i++)
+            {
+                output.Add("\n");
+            }
+        }
+
+        /// <summary>
+        /// Initialization method for the terminal
+        /// </summary>
         public void Init()
         {
             connectedComputer = Player.GetInstance().ConnectedComputer;
@@ -108,10 +124,7 @@ namespace TerminalGame.UI.Modules
             
             linesToDraw = (int)(outputViewport.Height / terminalFont.MeasureString("MEASURE THIS").Y);
             Console.WriteLine("INIT: 0x4C54443D" + linesToDraw);
-            for (int i = 0; i < linesToDraw + 1; i++)
-            {
-                output.Add("\n");
-            }
+            Clear();
             
             terminalInput.Renderer.Color = Color.LightGray;
             terminalInput.Cursor.Selection = new Color(Color.PeachPuff, .4f);
@@ -120,17 +133,51 @@ namespace TerminalGame.UI.Modules
             terminalInput.UpArrow += TerminalInput_UpArrow;
             terminalInput.DnArrow += TerminalInput_DnArrow;
             terminalInput.TabDown += TerminalInput_TabDown;
-            connectedComputer.Connected += ConnectedComputer_Connected;
+            foreach(Computer c in Computers.Computers.computerList)
+            {
+                c.Connected += ConnectedComputer_Connected;
+                c.Disonnected += ConnectedComputer_Disonnected;
+                Console.WriteLine("Subscribed to " + c.IP + "'s CONN/DISC Events");
+            }
+
+            //output.Add("Kernel panic - not syncing: Fatal exception in interrupt\n");
+        }
+
+        private void ConnectedComputer_Disonnected(object sender, ConnectEventArgs e)
+        {
+            Console.WriteLine("*** DISCONNECTION EVENT FIRED");
+            Console.WriteLine("*** CON_STR: " + e.ConnectionString.ToString() + ", IS_RT: " + e.IsRoot.ToString());
+            output.Add("[EVENT] Disconnected\n");
+            UpdateOutput();
+            connectedAddress = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
+            UpdateInputSize();
         }
 
         private void ConnectedComputer_Connected(object sender, ConnectEventArgs e)
         {
             Console.WriteLine("*** CONNECTION EVENT FIRED");
-            output.Add("[EVENT] Connected to " + e.ConnectionString);
+            Console.WriteLine("*** CON_STR: " + e.ConnectionString.ToString() + ", IS_RT: " + e.IsRoot.ToString());
+            output.Add("[EVENT] Connected to " + e.ConnectionString + "\n");
             UpdateOutput();
-            connectedAddress = e.IsRoot ? "Root@" + e.ConnectionString : "User@" + e.ConnectionString;
+            connectedAddress = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
+            UpdateInputSize();
+        }
+        
+        private void UpdateInputSize()
+        {
+            connAdd.Width = (int)(terminalFont.MeasureString(connectedAddress).X);
+
+            inputViewport.X = connAdd.X + connAdd.Width;
+            inputViewport.Width = container.Width - connAdd.Width;
+            terminalInput = new TextBox(inputViewport, (76 - connectedAddress.Length), "", graphics, terminalFont, Color.LightGray, Color.DarkGreen, 30);
+            terminalInput.Renderer.Color = Color.LightGray;
+            terminalInput.Cursor.Selection = new Color(Color.PeachPuff, .4f);
+            terminalInput.Active = true;
         }
 
+        /// <summary>
+        /// Writes new text to the terminal. Adds any entered commands to the history.
+        /// </summary>
         public void UpdateOutput()
         {
             int counter = 0;
@@ -152,13 +199,6 @@ namespace TerminalGame.UI.Modules
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //connAdd.Height = (int)(terminalFont.MeasureString(connectedAddress).Y);
-            //connAdd.Width = (int)(terminalFont.MeasureString(connectedAddress).X);
-
-            //inputViewport.X = connAdd.Width;
-            //inputViewport.Y = connAdd.Height;
-            //inputViewport.Width = container.Width - connAdd.Width;
-            //inputViewport.Height = connAdd.Height;
 
             Texture2D texture = Drawing.DrawBlankTexture(graphics);
             spriteBatch.Draw(texture, container, BackgroundColor);
