@@ -79,3 +79,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/bg.jpg
 
+#begin Fonts/MonoSpatial.ttf
+/copy:Fonts/MonoSpatial.ttf
+
