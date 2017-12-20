@@ -49,17 +49,31 @@ namespace TerminalGame.Computers
             string retval = "";
             for (int i = 0; i < 4; i++)
             {
-                Thread.Sleep(50);
+                //Make sure each computer gets a different IP. Less than 5ms might work. More than 5ms might be needed.
+                Thread.Sleep(5);
                 retval += rnd.Next(1, 254) + ".";
             }
             return retval.TrimEnd('.');
         }
     }
+    /// <summary>
+    /// Custom EventArgs for Computers
+    /// </summary>
     public class ConnectEventArgs : EventArgs
     {
+        /// <summary>
+        /// IP passed through the event
+        /// </summary>
         public string ConnectionString { get; private set; }
+        /// <summary>
+        /// Is player root? Passed through event
+        /// </summary>
         public bool IsRoot { get; private set; }
-
+        /// <summary>
+        /// The actual EventArgs
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="isRoot"></param>
         public ConnectEventArgs(string connectionString, bool isRoot)
         {
             ConnectionString = connectionString;

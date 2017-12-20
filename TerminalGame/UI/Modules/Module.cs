@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TerminalGame.UI.Modules
 {
+    /// <summary>
+    /// Base UI module
+    /// </summary>
     public abstract class Module
     {
         public abstract SpriteFont Font { get; set; }
@@ -15,6 +18,11 @@ namespace TerminalGame.UI.Modules
         protected GraphicsDevice graphics;
         protected Rectangle container;
 
+        /// <summary>
+        /// Base UI module constructor
+        /// </summary>
+        /// <param name="Graphics"></param>
+        /// <param name="Container"></param>
         protected Module(GraphicsDevice Graphics, Rectangle Container)
         {
             graphics = Graphics;

@@ -7,10 +7,19 @@ using Microsoft.Xna.Framework.Input;
 
 namespace TerminalGame.Utilities.TextHandler
 {
+    /// <summary>
+    /// Text input
+    /// </summary>
     public class TextBox
     {
+        /// <summary>
+        /// GraphicsDevice used to render
+        /// </summary>
         public GraphicsDevice GraphicsDevice { get; set; }
 
+        /// <summary>
+        /// TextBox area
+        /// </summary>
         public Rectangle Area
         {
             get { return Renderer.Area; }

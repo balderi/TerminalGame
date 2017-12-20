@@ -5,6 +5,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TerminalGame.Utilities.TextHandler
 {
+    /// <summary>
+    /// Blinking cursor for text input
+    /// </summary>
     public class Cursor
     {
         public Color Color { get; set; }

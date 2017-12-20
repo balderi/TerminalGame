@@ -25,6 +25,9 @@ namespace TerminalGame.Utilities.TextHandler
     /// </summary>
     public static class KeyboardInput
     {
+        /// <summary>
+        /// Custom EventArgs for keyboard input
+        /// </summary>
         public class CharacterEventArgs : EventArgs
         {
             public char Character { get; private set; }

@@ -5,6 +5,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TerminalGame.Utilities.TextHandler
 {
+    /// <summary>
+    /// TextRenderer
+    /// </summary>
     public class TextRenderer
     {
         public Rectangle Area { get; set; }

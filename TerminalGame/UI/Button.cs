@@ -6,6 +6,9 @@ using TerminalGame.Utilities;
 
 namespace TerminalGame.UI
 {
+    /// <summary>
+    /// Customizable UI button
+    /// </summary>
     public class Button : Component
     {
         private MouseState currentMouseState, previousMouseState;
@@ -16,10 +19,32 @@ namespace TerminalGame.UI
         private Rectangle container;
         private string text;
 
+        /// <summary>
+        /// EventHandler delegate for when the button is clicked
+        /// </summary>
+        /// <param name="e"></param>
         public delegate void ButtonPressedEventHandler(ButtonPressedEventArgs e);
+
+        /// <summary>
+        /// Event for when the button is clicked
+        /// </summary>
         public event ButtonPressedEventHandler Click;
+        /// <summary>
+        /// Button's position on screen
+        /// </summary>
         public Vector2 Position { get; }
 
+        /// <summary>
+        /// Button constructor
+        /// </summary>
+        /// <param name="Text">Button text</param>
+        /// <param name="Container">Specifies width/height of button</param>
+        /// <param name="Font">Font used to draw button text</param>
+        /// <param name="FontColor">Text color</param>
+        /// <param name="BackColor">Button color</param>
+        /// <param name="HoverColor">Button color when hovering</param>
+        /// <param name="ActiveColor">Button color when clicking</param>
+        /// <param name="GraphicsDevice">GraphicsDevice used to render</param>
         public Button(string Text, Rectangle Container, SpriteFont Font, Color FontColor, Color BackColor, Color HoverColor, Color ActiveColor, GraphicsDevice GraphicsDevice)
         {
             text = Text;
@@ -32,6 +57,13 @@ namespace TerminalGame.UI
             texture = Drawing.DrawBlankTexture(GraphicsDevice);
         }
 
+        /// <summary>
+        /// Button constructor
+        /// </summary>
+        /// <param name="Text">Button text</param>
+        /// <param name="Container">Specifies width/height of button</param>
+        /// <param name="Font">Font used to draw button text</param>
+        /// <param name="GraphicsDevice">GraphicsDevice used to render</param>
         public Button(string Text, Rectangle Container, SpriteFont Font, GraphicsDevice GraphicsDevice)
         {
             text = Text;
@@ -44,6 +76,10 @@ namespace TerminalGame.UI
             texture = Drawing.DrawBlankTexture(GraphicsDevice);
         }
 
+        /// <summary>
+        /// Draw button
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             currentColor = backColor;
@@ -66,6 +102,9 @@ namespace TerminalGame.UI
             }
         }
 
+        /// <summary>
+        /// Update button
+        /// </summary>
         public override void Update()
         {
             previousMouseState = currentMouseState;
@@ -95,8 +134,14 @@ namespace TerminalGame.UI
         }
     }
 
+    /// <summary>
+    /// Custom EventArgs for when button is pressed
+    /// </summary>
     public class ButtonPressedEventArgs : EventArgs
     {
+        /// <summary>
+        /// Button value
+        /// </summary>
         public string Button { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace TerminalGame.Computers
 {
@@ -51,7 +51,6 @@ namespace TerminalGame.Computers
                 Player.GetInstance().ConnectedComputer = this;
                 IsPlayerConnected = true;
             }
-
             Console.WriteLine("CONN: Calling Connected?.Invoke with IP:" + IP + " and PHR: " + PlayerHasRoot.ToString());
             Connected?.Invoke(null, new ConnectEventArgs(IP, PlayerHasRoot));
             Console.WriteLine("CONN: Connected to " + IP);
@@ -67,8 +66,7 @@ namespace TerminalGame.Computers
 
             Console.WriteLine("DISC: Calling Disconnected?.Invoke");
             Disonnected?.Invoke(null, new ConnectEventArgs(IP, PlayerHasRoot));
-            Console.WriteLine("DISC: Disconnected from " + IP);
-
+            Console.WriteLine("DISC: Disconnecting from " + IP);
             if (reconnect)
             {
                 Console.WriteLine("DISC: RECONNECT");

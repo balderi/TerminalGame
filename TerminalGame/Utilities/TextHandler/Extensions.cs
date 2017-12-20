@@ -5,6 +5,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TerminalGame.Utilities.TextHandler
 {
+    /// <summary>
+    /// Extensions for TextBox
+    /// </summary>
     public static class Extensions
     {
         private static Texture2D pixel;

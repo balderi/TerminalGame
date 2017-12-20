@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System;
+using System.Threading;
 using System.Collections.Generic;
 using TerminalGame.UI.Modules;
 using TerminalGame.Utilities.TextHandler;
@@ -22,7 +23,6 @@ namespace TerminalGame
         private SpriteFont font, fontXL, testfont, menuFont, fontS;
         private Song bgm_game, bgm_menu;
         private string GameTitle;
-        private bool isExiting;
 
         enum GameState { Menu, Game }
 
@@ -36,6 +36,9 @@ namespace TerminalGame
         TestModule module;
         Texture2D bg;
 
+        /// <summary>
+        /// Main game constructor
+        /// </summary>
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -58,14 +61,14 @@ namespace TerminalGame
             
             IsMouseVisible = true;
 
-            graphics.PreferredBackBufferHeight = 960;
-            graphics.PreferredBackBufferWidth = 1440;
+            //graphics.PreferredBackBufferHeight = 960;
+            //graphics.PreferredBackBufferWidth = 1440;
 
             //Set game to fullscreen
-            //graphics.HardwareModeSwitch = false;
-            //graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
-            //graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
-            //graphics.IsFullScreen = true;
+            graphics.HardwareModeSwitch = false;
+            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            graphics.IsFullScreen = true;
             graphics.ApplyChanges();
 
             MediaPlayer.IsRepeating = true;
@@ -103,10 +106,15 @@ namespace TerminalGame
             Console.WriteLine("Done loading");
         }
 
-        public void Quit()
+        /// <summary>
+        /// To happen when Exit has been called
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        protected override void OnExiting(object sender, EventArgs args)
         {
             Console.WriteLine("Exiting...");
-            Exit();
+            base.OnExiting(sender, args);
         }
 
         /// <summary>
@@ -121,7 +129,7 @@ namespace TerminalGame
                 case "New Game":
                     {
                         MediaPlayer.Stop();
-                        gameState = GameState.Game;
+                        Thread.Sleep(100);
                         StartNewGame();
                         break;
                     }
@@ -135,7 +143,7 @@ namespace TerminalGame
                     }
                 case "Quit Game":
                     {
-                        Quit();
+                        Exit();
                         break;
                     }
                 default:
@@ -149,6 +157,7 @@ namespace TerminalGame
         /// </summary>
         protected override void UnloadContent()
         {
+            base.UnloadContent();
             // TODO: Unload any non ContentManager content here
         }
 
@@ -176,12 +185,6 @@ namespace TerminalGame
             //UpdateOutput();
         }
 
-        /// <summary>
-        /// Called when user hits the Enter key
-        /// </summary>
-        /// <param name="sender">Sender object</param>
-        /// <param name="e">EventArgs</param>
-
         private void StartNewGame()
         {
             Console.WriteLine("Starting new game...");
@@ -189,7 +192,7 @@ namespace TerminalGame
             MediaPlayer.Play(bgm_game);
 
             playerComp = new Computer(Computer.Type.Workstation, "127.0.0.1", "localhost", "pasword");
-
+            
             Computers.Computers.DoComputers();
             Computers.Computers.computerList.Add(playerComp);
 
@@ -199,7 +202,7 @@ namespace TerminalGame
             Player.GetInstance().PlayersComputer = playerComp;
 
             bgR = new Rectangle(new Point(0, 0), new Point(bg.Width, bg.Height));
-
+            
             terminal = new Terminal(GraphicsDevice, new Rectangle(3, 3, 700, graphics.PreferredBackBufferHeight - 6), font)
             {
                 BackgroundColor = Color.Black * 0.75f,
@@ -209,7 +212,7 @@ namespace TerminalGame
                 Font = fontS,
             };
 
-            module = new TestModule(GraphicsDevice, new Rectangle(1000, 600, 400, 200), fontS)
+            module = new TestModule(GraphicsDevice, new Rectangle(750, 500, 400, 200), fontS)
             {
                 BackgroundColor = Color.Pink * 0.5f,
                 BorderColor = Color.White,
@@ -223,6 +226,8 @@ namespace TerminalGame
             Console.WriteLine("CHK: Connect: " + (Player.GetInstance().PlayersComputer != null).ToString());
             terminal.Init();
             Console.WriteLine("Game started");
+
+            gameState = GameState.Game;
         }
 
         /// <summary>
@@ -232,16 +237,13 @@ namespace TerminalGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (isExiting)
-            {
-                Quit();
-                //Thread.Sleep(2000);
-            }
             base.Update(gameTime);
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 MediaPlayer.Stop();
-                isExiting = true;
+                if(terminal != null)
+                    terminal.ForceQuit();
+                Exit();
             }
             
             KeyboardInput.Update();
@@ -269,34 +271,29 @@ namespace TerminalGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            GraphicsDevice.Clear(Color.Black);
+            spriteBatch.Begin(blendState: BlendState.AlphaBlend);
+            base.Draw(gameTime);
             switch ((int)gameState)
             {
                 case 0:
                     {
-                        GraphicsDevice.Clear(Color.Black);
-                        spriteBatch.Begin();
                         mainMenu.Draw(spriteBatch, Window, fontXL);
                         spriteBatch.End();
                         break;
                     }
                 case 1:
-                        {
-                        GraphicsDevice.Clear(Color.Black);
-
-
-                        base.Draw(gameTime);
-                        spriteBatch.Begin(blendState: BlendState.AlphaBlend);
-
+                    {
                         spriteBatch.Draw(bg, bgR, Color.White);
                         module.Draw(spriteBatch);
                         terminal.Draw(spriteBatch);
 
-                        spriteBatch.End();
                         break;
                     }
                 default:
                         break;
-        }
+            }
+            spriteBatch.End();
         }
     }
 }

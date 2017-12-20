@@ -1,4 +1,7 @@
-﻿namespace TerminalGame.Utilities
+﻿using System;
+using System.Threading;
+
+namespace TerminalGame.Utilities
 {
     public static class CommandParser
     {
@@ -60,7 +63,7 @@
                         if(data.Length > 1)
                         {
                             Programs.Connect.connect(data[1]);
-                            return "Connecting to " + data[1] + "\n";
+                            return "Connected to " + data[1] + "\n";
                         }
                         return "Usage: " + data[0] + " [IP]\n";
                     }
@@ -70,7 +73,7 @@
                         if (!Player.GetInstance().PlayersComputer.IsPlayerConnected)
                         {
                             Programs.Connect.disconnect();
-                            return "Disconnecting\n";
+                            return "Disconnected\n";
                         }
                         return "Cannot disconnect from gateway\n";
                     }

@@ -24,7 +24,7 @@ namespace TerminalGame.Utilities
         /// <param name="spriteBatch"></param>
         /// <param name="Object">Size of border</param>
         /// <param name="Texture"></param>
-        /// <param name="BorderWidth">Width of border. Negative values draws the border inside the object.</param>
+        /// <param name="BorderWidth">Width of border. Negative values draws the border inside the object. (I think -b)</param>
         /// <param name="BorderColor">Color of the border. Use eg. Color.Red * 0.5f to make border 50% transparent</param>
         public static void DrawBorder(SpriteBatch spriteBatch, Rectangle Object, Texture2D Texture, int BorderWidth, Color BorderColor)
         {

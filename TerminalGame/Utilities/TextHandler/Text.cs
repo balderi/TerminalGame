@@ -9,12 +9,17 @@ namespace TerminalGame.Utilities.TextHandler
     /// </summary>
     public class Text
     {
+        /// <summary>
+        /// String
+        /// </summary>
         public string String
         {
             get { return new string(_char).Substring(0, Length); }
             set { ResetText(value); }
         }
-
+        /// <summary>
+        /// Characters
+        /// </summary>
         public char[] Characters
         {
             get { return _char; }
@@ -22,7 +27,9 @@ namespace TerminalGame.Utilities.TextHandler
         }
 
         private int length;
-
+        /// <summary>
+        /// Length
+        /// </summary>
         public int Length
         {
             get { return length; }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Threading;
 using System.Collections.Generic;
 using TerminalGame.Utilities;
 using TerminalGame.Utilities.TextHandler;
@@ -51,7 +52,12 @@ namespace TerminalGame.UI.Modules
                 Title = "!!! UNNAMED WINDOW !!!";
             }
         }
-
+        
+        /// <summary>
+        /// Called when user hits the Enter key
+        /// </summary>
+        /// <param name="sender">Sender object</param>
+        /// <param name="e">EventArgs</param>
         private void TerminalInput_EnterDown(object sender, KeyboardInput.KeyEventArgs e)
         {
             Console.WriteLine("CMD: " + terminalInput.Text.String);
@@ -139,15 +145,13 @@ namespace TerminalGame.UI.Modules
                 c.Disonnected += ConnectedComputer_Disonnected;
                 Console.WriteLine("Subscribed to " + c.IP + "'s CONN/DISC Events");
             }
-
-            //output.Add("Kernel panic - not syncing: Fatal exception in interrupt\n");
         }
 
         private void ConnectedComputer_Disonnected(object sender, ConnectEventArgs e)
         {
             Console.WriteLine("*** DISCONNECTION EVENT FIRED");
             Console.WriteLine("*** CON_STR: " + e.ConnectionString.ToString() + ", IS_RT: " + e.IsRoot.ToString());
-            output.Add("[EVENT] Disconnected\n");
+            //output.Add("Disconnected\n");
             UpdateOutput();
             connectedAddress = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
             UpdateInputSize();
@@ -157,7 +161,7 @@ namespace TerminalGame.UI.Modules
         {
             Console.WriteLine("*** CONNECTION EVENT FIRED");
             Console.WriteLine("*** CON_STR: " + e.ConnectionString.ToString() + ", IS_RT: " + e.IsRoot.ToString());
-            output.Add("[EVENT] Connected to " + e.ConnectionString + "\n");
+            output.Add("Connecting to " + e.ConnectionString + "\n");
             UpdateOutput();
             connectedAddress = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
             UpdateInputSize();
@@ -197,9 +201,17 @@ namespace TerminalGame.UI.Modules
             }
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            float lerpAmount = (float)(gameTime.TotalGameTime.TotalMilliseconds % 500f / 500f);
+
+            terminalInput.Cursor.Color = Color.Lerp(Color.DarkGray, Color.LightGray, lerpAmount);
+
+            terminalInput.Update();
+        }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
-
             Texture2D texture = Drawing.DrawBlankTexture(graphics);
             spriteBatch.Draw(texture, container, BackgroundColor);
             spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
@@ -212,6 +224,12 @@ namespace TerminalGame.UI.Modules
             terminalInput.Draw(spriteBatch);
         }
 
+        public void ForceQuit()
+        {
+            output.Add("\n\nKernel panic - not syncing: Fatal exception in interrupt\n\n");
+            UpdateOutput();
+        }
+
         private string TextWrap(string text)
         {
             isMultiLine = false;
@@ -221,15 +239,6 @@ namespace TerminalGame.UI.Modules
 
             isMultiLine = true;
             return text.Insert(maxlen - 1, "\n§");
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            float lerpAmount = (float)(gameTime.TotalGameTime.TotalMilliseconds % 500f / 500f);
-
-            terminalInput.Cursor.Color = Color.Lerp(Color.DarkGray, Color.LightGray, lerpAmount);
-
-            terminalInput.Update();
         }
 
         protected override Rectangle RenderHeader()
