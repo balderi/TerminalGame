@@ -14,7 +14,7 @@ namespace TerminalGame.Programs
         /// Call the COnnect method on the computer with the given IP address
         /// </summary>
         /// <param name="IP"></param>
-        public static void connect(string IP)
+        public static bool connect(string IP)
         {
             Console.WriteLine("Running connect on " + IP + " ...");
             bool conn = false;
@@ -24,10 +24,15 @@ namespace TerminalGame.Programs
                 {
                     c.Connect(false);
                     conn = true;
+                    return true;
                 }
-            }
+            }/*
             if(!conn)
+            {*/
                 Console.WriteLine("Could not connect to " + IP);
+                return false;
+            //}
+
             //return "Could not connect to " + IP;
         }
         /// <summary>

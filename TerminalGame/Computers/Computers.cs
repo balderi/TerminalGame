@@ -27,6 +27,7 @@ namespace TerminalGame.Computers
         public static void DoComputers()
         {
             computerList = new List<Computer>();
+            //FileSystems.FileSystem fs = new FileSystems.FileSystem();
             Computer c1 = new Computer(Computer.Type.Workstation, "123.123.123.123", "TestComputer", "abc123");
             Computer c2 = new Computer(Computer.Type.Server, "100.100.100.100", "TestServer", "abc123");
             computerList.Add(c1);

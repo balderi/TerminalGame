@@ -3,8 +3,16 @@ using System.Threading;
 
 namespace TerminalGame.Utilities
 {
+    /// <summary>
+    /// Command Parser
+    /// </summary>
     public static class CommandParser
     {
+        /// <summary>
+        /// Parses commands
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
         public static string ParseCommand(string command)
         {
             var data = command.Split();
@@ -17,17 +25,7 @@ namespace TerminalGame.Utilities
                         return "I'm sorry Dave, I'm afraid I can't do that.\n";
                     }
                 case "":
-                case "ls":
                     {
-                        return "";
-                    }
-                case "cat":
-                case "cd":
-                    {
-                        if(data.Length > 1)
-                        {
-                            return data[0] + ": " + data[1] + ": no such file or directory\n";
-                        }
                         return "";
                     }
                 case "echo":
@@ -40,13 +38,34 @@ namespace TerminalGame.Utilities
                     }
                 case "sudo":
                     {
+                        if(data[1] == "su")
+                        {
+
+                        }
                         return data[0] + ": username is not in the sudoers file. This incident will be reported.\n";
                     }
                 case "rm":
                     {
                         if (data.Length > 1)
                         {
-                            return data[0] + ": cannot remove \'" + data[1] + "\': no such file or directory\n";
+                            if (Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[1]) != null || Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[2]) != null)
+                            {
+                                if(data[1] == "-r" && Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[2]) != null)
+                                {
+                                    Player.GetInstance().ConnectedComputer.FileSystem.RemoveFile(Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[2]));
+                                }
+                                else if(!Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[1]).IsDirectory)
+                                {
+                                    Player.GetInstance().ConnectedComputer.FileSystem.RemoveFile(Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[1]));
+                                }
+                                else
+                                {
+                                    return data[0] + ": cannot remove \'" + data[1] + "\': is a directory\n";
+                                }
+                                return "";
+                            }
+                            else
+                                return data[0] + ": cannot remove \'" + data[1] + "\': no such file or directory\n";
                         }
                         return data[0] + ": missing operand\n";
                     }
@@ -62,8 +81,10 @@ namespace TerminalGame.Utilities
                     {
                         if(data.Length > 1)
                         {
-                            Programs.Connect.connect(data[1]);
-                            return "Connected to " + data[1] + "\n";
+                            if (Programs.Connect.connect(data[1]))
+                                return "Connected to " + data[1] + "\n";
+                            else
+                                return "Could not connect to " + data[1] + "\n";
                         }
                         return "Usage: " + data[0] + " [IP]\n";
                     }
@@ -83,7 +104,41 @@ namespace TerminalGame.Utilities
                     }
                 case "conch":
                     {
-                        return Player.GetInstance().PlayersComputer.IsPlayerConnected.ToString() + "\n";
+                        return Player.GetInstance().ConnectedComputer.IsPlayerConnected.ToString() + "\n";
+                    }
+                case "touch":
+                    {
+                        if (data.Length > 1)
+                            Player.GetInstance().ConnectedComputer.FileSystem.AddFile(data[1]);
+                        return "";
+                    }
+                case "mkdir":
+                    {
+                        if (data.Length > 1)
+                            Player.GetInstance().ConnectedComputer.FileSystem.AddDir(data[1]);
+                        return "";
+                    }
+                case "pwd":
+                    {
+                        return Player.GetInstance().ConnectedComputer.FileSystem.CurrentDir.Name + "\n";
+                    }
+                case "ls":
+                case "dir":
+                    {
+                        return Player.GetInstance().ConnectedComputer.FileSystem.ListFiles();
+                    }
+                case "cd":
+                    {
+                        if (data.Length > 1)
+                        {
+                            if (Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[1]) != null)
+                            {
+                                Player.GetInstance().ConnectedComputer.FileSystem.ChangeDir(data[1]);
+                                return "";
+                            }
+                            return data[0] + ": " + data[1] + ": no such file or directory\n";
+                        }
+                        return "Usage: " + data[0] + " [Directory]\n";
                     }
                 default:
                     return data[0] + ": command not found\n";

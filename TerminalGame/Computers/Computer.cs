@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using TerminalGame.Computers.FileSystems;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,21 @@ namespace TerminalGame.Computers
         public string RootPassword { get; private set; }
         public bool IsPlayerConnected { get; private set; }
         public bool PlayerHasRoot { get; private set; }
+        public FileSystem FileSystem { get; private set; }
+
 
         public event EventHandler<ConnectEventArgs> Connected;
         public event EventHandler<ConnectEventArgs> Disonnected;
+
+        public Computer(Type type, string IP, string Name, string RootPassword, FileSystem FileSystem)
+        {
+            Console.WriteLine("Create: Computer with IP " + IP + " and Name: " + Name);
+            this.type = type;
+            this.IP = IP;
+            this.Name = Name;
+            this.RootPassword = RootPassword;
+            this.FileSystem = FileSystem;
+        }
 
         public Computer(Type type, string IP, string Name, string RootPassword)
         {
@@ -30,6 +43,7 @@ namespace TerminalGame.Computers
             this.IP = IP;
             this.Name = Name;
             this.RootPassword = RootPassword;
+            BuildBasicFileSystem();
         }
 
         /// <summary>
@@ -75,6 +89,16 @@ namespace TerminalGame.Computers
             {
                 Console.WriteLine("*** DISC: GOING HOME");
                 Player.GetInstance().PlayersComputer.Connect(true);
+            }
+        }
+
+        private void BuildBasicFileSystem()
+        {
+            FileSystem = new FileSystem();
+            string[] baseDirs = { "bin", "usr", "home", "sys" };
+            for (int i = 0; i < baseDirs.Length; i++)
+            {
+                FileSystem.AddDir(baseDirs[i]);
             }
         }
 

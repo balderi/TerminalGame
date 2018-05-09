@@ -93,7 +93,7 @@ namespace TerminalGame
             testfont = Content.Load<SpriteFont>("Fonts/terminalFontXS");
             fontS = Content.Load<SpriteFont>("Fonts/terminalFontS");
             
-            bgm_game = Content.Load<Song>("Audio/Music/bgm");
+            bgm_game = Content.Load<Song>("Audio/Music/ambientbgm1_2");
             bgm_menu = Content.Load<Song>("Audio/Music/mainmenu");
             MediaPlayer.Play(bgm_menu);
 
@@ -129,7 +129,6 @@ namespace TerminalGame
                 case "New Game":
                     {
                         MediaPlayer.Stop();
-                        Thread.Sleep(100);
                         StartNewGame();
                         break;
                     }
@@ -191,7 +190,7 @@ namespace TerminalGame
 
             MediaPlayer.Play(bgm_game);
 
-            playerComp = new Computer(Computer.Type.Workstation, "127.0.0.1", "localhost", "pasword");
+            playerComp = new Computer(Computer.Type.Workstation, "127.0.0.1", "localhost", "pasword", new Computers.FileSystems.FileSystem());
             
             Computers.Computers.DoComputers();
             Computers.Computers.computerList.Add(playerComp);
@@ -241,7 +240,7 @@ namespace TerminalGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 MediaPlayer.Stop();
-                if(terminal != null)
+                if(gameState > 0)
                     terminal.ForceQuit();
                 Exit();
             }
@@ -279,7 +278,6 @@ namespace TerminalGame
                 case 0:
                     {
                         mainMenu.Draw(spriteBatch, Window, fontXL);
-                        spriteBatch.End();
                         break;
                     }
                 case 1:
@@ -287,7 +285,6 @@ namespace TerminalGame
                         spriteBatch.Draw(bg, bgR, Color.White);
                         module.Draw(spriteBatch);
                         terminal.Draw(spriteBatch);
-
                         break;
                     }
                 default:

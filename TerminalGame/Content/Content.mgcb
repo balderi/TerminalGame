@@ -6,7 +6,7 @@
 /platform:DesktopGL
 /config:
 /profile:Reach
-/compress:False
+/compress:True
 
 #-------------------------------- References --------------------------------#
 
@@ -81,4 +81,22 @@
 
 #begin Fonts/MonoSpatial.ttf
 /copy:Fonts/MonoSpatial.ttf
+
+#begin Audio/Music/ambientbgm1_2.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Music/ambientbgm1_2.ogg
+
+#begin C:/Users/Balder/Desktop/testo.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:C:/Users/Balder/Desktop/testo.wav
+
+#begin Audio/Music/testo.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Music/testo.ogg
 

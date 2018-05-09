@@ -54,7 +54,8 @@ namespace TerminalGame.UI.Modules
         }
         
         /// <summary>
-        /// Called when user hits the Enter key
+        /// Called when user hits the Enter key.
+        /// Calls the Command Parser with the input text and then handles the output
         /// </summary>
         /// <param name="sender">Sender object</param>
         /// <param name="e">EventArgs</param>
@@ -63,23 +64,32 @@ namespace TerminalGame.UI.Modules
             Console.WriteLine("CMD: " + terminalInput.Text.String);
             output.Add(connectedAddress + terminalInput.Text.String + "\n");
             string pars = "";
+
             if (!string.IsNullOrEmpty(terminalInput.Text.String))
                 pars = TextWrap(CommandParser.ParseCommand(terminalInput.Text.String));
+
             string[] o = pars.Split('§');
             history.Insert(0, terminalInput.Text.String);
+
             if (!string.IsNullOrEmpty(o[0]))
             {
                 for (int i = 0; i < o.Length; i++)
                 {
-                    output.Add(o[i]);
+                    if (!string.IsNullOrEmpty(o[i]) && o[i] != "\n")
+                    {
+                        output.Add(o[i]);
+                    }
                 }
             }
+
             if (terminalInput.Text.String == "clear")
                 Clear();
+
             UpdateOutput();
             terminalInput.Clear();
-            if (isMultiLine)
-                UpdateOutput();
+
+            //if (isMultiLine) // TODO: Check if this does anything anymore
+                //UpdateOutput();
         }
 
         private void TerminalInput_TabDown(object sender, KeyboardInput.KeyEventArgs e)
@@ -126,7 +136,7 @@ namespace TerminalGame.UI.Modules
             inputViewport = new Rectangle(connAdd.Width, connAdd.Y, container.Width - connAdd.Width, (int)(terminalFont.MeasureString("MEASURE ME").Y));
             terminalInput = new TextBox(inputViewport, (76 - connectedAddress.Length), "", graphics, terminalFont, Color.LightGray, Color.DarkGreen, 30);
 
-            outputViewport = new Rectangle(container.X, container.Y + RenderHeader().Height + 5, container.Width, container.Height - inputViewport.Height - RenderHeader().Height);
+            outputViewport = new Rectangle(container.X, container.Y + RenderHeader().Height + 2, container.Width, container.Height - (inputViewport.Height) - RenderHeader().Height);
             
             linesToDraw = (int)(outputViewport.Height / terminalFont.MeasureString("MEASURE THIS").Y);
             Console.WriteLine("INIT: 0x4C54443D" + linesToDraw);
