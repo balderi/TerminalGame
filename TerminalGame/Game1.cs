@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using TerminalGame.UI.Modules;
 using TerminalGame.Utilities.TextHandler;
 using TerminalGame.Computers;
+using TerminalGame.OS;
 
 namespace TerminalGame
 {
@@ -160,7 +161,6 @@ namespace TerminalGame
         protected override void UnloadContent()
         {
             base.UnloadContent();
-            // TODO: Unload any non ContentManager content here
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace TerminalGame
 
             MediaPlayer.Play(bgm_game);
 
-            playerComp = new Computer(Computer.Type.Workstation, "127.0.0.1", "localhost", "pasword", new Computers.FileSystems.FileSystem());
+            playerComp = new Computer(Computer.Type.Workstation, "127.0.0.1", "localhost", "pasword");
             
             Computers.Computers.DoComputers();
             Computers.Computers.computerList.Add(playerComp);

@@ -26,7 +26,7 @@ namespace TerminalGame.Computers
 
         public event EventHandler<ConnectEventArgs> Connected;
         public event EventHandler<ConnectEventArgs> Disonnected;
-
+        
         public Computer(Type type, string IP, string Name, string RootPassword, FileSystem FileSystem)
         {
             Console.WriteLine("Create: Computer with IP " + IP + " and Name: " + Name);

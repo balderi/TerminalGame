@@ -51,10 +51,26 @@ with.
     See the documentation for more information.
     -->
     <CharacterRegions>
+      <CharacterRegion> <!--TAB-->
+        <Start>&#9;</Start>
+        <End>&#9;</End>
+      </CharacterRegion> <!--TAB-->
       <CharacterRegion>
         <Start>&#32;</Start>
         <End>&#126;</End>
       </CharacterRegion>
+      <CharacterRegion>
+        <Start>&#160;</Start>
+        <End>&#255;</End>
+      </CharacterRegion>
+      <CharacterRegion> <!--BOX DRAWING-->
+        <Start>&#9472;</Start>
+        <End>&#9580;</End>
+      </CharacterRegion> <!--BOX DRAWING-->
+      <CharacterRegion> <!--SHADING-->
+        <Start>&#9617;</Start>
+        <End>&#9619;</End>
+      </CharacterRegion> <!--SHADING-->
     </CharacterRegions>
   </Asset>
 </XnaContent>

@@ -84,6 +84,11 @@
     <Compile Include="Player.cs" />
     <Compile Include="Programs\Connect.cs" />
     <Compile Include="Programs\Program.cs" />
+    <Compile Include="OS\Programs.cs" />
+    <Compile Include="Scenes\IScene.cs" />
+    <Compile Include="Scenes\Scene.cs" />
+    <Compile Include="States\State.cs" />
+    <Compile Include="States\StateMachine.cs" />
     <Compile Include="UI\MainMenuButton.cs" />
     <Compile Include="UI\Modules\Module.cs" />
     <Compile Include="Program.cs" />
@@ -169,6 +174,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

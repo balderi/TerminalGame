@@ -11,12 +11,12 @@ namespace TerminalGame.UI.Modules
 {
     class Terminal : Module
     {
-
+        //TODO: Make singleton, and add the instance to the player, instead of the game itself
         //TODO: Add ability to take input from outside sources (programs, messages, etc.)
 
         private TextBox terminalInput;
         private Rectangle connAdd, inputViewport, outputViewport;
-        private int linesToDraw;
+        private int linesToDraw, currentIndex;
         private string terminalOutput, connectedAddress;
         private List<string> history, output;
         private SpriteFont terminalFont;
@@ -64,6 +64,7 @@ namespace TerminalGame.UI.Modules
             Console.WriteLine("CMD: " + terminalInput.Text.String);
             output.Add(connectedAddress + terminalInput.Text.String + "\n");
             string pars = "";
+            currentIndex = 0;
 
             if (!string.IsNullOrEmpty(terminalInput.Text.String))
                 pars = TextWrap(CommandParser.ParseCommand(terminalInput.Text.String));
@@ -84,12 +85,16 @@ namespace TerminalGame.UI.Modules
 
             if (terminalInput.Text.String == "clear")
                 Clear();
+            if(terminalInput.Text.String == "hist")
+            {
+                foreach(string s in history)
+                {
+                    output.Add(s);
+                }
+            }
 
             UpdateOutput();
             terminalInput.Clear();
-
-            //if (isMultiLine) // TODO: Check if this does anything anymore
-                //UpdateOutput();
         }
 
         private void TerminalInput_TabDown(object sender, KeyboardInput.KeyEventArgs e)
@@ -100,15 +105,22 @@ namespace TerminalGame.UI.Modules
 
         private void TerminalInput_DnArrow(object sender, KeyboardInput.KeyEventArgs e)
         {
-            terminalInput.Text.String = "Previous Command";
+            if (currentIndex > 0)
+            {
+                terminalInput.Text.String = history[--currentIndex];
+            }
             terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
+            Console.WriteLine("DN :: CI:{0} | HC:{1}", currentIndex, history.Count);
         }
 
         private void TerminalInput_UpArrow(object sender, KeyboardInput.KeyEventArgs e)
         {
-            if(history.Count > 0)
-                terminalInput.Text.String = history[0];
+            if (history.Count > 0 && currentIndex < history.Count)
+            {
+                terminalInput.Text.String = history[currentIndex++];
+            }
             terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
+            Console.WriteLine("UP :: CI:{0} | HC:{1}", currentIndex, history.Count);
         }
 
         /// <summary>

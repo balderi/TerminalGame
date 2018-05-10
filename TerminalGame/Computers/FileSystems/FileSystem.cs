@@ -123,13 +123,13 @@ namespace TerminalGame.Computers.FileSystems
         {
             string retval = "";
             if (file.Parent != CurrentDir)
-                retval += "<DIR> ..\n§";
+                retval += "\t<DIR>\t..\n§";
             foreach (File f in file.Children)
             {
                 if (f.IsDirectory)
-                    retval += "<DIR> " + f.Name + "\n§";
+                    retval += "\t<DIR>\t" + f.Name + "\n§";
                 else
-                    retval += f.Name + "\n§";
+                    retval += "\t\t" + f.Name + "\n§";
             }
             return retval;
         }

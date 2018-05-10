@@ -82,12 +82,6 @@
 #begin Fonts/MonoSpatial.ttf
 /copy:Fonts/MonoSpatial.ttf
 
-#begin Audio/Music/ambientbgm1_2.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Audio/Music/ambientbgm1_2.ogg
-
 #begin C:/Users/Balder/Desktop/testo.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -111,4 +105,10 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Audio/Sounds/click1.wav
+
+#begin Audio/Music/ambientbgm1_2.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Music/ambientbgm1_2.ogg
 

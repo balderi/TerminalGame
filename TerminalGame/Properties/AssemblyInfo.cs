@@ -34,3 +34,8 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: InternalsVisibleTo("TerminalGame.Tests")]
+[assembly: InternalsVisibleTo("TerminalGame.Explorables")]
+
+// Friends - http://softwareonastring.com/316/why-cant-my-test-access-a-public-constructor
+[assembly: InternalsVisibleTo("UnitTests")]
