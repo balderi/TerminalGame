@@ -48,19 +48,23 @@ namespace TerminalGame.Utilities
                     {
                         if (data.Length > 1)
                         {
-                            if (Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[1]) != null || Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[2]) != null)
+                            if (data[1] != null && Player.GetInstance().ConnectedComputer.FileSystem.CurrentDir.Children.Count > 0 && data[1] != "*")
                             {
-                                if(data[1] == "-r" && Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[2]) != null)
+                                if (data[1] == "-r" && Player.GetInstance().ConnectedComputer.FileSystem.TryFindFile(data[2], true))
                                 {
-                                    Player.GetInstance().ConnectedComputer.FileSystem.RemoveFile(Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[2]));
+                                    Player.GetInstance().ConnectedComputer.FileSystem.RemoveFile(Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[2], true));
                                 }
-                                else if(!Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[1]).IsDirectory)
+                                else if (Player.GetInstance().ConnectedComputer.FileSystem.TryFindFile(data[1], true))
                                 {
-                                    Player.GetInstance().ConnectedComputer.FileSystem.RemoveFile(Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[1]));
+                                    return data[0] + ": cannot remove \'" + data[1] + "\': is a directory\n";
+                                }
+                                else if (Player.GetInstance().ConnectedComputer.FileSystem.TryFindFile(data[1], false))
+                                {
+                                    Player.GetInstance().ConnectedComputer.FileSystem.RemoveFile(Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[1], false));
                                 }
                                 else
                                 {
-                                    return data[0] + ": cannot remove \'" + data[1] + "\': is a directory\n";
+                                    return data[0] + ": cannot remove \'" + data[1] + "\': no such file or directory\n";
                                 }
                                 return "";
                             }
@@ -131,7 +135,7 @@ namespace TerminalGame.Utilities
                     {
                         if (data.Length > 1)
                         {
-                            if (Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[1]) != null)
+                            if (Player.GetInstance().ConnectedComputer.FileSystem.TryFindFile(data[1], true))
                             {
                                 Player.GetInstance().ConnectedComputer.FileSystem.ChangeDir(data[1]);
                                 return "";

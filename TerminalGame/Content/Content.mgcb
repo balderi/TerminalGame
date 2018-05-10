@@ -100,3 +100,15 @@
 /processorParam:Quality=Best
 /build:Audio/Music/testo.ogg
 
+#begin Audio/Sounds/yay.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sounds/yay.wav
+
+#begin Audio/Sounds/click1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sounds/click1.wav
+

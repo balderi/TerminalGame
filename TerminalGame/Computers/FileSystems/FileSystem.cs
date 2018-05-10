@@ -19,24 +19,59 @@ namespace TerminalGame.Computers.FileSystems
             Children = new List<File>() { root };
         }
 
-        public File FindDir(string name)
+        public File FindFile(string name, bool isDir)
         {
             if (name == "..")
                 return CurrentDir.Parent;
 
             bool findFile(File f)
-            { return f.Name == name && f.IsDirectory; }
+            {
+                if(isDir)
+                    return f.Name == name && f.IsDirectory;
+                return f.Name == name;
+            }
             return CurrentDir.Children.Find(findFile);
         }
 
-        public File FindFile(string name)
+        public bool TryFindFile(string name, bool isDir)
         {
             if (name == "..")
-                return CurrentDir.Parent;
+                return true;
+            
+            foreach (File f in CurrentDir.Children)
+            {
+                if (isDir)
+                {
+                    if (f.Name == name && f.IsDirectory)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (f.Name == name && !f.IsDirectory)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
 
-            bool findFile(File f)
-            { return f.Name == name; }
-            return CurrentDir.Children.Find(findFile);
+            //try
+            //{
+            //    Console.WriteLine("*** TRYFIND TRY");
+            //    bool findFile(File f)
+            //    {
+            //        if (isDir)
+            //            return f.Name == name && f.IsDirectory;
+            //        return f.Name == name && !f.IsDirectory;
+            //    }
+            //    return CurrentDir.Children.Find(findFile) != null;
+            //}
+            //catch
+            //{
+            //    return false;
+            //}
         }
 
         public void ChangeDir(string name)
@@ -45,7 +80,7 @@ namespace TerminalGame.Computers.FileSystems
             {
                 CurrentDir = CurrentDir.Parent;
             }
-            else if (FindFile(name) != null)
+            else if (FindFile(name, true) != null)
             {
                 bool findFile(File f)
                 { return f.Name == name && f.IsDirectory && !f.Equals(CurrentDir); }

@@ -11,7 +11,8 @@ namespace TerminalGame.Computers
     class Computer
     {
         public enum Type { Workstation, Server, Mainframe, Laptop }
-        Type type;
+
+        readonly Type type;
         public enum AccessLevel { root, user }
         AccessLevel access;
 

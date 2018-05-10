@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Utilities;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 namespace TerminalGame.UI.Modules
 {
@@ -15,13 +17,18 @@ namespace TerminalGame.UI.Modules
 
         private Button button;
         
-        private SpriteFont fnt;
-
+        private readonly SpriteFont fnt;
+        
         private int counter;
         private string buttonClicks;
 
-        public TestModule(GraphicsDevice Graphics, Rectangle Container, SpriteFont font) : base(Graphics, Container)
+        SoundEffect Click, Yay;
+
+        public TestModule(GraphicsDevice Graphics, Rectangle Container, SpriteFont font, SoundEffect click, SoundEffect yay) : base(Graphics, Container)
         {
+            Yay = yay;
+            Click = click;
+
             fnt = font;
             if(BackgroundColor == null)
             {
@@ -53,7 +60,10 @@ namespace TerminalGame.UI.Modules
 
         private void Button_Click(ButtonPressedEventArgs e)
         {
+            Click.Play();
             counter++;
+            if (counter % 50 == 0)
+                Yay.Play();
             buttonClicks = counter + " button clicks!";
         }
 

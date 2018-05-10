@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Threading;
 using System.Collections.Generic;
@@ -22,7 +23,8 @@ namespace TerminalGame
         
         private SpriteFont font, fontXL, testfont, menuFont, fontS;
         private Song bgm_game, bgm_menu;
-        private string GameTitle;
+        SoundEffect yay, click1;
+        private readonly string GameTitle;
 
         enum GameState { Menu, Game }
 
@@ -92,7 +94,8 @@ namespace TerminalGame
             fontXL = Content.Load<SpriteFont>("Fonts/terminalFontXL");
             testfont = Content.Load<SpriteFont>("Fonts/terminalFontXS");
             fontS = Content.Load<SpriteFont>("Fonts/terminalFontS");
-            
+            yay = Content.Load<SoundEffect>("Audio/Sounds/yay");
+            click1 = Content.Load<SoundEffect>("Audio/Sounds/click1");
             bgm_game = Content.Load<Song>("Audio/Music/ambientbgm1_2");
             bgm_menu = Content.Load<Song>("Audio/Music/mainmenu");
             MediaPlayer.Play(bgm_menu);
@@ -211,7 +214,7 @@ namespace TerminalGame
                 Font = fontS,
             };
 
-            module = new TestModule(GraphicsDevice, new Rectangle(750, 500, 400, 200), fontS)
+            module = new TestModule(GraphicsDevice, new Rectangle(750, 500, 400, 200), fontS, click1, yay)
             {
                 BackgroundColor = Color.Pink * 0.5f,
                 BorderColor = Color.White,
