@@ -38,9 +38,12 @@ namespace TerminalGame.Utilities
                     }
                 case "sudo":
                     {
-                        if(data[1] == "su")
+                        if(data.Length > 1)
                         {
+                            if (data[1] == "su")
+                            {
 
+                            }
                         }
                         return data[0] + ": username is not in the sudoers file. This incident will be reported.\n";
                     }

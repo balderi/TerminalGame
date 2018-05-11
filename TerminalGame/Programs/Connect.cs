@@ -22,7 +22,7 @@ namespace TerminalGame.Programs
             {
                 if(IP == Player.GetInstance().ConnectedComputer.IP || IP == Player.GetInstance().ConnectedComputer.Name)
                 {
-                    Console.WriteLine("Already connected to" + IP);
+                    Console.WriteLine("Already connected to " + IP);
                     return false;
                 }
                 if (c.IP == IP || c.Name == IP)
