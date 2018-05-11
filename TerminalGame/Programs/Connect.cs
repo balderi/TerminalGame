@@ -20,6 +20,11 @@ namespace TerminalGame.Programs
             bool conn = false;
             foreach(Computer c in Computers.Computers.computerList)
             {
+                if(IP == Player.GetInstance().ConnectedComputer.IP || IP == Player.GetInstance().ConnectedComputer.Name)
+                {
+                    Console.WriteLine("Already connected to" + IP);
+                    return false;
+                }
                 if (c.IP == IP || c.Name == IP)
                 {
                     c.Connect(false);
