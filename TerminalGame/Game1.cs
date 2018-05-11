@@ -32,12 +32,13 @@ namespace TerminalGame
         GameState gameState;
 
         Terminal terminal;
+        TestModule module;
+        NetworkMap networkMap;
 
         Computer playerComp;
 
         Rectangle bgR;
-        TestModule module;
-        Texture2D bg;
+        Texture2D bg, computer;
 
         /// <summary>
         /// Main game constructor
@@ -106,6 +107,7 @@ namespace TerminalGame
             mainMenu.ButtonClicked += MainMenu_ButtonClicked;
             
             bg = Content.Load<Texture2D>("Textures/bg");
+            computer = Content.Load<Texture2D>("Textures/nmapComputer");
             
             Console.WriteLine("Done loading");
         }
@@ -191,7 +193,6 @@ namespace TerminalGame
         {
             Console.WriteLine("Starting new game...");
 
-            MediaPlayer.Play(bgm_game);
 
             playerComp = new Computer(Computer.Type.Workstation, "127.0.0.1", "localhost", "pasword");
             
@@ -205,7 +206,7 @@ namespace TerminalGame
 
             bgR = new Rectangle(new Point(0, 0), new Point(bg.Width, bg.Height));
             
-            terminal = new Terminal(GraphicsDevice, new Rectangle(3, 3, 700, graphics.PreferredBackBufferHeight - 6), font)
+            terminal = new Terminal(GraphicsDevice, new Rectangle(2, 2, 700, graphics.PreferredBackBufferHeight - 4), font)
             {
                 BackgroundColor = Color.Black * 0.75f,
                 BorderColor = Color.RoyalBlue,
@@ -223,6 +224,15 @@ namespace TerminalGame
                 Font = fontS,
             };
 
+            networkMap = new NetworkMap(GraphicsDevice, new Rectangle(704, graphics.PreferredBackBufferHeight - 302, graphics.PreferredBackBufferWidth - 706, 300), computer, fontS)
+            {
+                BackgroundColor = Color.Black * 0.75f,
+                BorderColor = Color.RoyalBlue,
+                HeaderColor = Color.RoyalBlue,
+                Title = "NetworkMap v0.1",
+                Font = fontS,
+            };
+
             Console.WriteLine("INIT: Name:" + playerComp.Name);
             Console.WriteLine("INIT: Connect: " + playerComp.IsPlayerConnected);
             Console.WriteLine("CHK: Connect: " + (Player.GetInstance().PlayersComputer != null).ToString());
@@ -230,6 +240,8 @@ namespace TerminalGame
             Console.WriteLine("Game started");
 
             gameState = GameState.Game;
+
+            MediaPlayer.Play(bgm_game);
         }
 
         /// <summary>
@@ -260,6 +272,7 @@ namespace TerminalGame
                     {
                         module.Update(gameTime);
                         terminal.Update(gameTime);
+                        networkMap.Update(gameTime);
                         break;
                     }
                 default:
@@ -288,6 +301,7 @@ namespace TerminalGame
                         spriteBatch.Draw(bg, bgR, Color.White);
                         module.Draw(spriteBatch);
                         terminal.Draw(spriteBatch);
+                        networkMap.Draw(spriteBatch);
                         break;
                     }
                 default:

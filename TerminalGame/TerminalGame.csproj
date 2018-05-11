@@ -96,6 +96,9 @@
     <Compile Include="TestClass.cs" />
     <Compile Include="UI\Button.cs" />
     <Compile Include="UI\Component.cs" />
+    <Compile Include="UI\Modules\NetworkMap.cs" />
+    <Compile Include="UI\Modules\NetworkNode.cs" />
+    <Compile Include="UI\Modules\PopUpBox.cs" />
     <Compile Include="UI\Modules\Terminal.cs" />
     <Compile Include="UI\Modules\TestModule.cs" />
     <Compile Include="Utilities\CommandParser.cs" />

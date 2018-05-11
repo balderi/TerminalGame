@@ -110,7 +110,7 @@ namespace TerminalGame.Utilities.TextHandler
             }
 
             spriteBatch.Draw(spriteBatch.GetWhitePixel(),
-                new Rectangle(cp.X, cp.Y, Icon.Width, textBox.Renderer.Font.LineSpacing), Icon, Color);
+                new Rectangle(cp.X, cp.Y, Icon.Width, textBox.Renderer.Font.LineSpacing - 3), Icon, Color);
         }
 
         private Point GetPosition(int x, int y, int pos)

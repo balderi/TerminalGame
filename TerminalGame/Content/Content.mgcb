@@ -82,12 +82,6 @@
 #begin Fonts/MonoSpatial.ttf
 /copy:Fonts/MonoSpatial.ttf
 
-#begin C:/Users/Balder/Desktop/testo.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:C:/Users/Balder/Desktop/testo.wav
-
 #begin Audio/Music/testo.ogg
 /importer:OggImporter
 /processor:SongProcessor
@@ -111,4 +105,16 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Audio/Music/ambientbgm1_2.ogg
+
+#begin Textures/nmapComputer.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/nmapComputer.png
 

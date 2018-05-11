@@ -38,13 +38,13 @@ namespace TerminalGame.Utilities.Tests
         public void Touch() => Assert.AreEqual("", CommandParser.ParseCommand("touch test"));
 
         [TestMethod]
-        public void Ls() => Assert.AreEqual("\t<DIR>\tbin\n§\t<DIR>\tusr\n§\t<DIR>\thome\n§\t<DIR>\tsys\n§", CommandParser.ParseCommand("ls"));
+        public void Ls() => Assert.AreEqual("    <DIR>    bin\n§    <DIR>    usr\n§    <DIR>    home\n§    <DIR>    sys\n§", CommandParser.ParseCommand("ls"));
 
         [TestMethod]
         public void TouchedLs()
         {
             CommandParser.ParseCommand("touch test");
-            Assert.AreEqual("\t<DIR>\tbin\n§\t<DIR>\tusr\n§\t<DIR>\thome\n§\t<DIR>\tsys\n§\t\ttest\n§", CommandParser.ParseCommand("ls"));
+            Assert.AreEqual("    <DIR>    bin\n§    <DIR>    usr\n§    <DIR>    home\n§    <DIR>    sys\n§             test\n§", CommandParser.ParseCommand("ls"));
         }
 
         [TestMethod]

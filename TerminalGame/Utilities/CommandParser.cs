@@ -50,9 +50,12 @@ namespace TerminalGame.Utilities
                         {
                             if (data[1] != null && Player.GetInstance().ConnectedComputer.FileSystem.CurrentDir.Children.Count > 0 && data[1] != "*")
                             {
-                                if (data[1] == "-r" && Player.GetInstance().ConnectedComputer.FileSystem.TryFindFile(data[2], true))
+                                if (data[1] == "-r" && data.Length > 2)
                                 {
-                                    Player.GetInstance().ConnectedComputer.FileSystem.RemoveFile(Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[2], true));
+                                    if(Player.GetInstance().ConnectedComputer.FileSystem.TryFindFile(data[2], true))
+                                        Player.GetInstance().ConnectedComputer.FileSystem.RemoveFile(Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[2], true));
+                                    else
+                                        return data[0] + ": missing operand\n";
                                 }
                                 else if (Player.GetInstance().ConnectedComputer.FileSystem.TryFindFile(data[1], true))
                                 {

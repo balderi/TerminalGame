@@ -60,10 +60,10 @@ namespace TerminalGame.UI.Modules
 
         private void Button_Click(ButtonPressedEventArgs e)
         {
-            Click.Play();
+            Click.Play(0.1f, 0.0f, 0.0f);
             counter++;
-            if (counter % 50 == 0)
-                Yay.Play();
+            if (counter % 100 == 0)
+                Yay.Play(0.1f, 0.0f, 0.0f);
             buttonClicks = counter + " button clicks!";
         }
 
@@ -81,7 +81,7 @@ namespace TerminalGame.UI.Modules
 
         protected override Rectangle RenderHeader()
         {
-            return new Rectangle(container.X + 1, container.Y + 1, container.Width - 1, (int)Font.MeasureString(Title).Y);
+            return new Rectangle(container.X, container.Y, container.Width, (int)Font.MeasureString(Title).Y);
         }
 
         public override void Update(GameTime gameTime)

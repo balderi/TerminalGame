@@ -11,7 +11,7 @@ namespace TerminalGame.UI.Modules
 {
     class Terminal : Module
     {
-        //TODO: Make singleton, and add the instance to the player, instead of the game itself
+        //TODO: Make singleton (if necessary), and add the instance to the player, instead of the game itself
         //TODO: Add ability to take input from outside sources (programs, messages, etc.)
 
         private TextBox terminalInput;
