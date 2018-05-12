@@ -12,7 +12,6 @@ namespace TerminalGame.UI.Modules
 {
     class NetworkMap : Module
     {
-        //TODO: Make sure nodes do not overlap
         //TODO: Make sure the info box stays inside game window
 
         public override SpriteFont Font { get; set; }
@@ -27,22 +26,44 @@ namespace TerminalGame.UI.Modules
         Random rnd;
         PopUpBox infoBox;
         SpriteFont SpriteFont;
+        Point size;
+        Rectangle cont;
 
-        public NetworkMap(GraphicsDevice Graphics, Rectangle Container, Texture2D computer, SpriteFont font) : base(Graphics, Container)
+        public NetworkMap(GraphicsDevice Graphics, Rectangle Container, Texture2D texture, SpriteFont font) : base(Graphics, Container)
         {
             offset = new Point(30, -10);
+            size = new Point(25, 25);
             SpriteFont = font;
             //infoBox = new PopUpBox("info\nbox", new Rectangle(0, 0, 150, 50), Drawing.DrawBlankTexture(graphics), SpriteFont, Color.White, Color.Black * 0.5f, Color.White, graphics);
             rnd = new Random(DateTime.Now.Millisecond);
             nodes = new List<NetworkNode>();
             foreach (Computer c in Computers.Computers.computerList)
             {
-                Point p = new Point(rnd.Next(Container.X + 15, Container.X + Container.Width - 25), rnd.Next(Container.Y + 25, Container.Y + Container.Height - 25));
-                NetworkNode n = new NetworkNode(computer, c, p, new PopUpBox("info\nbox", new Rectangle(0, 0, 150, 50), SpriteFont, Color.White, Color.Black * 0.5f, Color.White, graphics));
+                bool intersects = true;
+                //Rectangle container;
+                while (intersects)
+                {
+                    Point position = new Point(rnd.Next(Container.X + 15, Container.X + Container.Width - 115), rnd.Next(Container.Y + 25, Container.Y + Container.Height - 50));
+                    cont = new Rectangle(position, size);
+                    if (nodes.Count > 0)
+                    {
+                        intersects = false;
+                        foreach (NetworkNode node in nodes)
+                        {
+                            if (cont.Intersects(node.Container))
+                                intersects = true;
+                        }
+                    }
+                    else
+                    {
+                        intersects = false;
+                    }
+                }
+                NetworkNode n = new NetworkNode(texture, c, cont, new PopUpBox("info\nbox", new Rectangle(0, 0, 150, 50), SpriteFont, Color.White, Color.Black * 0.5f, Color.White, graphics));
                 nodes.Add(n);
                 //n.Hover += OnNodeHover;
                 n.Click += OnNodeClick;
-                Thread.Sleep(10);
+                Thread.Sleep(5);
             }
         }
 

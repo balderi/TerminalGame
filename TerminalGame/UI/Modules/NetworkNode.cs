@@ -22,17 +22,17 @@ namespace TerminalGame.UI.Modules
         public Point Position { get; private set; }
         public PopUpBox InfoBox { get; private set; }
         public bool IsHovering { get; private set; }
-        
+        public Rectangle Container { get; private set; }
+
         private MouseState CurrentMouseState, PreviousMouseState;
         private Texture2D Texture;
         private Color Color, HoverColor, CurrentColor, ConnectedColor, PlayerColor;
-        private Rectangle Container;
 
-        public NetworkNode(Texture2D texture, Computer computer, Point position, PopUpBox infoBox)
+        public NetworkNode(Texture2D texture, Computer computer, Rectangle container, PopUpBox infoBox)
         {
             Texture = texture;
             Computer = computer;
-            Container = new Rectangle(position, new Point(25, 25));
+            Container = container;
             Color = Color.RoyalBlue;
             HoverColor = Color.DarkOrange;
             ConnectedColor = Color.Green;
@@ -85,7 +85,6 @@ namespace TerminalGame.UI.Modules
             if (IsHovering)
             {
                 CurrentColor = HoverColor;
-                //InfoBox.Draw(spriteBatch);
             }
             else if(Computer == Player.GetInstance().ConnectedComputer)
             {

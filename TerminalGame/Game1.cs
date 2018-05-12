@@ -75,7 +75,8 @@ namespace TerminalGame
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
             graphics.IsFullScreen = true;
             graphics.ApplyChanges();
-
+            
+            MediaPlayer.Volume = 0.2f;
             MediaPlayer.IsRepeating = true;
             base.Initialize();
             Console.WriteLine("Done initializing");
