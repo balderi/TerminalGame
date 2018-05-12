@@ -150,6 +150,30 @@ namespace TerminalGame.Utilities
                         }
                         return "Usage: " + data[0] + " [Directory]\n";
                     }
+                case "help":
+                    {
+                        return
+                            "  cd [DIRECTORY]\n§" +
+                            "    Changes directory\n§" +
+                            "  rm [OPTION] [FILE]\n§" +
+                            "    Removes a file or directory\n§" +
+                            "  ls / dir\n§" +
+                            "    Lists all files/folders in the current directory\n§" +
+                            "  pwd\n§" +
+                            "    Lists the current directory\n§" +
+                            "  touch [NAME]\n§" +
+                            "    Creates a file\n§" +
+                            "  mkdir [NAME]\n§" +
+                            "    Creates a directory\n§" +
+                            "  connect [IP]\n§" +
+                            "    Connects to another computer\n§" +
+                            "  disconnect / dc\n§" +
+                            "    Disconnects from computer\n§" +
+                            "  ifconfig\n§" +
+                            "    Shows the IP address of the computer\n§" +
+                            "  help\n§" +
+                            "    Shows this help text\n§";
+                    }
                 default:
                     return data[0] + ": command not found\n";
             }

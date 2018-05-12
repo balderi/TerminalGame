@@ -95,6 +95,10 @@ namespace TerminalGame.UI.Modules
 
             UpdateOutput();
             terminalInput.Clear();
+
+            if(isMultiLine)
+                UpdateOutput();
+
         }
 
         private void TerminalInput_TabDown(object sender, KeyboardInput.KeyEventArgs e)
@@ -256,7 +260,7 @@ namespace TerminalGame.UI.Modules
         {
             isMultiLine = false;
             int maxlen = 77;
-            if (text.Length <= maxlen)
+            if (text.Length <= maxlen || text.Contains("§"))
                 return text;
 
             isMultiLine = true;
