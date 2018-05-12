@@ -8,16 +8,15 @@ using TerminalGame.Computers;
 
 namespace TerminalGame.Programs
 {
-    class Connect
+    class Connection
     {
         /// <summary>
         /// Call the COnnect method on the computer with the given IP address
         /// </summary>
         /// <param name="IP"></param>
-        public static bool connect(string IP)
+        public static bool Connect(string IP)
         {
             Console.WriteLine("Running connect on " + IP + " ...");
-            bool conn = false;
             foreach(Computer c in Computers.Computers.computerList)
             {
                 if(IP == Player.GetInstance().ConnectedComputer.IP || IP == Player.GetInstance().ConnectedComputer.Name)
@@ -28,22 +27,17 @@ namespace TerminalGame.Programs
                 if (c.IP == IP || c.Name == IP)
                 {
                     c.Connect(false);
-                    conn = true;
                     return true;
                 }
-            }/*
-            if(!conn)
-            {*/
-                Console.WriteLine("Could not connect to " + IP);
-                return false;
-            //}
-
-            //return "Could not connect to " + IP;
+            }
+            Console.WriteLine("Could not connect to " + IP);
+            return false;
         }
+
         /// <summary>
         /// Call the Disconnect method on the computer with the given IP address
         /// </summary>
-        public static void disconnect()
+        public static void Disconnect()
         {
             Player.GetInstance().ConnectedComputer.Disconnect(false);
         }

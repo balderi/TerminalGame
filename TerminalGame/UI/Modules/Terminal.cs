@@ -13,6 +13,7 @@ namespace TerminalGame.UI.Modules
     {
         //TODO: Make singleton (if necessary), and add the instance to the player, instead of the game itself
         //TODO: Add ability to take input from outside sources (programs, messages, etc.)
+        //TODO: Add a 'write' method, so programs and other things can print messages directly to the terminal
 
         private TextBox terminalInput;
         private Rectangle connAdd, inputViewport, outputViewport;
@@ -103,6 +104,7 @@ namespace TerminalGame.UI.Modules
 
         private void TerminalInput_TabDown(object sender, KeyboardInput.KeyEventArgs e)
         {
+            //TODO: Make autocomplete work as intended
             terminalInput.Text.String = "Autocomplete command";
             terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
         }

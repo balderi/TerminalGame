@@ -76,9 +76,8 @@ namespace TerminalGame.Computers.FileSystems
         {
             if (obj == null)
                 return 1;
-            File otherFile = obj as File;
-            if (otherFile != null)
-                return this.Name.CompareTo(otherFile.Name);
+            if (obj is File otherFile)
+                return Name.CompareTo(otherFile.Name);
             else
                 throw new ArgumentException("Object is not a File");
         }

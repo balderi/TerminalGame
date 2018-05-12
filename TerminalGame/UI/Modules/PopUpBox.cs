@@ -13,15 +13,14 @@ namespace TerminalGame.UI.Modules
 {
     class PopUpBox
     {
-        //TODO: Autosize by string length
-
-        private Texture2D backgroundTexture, borderTexture, texture;
+        private readonly Texture2D backgroundTexture;
+        private readonly Texture2D borderTexture;
         private SpriteFont font;
         private Color fontColor, backColor, borderColor;
         public Rectangle Container { get; set; }
         public Point Location { get; set; }
         public string Text { get; set; }
-        public bool isActive { get; set; }
+        public bool IsActive { get; set; }
 
         /// <summary>
         /// Creates a pop-up box with info

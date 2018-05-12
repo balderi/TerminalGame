@@ -25,7 +25,7 @@ namespace TerminalGame.UI.Modules
         public Rectangle Container { get; private set; }
 
         private MouseState CurrentMouseState, PreviousMouseState;
-        private Texture2D Texture;
+        private readonly Texture2D Texture;
         private Color Color, HoverColor, CurrentColor, ConnectedColor, PlayerColor;
 
         public NetworkNode(Texture2D texture, Computer computer, Rectangle container, PopUpBox infoBox)
@@ -99,11 +99,17 @@ namespace TerminalGame.UI.Modules
         }
     }
 
+    /// <summary>
+    /// Fires when node is clicked
+    /// </summary>
     public class NodeClickedEventArgs : EventArgs
     {
         public string IP { get; set; }
     }
 
+    /// <summary>
+    /// Fires when mouse hovers over the node
+    /// </summary>
     public class NodeHoverEventArgs : EventArgs
     {
         public string IP { get; set; }

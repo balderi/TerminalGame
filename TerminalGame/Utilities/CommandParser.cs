@@ -91,7 +91,7 @@ namespace TerminalGame.Utilities
                     {
                         if(data.Length > 1)
                         {
-                            if (Programs.Connect.connect(data[1]))
+                            if (Programs.Connection.Connect(data[1]))
                                 return "Connected to " + data[1] + "\n";
                             else
                                 return "Could not connect to " + data[1] + "\n";
@@ -103,7 +103,7 @@ namespace TerminalGame.Utilities
                     {
                         if (!Player.GetInstance().PlayersComputer.IsPlayerConnected)
                         {
-                            Programs.Connect.disconnect();
+                            Programs.Connection.Disconnect();
                             return "Disconnected\n";
                         }
                         return "Cannot disconnect from gateway\n";

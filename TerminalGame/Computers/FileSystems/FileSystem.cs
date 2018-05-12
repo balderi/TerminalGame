@@ -105,10 +105,15 @@ namespace TerminalGame.Computers.FileSystems
 
         private string ListFiles(File file)
         {
+            //Sorts alphabetically
             file.Children.Sort();
             string retval = "";
             if (file.Parent != CurrentDir)
+            {
+                retval += "    <DIR>    .\n§";
                 retval += "    <DIR>    ..\n§";
+            }
+            
             foreach (File f in file.Children)
             {
                 if (f.IsDirectory)

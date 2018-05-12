@@ -18,7 +18,7 @@ namespace TerminalGame.UI.Modules
         public override bool IsActive { get; set; }
         public override string Title { get; set; }
 
-        private SpriteFont lilFont;
+        private readonly SpriteFont lilFont;
         private string connectionInfo;
 
         public StatusBar(GraphicsDevice graphics, Rectangle container, SpriteFont spriteFont) : base(graphics, container)

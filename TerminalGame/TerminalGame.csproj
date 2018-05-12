@@ -86,7 +86,7 @@
     <Compile Include="LoadingScreen.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Player.cs" />
-    <Compile Include="Programs\Connect.cs" />
+    <Compile Include="Programs\Connection.cs" />
     <Compile Include="Programs\Program.cs" />
     <Compile Include="OS\Programs.cs" />
     <Compile Include="Scenes\IScene.cs" />
