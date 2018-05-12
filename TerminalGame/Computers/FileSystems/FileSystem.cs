@@ -56,22 +56,6 @@ namespace TerminalGame.Computers.FileSystems
                 }
             }
             return false;
-
-            //try
-            //{
-            //    Console.WriteLine("*** TRYFIND TRY");
-            //    bool findFile(File f)
-            //    {
-            //        if (isDir)
-            //            return f.Name == name && f.IsDirectory;
-            //        return f.Name == name && !f.IsDirectory;
-            //    }
-            //    return CurrentDir.Children.Find(findFile) != null;
-            //}
-            //catch
-            //{
-            //    return false;
-            //}
         }
 
         public void ChangeDir(string name)
@@ -121,6 +105,7 @@ namespace TerminalGame.Computers.FileSystems
 
         private string ListFiles(File file)
         {
+            file.Children.Sort();
             string retval = "";
             if (file.Parent != CurrentDir)
                 retval += "    <DIR>    ..\n§";

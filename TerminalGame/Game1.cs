@@ -22,7 +22,7 @@ namespace TerminalGame
         SpriteBatch spriteBatch;
         Menu mainMenu;
         
-        private SpriteFont font, fontXL, testfont, menuFont, fontS;
+        private SpriteFont font, fontL, fontXL, testfont, menuFont, fontS, fontXS;
         private Song bgm_game, bgm_menu;
         SoundEffect yay, click1;
         private readonly string GameTitle;
@@ -34,6 +34,7 @@ namespace TerminalGame
         Terminal terminal;
         TestModule module;
         NetworkMap networkMap;
+        StatusBar statusBar;
 
         Computer playerComp;
 
@@ -91,11 +92,13 @@ namespace TerminalGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            font = Content.Load<SpriteFont>("Fonts/terminalFont");
-            menuFont = Content.Load<SpriteFont>("Fonts/terminalFontL");
-            fontXL = Content.Load<SpriteFont>("Fonts/terminalFontXL");
-            testfont = Content.Load<SpriteFont>("Fonts/terminalFontXS");
+            fontXS = Content.Load<SpriteFont>("Fonts/terminalFontXS");
             fontS = Content.Load<SpriteFont>("Fonts/terminalFontS");
+            font = Content.Load<SpriteFont>("Fonts/terminalFont");
+            fontL = Content.Load<SpriteFont>("Fonts/terminalFontL");
+            fontXL = Content.Load<SpriteFont>("Fonts/terminalFontXL");
+            menuFont = Content.Load<SpriteFont>("Fonts/terminalFontL");
+            testfont = Content.Load<SpriteFont>("Fonts/terminalFontXS");
             yay = Content.Load<SoundEffect>("Audio/Sounds/yay");
             click1 = Content.Load<SoundEffect>("Audio/Sounds/click1");
             bgm_game = Content.Load<Song>("Audio/Music/ambientbgm1_2");
@@ -233,6 +236,15 @@ namespace TerminalGame
                 Font = fontS,
             };
 
+            statusBar = new StatusBar(GraphicsDevice, new Rectangle(704, 2, graphics.PreferredBackBufferWidth - 706, (int)fontL.MeasureString("A").Y), fontXS)
+            {
+                BackgroundColor = Color.MidnightBlue,
+                BorderColor = Color.MidnightBlue,
+                HeaderColor = Color.MidnightBlue,
+                Title = "Status Bar",
+                Font = fontL,
+            };
+
             Console.WriteLine("INIT: Name:" + playerComp.Name);
             Console.WriteLine("INIT: Connect: " + playerComp.IsPlayerConnected);
             Console.WriteLine("CHK: Connect: " + (Player.GetInstance().PlayersComputer != null).ToString());
@@ -273,6 +285,7 @@ namespace TerminalGame
                         module.Update(gameTime);
                         terminal.Update(gameTime);
                         networkMap.Update(gameTime);
+                        statusBar.Update(gameTime);
                         break;
                     }
                 default:
@@ -302,6 +315,7 @@ namespace TerminalGame
                         module.Draw(spriteBatch);
                         terminal.Draw(spriteBatch);
                         networkMap.Draw(spriteBatch);
+                        statusBar.Draw(spriteBatch);
                         break;
                     }
                 default:

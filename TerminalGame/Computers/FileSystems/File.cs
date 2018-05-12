@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TerminalGame.Computers.FileSystems
 {
-    class File
+    class File : IComparable
     {
         public enum FileType
         {
@@ -70,6 +70,17 @@ namespace TerminalGame.Computers.FileSystems
             {
                 Children.Remove(file);
             }
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj == null)
+                return 1;
+            File otherFile = obj as File;
+            if (otherFile != null)
+                return this.Name.CompareTo(otherFile.Name);
+            else
+                throw new ArgumentException("Object is not a File");
         }
     }
 }
