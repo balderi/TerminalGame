@@ -56,7 +56,7 @@ namespace TerminalGame.UI.Modules
                         intersects = false;
                     }
                 }
-                NetworkNode n = new NetworkNode(texture, c, cont, new PopUpBox("info\nbox", new Rectangle(0, 0, 150, 50), SpriteFont, Color.White, Color.Black * 0.5f, Color.White, graphics));
+                NetworkNode n = new NetworkNode(texture, c, cont, new PopUpBox(c.Name + "\n" + c.IP, new Point(0,0), SpriteFont, Color.White, Color.Black * 0.5f, Color.White, graphics));
                 nodes.Add(n);
                 n.Click += OnNodeClick;
                 Thread.Sleep(5);
@@ -69,7 +69,7 @@ namespace TerminalGame.UI.Modules
             Drawing.DrawBorder(spriteBatch, container, texture, 1, BorderColor);
             spriteBatch.Draw(texture, container, BackgroundColor);
             spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
-            spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y + 2), Color.White);
+            spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
 
             foreach (NetworkNode node in nodes)
             {

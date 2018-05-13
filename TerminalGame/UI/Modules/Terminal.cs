@@ -11,7 +11,6 @@ namespace TerminalGame.UI.Modules
 {
     class Terminal : Module
     {
-        //TODO: Make singleton (if necessary), and add the instance to the player, instead of the game itself
         //TODO: Add ability to take input from outside sources (programs, messages, etc.)
         //TODO: Add a 'write' method, so programs and other things can print messages directly to the terminal
 
@@ -63,12 +62,19 @@ namespace TerminalGame.UI.Modules
         private void TerminalInput_EnterDown(object sender, KeyboardInput.KeyEventArgs e)
         {
             Console.WriteLine("CMD: " + terminalInput.Text.String);
-            //output.Add(InputWrap(connectedAddress + terminalInput.Text.String + "\n"));
-            string input = InputWrap(connectedAddress + terminalInput.Text.String + "\n");
+            string input;
+            if (terminalInput.Text.String.Contains("§"))
+            {
+                string temp = terminalInput.Text.String.Replace('§', '?');
+                input = InputWrap(connectedAddress + temp + "\n");
+            }
+            else
+                input = InputWrap(connectedAddress + terminalInput.Text.String + "\n");
+
             string pars = "";
             currentIndex = 0;
 
-            if (!string.IsNullOrEmpty(terminalInput.Text.String))
+            if (!string.IsNullOrEmpty(terminalInput.Text.String) && !terminalInput.Text.String.Contains("§"))
                 pars = TextWrap(CommandParser.ParseCommand(terminalInput.Text.String));
 
             string[] o = pars.Split('§');
@@ -156,7 +162,7 @@ namespace TerminalGame.UI.Modules
         public void Init()
         {
             connectedComputer = Player.GetInstance().ConnectedComputer;
-            connectedAddress = "root@localhost > ";
+            connectedAddress = "root@127.0.0.1 > ";
             terminalOutput = "";
             history = new List<string>();
             output = new List<string>();
@@ -211,7 +217,7 @@ namespace TerminalGame.UI.Modules
 
             inputViewport.X = connAdd.X + connAdd.Width;
             inputViewport.Width = container.Width - connAdd.Width;
-            terminalInput = new TextBox(inputViewport, (76 - connectedAddress.Length), "", graphics, terminalFont, Color.LightGray, Color.DarkGreen, 30);
+            terminalInput = new TextBox(inputViewport, 256, "", graphics, terminalFont, Color.LightGray, Color.DarkGreen, 30); //(76 - connectedAddress.Length)
             terminalInput.Renderer.Color = Color.LightGray;
             terminalInput.Cursor.Selection = new Color(Color.PeachPuff, .4f);
             terminalInput.Active = true;
@@ -253,7 +259,7 @@ namespace TerminalGame.UI.Modules
             Texture2D texture = Drawing.DrawBlankTexture(graphics);
             spriteBatch.Draw(texture, container, BackgroundColor);
             spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
-            spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y + 2), Color.White);
+            spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
             Drawing.DrawBorder(spriteBatch, container, texture, 1, BorderColor);
 
             spriteBatch.DrawString(terminalFont, connectedAddress, new Vector2(connAdd.X, connAdd.Y), Color.LightGray);

@@ -27,13 +27,17 @@ namespace TerminalGame.Computers
         public static void DoComputers()
         {
             computerList = new List<Computer>();
-            //FileSystems.FileSystem fs = new FileSystems.FileSystem();
             Computer c1 = new Computer(Computer.Type.Workstation, "123.123.123.123", "TestComputer", "abc123");
             Computer c2 = new Computer(Computer.Type.Server, "100.100.100.100", "TestServer", "abc123");
+            Computer c3 = new Computer(Computer.Type.Server, "1.12.123.123", "TestServer With A Pretty Long Name Just To Check Dat InfoBox", "abc123");
+            Computer c4 = new Computer(Computer.Type.Server, "111.111.111.111", "Intraware Technology Internal Services Machine", "abc123");
+            
             computerList.Add(c1);
             computerList.Add(c2);
+            computerList.Add(c3);
+            computerList.Add(c4);
 
-            for(int i = 0; i < 10; i++)
+            for (int i = 0; i < 25; i++)
             {
                 Computer c = new Computer(Computer.Type.Workstation, IPgen(), "Workstation" + i, "password");
                 computerList.Add(c);

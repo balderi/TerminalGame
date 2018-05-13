@@ -44,6 +44,28 @@ namespace TerminalGame.UI.Modules
             borderTexture = Drawing.DrawBlankTexture(GraphicsDevice);
         }
 
+        /// <summary>
+        /// Creates an auto-sizing pop-up box with info
+        /// </summary>
+        /// <param name="Text">Pop-up box text</param>
+        /// <param name="Location">Specifies position of Pop-up box</param>
+        /// <param name="Font">Font used to draw Pop-up box text</param>
+        /// <param name="FontColor">Text color</param>
+        /// <param name="BackColor">Pop-up box color</param>
+        /// <param name="BorderColor">Pop-up box color when hovering</param>
+        /// <param name="GraphicsDevice">GraphicsDevice used to render</param>
+        public PopUpBox(string Text, Point Location, SpriteFont Font, Color FontColor, Color BackColor, Color BorderColor, GraphicsDevice GraphicsDevice)
+        {
+            this.Text = Text;
+            font = Font;
+            fontColor = FontColor;
+            backColor = BackColor;
+            borderColor = BorderColor;
+            backgroundTexture = Drawing.DrawBlankTexture(GraphicsDevice);
+            borderTexture = Drawing.DrawBlankTexture(GraphicsDevice);
+            Container = new Rectangle(Location.X, Location.Y, (int)font.MeasureString(Text).Length() + 20, (int)font.MeasureString(Text).Y + 10);
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             if (!string.IsNullOrEmpty(Text))

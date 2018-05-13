@@ -22,7 +22,7 @@ namespace TerminalGame
         SpriteBatch spriteBatch;
         Menu mainMenu;
         
-        private SpriteFont font, fontL, fontXL, testfont, menuFont, fontS, fontXS;
+        private SpriteFont font, fontL, fontXL, menuFont, fontS, fontXS;
         private Song bgm_game, bgm_menu;
         SoundEffect yay, click1;
         private readonly string GameTitle;
@@ -35,6 +35,8 @@ namespace TerminalGame
         TestModule module;
         NetworkMap networkMap;
         StatusBar statusBar;
+        RemoteView remoteView;
+        NotesModule notes;
 
         Computer playerComp;
 
@@ -93,23 +95,34 @@ namespace TerminalGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            Console.Write("Loading fonts");
             fontXS = Content.Load<SpriteFont>("Fonts/terminalFontXS");
+            Console.Write(".");
             fontS = Content.Load<SpriteFont>("Fonts/terminalFontS");
+            Console.Write(".");
             font = Content.Load<SpriteFont>("Fonts/terminalFont");
+            Console.Write(".");
             fontL = Content.Load<SpriteFont>("Fonts/terminalFontL");
+            Console.Write(".");
             fontXL = Content.Load<SpriteFont>("Fonts/terminalFontXL");
+            Console.Write(".");
             menuFont = Content.Load<SpriteFont>("Fonts/terminalFontL");
-            testfont = Content.Load<SpriteFont>("Fonts/terminalFontXS");
+            Console.Write(".");
             yay = Content.Load<SoundEffect>("Audio/Sounds/yay");
+            Console.Write(".");
             click1 = Content.Load<SoundEffect>("Audio/Sounds/click1");
+            Console.Write(".");
             bgm_game = Content.Load<Song>("Audio/Music/ambientbgm1_2");
+            Console.Write(".");
             bgm_menu = Content.Load<Song>("Audio/Music/mainmenu");
+            Console.WriteLine("Done");
             MediaPlayer.Play(bgm_menu);
 
             mainMenu = new Menu(GameTitle, spriteBatch, menuFont, GraphicsDevice);
 
             mainMenu.ButtonClicked += MainMenu_ButtonClicked;
-            
+
+            Console.WriteLine("Loading textures");
             bg = Content.Load<Texture2D>("Textures/bg");
             computer = Content.Load<Texture2D>("Textures/nmapComputer");
             
@@ -177,8 +190,6 @@ namespace TerminalGame
         protected override void OnActivated(object sender, EventArgs args)
         {
             base.OnActivated(sender, args);
-            //history.Add("Window regained focus\n");
-            //UpdateOutput();
         }
 
         /// <summary>
@@ -189,17 +200,15 @@ namespace TerminalGame
         protected override void OnDeactivated(object sender, EventArgs args)
         {
             base.OnDeactivated(sender, args);
-            //history.Add("Window lost focus\n");
-            //UpdateOutput();
         }
 
         private void StartNewGame()
         {
             Console.WriteLine("Starting new game...");
 
-
             playerComp = new Computer(Computer.Type.Workstation, "127.0.0.1", "localhost", "pasword");
-            
+
+            Console.WriteLine("Setting up computers...");
             Computers.Computers.DoComputers();
             Computers.Computers.computerList.Add(playerComp);
 
@@ -209,8 +218,9 @@ namespace TerminalGame
             Player.GetInstance().PlayersComputer = playerComp;
 
             bgR = new Rectangle(new Point(0, 0), new Point(bg.Width, bg.Height));
-            
-            terminal = new Terminal(GraphicsDevice, new Rectangle(2, 2, 700, graphics.PreferredBackBufferHeight - 4), font)
+
+            Console.WriteLine("Loading terminal...");
+            terminal = new Terminal(GraphicsDevice, new Rectangle(2, 1, 700, graphics.PreferredBackBufferHeight - 2), font)
             {
                 BackgroundColor = Color.Black * 0.75f,
                 BorderColor = Color.RoyalBlue,
@@ -219,6 +229,7 @@ namespace TerminalGame
                 Font = fontS,
             };
 
+            Console.WriteLine("Loading module...");
             module = new TestModule(GraphicsDevice, new Rectangle(750, 500, 400, 200), fontS, click1, yay)
             {
                 BackgroundColor = Color.Pink * 0.5f,
@@ -228,7 +239,8 @@ namespace TerminalGame
                 Font = fontS,
             };
 
-            networkMap = new NetworkMap(GraphicsDevice, new Rectangle(704, graphics.PreferredBackBufferHeight - 302, graphics.PreferredBackBufferWidth - 706, 300), computer, fontS)
+            Console.WriteLine("Loading networkmap...");
+            networkMap = new NetworkMap(GraphicsDevice, new Rectangle(705, graphics.PreferredBackBufferHeight - 299, graphics.PreferredBackBufferWidth - 706, 298), computer, fontS)
             {
                 BackgroundColor = Color.Black * 0.75f,
                 BorderColor = Color.RoyalBlue,
@@ -237,13 +249,34 @@ namespace TerminalGame
                 Font = fontS,
             };
 
-            statusBar = new StatusBar(GraphicsDevice, new Rectangle(704, 2, graphics.PreferredBackBufferWidth - 706, (int)fontL.MeasureString("A").Y), fontXS)
+            Console.WriteLine("Loading statusbar...");
+            statusBar = new StatusBar(GraphicsDevice, new Rectangle(705, 1, graphics.PreferredBackBufferWidth - 706, (int)fontL.MeasureString("A").Y - 1), fontXS)
             {
                 BackgroundColor = Color.MidnightBlue,
                 BorderColor = Color.MidnightBlue,
                 HeaderColor = Color.MidnightBlue,
                 Title = "Status Bar",
                 Font = fontL,
+            };
+
+            Console.WriteLine("Loading remoteview...");
+            remoteView = new RemoteView(GraphicsDevice, new Rectangle(705, (int)fontL.MeasureString("A").Y + 4, graphics.PreferredBackBufferWidth - 706 - 304, graphics.PreferredBackBufferHeight - 304 - (int)fontL.MeasureString("A").Y - 2), fontL, font)
+            {
+                BackgroundColor = Color.Black * 0.75f,
+                BorderColor = Color.RoyalBlue,
+                HeaderColor = Color.RoyalBlue,
+                Title = "Remote System",
+                Font = fontS,
+            };
+
+            Console.WriteLine("Loading notes...");
+            notes = new NotesModule(GraphicsDevice, new Rectangle(704 + graphics.PreferredBackBufferWidth - 706 - 300, (int)fontL.MeasureString("A").Y + 4, 301, graphics.PreferredBackBufferHeight - 304 - (int)fontL.MeasureString("A").Y - 2), font)
+            {
+                BackgroundColor = Color.Black * 0.75f,
+                BorderColor = Color.RoyalBlue,
+                HeaderColor = Color.RoyalBlue,
+                Title = "Friendly neighborhood notepad",
+                Font = fontS,
             };
 
             Console.WriteLine("INIT: Name:" + playerComp.Name);
@@ -283,10 +316,11 @@ namespace TerminalGame
                     }
                 case 1:
                     {
-                        module.Update(gameTime);
                         terminal.Update(gameTime);
                         networkMap.Update(gameTime);
                         statusBar.Update(gameTime);
+                        remoteView.Update(gameTime);
+                        notes.Update(gameTime);
                         break;
                     }
                 default:
@@ -313,10 +347,11 @@ namespace TerminalGame
                 case 1:
                     {
                         spriteBatch.Draw(bg, bgR, Color.White);
-                        module.Draw(spriteBatch);
                         terminal.Draw(spriteBatch);
                         networkMap.Draw(spriteBatch);
                         statusBar.Draw(spriteBatch);
+                        remoteView.Draw(spriteBatch);
+                        notes.Draw(spriteBatch);
                         break;
                     }
                 default:
