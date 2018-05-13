@@ -42,7 +42,7 @@ namespace TerminalGame.UI.Modules
             spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
             spriteBatch.DrawString(TitleFont, ConnectionName, new Vector2(container.X + 10, container.Y + RenderHeader().Height + 10), Color.White);
             spriteBatch.DrawString(SubtitleFont, ConnectionIP, new Vector2(container.X + 10, TitleFont.MeasureString("A").Y + container.Y + RenderHeader().Height + 10), Color.White);
-            spriteBatch.DrawString(SubtitleFont, UserLevel, new Vector2(SubtitleFont.MeasureString(ConnectionIP).Length() + container.X + 20, TitleFont.MeasureString("A").Y + container.Y + RenderHeader().Height + 10), Color.Green);
+            spriteBatch.DrawString(SubtitleFont, UserLevel, new Vector2(SubtitleFont.MeasureString(ConnectionIP).Length() + container.X + 20, TitleFont.MeasureString("A").Y + container.Y + RenderHeader().Height + 10), Player.GetInstance().ConnectedComputer.PlayerHasRoot ? Color.Green : Color.Red);
         }
 
         public override void Update(GameTime gameTime)
@@ -50,7 +50,7 @@ namespace TerminalGame.UI.Modules
             ConnectedComputer = Player.GetInstance().ConnectedComputer;
             ConnectionName = ConnectedComputer.Name;
             ConnectionIP = ConnectedComputer.IP;
-            UserLevel = ConnectedComputer.PlayerHasRoot ? "You have root access on this device" : "";
+            UserLevel = ConnectedComputer.PlayerHasRoot ? "You have root access on this system" : "Access denied";
         }
 
         protected override Rectangle RenderHeader()
