@@ -53,7 +53,7 @@ namespace TerminalGame.UI.Modules
                 Title = "!!! UNNAMED WINDOW !!!";
             }
         }
-        
+
         /// <summary>
         /// Called when user hits the Enter key.
         /// Calls the Command Parser with the input text and then handles the output
@@ -63,7 +63,8 @@ namespace TerminalGame.UI.Modules
         private void TerminalInput_EnterDown(object sender, KeyboardInput.KeyEventArgs e)
         {
             Console.WriteLine("CMD: " + terminalInput.Text.String);
-            output.Add(connectedAddress + terminalInput.Text.String + "\n");
+            //output.Add(InputWrap(connectedAddress + terminalInput.Text.String + "\n"));
+            string input = InputWrap(connectedAddress + terminalInput.Text.String + "\n");
             string pars = "";
             currentIndex = 0;
 
@@ -71,7 +72,16 @@ namespace TerminalGame.UI.Modules
                 pars = TextWrap(CommandParser.ParseCommand(terminalInput.Text.String));
 
             string[] o = pars.Split('§');
+            string[] inp = input.Split('§');
             history.Insert(0, terminalInput.Text.String);
+            
+            for (int i = 0; i < inp.Length; i++)
+            {
+                if (inp[i] != "\n")
+                {
+                    output.Add(inp[i]);
+                }
+            }
 
             if (!string.IsNullOrEmpty(o[0]))
             {
@@ -152,7 +162,7 @@ namespace TerminalGame.UI.Modules
             output = new List<string>();
             connAdd = new Rectangle(container.X + 3, container.Height - RenderHeader().Height, (int)(terminalFont.MeasureString(connectedAddress).X), (int)(terminalFont.MeasureString(connectedAddress).Y));
             inputViewport = new Rectangle(connAdd.Width, connAdd.Y, container.Width - connAdd.Width, (int)(terminalFont.MeasureString("MEASURE ME").Y));
-            terminalInput = new TextBox(inputViewport, (76 - connectedAddress.Length), "", graphics, terminalFont, Color.LightGray, Color.DarkGreen, 30);
+            terminalInput = new TextBox(inputViewport, (256), "", graphics, terminalFont, Color.LightGray, Color.DarkGreen, 30); //76 - connectedAddress.Length
 
             outputViewport = new Rectangle(container.X, container.Y + RenderHeader().Height + 2, container.Width, container.Height - (inputViewport.Height) - RenderHeader().Height);
             
@@ -266,7 +276,26 @@ namespace TerminalGame.UI.Modules
                 return text;
 
             isMultiLine = true;
-            return text.Insert(maxlen - 1, "\n§");
+            for (int i = 0; i < (text.Length / maxlen); i++)
+            {
+                text = text.Insert((i + 1) * maxlen - 1, "\n§");
+            }
+            return text;
+        }
+
+        private string InputWrap(string text)
+        {
+            isMultiLine = false;
+            int maxlen = 77;
+            if (text.Length <= maxlen)
+                return text;
+
+            isMultiLine = true;
+            for(int i = 0; i < (text.Length / maxlen); i++)
+            {
+                 text = text.Insert((i + 1) * maxlen - 1, "\n§");
+            }
+            return text;
         }
 
         protected override Rectangle RenderHeader()
