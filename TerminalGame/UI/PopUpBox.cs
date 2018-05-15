@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TerminalGame.Utilities;
 
-namespace TerminalGame.UI.Modules
+namespace TerminalGame.UI
 {
     class PopUpBox
     {

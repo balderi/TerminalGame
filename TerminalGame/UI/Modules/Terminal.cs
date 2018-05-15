@@ -20,7 +20,7 @@ namespace TerminalGame.UI.Modules
         private string terminalOutput, connectedAddress;
         private List<string> history, output;
         private SpriteFont terminalFont;
-        private bool isMultiLine;
+        private bool isMultiLine, isInputBlocked;
         private Computer connectedComputer;
 
 
@@ -61,88 +61,114 @@ namespace TerminalGame.UI.Modules
         /// <param name="e">EventArgs</param>
         private void TerminalInput_EnterDown(object sender, KeyboardInput.KeyEventArgs e)
         {
-            Console.WriteLine("CMD: " + terminalInput.Text.String);
-            string input;
-            if (terminalInput.Text.String.Contains("§"))
+            if (!isInputBlocked)
             {
-                string temp = terminalInput.Text.String.Replace('§', '?');
-                input = InputWrap(connectedAddress + temp + "\n");
-            }
-            else
-                input = InputWrap(connectedAddress + terminalInput.Text.String + "\n");
-
-            string pars = "";
-            currentIndex = 0;
-
-            if (!string.IsNullOrEmpty(terminalInput.Text.String) && !terminalInput.Text.String.Contains("§"))
-                pars = TextWrap(CommandParser.ParseCommand(terminalInput.Text.String));
-
-            string[] o = pars.Split('§');
-            string[] inp = input.Split('§');
-            history.Insert(0, terminalInput.Text.String);
-            
-            for (int i = 0; i < inp.Length; i++)
-            {
-                if (inp[i] != "\n")
+                Console.WriteLine("CMD: " + terminalInput.Text.String);
+                string input;
+                if (terminalInput.Text.String.Contains("§"))
                 {
-                    output.Add(inp[i]);
+                    string temp = terminalInput.Text.String.Replace('§', '?');
+                    input = InputWrap(connectedAddress + temp + "\n");
                 }
-            }
+                else
+                    input = InputWrap(connectedAddress + terminalInput.Text.String + "\n");
 
-            if (!string.IsNullOrEmpty(o[0]))
-            {
-                for (int i = 0; i < o.Length; i++)
+                string pars = "";
+                currentIndex = 0;
+
+                if (!string.IsNullOrEmpty(terminalInput.Text.String) && !terminalInput.Text.String.Contains("§"))
+                    pars = TextWrap(CommandParser.ParseCommand(terminalInput.Text.String));
+
+                string[] o = pars.Split('§');
+                string[] inp = input.Split('§');
+                history.Insert(0, terminalInput.Text.String);
+
+                for (int i = 0; i < inp.Length; i++)
                 {
-                    if (!string.IsNullOrEmpty(o[i]) && o[i] != "\n")
+                    if (inp[i] != "\n")
                     {
-                        output.Add(o[i]);
+                        output.Add(inp[i]);
                     }
                 }
-            }
 
-            if (terminalInput.Text.String == "clear")
-                Clear();
-            if(terminalInput.Text.String == "hist")
-            {
-                foreach(string s in history)
+                if (!string.IsNullOrEmpty(o[0]))
                 {
-                    output.Add(s);
+                    for (int i = 0; i < o.Length; i++)
+                    {
+                        if (!string.IsNullOrEmpty(o[i]) && o[i] != "\n")
+                        {
+                            output.Add(o[i]);
+                        }
+                    }
                 }
-            }
 
-            UpdateOutput();
-            terminalInput.Clear();
+                if (terminalInput.Text.String == "clear")
+                    Clear();
+                if (terminalInput.Text.String == "hist")
+                {
+                    foreach (string s in history)
+                    {
+                        output.Add(s);
+                    }
+                }
 
-            if(isMultiLine)
                 UpdateOutput();
+                terminalInput.Clear();
 
+                if (isMultiLine)
+                    UpdateOutput();
+            }
+        }
+
+        public void Write(string text)
+        {
+
+        }
+
+        public void BlockInput()
+        {
+            isInputBlocked = true;
+        }
+
+        public void UnblockInput()
+        {
+            isInputBlocked = false;
         }
 
         private void TerminalInput_TabDown(object sender, KeyboardInput.KeyEventArgs e)
         {
-            //TODO: Make autocomplete work as intended
-            terminalInput.Text.String = "Autocomplete command";
-            terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
+            if (!isInputBlocked)
+            {
+                //TODO: Make autocomplete work as intended
+                terminalInput.Text.String = "Autocomplete command";
+                terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
+            }
         }
 
         private void TerminalInput_DnArrow(object sender, KeyboardInput.KeyEventArgs e)
         {
-            if (currentIndex > 0)
+            if (!isInputBlocked)
             {
-                terminalInput.Text.String = history[--currentIndex];
+                if (currentIndex > 0)
+                {
+                    terminalInput.Text.String = history[--currentIndex];
+                }
+                terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
+                Console.WriteLine("DN :: CI:{0} | HC:{1}", currentIndex, history.Count);
             }
-            terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
-            Console.WriteLine("DN :: CI:{0} | HC:{1}", currentIndex, history.Count);
         }
 
         private void TerminalInput_UpArrow(object sender, KeyboardInput.KeyEventArgs e)
-        {
-            if (history.Count > 0 && currentIndex < history.Count)
             {
-                terminalInput.Text.String = history[currentIndex++];
+            if (!isInputBlocked)
+            {
+                if (history.Count > 0 && currentIndex < history.Count)
+                {
+                    terminalInput.Text.String = history[currentIndex++];
+                }
+                terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
+                Console.WriteLine("UP :: CI:{0} | HC:{1}", currentIndex, history.Count);
             }
-            terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
-            Console.WriteLine("UP :: CI:{0} | HC:{1}", currentIndex, history.Count);
         }
 
         /// <summary>
@@ -187,7 +213,6 @@ namespace TerminalGame.UI.Modules
             {
                 c.Connected += ConnectedComputer_Connected;
                 c.Disonnected += ConnectedComputer_Disonnected;
-                Console.WriteLine("Subscribed to " + c.IP + "'s CONN/DISC Events");
             }
         }
 

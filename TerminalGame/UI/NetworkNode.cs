@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Computers;
 
-namespace TerminalGame.UI.Modules
+namespace TerminalGame.UI
 {
     class NetworkNode
     {

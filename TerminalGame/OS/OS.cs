@@ -14,6 +14,10 @@ namespace TerminalGame.OS
         //TODO: This should be a singleton module manager, for better interop
         private static OS instance;
 
+        public Terminal Terminal { get; private set; }
+        public RemoteView RemoteView { get; private set; }
+        public NetworkMap Networkmap { get; private set; }
+        public StatusBar StatusBar { get; private set; }
         public List<Module> Modules { get; private set; }
         
         private OS()
@@ -28,16 +32,6 @@ namespace TerminalGame.OS
                 instance = new OS();
             }
             return instance;
-        }
-
-        public void AddModule(Module module)
-        {
-            foreach(Module m in Modules)
-            {
-                if (module.Equals(m))
-                    return;
-            }
-            Modules.Add(module);
         }
 
         public void EnableModule(Module module)
@@ -56,6 +50,11 @@ namespace TerminalGame.OS
                 if (module.Equals(m) && m.IsActive)
                     m.IsActive = false;
             }
+        }
+
+        public void Write(string text)
+        {
+
         }
 
         public void HideModule(Module module)

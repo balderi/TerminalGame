@@ -16,8 +16,19 @@ namespace TerminalGame.Utilities
         public static string ParseCommand(string command)
         {
             var data = command.Split();
-            switch(data[0])
+            string noPriv = data[0] + ": Permission denied\n";
+            switch (data[0])
             {
+                case "sshnuke":
+                    {
+                        Player.GetInstance().ConnectedComputer.GetRoot();
+                        Thread.Sleep(10);
+                        Player.GetInstance().ConnectedComputer.Connect();
+                        return "Connecting to " + Player.GetInstance().ConnectedComputer.IP + ":ssh ... successful.\n§" +
+                            "Attempting to exploit SSHv1 CRC32 ... successful.\n§" +
+                            "Resetting root password to \"passwd\".\n§" + 
+                            "System open: Access level <9>\n";
+                    }
                 case "shutdown":
                 case "reboot":
                 case "exit":
@@ -49,35 +60,40 @@ namespace TerminalGame.Utilities
                     }
                 case "rm":
                     {
-                        if (data.Length > 1)
+                        if (Player.GetInstance().ConnectedComputer.PlayerHasRoot)
                         {
-                            if (data[1] != null && Player.GetInstance().ConnectedComputer.FileSystem.CurrentDir.Children.Count > 0 && data[1] != "*")
+                            if (data.Length > 1)
                             {
-                                if (data[1] == "-r" && data.Length > 2)
+                                if (data[1] != null && Player.GetInstance().ConnectedComputer.FileSystem.CurrentDir.Children.Count > 0 && data[1] != "*")
                                 {
-                                    if(Player.GetInstance().ConnectedComputer.FileSystem.TryFindFile(data[2], true))
-                                        Player.GetInstance().ConnectedComputer.FileSystem.RemoveFile(Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[2], true));
+                                    if (data[1] == "-r" && data.Length > 2)
+                                    {
+                                        if (Player.GetInstance().ConnectedComputer.FileSystem.TryFindFile(data[2], true))
+                                            Player.GetInstance().ConnectedComputer.FileSystem.RemoveFile(Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[2], true));
+                                        else
+                                            return data[0] + ": missing operand\n";
+                                    }
+                                    else if (Player.GetInstance().ConnectedComputer.FileSystem.TryFindFile(data[1], true))
+                                    {
+                                        return data[0] + ": cannot remove \'" + data[1] + "\': is a directory\n";
+                                    }
+                                    else if (Player.GetInstance().ConnectedComputer.FileSystem.TryFindFile(data[1], false))
+                                    {
+                                        Player.GetInstance().ConnectedComputer.FileSystem.RemoveFile(Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[1], false));
+                                    }
                                     else
-                                        return data[0] + ": missing operand\n";
-                                }
-                                else if (Player.GetInstance().ConnectedComputer.FileSystem.TryFindFile(data[1], true))
-                                {
-                                    return data[0] + ": cannot remove \'" + data[1] + "\': is a directory\n";
-                                }
-                                else if (Player.GetInstance().ConnectedComputer.FileSystem.TryFindFile(data[1], false))
-                                {
-                                    Player.GetInstance().ConnectedComputer.FileSystem.RemoveFile(Player.GetInstance().ConnectedComputer.FileSystem.FindFile(data[1], false));
+                                    {
+                                        return data[0] + ": cannot remove \'" + data[1] + "\': no such file or directory\n";
+                                    }
+                                    return "";
                                 }
                                 else
-                                {
                                     return data[0] + ": cannot remove \'" + data[1] + "\': no such file or directory\n";
-                                }
-                                return "";
                             }
-                            else
-                                return data[0] + ": cannot remove \'" + data[1] + "\': no such file or directory\n";
+                            return data[0] + ": missing operand\n";
                         }
-                        return data[0] + ": missing operand\n";
+                        else
+                            return noPriv;
                     }
                 case "man":
                     {
@@ -118,37 +134,63 @@ namespace TerminalGame.Utilities
                     }
                 case "touch":
                     {
-                        if (data.Length > 1)
-                            Player.GetInstance().ConnectedComputer.FileSystem.AddFile(data[1]);
-                        return "";
+                        if (Player.GetInstance().ConnectedComputer.PlayerHasRoot)
+                        {
+                            if (data.Length > 1)
+                                Player.GetInstance().ConnectedComputer.FileSystem.AddFile(data[1]);
+                            return "";
+                        }
+                        else
+                            return noPriv;
                     }
                 case "mkdir":
                     {
-                        if (data.Length > 1)
-                            Player.GetInstance().ConnectedComputer.FileSystem.AddDir(data[1]);
-                        return "";
+                        if (Player.GetInstance().ConnectedComputer.PlayerHasRoot)
+                        {
+                            if (data.Length > 1)
+                                Player.GetInstance().ConnectedComputer.FileSystem.AddDir(data[1]);
+                            return "";
+                        }
+                        else
+                            return noPriv;
                     }
                 case "pwd":
                     {
-                        return Player.GetInstance().ConnectedComputer.FileSystem.CurrentDir.Name + "\n";
+                        if (Player.GetInstance().ConnectedComputer.PlayerHasRoot)
+                        {
+                            return Player.GetInstance().ConnectedComputer.FileSystem.CurrentDir.Name + "\n";
+                        }
+
+                        else
+                            return noPriv;
                     }
                 case "ls":
                 case "dir":
                     {
-                        return Player.GetInstance().ConnectedComputer.FileSystem.ListFiles();
+                        if (Player.GetInstance().ConnectedComputer.PlayerHasRoot)
+                        {
+                            return Player.GetInstance().ConnectedComputer.FileSystem.ListFiles();
+                        }
+                        else
+                            return noPriv;
                     }
                 case "cd":
                     {
-                        if (data.Length > 1)
+                        if (Player.GetInstance().ConnectedComputer.PlayerHasRoot)
                         {
-                            if (Player.GetInstance().ConnectedComputer.FileSystem.TryFindFile(data[1], true))
+                            if (data.Length > 1)
                             {
-                                Player.GetInstance().ConnectedComputer.FileSystem.ChangeDir(data[1]);
-                                return "";
+                                if (Player.GetInstance().ConnectedComputer.FileSystem.TryFindFile(data[1], true))
+                                {
+                                    Player.GetInstance().ConnectedComputer.FileSystem.ChangeDir(data[1]);
+                                    return "";
+                                }
+                                return data[0] + ": " + data[1] + ": no such file or directory\n";
                             }
-                            return data[0] + ": " + data[1] + ": no such file or directory\n";
+                            return "Usage: " + data[0] + " [Directory]\n";
                         }
-                        return "Usage: " + data[0] + " [Directory]\n";
+                        else
+                            return noPriv;
                     }
                 case "help":
                     {

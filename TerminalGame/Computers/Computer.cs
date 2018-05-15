@@ -29,7 +29,6 @@ namespace TerminalGame.Computers
         
         public Computer(Type type, string IP, string Name, string RootPassword, FileSystem FileSystem)
         {
-            Console.WriteLine("Create: Computer with IP " + IP + " and Name: " + Name);
             this.type = type;
             this.IP = IP;
             this.Name = Name;
@@ -39,7 +38,6 @@ namespace TerminalGame.Computers
 
         public Computer(Type type, string IP, string Name, string RootPassword)
         {
-            Console.WriteLine("Create: Computer with IP " + IP + " and Name: " + Name);
             this.type = type;
             this.IP = IP;
             this.Name = Name;
@@ -96,11 +94,42 @@ namespace TerminalGame.Computers
         private void BuildBasicFileSystem()
         {
             FileSystem = new FileSystem();
-            string[] baseDirs = { "bin", "usr", "home", "sys" };
+            string[] baseDirs = { "bin", "usr", "home", "sys", "logs" };
             for (int i = 0; i < baseDirs.Length; i++)
             {
                 FileSystem.AddDir(baseDirs[i]);
             }
+        }
+
+        /// <summary>
+        /// For generic actions
+        /// </summary>
+        /// <param name="Source">Source system</param>
+        /// <param name="Action">The action performed e.g. gained root</param>
+        public void GenerateLog(Computer Source, string Action)
+        {
+
+        }
+
+        /// <summary>
+        /// For actions on files
+        /// </summary>
+        /// <param name="Source">Source system</param>
+        /// <param name="Action">The action performed e.g. deleted file</param>
+        /// <param name="AffectedFile">The affected file</param>
+        public void GenerateLog(Computer Source, string Action, File AffectedFile)
+        {
+
+        }
+
+        /// <summary>
+        /// For traffic routing logs, when e.g. used as proxy
+        /// </summary>
+        /// <param name="Source">Source system</param>
+        /// <param name="Dest">Destination system</param>
+        public void GenerateLog(Computer Source, Computer Dest)
+        {
+
         }
 
         /// <summary>
