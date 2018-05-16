@@ -11,7 +11,6 @@ namespace TerminalGame.OS
 {
     class OS
     {
-        //TODO: This should be a singleton module manager, for better interop
         private static OS instance;
 
         public Terminal Terminal { get; private set; }

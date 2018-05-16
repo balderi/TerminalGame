@@ -32,6 +32,20 @@ namespace TerminalGame.Computers.FileSystems
             IsDirectory = type == FileType.Directory;
         }
 
+        /// <summary>
+        /// Recursively prints the full directory path from root to current directory
+        /// </summary>
+        /// <returns>Full, formatted path as string</returns>
+        public string PrintFullPath()
+        {
+            string retval = "";
+            if (Parent != this)
+            {
+                retval += Parent.PrintFullPath() + "/" + Name;
+            }
+            return retval;
+        }
+
         public void SetParent(File parent)
         {
             Parent = parent;

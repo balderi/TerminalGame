@@ -11,16 +11,13 @@ namespace TerminalGame.UI.Modules
 {
     class Terminal : Module
     {
-        //TODO: Add ability to take input from outside sources (programs, messages, etc.)
-        //TODO: Add a 'write' method, so programs and other things can print messages directly to the terminal
-
         private TextBox terminalInput;
         private Rectangle connAdd, inputViewport, outputViewport;
         private int linesToDraw, currentIndex;
         private string terminalOutput, connectedAddress;
         private List<string> history, output;
         private SpriteFont terminalFont;
-        private bool isMultiLine, isInputBlocked;
+        private bool isMultiLine, isInputBlocked, updateInp;
         private Computer connectedComputer;
 
 
@@ -34,7 +31,7 @@ namespace TerminalGame.UI.Modules
         public Terminal(GraphicsDevice Graphics, Rectangle Container, SpriteFont TerminalFont) : base(Graphics, Container)
         {
             terminalFont = TerminalFont;
-
+            updateInp = true;
             if (BackgroundColor == null)
             {
                 BackgroundColor = Color.LightPink;
@@ -83,8 +80,7 @@ namespace TerminalGame.UI.Modules
                         output.Add(inp[i]);
                     }
                 }
-
-                string pars = "";
+                
                 currentIndex = 0;
 
                 if (!string.IsNullOrEmpty(terminalInput.Text.String) && !terminalInput.Text.String.Contains("§"))
@@ -95,6 +91,9 @@ namespace TerminalGame.UI.Modules
 
                 if (isMultiLine)
                     UpdateOutput();
+
+                connectedComputer = Player.GetInstance().ConnectedComputer;
+                updateInp = true;
             }
         }
 
@@ -144,6 +143,7 @@ namespace TerminalGame.UI.Modules
                 terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
                 Console.WriteLine("DN :: CI:{0} | HC:{1}", currentIndex, history.Count);
             }
+            updateInp = true;
         }
 
         private void TerminalInput_UpArrow(object sender, KeyboardInput.KeyEventArgs e)
@@ -157,6 +157,7 @@ namespace TerminalGame.UI.Modules
                 terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
                 Console.WriteLine("UP :: CI:{0} | HC:{1}", currentIndex, history.Count);
             }
+            updateInp = true;
         }
 
         /// <summary>
@@ -171,6 +172,36 @@ namespace TerminalGame.UI.Modules
             output.RemoveAt(0);
             Console.WriteLine("TERMINAL CLEAR");
         }
+        /// <summary>
+        /// We have to re-create the textbox each time its length should change,
+        /// otherwise the text will get deformed.
+        /// Disposes of current textbox and creates a brand new one with the proper dimensions.
+        /// </summary>
+        /// <returns>A brand new textbox</returns>
+        private TextBox TextBox()
+        {
+            if (terminalInput == null)
+            {
+                Console.WriteLine("*** CREATE TEXTBOX");
+                int maxChars = ((int)(container.Width - Font.MeasureString(connectedAddress).Length()) / (int)Font.MeasureString("_").Length()) + 200;
+                TextBox retval = new TextBox(inputViewport, maxChars, "", graphics, terminalFont, Color.LightGray, Color.DarkGreen, 30);
+                retval.Renderer.Color = Color.LightGray;
+                retval.Cursor.Selection = new Color(Color.PeachPuff, .4f);
+                retval.Active = true;
+                retval.EnterDown += TerminalInput_EnterDown;
+                retval.UpArrow += TerminalInput_UpArrow;
+                retval.DnArrow += TerminalInput_DnArrow;
+                retval.TabDown += TerminalInput_TabDown;
+                return retval;
+            }
+            else
+            {
+                Console.WriteLine("*** DISPOSE TEXTBOX");
+                terminalInput?.Dispose();
+                terminalInput = null;
+                return TextBox();
+            }
+        }
 
         /// <summary>
         /// Initialization method for the terminal
@@ -184,55 +215,54 @@ namespace TerminalGame.UI.Modules
             output = new List<string>();
             connAdd = new Rectangle(container.X + 3, container.Height - RenderHeader().Height, (int)(terminalFont.MeasureString(connectedAddress).X), (int)(terminalFont.MeasureString(connectedAddress).Y));
             inputViewport = new Rectangle(connAdd.Width, connAdd.Y, container.Width - connAdd.Width, (int)(terminalFont.MeasureString("MEASURE ME").Y));
-            terminalInput = new TextBox(inputViewport, 256, "", graphics, terminalFont, Color.LightGray, Color.DarkGreen, 30);
+
+            terminalInput = TextBox();
 
             outputViewport = new Rectangle(container.X, container.Y + RenderHeader().Height + 2, container.Width, container.Height - (inputViewport.Height) - RenderHeader().Height);
             
             linesToDraw = (int)(outputViewport.Height / terminalFont.MeasureString("MEASURE THIS").Y);
             Console.WriteLine("INIT: 0x4C54443D" + linesToDraw);
             Clear();
-            
-            terminalInput.Renderer.Color = Color.LightGray;
-            terminalInput.Cursor.Selection = new Color(Color.PeachPuff, .4f);
-            terminalInput.Active = true;
-            terminalInput.EnterDown += TerminalInput_EnterDown;
-            terminalInput.UpArrow += TerminalInput_UpArrow;
-            terminalInput.DnArrow += TerminalInput_DnArrow;
-            terminalInput.TabDown += TerminalInput_TabDown;
+
             foreach(Computer c in Computers.Computers.computerList)
             {
                 c.Connected += ConnectedComputer_Connected;
                 c.Disonnected += ConnectedComputer_Disonnected;
+                c.FileSystem.ChangeDirirectory += FileSystem_ChangeDir;
             }
+        }
+
+        private void FileSystem_ChangeDir(object sender, EventArgs e)
+        {
+            updateInp = true;
         }
 
         private void ConnectedComputer_Disonnected(object sender, ConnectEventArgs e)
         {
             Console.WriteLine("*** DISCONNECTION EVENT FIRED");
+            connectedComputer = Player.GetInstance().ConnectedComputer;
             Console.WriteLine("*** CON_STR: " + e.ConnectionString.ToString() + ", IS_RT: " + e.IsRoot.ToString());
-            //output.Add("Disconnected\n");
             UpdateOutput();
             connectedAddress = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
-            UpdateInputSize();
+            updateInp = true;
         }
 
         private void ConnectedComputer_Connected(object sender, ConnectEventArgs e)
         {
             Console.WriteLine("*** CONNECTION EVENT FIRED");
+            connectedComputer = Player.GetInstance().ConnectedComputer;
             Console.WriteLine("*** CON_STR: " + e.ConnectionString.ToString() + ", IS_RT: " + e.IsRoot.ToString());
-            //output.Add("Connecting to " + e.ConnectionString + "\n");
             UpdateOutput();
             connectedAddress = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
-            UpdateInputSize();
+            updateInp = true;
         }
         
         private void UpdateInputSize()
         {
             connAdd.Width = (int)(terminalFont.MeasureString(connectedAddress).X);
-
             inputViewport.X = connAdd.X + connAdd.Width;
             inputViewport.Width = container.Width - connAdd.Width;
-            terminalInput.Area = inputViewport;
+            terminalInput = TextBox();
         }
 
         /// <summary>
@@ -274,7 +304,12 @@ namespace TerminalGame.UI.Modules
             float lerpAmount = (float)(gameTime.TotalGameTime.TotalMilliseconds % 500f / 500f);
 
             terminalInput.Cursor.Color = Color.Lerp(Color.DarkGray, Color.LightGray, lerpAmount);
-
+            connectedAddress = connectedComputer.PlayerHasRoot ? "root@" + connectedComputer.IP + connectedComputer.FileSystem.CurrentDir.PrintFullPath() + " > " : "user@" + connectedComputer.IP + connectedComputer.FileSystem.CurrentDir.PrintFullPath() + " > ";
+            if (updateInp)
+            {
+                UpdateInputSize();
+                updateInp = false;
+            }
             terminalInput.Update();
         }
 

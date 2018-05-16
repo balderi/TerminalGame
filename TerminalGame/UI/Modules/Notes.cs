@@ -12,6 +12,7 @@ namespace TerminalGame.UI.Modules
 {
     class NotesModule : Module
     {
+        // TODO: Word-wrapping on notes
         public override SpriteFont Font { get; set; }
         public override Color BackgroundColor { get; set; }
         public override Color BorderColor { get; set; }

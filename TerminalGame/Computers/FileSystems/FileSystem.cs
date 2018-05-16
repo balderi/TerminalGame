@@ -8,6 +8,7 @@ namespace TerminalGame.Computers.FileSystems
 {
     class FileSystem
     {
+        public event EventHandler ChangeDirirectory;
         public List<File> Children;
         public File CurrentDir { get; private set; }
 
@@ -70,6 +71,7 @@ namespace TerminalGame.Computers.FileSystems
                 { return f.Name == name && f.IsDirectory && !f.Equals(CurrentDir); }
                 CurrentDir = CurrentDir.Children.Find(findFile);
             }
+            ChangeDirirectory?.Invoke(this, new EventArgs());
         }
 
         public void AddFile(string name)
