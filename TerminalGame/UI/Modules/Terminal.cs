@@ -64,6 +64,7 @@ namespace TerminalGame.UI.Modules
             if (!isInputBlocked)
             {
                 Console.WriteLine("CMD: " + terminalInput.Text.String);
+                history.Insert(0, terminalInput.Text.String);
                 string input;
                 if (terminalInput.Text.String.Contains("§"))
                 {
@@ -73,15 +74,7 @@ namespace TerminalGame.UI.Modules
                 else
                     input = InputWrap(connectedAddress + terminalInput.Text.String + "\n");
 
-                string pars = "";
-                currentIndex = 0;
-
-                if (!string.IsNullOrEmpty(terminalInput.Text.String) && !terminalInput.Text.String.Contains("§"))
-                    pars = TextWrap(CommandParser.ParseCommand(terminalInput.Text.String));
-
-                string[] o = pars.Split('§');
                 string[] inp = input.Split('§');
-                history.Insert(0, terminalInput.Text.String);
 
                 for (int i = 0; i < inp.Length; i++)
                 {
@@ -90,6 +83,15 @@ namespace TerminalGame.UI.Modules
                         output.Add(inp[i]);
                     }
                 }
+
+                string pars = "";
+                currentIndex = 0;
+
+                if (!string.IsNullOrEmpty(terminalInput.Text.String) && !terminalInput.Text.String.Contains("§"))
+                    CommandParser.ParseCommand(terminalInput.Text.String);
+
+                string[] o = pars.Split('§');
+                
 
                 if (!string.IsNullOrEmpty(o[0]))
                 {
@@ -102,8 +104,8 @@ namespace TerminalGame.UI.Modules
                     }
                 }
 
-                if (terminalInput.Text.String == "clear")
-                    Clear();
+                //if (terminalInput.Text.String == "clear")
+                //    Clear();
                 if (terminalInput.Text.String == "hist")
                 {
                     foreach (string s in history)
@@ -122,7 +124,17 @@ namespace TerminalGame.UI.Modules
 
         public void Write(string text)
         {
+            string[] formattedOut = Format(text);
+            for(int i = 0; i < formattedOut.Length; i++)
+            {
+                output.Add(TextWrap(formattedOut[i]));
+                UpdateOutput();
+            }
+        }
 
+        private string[] Format(string text)
+        {
+            return text.Split('§');
         }
 
         public void BlockInput()
@@ -180,6 +192,7 @@ namespace TerminalGame.UI.Modules
             {
                 output.Add("\n");
             }
+            Console.WriteLine("TERMINAL CLEAR");
         }
 
         /// <summary>
@@ -194,7 +207,7 @@ namespace TerminalGame.UI.Modules
             output = new List<string>();
             connAdd = new Rectangle(container.X + 3, container.Height - RenderHeader().Height, (int)(terminalFont.MeasureString(connectedAddress).X), (int)(terminalFont.MeasureString(connectedAddress).Y));
             inputViewport = new Rectangle(connAdd.Width, connAdd.Y, container.Width - connAdd.Width, (int)(terminalFont.MeasureString("MEASURE ME").Y));
-            terminalInput = new TextBox(inputViewport, (256), "", graphics, terminalFont, Color.LightGray, Color.DarkGreen, 30); //76 - connectedAddress.Length
+            terminalInput = new TextBox(inputViewport, 256, "", graphics, terminalFont, Color.LightGray, Color.DarkGreen, 30);
 
             outputViewport = new Rectangle(container.X, container.Y + RenderHeader().Height + 2, container.Width, container.Height - (inputViewport.Height) - RenderHeader().Height);
             
@@ -242,10 +255,7 @@ namespace TerminalGame.UI.Modules
 
             inputViewport.X = connAdd.X + connAdd.Width;
             inputViewport.Width = container.Width - connAdd.Width;
-            terminalInput = new TextBox(inputViewport, 256, "", graphics, terminalFont, Color.LightGray, Color.DarkGreen, 30); //(76 - connectedAddress.Length)
-            terminalInput.Renderer.Color = Color.LightGray;
-            terminalInput.Cursor.Selection = new Color(Color.PeachPuff, .4f);
-            terminalInput.Active = true;
+            terminalInput.Area = inputViewport;
         }
 
         /// <summary>

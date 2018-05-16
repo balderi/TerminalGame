@@ -25,47 +25,47 @@ namespace TerminalGame.Utilities.Tests
             Computers.Computers.computerList.Add(computer);
         }
 
-        [TestMethod]
-        public void Echo() => Assert.AreEqual("test\n", CommandParser.ParseCommand("echo \"test\""));
+        //[TestMethod]
+        //public void Echo() => Assert.AreEqual("test\n", CommandParser.ParseCommand("echo \"test\""));
 
-        [TestMethod]
-        public void Blank() => Assert.AreEqual("", CommandParser.ParseCommand(""));
+        //[TestMethod]
+        //public void Blank() => Assert.AreEqual("", CommandParser.ParseCommand(""));
 
-        [TestMethod]
-        public void Man() => Assert.AreEqual("No manual entry for test\n", CommandParser.ParseCommand("man test"));
+        //[TestMethod]
+        //public void Man() => Assert.AreEqual("No manual entry for test\n", CommandParser.ParseCommand("man test"));
 
-        [TestMethod]
-        public void Touch() => Assert.AreEqual("", CommandParser.ParseCommand("touch test"));
+        //[TestMethod]
+        //public void Touch() => Assert.AreEqual("", CommandParser.ParseCommand("touch test"));
 
-        [TestMethod]
-        public void Ls() => Assert.AreEqual("    <DIR>    bin\n§    <DIR>    home\n§    <DIR>    sys\n§    <DIR>    usr\n§", CommandParser.ParseCommand("ls"));
+        //[TestMethod]
+        //public void Ls() => Assert.AreEqual("    <DIR>    bin\n§    <DIR>    home\n§    <DIR>    sys\n§    <DIR>    usr\n§", CommandParser.ParseCommand("ls"));
 
-        [TestMethod]
-        public void TouchedLs()
-        {
-            CommandParser.ParseCommand("touch test");
-            Assert.AreEqual("    <DIR>    bin\n§    <DIR>    home\n§    <DIR>    sys\n§             test\n§    <DIR>    usr\n§", CommandParser.ParseCommand("ls"));
-        }
+        //[TestMethod]
+        //public void TouchedLs()
+        //{
+        //    CommandParser.ParseCommand("touch test");
+        //    Assert.AreEqual("    <DIR>    bin\n§    <DIR>    home\n§    <DIR>    sys\n§             test\n§    <DIR>    usr\n§", CommandParser.ParseCommand("ls"));
+        //}
 
-        [TestMethod]
-        public void ConnectNoArgs() => Assert.AreEqual("Usage: connect [IP]\n", CommandParser.ParseCommand("connect"));
+        //[TestMethod]
+        //public void ConnectNoArgs() => Assert.AreEqual("Usage: connect [IP]\n", CommandParser.ParseCommand("connect"));
 
-        [TestMethod]
-        public void ConnectAlreadyConnected()
-        {
-            Assert.AreEqual("Could not connect to test\n", CommandParser.ParseCommand("connect test"));
-        }
+        //[TestMethod]
+        //public void ConnectAlreadyConnected()
+        //{
+        //    Assert.AreEqual("Could not connect to test\n", CommandParser.ParseCommand("connect test"));
+        //}
 
-        [TestMethod]
-        public void ConnectName()
-        {
-            Assert.AreEqual("Connected to Workstation2\n", CommandParser.ParseCommand("connect Workstation2"));
-        }
+        //[TestMethod]
+        //public void ConnectName()
+        //{
+        //    Assert.AreEqual("Connected to Workstation2\n", CommandParser.ParseCommand("connect Workstation2"));
+        //}
 
-        [TestMethod]
-        public void ConnectIP()
-        {
-            Assert.AreEqual("Connected to 123.123.123.123\n", CommandParser.ParseCommand("connect 123.123.123.123"));
-        }
+        //[TestMethod]
+        //public void ConnectIP()
+        //{
+        //    Assert.AreEqual("Connected to 123.123.123.123\n", CommandParser.ParseCommand("connect 123.123.123.123"));
+        //}
     }
 }

@@ -18,8 +18,7 @@ namespace TerminalGame.UI.Modules
         public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
         public override string Title { get; set; }
-        public List<string> Notes { get; set; }
-        public int ID { get; private set; }
+        public List<string> Notes { get; private set; }
 
         private readonly SpriteFont NoteFont;
         string noteRender, divider, id, bar;
@@ -27,15 +26,40 @@ namespace TerminalGame.UI.Modules
 
         public NotesModule(GraphicsDevice Graphics, Rectangle Container, SpriteFont noteFont) : base(Graphics, Container)
         {
-            ID = 0;
             Notes = new List<string>();
             NoteFont = noteFont;
-            string sample = "This is a sample note.\nPlease ignore.";
-            string sample2 = "This is also a sample note.\nPlease ignore this too.";
+            string sample = "Use\n  note [TEXT]\nto add a note.\nE.g. note \"this is a test\"\n(Note the quotes!)";
+            string sample2 = "Use\n  note -r [ID]\nto remove a note.\nE.g. note -r 1\nwould remove this note (Note1).";
+            string sample3 = "Or\n  note -r *\nto remove all notes.";
             Notes.Add(sample);
             Notes.Add(sample2);
+            Notes.Add(sample3);
             noteRender = "";
             bar = "-----------------------------";
+        }
+
+        public void AddNote(string text)
+        {
+            Notes.Add(text);
+        }
+
+        public bool RemoveNote(int id)
+        {
+            try
+            {
+                Notes.RemoveAt(id);
+                return true;
+            }
+            catch(ArgumentOutOfRangeException e)
+            {
+                //OS.OS.GetInstance().Terminal.Write(String.Format("No note with id \'{0}\'", id));
+            }
+            return false;
+        }
+
+        public void Clear()
+        {
+            Notes.Clear();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -51,12 +75,10 @@ namespace TerminalGame.UI.Modules
         public override void Update(GameTime gameTime)
         {
             noteRender = "";
-            ID = 0;
             foreach(string s in Notes)
             {
-                id = "<Note" + ID.ToString() + ">";
+                id = "<Note" + Notes.IndexOf(s) + ">";
                 divider = "--" + id + bar.Substring(0, bar.Length - id.Length);
-                ID++;
                 noteRender += String.Format("{0}\n{1}\n",divider,s);
             }
         }

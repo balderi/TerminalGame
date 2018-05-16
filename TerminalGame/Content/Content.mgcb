@@ -79,9 +79,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/bg.jpg
 
-#begin Fonts/MonoSpatial.ttf
-/copy:Fonts/MonoSpatial.ttf
-
 #begin Audio/Music/testo.ogg
 /importer:OggImporter
 /processor:SongProcessor
@@ -117,4 +114,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/nmapComputer.png
+
+#begin Fonts/Hack-Regular.ttf
+/copy:Fonts/Hack-Regular.ttf
 

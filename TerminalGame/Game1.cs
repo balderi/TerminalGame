@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using TerminalGame.UI.Modules;
 using TerminalGame.Utilities.TextHandler;
 using TerminalGame.Computers;
-using TerminalGame.OS;
 
 namespace TerminalGame
 {
@@ -21,7 +20,9 @@ namespace TerminalGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Menu mainMenu;
-        
+
+        OS.OS os;
+
         private SpriteFont font, fontL, fontXL, menuFont, fontS, fontXS;
         private Song bgm_game, bgm_menu;
         SoundEffect yay, click1;
@@ -206,6 +207,8 @@ namespace TerminalGame
         {
             Console.WriteLine("Starting new game...");
 
+            os = OS.OS.GetInstance();
+
             playerComp = new Computer(Computer.Type.Workstation, "127.0.0.1", "localhost", "pasword");
 
             Console.WriteLine("Setting up computers...");
@@ -279,6 +282,8 @@ namespace TerminalGame
                 Font = fontS,
             };
 
+            os.Init(terminal, remoteView, networkMap, statusBar, notes);
+
             Console.WriteLine("INIT: Name:" + playerComp.Name);
             Console.WriteLine("INIT: Connect: " + playerComp.IsPlayerConnected);
             Console.WriteLine("CHK: Connect: " + (Player.GetInstance().PlayersComputer != null).ToString());
@@ -316,11 +321,13 @@ namespace TerminalGame
                     }
                 case 1:
                     {
-                        terminal.Update(gameTime);
-                        networkMap.Update(gameTime);
-                        statusBar.Update(gameTime);
-                        remoteView.Update(gameTime);
-                        notes.Update(gameTime);
+                        //terminal.Update(gameTime);
+                        //networkMap.Update(gameTime);
+                        //statusBar.Update(gameTime);
+                        //remoteView.Update(gameTime);
+                        //notes.Update(gameTime);
+
+                        os.Update(gameTime);
                         break;
                     }
                 default:
@@ -347,11 +354,13 @@ namespace TerminalGame
                 case 1:
                     {
                         spriteBatch.Draw(bg, bgR, Color.White);
-                        terminal.Draw(spriteBatch);
-                        networkMap.Draw(spriteBatch);
-                        statusBar.Draw(spriteBatch);
-                        remoteView.Draw(spriteBatch);
-                        notes.Draw(spriteBatch);
+                        //terminal.Draw(spriteBatch);
+                        //networkMap.Draw(spriteBatch);
+                        //statusBar.Draw(spriteBatch);
+                        //remoteView.Draw(spriteBatch);
+                        //notes.Draw(spriteBatch);
+
+                        os.Draw(spriteBatch);
                         break;
                     }
                 default:

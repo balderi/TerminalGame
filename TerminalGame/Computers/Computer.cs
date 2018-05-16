@@ -56,7 +56,6 @@ namespace TerminalGame.Computers
                 Console.WriteLine("*** CONN: GOING HOME");
                 Player.GetInstance().ConnectedComputer = this;
                 IsPlayerConnected = true;
-                //return "Connected to " + IP;
             }
             else
             {

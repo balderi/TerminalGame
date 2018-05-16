@@ -16,13 +16,32 @@ namespace TerminalGame.OS
 
         public Terminal Terminal { get; private set; }
         public RemoteView RemoteView { get; private set; }
-        public NetworkMap Networkmap { get; private set; }
+        public NetworkMap NetworkMap { get; private set; }
         public StatusBar StatusBar { get; private set; }
+        public NotesModule Notes { get; private set; }
         public List<Module> Modules { get; private set; }
         
         private OS()
         {
-            Modules = new List<Module>();
+            
+        }
+
+        public void Init(Terminal terminal, RemoteView remoteView, NetworkMap networkmap, StatusBar statusBar, NotesModule notes)
+        {
+            Terminal = terminal;
+            RemoteView = remoteView;
+            NetworkMap = networkmap;
+            StatusBar = statusBar;
+            Notes = notes;
+
+            Modules = new List<Module>()
+            {
+                Terminal,
+                RemoteView,
+                NetworkMap,
+                StatusBar,
+                Notes
+            };
         }
 
         public static OS GetInstance()
@@ -54,7 +73,7 @@ namespace TerminalGame.OS
 
         public void Write(string text)
         {
-
+            Terminal.Write(text);
         }
 
         public void HideModule(Module module)
