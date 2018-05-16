@@ -35,7 +35,7 @@ namespace TerminalGame.UI.Modules
             Notes.Add(sample2);
             Notes.Add(sample3);
             noteRender = "";
-            bar = "-----------------------------";
+            bar = "-------------------------------";
         }
 
         public void AddNote(string text)
@@ -50,10 +50,7 @@ namespace TerminalGame.UI.Modules
                 Notes.RemoveAt(id);
                 return true;
             }
-            catch(ArgumentOutOfRangeException e)
-            {
-                //OS.OS.GetInstance().Terminal.Write(String.Format("No note with id \'{0}\'", id));
-            }
+            catch (ArgumentOutOfRangeException e) { Console.WriteLine(e.Message); }
             return false;
         }
 
@@ -78,7 +75,7 @@ namespace TerminalGame.UI.Modules
             foreach(string s in Notes)
             {
                 id = "<Note" + Notes.IndexOf(s) + ">";
-                divider = "--" + id + bar.Substring(0, bar.Length - id.Length);
+                divider = bar.Substring(0, 2) + id + bar.Substring(0, bar.Length - id.Length - 2);
                 noteRender += String.Format("{0}\n{1}\n",divider,s);
             }
         }

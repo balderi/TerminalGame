@@ -110,16 +110,16 @@ namespace TerminalGame.Computers.FileSystems
             string retval = "";
             if (file.Parent != CurrentDir)
             {
-                retval += "    <DIR>    .\n§";
-                retval += "    <DIR>    ..\n§";
+                retval += "\n    <DIR>    .§";
+                retval += "\n    <DIR>    ..§";
             }
             
             foreach (File f in file.Children)
             {
                 if (f.IsDirectory)
-                    retval += "    <DIR>    " + f.Name + "\n§";
+                    retval += "\n    <DIR>    " + f.Name + "§";
                 else
-                    retval += "             " + f.Name + "\n§";
+                    retval += "\n             " + f.Name + "§";
             }
             return retval;
         }

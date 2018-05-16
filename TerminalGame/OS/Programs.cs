@@ -9,6 +9,10 @@ namespace TerminalGame.OS
     class Programs
     {
         private static Programs instance;
+        UI.Modules.Terminal terminal;
+        Timer timer;
+        int count;
+        string[] textToWrite;
 
         public static Programs GetInstance()
         {
@@ -19,7 +23,7 @@ namespace TerminalGame.OS
 
         private Programs()
         {
-
+            terminal = OS.GetInstance().Terminal;
         }
 
         #region Programs
@@ -52,24 +56,37 @@ namespace TerminalGame.OS
 
         public void sshnuke()
         {
-            OS.GetInstance().Terminal.Write("Connecting to " + Player.GetInstance().ConnectedComputer.IP + ":ssh ");
-            OS.GetInstance().Terminal.Write("."); Thread.Sleep(333);
-            OS.GetInstance().Terminal.Write("."); Thread.Sleep(333);
-            OS.GetInstance().Terminal.Write("."); Thread.Sleep(333);
-            OS.GetInstance().Terminal.Write(" successful.\n");
+            var autoEvent = new AutoResetEvent(false);
+            terminal.Write("\nConnecting to " + Player.GetInstance().ConnectedComputer.IP + ":ssh ");
+            count = 0;
+            textToWrite = new string[]
+            {
+                ".",
+                ".",
+                ".",
+                " successful.\nAttempting to exploit SSHv1 CRC32 ",
+                ".",
+                ".",
+                ".",
+                " successful.",
+                "\nResetting root password to \"password\".",
+                "\nSystem open: Access level <9>"
+            };
+            timer = new Timer(write, autoEvent, 1000, 333);
+        }
 
-
-            OS.GetInstance().Terminal.Write("Attempting to exploit SSHv1 CRC32 ");
-            OS.GetInstance().Terminal.Write("."); Thread.Sleep(333);
-            OS.GetInstance().Terminal.Write("."); Thread.Sleep(333);
-            OS.GetInstance().Terminal.Write("."); Thread.Sleep(333);
-            OS.GetInstance().Terminal.Write(" successful.\n"); Thread.Sleep(200);
-
-
-            OS.GetInstance().Terminal.Write("Resetting root password to \"password\".\n");
-            Player.GetInstance().ConnectedComputer.GetRoot(); Thread.Sleep(200);
-            Player.GetInstance().ConnectedComputer.Connect();
-            OS.GetInstance().Terminal.Write("System open: Access level <9>\n");
+        private void write(Object stateInfo)
+        {
+            AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
+            terminal.Write(textToWrite[count++]);
+            if(count == textToWrite.Length)
+            {
+                Player.GetInstance().ConnectedComputer.GetRoot();
+                Player.GetInstance().ConnectedComputer.Connect();
+                count = 0;
+                autoEvent.Set();
+                timer.Dispose();
+            }
         }
 
 #pragma warning restore IDE1006 // Naming Styles

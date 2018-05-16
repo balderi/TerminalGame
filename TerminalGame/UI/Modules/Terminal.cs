@@ -69,10 +69,10 @@ namespace TerminalGame.UI.Modules
                 if (terminalInput.Text.String.Contains("§"))
                 {
                     string temp = terminalInput.Text.String.Replace('§', '?');
-                    input = InputWrap(connectedAddress + temp + "\n");
+                    input = InputWrap("\n" + connectedAddress + temp);
                 }
                 else
-                    input = InputWrap(connectedAddress + terminalInput.Text.String + "\n");
+                    input = InputWrap("\n" + connectedAddress + terminalInput.Text.String);
 
                 string[] inp = input.Split('§');
 
@@ -89,31 +89,7 @@ namespace TerminalGame.UI.Modules
 
                 if (!string.IsNullOrEmpty(terminalInput.Text.String) && !terminalInput.Text.String.Contains("§"))
                     CommandParser.ParseCommand(terminalInput.Text.String);
-
-                string[] o = pars.Split('§');
                 
-
-                if (!string.IsNullOrEmpty(o[0]))
-                {
-                    for (int i = 0; i < o.Length; i++)
-                    {
-                        if (!string.IsNullOrEmpty(o[i]) && o[i] != "\n")
-                        {
-                            output.Add(o[i]);
-                        }
-                    }
-                }
-
-                //if (terminalInput.Text.String == "clear")
-                //    Clear();
-                if (terminalInput.Text.String == "hist")
-                {
-                    foreach (string s in history)
-                    {
-                        output.Add(s);
-                    }
-                }
-
                 UpdateOutput();
                 terminalInput.Clear();
 
@@ -192,6 +168,7 @@ namespace TerminalGame.UI.Modules
             {
                 output.Add("\n");
             }
+            output.RemoveAt(0);
             Console.WriteLine("TERMINAL CLEAR");
         }
 
@@ -243,7 +220,7 @@ namespace TerminalGame.UI.Modules
         {
             Console.WriteLine("*** CONNECTION EVENT FIRED");
             Console.WriteLine("*** CON_STR: " + e.ConnectionString.ToString() + ", IS_RT: " + e.IsRoot.ToString());
-            output.Add("Connecting to " + e.ConnectionString + "\n");
+            //output.Add("Connecting to " + e.ConnectionString + "\n");
             UpdateOutput();
             connectedAddress = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
             UpdateInputSize();
@@ -264,10 +241,22 @@ namespace TerminalGame.UI.Modules
         public void UpdateOutput()
         {
             int counter = 0;
-            while (output.Count > linesToDraw)
+            int lines = 0;
+            foreach (string s in output)
+            {
+                if (s.Contains("\n"))
+                    lines++;
+            }
+            while (lines > linesToDraw - 1)
             {
                 output.RemoveAt(0);
+                lines--;
                 counter++;
+            }
+            while (lines < linesToDraw - 1)
+            {
+                output.Insert(0, "\n");
+                lines++;
             }
             if (output.Count > 0)
             {
@@ -319,7 +308,7 @@ namespace TerminalGame.UI.Modules
             isMultiLine = true;
             for (int i = 0; i < (text.Length / maxlen); i++)
             {
-                text = text.Insert((i + 1) * maxlen - 1, "\n§");
+                text = text.Insert((i + 1) * maxlen - 1, "§\n");
             }
             return text;
         }
@@ -334,7 +323,7 @@ namespace TerminalGame.UI.Modules
             isMultiLine = true;
             for(int i = 0; i < (text.Length / maxlen); i++)
             {
-                 text = text.Insert((i + 1) * maxlen - 1, "\n§");
+                 text = text.Insert((i + 1) * maxlen - 1, "§\n");
             }
             return text;
         }
