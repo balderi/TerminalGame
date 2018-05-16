@@ -51,7 +51,7 @@ namespace TerminalGame
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            GameTitle = "TerminalGame v0.1a";
+            GameTitle = "TerminalGame v0.2a";
             IsFixedTimeStep = true;
         }
 
