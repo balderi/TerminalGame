@@ -208,7 +208,9 @@ namespace TerminalGame.Utilities
                     {
                         if (player.ConnectedComputer.PlayerHasRoot)
                         {
-                            if (data.Length > 1)
+                            if (data.Length > 2 && data[2].Contains("\""))
+                                player.ConnectedComputer.FileSystem.AddFile(data[1], command.Split('"')[1]);
+                            else if (data.Length > 1)
                                 player.ConnectedComputer.FileSystem.AddFile(data[1]);
                             break;
                         }
@@ -248,6 +250,27 @@ namespace TerminalGame.Utilities
                         if (player.ConnectedComputer.PlayerHasRoot)
                         {
                             terminal.Write(player.ConnectedComputer.FileSystem.ListFiles());
+                            break;
+                        }
+                        else
+                            terminal.Write(noPriv);
+                        break;
+                    }
+                case "cat":
+                    {
+                        if (player.ConnectedComputer.PlayerHasRoot)
+                        {
+                            if (data.Length > 1)
+                            {
+                                if (player.ConnectedComputer.FileSystem.TryFindFile(data[1], false))
+                                {
+                                    terminal.Write("\n" + player.ConnectedComputer.FileSystem.FindFile(data[1], false).Execute());
+                                    break;
+                                }
+                                terminal.Write("\n" + data[0] + ": no such file or directory");
+                                break;
+                            }
+                            terminal.Write("\nUsage: " + data[0] + " [FILE]");
                             break;
                         }
                         else

@@ -20,6 +20,7 @@ namespace TerminalGame.UI
 
         public Computer Computer { get; private set; }
         public Point Position { get; private set; }
+        public Point CenterPosition { get; private set; }
         public PopUpBox InfoBox { get; private set; }
         public bool IsHovering { get; private set; }
         public Rectangle Container { get; private set; }
@@ -43,11 +44,13 @@ namespace TerminalGame.UI
             Position = Container.Location;
             InfoBox = infoBox;
             var holder = InfoBox.Container;
-            holder.Location = Position + new Point(30, -5);
+            holder.Location = Position + new Point(Container.Width + 5, 0);
             InfoBox.Container = holder;
             InfoBox.Text = Computer.Name + "\n" + Computer.IP;
             NodeSpinners = nodeSpinners;
             rotationCW = 0.0f;
+
+            CenterPosition = new Point(Position.X + Container.Width / 2, Position.Y + Container.Height / 2);
 
             spinnerS = new Point(40, 40);
             spinnerN = new Point(55, 55);

@@ -33,5 +33,26 @@ namespace TerminalGame.Utilities
             spriteBatch.Draw(Texture, new Rectangle(Object.Left, Object.Top - BorderWidth, Object.Width, BorderWidth), BorderColor); // Top
             spriteBatch.Draw(Texture, new Rectangle(Object.Left, Object.Bottom, Object.Width, BorderWidth), BorderColor); // Bottom
         }
+
+        public static void DrawLine(SpriteBatch spriteBatch, Texture2D texture, Color color, Vector2 start, Vector2 end)
+        {
+            Vector2 edge = end - start;
+            // calculate angle to rotate line
+            float angle = (float)Math.Atan2(edge.Y, edge.X);
+
+
+            spriteBatch.Draw(texture,
+                new Rectangle(// rectangle defines shape of line and position of start of line
+                    (int)start.X,
+                    (int)start.Y,
+                    (int)edge.Length(), //sb will strech the texture to fill this rectangle
+                    1), //width of line, change this to make thicker line
+                null,
+                color, //colour of line
+                angle,     //angle of line (calulated above)
+                new Vector2(0, 0), // point in line about which to rotate
+                SpriteEffects.None, 0);
+
+        }
     }
 }

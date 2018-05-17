@@ -37,6 +37,10 @@ namespace TerminalGame.Computers
             computerList.Add(c3);
             computerList.Add(c4);
 
+            c1.Link(c2);
+            c2.Link(c3);
+            c3.Link(c4);
+
             for (int i = 0; i < 25; i++)
             {
                 Computer c = new Computer(Computer.Type.Workstation, IPgen(), "Workstation" + i, "password");

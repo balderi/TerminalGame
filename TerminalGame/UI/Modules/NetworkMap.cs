@@ -68,7 +68,20 @@ namespace TerminalGame.UI.Modules
         {
             Texture2D texture = Drawing.DrawBlankTexture(graphics);
             spriteBatch.Draw(texture, container, BackgroundColor);
-            
+
+            foreach (NetworkNode node in nodes)
+            {
+                if (node.Computer.LinkedComputers.Count != 0)
+                {
+                    foreach (NetworkNode node2 in nodes)
+                    {
+                        if (node.Computer.LinkedComputers.Contains(node2.Computer))
+                        {
+                            Drawing.DrawLine(spriteBatch, texture, Color.White * 0.5f, node.CenterPosition.ToVector2(), node2.CenterPosition.ToVector2());
+                        }
+                    }
+                }
+            }
             foreach (NetworkNode node in nodes)
             {
                 if (node.Computer != Player.GetInstance().ConnectedComputer && node.Computer != Player.GetInstance().PlayersComputer && !node.IsHovering)

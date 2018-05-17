@@ -14,7 +14,7 @@ namespace TerminalGame.Computers.FileSystems
 
         public FileSystem()
         {
-            File root = new File(File.FileType.Directory, "/");
+            File root = new File("/");
             root.SetParent(root);
             CurrentDir = root;
             Children = new List<File>() { root };
@@ -74,9 +74,9 @@ namespace TerminalGame.Computers.FileSystems
             ChangeDirirectory?.Invoke(this, new EventArgs());
         }
 
-        public void AddFile(string name)
+        public void AddFile(string name, string contents = null)
         {
-            File f = new File(File.FileType.File, name);
+            File f = new File(name, contents);
             f.SetParent(CurrentDir);
             CurrentDir.Children.Add(f);
         }
@@ -95,7 +95,7 @@ namespace TerminalGame.Computers.FileSystems
 
         public void AddDir(string name)
         {
-            File f = new File(File.FileType.Directory, name);
+            File f = new File(name);
             f.SetParent(CurrentDir);
             CurrentDir.Children.Add(f);
         }

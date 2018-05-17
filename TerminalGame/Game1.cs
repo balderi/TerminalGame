@@ -26,7 +26,6 @@ namespace TerminalGame
 
         private SpriteFont font, fontL, fontXL, menuFont, fontS, fontXS;
         private Song bgm_game, bgm_menu;
-        SoundEffect yay, click1;
         private readonly string GameTitle;
 
         enum GameState { Menu, Game }
@@ -34,7 +33,6 @@ namespace TerminalGame
         GameState gameState;
 
         Terminal terminal;
-        TestModule module;
         NetworkMap networkMap;
         StatusBar statusBar;
         RemoteView remoteView;
@@ -112,10 +110,6 @@ namespace TerminalGame
             fontXL = Content.Load<SpriteFont>("Fonts/terminalFontXL");
             Console.Write(".");
             menuFont = Content.Load<SpriteFont>("Fonts/terminalFontL");
-            Console.Write(".");
-            yay = Content.Load<SoundEffect>("Audio/Sounds/yay");
-            Console.Write(".");
-            click1 = Content.Load<SoundEffect>("Audio/Sounds/click1");
             Console.Write(".");
             bgm_game = Content.Load<Song>("Audio/Music/ambientbgm1_2");
             Console.Write(".");
@@ -254,16 +248,6 @@ namespace TerminalGame
                 BorderColor = Color.RoyalBlue,
                 HeaderColor = Color.RoyalBlue,
                 Title = "Terminal v0.1",
-                Font = fontS,
-            };
-
-            Console.WriteLine("Loading module...");
-            module = new TestModule(GraphicsDevice, new Rectangle(750, 500, 400, 200), fontS, click1, yay)
-            {
-                BackgroundColor = Color.Pink * 0.5f,
-                BorderColor = Color.White,
-                HeaderColor = Color.DeepPink,
-                Title = "Super Barbie Button Clicker!!!",
                 Font = fontS,
             };
 

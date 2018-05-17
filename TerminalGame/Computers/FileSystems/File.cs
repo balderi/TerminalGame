@@ -23,13 +23,22 @@ namespace TerminalGame.Computers.FileSystems
         public string Name { get; private set; }
         public File Parent { get; private set; }
 
-        public File(FileType type, string name)
+        public File(string name)
         {
-            Type = type;
+            Type = FileType.Directory;
             Name = name;
             Children = new List<File>();
 
-            IsDirectory = type == FileType.Directory;
+            IsDirectory = true;
+        }
+
+        public File(string name, string contents = null)
+        {
+            Type = FileType.File;
+            Name = name;
+            Children = new List<File>();
+            Contents = contents;
+            IsDirectory = false;
         }
 
         /// <summary>
@@ -61,7 +70,9 @@ namespace TerminalGame.Computers.FileSystems
                     }
                 case FileType.File:
                     {
-                        return String.Format("{0} is a file.", Name);
+                        if(Contents != null)
+                            return Contents;
+                        return "";
                     }
                 default:
                     {
@@ -70,11 +81,19 @@ namespace TerminalGame.Computers.FileSystems
             }
         }
 
-        public void AddFile(string name)
+        public void AddFile(string name, string contents = null)
         {
             if (IsDirectory)
             {
-                Children.Add(new File(FileType.File, name));
+                Children.Add(new File(name, contents));
+            }
+        }
+
+        public void AddFolder(string name)
+        {
+            if (IsDirectory)
+            {
+                Children.Add(new File(name));
             }
         }
 

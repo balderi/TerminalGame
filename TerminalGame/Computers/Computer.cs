@@ -22,7 +22,7 @@ namespace TerminalGame.Computers
         public bool IsPlayerConnected { get; private set; }
         public bool PlayerHasRoot { get; private set; }
         public FileSystem FileSystem { get; private set; }
-
+        public List<Computer> LinkedComputers { get; private set; }
 
         public event EventHandler<ConnectEventArgs> Connected;
         public event EventHandler<ConnectEventArgs> Disonnected;
@@ -34,6 +34,7 @@ namespace TerminalGame.Computers
             this.Name = Name;
             this.RootPassword = RootPassword;
             this.FileSystem = FileSystem;
+            LinkedComputers = new List<Computer>();
         }
 
         public Computer(Type type, string IP, string Name, string RootPassword)
@@ -43,6 +44,7 @@ namespace TerminalGame.Computers
             this.Name = Name;
             this.RootPassword = RootPassword;
             BuildBasicFileSystem();
+            LinkedComputers = new List<Computer>();
         }
 
         /// <summary>
@@ -98,6 +100,14 @@ namespace TerminalGame.Computers
             {
                 FileSystem.AddDir(baseDirs[i]);
             }
+        }
+
+        public void Link(Computer computer)
+        {
+            if (!LinkedComputers.Contains(computer))
+                LinkedComputers.Add(computer);
+            if (!computer.LinkedComputers.Contains(this))
+                computer.Link(this);
         }
 
         /// <summary>
