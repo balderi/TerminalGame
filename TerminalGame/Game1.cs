@@ -42,7 +42,9 @@ namespace TerminalGame
         Computer playerComp;
 
         Rectangle bgR;
-        Texture2D bg, computer;
+        Texture2D bg, computer, spinner01, spinner02, spinner03, spinner04, spinner05, spinner06, spinner07, spinner08;
+
+        Dictionary<string, Texture2D> NetworkNodeSpinners;
 
         /// <summary>
         /// Main game constructor
@@ -126,7 +128,28 @@ namespace TerminalGame
             Console.WriteLine("Loading textures");
             bg = Content.Load<Texture2D>("Textures/bg");
             computer = Content.Load<Texture2D>("Textures/nmapComputer");
-            
+
+            spinner01 = Content.Load<Texture2D>("Textures/spinner01");
+            spinner02 = Content.Load<Texture2D>("Textures/spinner02");
+            spinner03 = Content.Load<Texture2D>("Textures/spinner03");
+            spinner04 = Content.Load<Texture2D>("Textures/spinner04");
+            spinner05 = Content.Load<Texture2D>("Textures/spinner05");
+            spinner06 = Content.Load<Texture2D>("Textures/spinner06");
+            spinner07 = Content.Load<Texture2D>("Textures/spinner07");
+            spinner08 = Content.Load<Texture2D>("Textures/spinner08");
+
+            NetworkNodeSpinners = new Dictionary<string, Texture2D>()
+            {
+                { "ConnectedSpinner", spinner01 },
+                { "PlayerSpinner", spinner02 },
+                { "03", spinner03 },
+                { "MissionSpinner", spinner04 },
+                { "05", spinner05 },
+                { "06", spinner06 },
+                { "07", spinner07 },
+                { "HoverSpinner", spinner08 },
+            };
+
             Console.WriteLine("Done loading");
         }
 
@@ -243,7 +266,7 @@ namespace TerminalGame
             };
 
             Console.WriteLine("Loading networkmap...");
-            networkMap = new NetworkMap(GraphicsDevice, new Rectangle(705, graphics.PreferredBackBufferHeight - 299, graphics.PreferredBackBufferWidth - 706, 298), computer, fontS)
+            networkMap = new NetworkMap(GraphicsDevice, new Rectangle(705, graphics.PreferredBackBufferHeight - 299, graphics.PreferredBackBufferWidth - 706, 298), computer, fontS, NetworkNodeSpinners)
             {
                 BackgroundColor = Color.Black * 0.75f,
                 BorderColor = Color.RoyalBlue,

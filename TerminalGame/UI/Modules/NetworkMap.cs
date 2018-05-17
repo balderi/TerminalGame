@@ -28,9 +28,9 @@ namespace TerminalGame.UI.Modules
         Point size;
         Rectangle cont;
 
-        public NetworkMap(GraphicsDevice Graphics, Rectangle Container, Texture2D texture, SpriteFont font) : base(Graphics, Container)
+        public NetworkMap(GraphicsDevice Graphics, Rectangle Container, Texture2D texture, SpriteFont font, Dictionary<string, Texture2D> nodeSpinners) : base(Graphics, Container)
         {
-            size = new Point(25, 25);
+            size = new Point(32, 32);
             SpriteFont = font;
             rnd = new Random(DateTime.Now.Millisecond);
             nodes = new List<NetworkNode>();
@@ -57,7 +57,7 @@ namespace TerminalGame.UI.Modules
                         intersects = false;
                     }
                 }
-                NetworkNode n = new NetworkNode(texture, c, cont, new PopUpBox(c.Name + "\n" + c.IP, new Point(0,0), SpriteFont, Color.White, Color.Black * 0.5f, Color.White, graphics));
+                NetworkNode n = new NetworkNode(texture, c, cont, new PopUpBox(c.Name + "\n" + c.IP, new Point(0,0), SpriteFont, Color.White, Color.Black * 0.5f, Color.White, graphics), nodeSpinners);
                 nodes.Add(n);
                 n.Click += OnNodeClick;
                 Thread.Sleep(5);
@@ -67,20 +67,29 @@ namespace TerminalGame.UI.Modules
         public override void Draw(SpriteBatch spriteBatch)
         {
             Texture2D texture = Drawing.DrawBlankTexture(graphics);
-            Drawing.DrawBorder(spriteBatch, container, texture, 1, BorderColor);
             spriteBatch.Draw(texture, container, BackgroundColor);
-            spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
-            spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
-
+            
             foreach (NetworkNode node in nodes)
             {
-                node.Draw(spriteBatch);
+                if (node.Computer != Player.GetInstance().ConnectedComputer && node.Computer != Player.GetInstance().PlayersComputer && !node.IsHovering)
+                    node.Draw(spriteBatch);
             }
+            // Makes sure that nodes with spinners are drawn on top, so other nodes don't obtruct them
+            foreach (NetworkNode node in nodes)
+            {
+                if (node.Computer == Player.GetInstance().ConnectedComputer || node.Computer == Player.GetInstance().PlayersComputer || node.IsHovering)
+                    node.Draw(spriteBatch);
+            }
+            // Makes sure that infoboxes are drawn on top, so other nodes don't obtruct them
             foreach (NetworkNode node in nodes)
             {
                 if(node.IsHovering)
                     node.InfoBox.Draw(spriteBatch);
             }
+
+            Drawing.DrawBorder(spriteBatch, container, texture, 1, BorderColor);
+            spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
+            spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
         }
 
         public override void Update(GameTime gameTime)

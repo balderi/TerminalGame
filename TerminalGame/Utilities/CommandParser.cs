@@ -48,7 +48,7 @@ namespace TerminalGame.Utilities
                             }
                             else if (data[1] == "-r" && data.Length < 3)
                             {
-                                terminal.Write("\nUsage: " + data[0] + " [OPTIONS] [NOTE OR NOTE ID]");
+                                terminal.Write("\n" + data[0] + ": missing operand");
                                 break;
                             }
                             else
@@ -204,11 +204,6 @@ namespace TerminalGame.Utilities
                         terminal.Write("\nIP: " + player.ConnectedComputer.IP);
                         break;
                     }
-                case "conch":
-                    {
-                        terminal.Write("\n" + player.ConnectedComputer.IsPlayerConnected.ToString());
-                        break;
-                    }
                 case "touch":
                     {
                         if (player.ConnectedComputer.PlayerHasRoot)
@@ -239,7 +234,7 @@ namespace TerminalGame.Utilities
                     {
                         if (player.ConnectedComputer.PlayerHasRoot)
                         {
-                            terminal.Write(player.ConnectedComputer.FileSystem.CurrentDir.Name + "\n");
+                            terminal.Write("\n" + player.ConnectedComputer.FileSystem.CurrentDir.PrintFullPath());
                             break;
                         }
 
@@ -273,13 +268,14 @@ namespace TerminalGame.Utilities
                                 terminal.Write("\n" + data[0] + ": " + data[1] + ": no such file or directory");
                                 break;
                             }
-                            terminal.Write("\nUsage: " + data[0] + " [Directory]");
+                            terminal.Write("\nUsage: " + data[0] + " [DIRECTORY]");
                             break;
                         }
                         else
                             terminal.Write( noPriv);
                         break;
                     }
+                case "cls":
                 case "clear":
                     {
                         OS.OS.GetInstance().Terminal.Clear();
@@ -290,7 +286,7 @@ namespace TerminalGame.Utilities
                         terminal.Write(
                             "\n  cd [DIRECTORY]§" +
                             "\n    Changes directory§" +
-                            "\n  rm [OPTION] [FILE]§" +
+                            "\n  rm [OPTIONS] [FILE]§" +
                             "\n    Removes a file or directory§" +
                             "\n  ls / dir§" +
                             "\n    Lists all files/folders in the current directory§" +
@@ -306,8 +302,12 @@ namespace TerminalGame.Utilities
                             "\n    Disconnects from computer§" +
                             "\n  ifconfig§" +
                             "\n    Shows the IP address of the computer§" +
+                            "\n  clear / cls§" +
+                            "\n    Clears the terminal§" +
                             "\n  sshnuke§" +
                             "\n    Gain root access on another system§" +
+                            "\n  note [OPTIONS] [TEXT OR NOTE ID]§" +
+                            "\n    Add or remove note§" +
                             "\n  help§" +
                             "\n    Shows this help text§");
                         break;

@@ -26,9 +26,12 @@ namespace TerminalGame.UI
 
         private MouseState CurrentMouseState, PreviousMouseState;
         private readonly Texture2D Texture;
-        private Color Color, HoverColor, CurrentColor, ConnectedColor, PlayerColor;
+        Dictionary<string, Texture2D> NodeSpinners;
+        private Color Color, HoverColor, CurrentColor, ConnectedColor, PlayerColor, ConnectedSpinnerColor, PlayerSpinnerColor, HoverSpinnerColor;
+        float rotationCW, rotationCCW, mul;
+        Point spinnerS, spinnerN, spinnerL;
 
-        public NetworkNode(Texture2D texture, Computer computer, Rectangle container, PopUpBox infoBox)
+        public NetworkNode(Texture2D texture, Computer computer, Rectangle container, PopUpBox infoBox, Dictionary<string, Texture2D> nodeSpinners)
         {
             Texture = texture;
             Computer = computer;
@@ -43,7 +46,13 @@ namespace TerminalGame.UI
             holder.Location = Position + new Point(30, -5);
             InfoBox.Container = holder;
             InfoBox.Text = Computer.Name + "\n" + Computer.IP;
+            NodeSpinners = nodeSpinners;
+            rotationCW = 0.0f;
+            mul = 0.75f;
 
+            spinnerS = new Point(40, 40);
+            spinnerN = new Point(55, 55);
+            spinnerL = new Point(70, 70);
         }
 
         public void Update(GameTime gameTime)
@@ -76,26 +85,55 @@ namespace TerminalGame.UI
                     Click?.Invoke(nc);
                 }
             }
+            rotationCW += 0.01f;
+            rotationCCW -= 0.01f;
+            ConnectedSpinnerColor = ConnectedColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 2) + 1) * 0.5f + 0.2f);
+            PlayerSpinnerColor = PlayerColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1) + 1) * 0.5f + 0.2f);
+            HoverSpinnerColor = HoverColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1.5) + 1) * 0.5f + 0.2f);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             CurrentColor = Color;
+            Texture2D connectedSpinner, playerSpinner, hoverSpinner, missionSpinner;
 
+            connectedSpinner = SelectSpinner("ConnectedSpinner");
+            playerSpinner = SelectSpinner("PlayerSpinner");
+            hoverSpinner = SelectSpinner("HoverSpinner");
+            missionSpinner = SelectSpinner("MissionSpinner");
+
+            if (Computer == Player.GetInstance().PlayersComputer)
+            {
+                CurrentColor = PlayerColor;
+                spriteBatch.Draw(playerSpinner, new Rectangle(new Point(Container.Location.X + (Container.Width / 2), Container.Location.Y + (Container.Height / 2)), spinnerS), null, PlayerSpinnerColor, rotationCW, new Vector2(playerSpinner.Width / 2, playerSpinner.Height / 2), SpriteEffects.None, 0);
+
+            }
+            if (Computer == Player.GetInstance().ConnectedComputer)
+            {
+                CurrentColor = ConnectedColor;
+                spriteBatch.Draw(connectedSpinner, new Rectangle(new Point(Container.Location.X + (Container.Width / 2), Container.Location.Y + (Container.Height / 2)), spinnerN), null, ConnectedSpinnerColor, rotationCCW, new Vector2(connectedSpinner.Width / 2, connectedSpinner.Height / 2), SpriteEffects.None, 0);
+
+            }
             if (IsHovering)
             {
                 CurrentColor = HoverColor;
-            }
-            else if(Computer == Player.GetInstance().ConnectedComputer)
-            {
-                CurrentColor = ConnectedColor;
-            }
-            else if (Computer == Player.GetInstance().PlayersComputer)
-            {
-                CurrentColor = PlayerColor;
+                spriteBatch.Draw(hoverSpinner, new Rectangle(new Point(Container.Location.X + (Container.Width / 2), Container.Location.Y + (Container.Height / 2)), spinnerL), null, HoverSpinnerColor, rotationCW, new Vector2(hoverSpinner.Width / 2, hoverSpinner.Height / 2), SpriteEffects.None, 0);
+
             }
 
             spriteBatch.Draw(Texture, Container, CurrentColor);
+        }
+
+        private Texture2D SelectSpinner(string key)
+        {
+            foreach(KeyValuePair<string, Texture2D> spinner in NodeSpinners)
+            {
+                if (spinner.Key == key)
+                {
+                    return spinner.Value;
+                }
+            }
+            throw new Exception("No element matches key \'" + key + "\'");
         }
     }
 

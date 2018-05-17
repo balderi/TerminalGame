@@ -126,7 +126,7 @@ namespace TerminalGame.UI.Modules
         {
             if (!isInputBlocked)
             {
-                //TODO: Make autocomplete work as intended
+                // TODO: Make autocomplete work as intended
                 terminalInput.Text.String = "Autocomplete command";
                 terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
             }
@@ -169,7 +169,7 @@ namespace TerminalGame.UI.Modules
             {
                 output.Add("\n");
             }
-            output.RemoveAt(0);
+            output.RemoveAt(0); // Leave room for the next prepended newline
             Console.WriteLine("TERMINAL CLEAR");
         }
         /// <summary>
