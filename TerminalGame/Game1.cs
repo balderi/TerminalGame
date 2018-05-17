@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using TerminalGame.UI.Modules;
 using TerminalGame.Utilities.TextHandler;
 using TerminalGame.Computers;
+using System.Reflection;
 
 namespace TerminalGame
 {
@@ -53,7 +54,8 @@ namespace TerminalGame
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            GameTitle = "TerminalGame v0.2a";
+            Version version = Assembly.GetEntryAssembly().GetName().Version;
+            GameTitle = String.Format("TerminalGame v{0}.{1}a", version.Major, version.Minor);
             IsFixedTimeStep = true;
         }
 
@@ -344,12 +346,6 @@ namespace TerminalGame
                     }
                 case 1:
                     {
-                        //terminal.Update(gameTime);
-                        //networkMap.Update(gameTime);
-                        //statusBar.Update(gameTime);
-                        //remoteView.Update(gameTime);
-                        //notes.Update(gameTime);
-
                         os.Update(gameTime);
                         break;
                     }
@@ -377,12 +373,6 @@ namespace TerminalGame
                 case 1:
                     {
                         spriteBatch.Draw(bg, bgR, Color.White);
-                        //terminal.Draw(spriteBatch);
-                        //networkMap.Draw(spriteBatch);
-                        //statusBar.Draw(spriteBatch);
-                        //remoteView.Draw(spriteBatch);
-                        //notes.Draw(spriteBatch);
-
                         os.Draw(spriteBatch);
                         break;
                     }

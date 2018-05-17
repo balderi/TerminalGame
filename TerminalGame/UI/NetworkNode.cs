@@ -26,9 +26,9 @@ namespace TerminalGame.UI
 
         private MouseState CurrentMouseState, PreviousMouseState;
         private readonly Texture2D Texture;
-        Dictionary<string, Texture2D> NodeSpinners;
+        readonly Dictionary<string, Texture2D> NodeSpinners;
         private Color Color, HoverColor, CurrentColor, ConnectedColor, PlayerColor, ConnectedSpinnerColor, PlayerSpinnerColor, HoverSpinnerColor;
-        float rotationCW, rotationCCW, mul;
+        private float rotationCW, rotationCCW;
         Point spinnerS, spinnerN, spinnerL;
 
         public NetworkNode(Texture2D texture, Computer computer, Rectangle container, PopUpBox infoBox, Dictionary<string, Texture2D> nodeSpinners)
@@ -48,7 +48,6 @@ namespace TerminalGame.UI
             InfoBox.Text = Computer.Name + "\n" + Computer.IP;
             NodeSpinners = nodeSpinners;
             rotationCW = 0.0f;
-            mul = 0.75f;
 
             spinnerS = new Point(40, 40);
             spinnerN = new Point(55, 55);
