@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Utilities;
 using TerminalGame.Computers;
-using TerminalGame.UI;
 
 namespace TerminalGame.UI.Modules
 {
@@ -62,6 +59,7 @@ namespace TerminalGame.UI.Modules
                 n.Click += OnNodeClick;
                 Thread.Sleep(5);
             }
+            IsActive = true;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -115,7 +113,8 @@ namespace TerminalGame.UI.Modules
 
         private void OnNodeClick(NodeClickedEventArgs e)
         {
-            CommandParser.ParseCommand("connect " + e.IP);
+            if(IsActive)
+                CommandParser.ParseCommand("connect " + e.IP);
         }
 
         protected override Rectangle RenderHeader()

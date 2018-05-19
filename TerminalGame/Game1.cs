@@ -2,9 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework.Audio;
 using System;
-using System.Threading;
 using System.Collections.Generic;
 using TerminalGame.UI.Modules;
 using TerminalGame.Utilities.TextHandler;
@@ -22,13 +20,15 @@ namespace TerminalGame
         SpriteBatch spriteBatch;
         Menu mainMenu;
 
+        LoadingScreen load;
+
         OS.OS os;
 
         private SpriteFont font, fontL, fontXL, menuFont, fontS, fontXS;
         private Song bgm_game, bgm_menu;
         private readonly string GameTitle;
 
-        enum GameState { Menu, Game }
+        enum GameState { Menu, Game, Loading }
 
         GameState gameState;
 
@@ -121,6 +121,8 @@ namespace TerminalGame
 
             mainMenu.ButtonClicked += MainMenu_ButtonClicked;
 
+            load = new LoadingScreen(fontL, fontS);
+
             Console.WriteLine("Loading textures");
             bg = Content.Load<Texture2D>("Textures/bg");
             computer = Content.Load<Texture2D>("Textures/nmapComputer");
@@ -171,7 +173,7 @@ namespace TerminalGame
             {
                 case "New Game":
                     {
-                        MediaPlayer.Stop();
+                        gameState = GameState.Loading;
                         StartNewGame();
                         break;
                     }
@@ -225,10 +227,13 @@ namespace TerminalGame
         private void StartNewGame()
         {
             Console.WriteLine("Starting new game...");
-
+            
             os = OS.OS.GetInstance();
 
             playerComp = new Computer(Computer.Type.Workstation, "127.0.0.1", "localhost", "pasword");
+            playerComp.FileSystem.ChangeDir("bin");
+            playerComp.FileSystem.AddFile("sshnuke", "01110011011100110110100001101110011101010110101101100101001000000110000101101100011011000110111101110111011100110010000001111001011011110111010100100000011101000110111100100000011001110110000101101001011011100010000001110101011011100110000101110101011101000110100001101111011100100110100101111010011001010110010000100000011001010110111001110100011100100111100100100000011010010110111001110100011011110010000001110010011001010110110101101111011101000110010100100000011100110111100101110011011101000110010101101101011100110010000001100010011110010010000001100011011000010111010101110011011010010110111001100111001000000110000100100000011000100111010101100110011001100110010101110010001000000110111101110110011001010111001001100110011011000110111101110111001000000110100101101110001000000110000100100000011000110110100001110101011011100110101100100000011011110110011000100000011000110110111101100100011001010010000001100100011001010111001101101001011001110110111001100101011001000010000001110100011011110010000001100111011101010110000101110010011001000010000001100001011001110110000101101001011011100111001101110100001000000110001101110010011110010111000001110100011011110110011101110010011000010111000001101000011010010110001100100000011000010111010001110100011000010110001101101011011100110010000001101111011011100010000001010011010100110100100000100000011101100110010101110010011100110110100101101111011011100010000001101111011011100110010100101110");
+            playerComp.FileSystem.ChangeDir("/");
 
             Console.WriteLine("Setting up computers...");
             Computers.Computers.DoComputers();
@@ -240,14 +245,14 @@ namespace TerminalGame
             Player.GetInstance().PlayersComputer = playerComp;
 
             bgR = new Rectangle(new Point(0, 0), new Point(bg.Width, bg.Height));
-
+            
             Console.WriteLine("Loading terminal...");
             terminal = new Terminal(GraphicsDevice, new Rectangle(2, 1, 700, graphics.PreferredBackBufferHeight - 2), font)
             {
                 BackgroundColor = Color.Black * 0.75f,
                 BorderColor = Color.RoyalBlue,
                 HeaderColor = Color.RoyalBlue,
-                Title = "Terminal v0.1",
+                Title = "Terminal",
                 Font = fontS,
             };
 
@@ -257,7 +262,7 @@ namespace TerminalGame
                 BackgroundColor = Color.Black * 0.75f,
                 BorderColor = Color.RoyalBlue,
                 HeaderColor = Color.RoyalBlue,
-                Title = "NetworkMap v0.1",
+                Title = "Network Map",
                 Font = fontS,
             };
 
@@ -301,6 +306,7 @@ namespace TerminalGame
 
             gameState = GameState.Game;
 
+            MediaPlayer.Stop();
             MediaPlayer.Play(bgm_game);
         }
 
@@ -333,6 +339,11 @@ namespace TerminalGame
                         os.Update(gameTime);
                         break;
                     }
+                case 2:
+                    {
+                        load.Update(gameTime);
+                        break;
+                    }
                 default:
                     break;
             }
@@ -358,6 +369,11 @@ namespace TerminalGame
                     {
                         spriteBatch.Draw(bg, bgR, Color.White);
                         os.Draw(spriteBatch);
+                        break;
+                    }
+                case 2:
+                    {
+                        load.Draw(spriteBatch, new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2));
                         break;
                     }
                 default:

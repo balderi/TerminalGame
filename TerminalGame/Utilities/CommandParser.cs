@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 
 namespace TerminalGame.Utilities
 {
@@ -11,102 +10,75 @@ namespace TerminalGame.Utilities
         /// <summary>
         /// Parses commands
         /// </summary>
-        /// <param name="command"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        public static void ParseCommand(string command)
+        public static string ParseCommand(string input)
         {
             Player player = Player.GetInstance();
             OS.OS os = OS.OS.GetInstance();
             UI.Modules.Terminal terminal = os.Terminal;
+            OS.Programs programs = OS.Programs.GetInstance();
 
-            var data = command.Split();
-            string noPriv = "\n" + data[0] + ": Permission denied";
-            switch (data[0])
+            var data = input.Trim(' ').Split();
+
+            var command = data[0];
+
+            string[] args = new string[data.Length - 1];
+            Array.Copy(data, 1, args, 0, data.Length - 1);
+
+            string noPriv = "\n" + command + ": Permission denied";
+
+            switch (command)
             {
                 case "note":
                     {
-                        if(data.Length > 1)
-                        {
-                            if(data[1] == "-r" && data.Length > 2)
-                            {
-                                if(data[2] == "*")
-                                {
-                                    os.Notes.Clear();
-                                    terminal.Write("\nAll notes removed");
-                                    break;
-                                }
-                                if(Int32.TryParse(data[2], out int id))
-                                {
-                                    if(os.Notes.RemoveNote(id))
-                                    {
-                                        terminal.Write("\nNote removed");
-                                        break;
-                                    }
-                                }
-                                terminal.Write("\nNo note with id \'" + data[2] + "\'");
-                                break;
-                            }
-                            else if (data[1] == "-r" && data.Length < 3)
-                            {
-                                terminal.Write("\n" + data[0] + ": missing operand");
-                                break;
-                            }
-                            else
-                            {
-                                try
-                                {
-                                    os.Notes.AddNote(command.Split('"')[1]);
-                                }
-                                catch
-                                {
-                                    os.Notes.AddNote(data[1]);
-                                }
-                                terminal.Write("\nNote added");
-                                break;
-                            }
-                        }
-                        terminal.Write("\nUsage: " + data[0] + " [OPTIONS] [NOTE OR NOTE ID]");
+                        if(args.Length != 0 && input.Contains("\""))
+                            Programs.Note.Execute(args, input.Split('"')[1]);
+                        else
+                            Programs.Note.Execute(args);
                         break;
                     }
                 case "sshnuke":
                     {
-                        OS.Programs.GetInstance().sshnuke();
-                        player.ConnectedComputer.GenerateLog(player.PlayersComputer, "gained root");
+                        Programs.SSHNuke.Execute();
                         break;
                     }
                 case "shutdown":
+                    {
+                        return "\nI'm sorry Dave, I'm afraid I can't do that.";
+                    }
                 case "reboot":
+                    {
+                        return "\nI'm sorry Dave, I'm afraid I can't do that.";
+                    }
                 case "exit":
                     {
-                        terminal.Write("\nI'm sorry Dave, I'm afraid I can't do that.");
-                        break;
+                        return "\nI'm sorry Dave, I'm afraid I can't do that.";
                     }
                 case "":
                     {
-                        terminal.Write("");
-                        break;
+                        return "";
                     }
                 case "echo":
                     {
-                        if (data.Length > 1)
+                        if (data.Length > 1 && input.Contains("\""))
                         {
-                            terminal.Write("\n" + command.Split('"')[1]);
-                            break;
+                            string output = input.Split('"')[1];
+                            programs.echo(output);
+                            return "\n" + output;
                         }
-                        terminal.Write("\n");
-                        break;
+                        return "\n";
                     }
                 case "sudo":
                     {
                         if(data.Length > 1)
                         {
-                            if (data[1] == "su")
+                            if (args[0] == "su")
                             {
 
                             }
                         }
-                        terminal.Write("\n" + data[0] + ": username is not in the sudoers file. This incident will be reported.");
-                        break;
+                        return "\n" + command + ": username is not in the sudoers file. This incident will be reported.";
                     }
                 case "rm":
                     {
@@ -114,118 +86,91 @@ namespace TerminalGame.Utilities
                         {
                             if (data.Length > 1)
                             {
-                                if (data[1] != null && Player.GetInstance().ConnectedComputer.FileSystem.CurrentDir.Children.Count > 0 && data[1] != "*")
+                                if (args[0] != null && Player.GetInstance().ConnectedComputer.FileSystem.CurrentDir.Children.Count > 0 && args[0] != "*")
                                 {
-                                    if (data[1] == "-r" && data.Length > 2)
+                                    if (args[0] == "-r" && data.Length > 2)
                                     {
-                                        if (player.ConnectedComputer.FileSystem.TryFindFile(data[2], true))
+                                        if (player.ConnectedComputer.FileSystem.TryFindFile(args[1], true))
                                         {
-                                            player.ConnectedComputer.FileSystem.RemoveFile(player.ConnectedComputer.FileSystem.FindFile(data[2], true));
+                                            player.ConnectedComputer.FileSystem.RemoveFile(player.ConnectedComputer.FileSystem.FindFile(args[1], true));
                                         }
                                         else
                                         {
-                                            terminal.Write("\n" + data[0] + ": missing operand");
+                                            return "\n" + command + ": missing operand";
                                         }
                                         break;
                                     }
-                                    else if (player.ConnectedComputer.FileSystem.TryFindFile(data[1], true))
+                                    else if (player.ConnectedComputer.FileSystem.TryFindFile(args[0], true))
                                     {
-                                        terminal.Write("\n" + data[0] + ": cannot remove \'" + data[1] + "\': is a directory");
-                                        break;
+                                        return "\n" + command + ": cannot remove \'" + args[0] + "\': is a directory";
                                     }
-                                    else if (player.ConnectedComputer.FileSystem.TryFindFile(data[1], false))
+                                    else if (player.ConnectedComputer.FileSystem.TryFindFile(args[0], false))
                                     {
-                                        player.ConnectedComputer.FileSystem.RemoveFile(player.ConnectedComputer.FileSystem.FindFile(data[1], false));
+                                        player.ConnectedComputer.FileSystem.RemoveFile(player.ConnectedComputer.FileSystem.FindFile(args[0], false));
                                         break;
                                     }
                                     else
                                     {
-                                        terminal.Write("\n" + data[0] + ": cannot remove \'" + data[1] + "\': no such file or directory");
-                                        break;
+                                        return "\n" + command + ": cannot remove \'" + args[0] + "\': no such file or directory";
                                     }
                                 }
                                 else
                                 {
-                                    terminal.Write("\n" + data[0] + ": cannot remove \'" + data[1] + "\': no such file or directory");
-                                    break;
+                                    return "\n" + command + ": cannot remove \'" + args[0] + "\': no such file or directory";
                                 }
                             }
-                            terminal.Write("\n" + data[0] + ": missing operand");
-                            break;
+                            return "\n" + command + ": missing operand";
                         }
                         else
                         {
-                            terminal.Write(noPriv);
-                            break;
+                            return noPriv;
                         }
                     }
                 case "man":
                     {
                         if (data.Length > 1)
                         {
-                            terminal.Write("\nNo manual entry for " + data[1]);
-                            break;
+                            return "\nNo manual entry for " + args[0];
                         }
-                        terminal.Write("\nWhat manual page do you want?");
-                        break;
+                        return "\nWhat manual page do you want?";
                     }
                 case "connect":
                     {
-                        if(data.Length > 1)
-                        {
-                            terminal.Write("\nConnecting to " + data[1] + "...");
-                            if (Programs.Connection.Connect(data[1]))
-                            {
-                                terminal.Write("\nConnected to " + data[1]);
-                                player.ConnectedComputer.GenerateLog(player.PlayersComputer, "connected");
-                                break;
-                            }
-                            else
-                            {
-                                terminal.Write("\nCould not connect to " + data[1]);
-                                break;
-                            }
-                        }
-                        terminal.Write("\nUsage: " + data[0] + " [IP]");
+                        if (args.Length != 0)
+                            Programs.Connect.Execute(args[0]);
+                        else
+                            Programs.Connect.Execute();
                         break;
                     }
                 case "dc":
                 case "disconnect":
                     {
-                        if (!player.PlayersComputer.IsPlayerConnected)
-                        {
-                            player.ConnectedComputer.GenerateLog(player.PlayersComputer, "disconnected");
-                            Programs.Connection.Disconnect();
-                            terminal.Write("\nDisconnected");
-                            break;
-                        }
-                        terminal.Write("\nCannot disconnect from gateway");
+                        Programs.Disconnect.Execute();
                         break;
                     }
+                case "ipconfig":
                 case "ifconfig":
                     {
-                        terminal.Write("\nIP: " + player.ConnectedComputer.IP);
-                        break;
+                        return "\nIP: " + player.ConnectedComputer.IP;
                     }
                 case "touch":
                     {
                         if (player.ConnectedComputer.PlayerHasRoot)
                         {
-                            if (data.Length > 2 && data[2].Contains("\""))
+                            if (data.Length > 2 && args[1].Contains("\""))
                             {
-                                player.ConnectedComputer.FileSystem.AddFile(data[1], command.Split('"')[1]);
+                                player.ConnectedComputer.FileSystem.AddFile(args[0], input.Split('"')[1]);
                             }
                             else if (data.Length > 1)
                             {
-                                player.ConnectedComputer.FileSystem.AddFile(data[1]);
+                                player.ConnectedComputer.FileSystem.AddFile(args[0]);
                             }
-                            player.ConnectedComputer.GenerateLog(player.PlayersComputer, "created file", player.ConnectedComputer.FileSystem.FindFile(data[1], false));
-                            break;
+                            player.ConnectedComputer.GenerateLog(player.PlayersComputer, "created file", player.ConnectedComputer.FileSystem.FindFile(args[0], false));
+                            return "";
                         }
                         else
                         {
-                            terminal.Write(noPriv);
-                            break;
+                            return noPriv;
                         }
                     }
                 case "mkdir":
@@ -234,122 +179,63 @@ namespace TerminalGame.Utilities
                         {
                             if (data.Length > 1)
                             {
-                                player.ConnectedComputer.FileSystem.AddDir(data[1]);
+                                player.ConnectedComputer.FileSystem.AddDir(args[0]);
                             }
-                            break;
+                            return "";
                         }
                         else
-                            terminal.Write(noPriv);
-                        break;
+                            return noPriv;
                     }
                 case "pwd":
                     {
                         if (player.ConnectedComputer.PlayerHasRoot)
                         {
-                            terminal.Write("\n" + player.ConnectedComputer.FileSystem.CurrentDir.PrintFullPath());
-                            break;
+                            return "\n" + player.ConnectedComputer.FileSystem.CurrentDir.PrintFullPath();
                         }
 
                         else
-                            terminal.Write(noPriv);
-                        break;
+                            return noPriv;
                     }
                 case "ls":
                 case "dir":
                     {
-                        if (player.ConnectedComputer.PlayerHasRoot)
-                        {
-                            terminal.Write(player.ConnectedComputer.FileSystem.ListFiles());
-                            break;
-                        }
-                        else
-                            terminal.Write(noPriv);
+                        Programs.Ls.Execute(command);
                         break;
                     }
                 case "cat":
                     {
-                        if (player.ConnectedComputer.PlayerHasRoot)
-                        {
-                            if (data.Length > 1)
-                            {
-                                if (player.ConnectedComputer.FileSystem.TryFindFile(data[1], false))
-                                {
-                                    terminal.Write("\n" + player.ConnectedComputer.FileSystem.FindFile(data[1], false).Execute());
-                                    player.ConnectedComputer.GenerateLog(player.PlayersComputer, "accessed file", player.ConnectedComputer.FileSystem.FindFile(data[1], false));
-                                    break;
-                                }
-                                terminal.Write("\n" + data[0] + ": no such file or directory");
-                                break;
-                            }
-                            terminal.Write("\nUsage: " + data[0] + " [FILE]");
-                            break;
-                        }
+                        if(args.Length != 0)
+                            Programs.Cat.Execute(args[0]);
                         else
-                            terminal.Write(noPriv);
+                            Programs.Cat.Execute();
                         break;
                     }
                 case "cd":
                     {
-                        if (player.ConnectedComputer.PlayerHasRoot)
-                        {
-                            if (data.Length > 1)
-                            {
-                                if (player.ConnectedComputer.FileSystem.TryFindFile(data[1], true))
-                                {
-                                    player.ConnectedComputer.FileSystem.ChangeDir(data[1]);
-                                    break;
-                                }
-                                terminal.Write("\n" + data[0] + ": " + data[1] + ": no such file or directory");
-                                break;
-                            }
-                            terminal.Write("\nUsage: " + data[0] + " [DIRECTORY]");
-                            break;
-                        }
+                        if (args.Length != 0)
+                            Programs.Cd.Execute(args[0]);
                         else
-                            terminal.Write( noPriv);
+                            Programs.Cd.Execute();
                         break;
                     }
                 case "cls":
                 case "clear":
                     {
-                        OS.OS.GetInstance().Terminal.Clear();
-                        break;
+                        os.Terminal.Clear();
+                        return "";
                     }
                 case "help":
                     {
-                        terminal.Write(
-                            "\n  cd [DIRECTORY]§" +
-                            "\n    Changes directory§" +
-                            "\n  rm [OPTIONS] [FILE]§" +
-                            "\n    Removes a file or directory§" +
-                            "\n  ls / dir§" +
-                            "\n    Lists all files/folders in the current directory§" +
-                            "\n  pwd§" +
-                            "\n    Lists the current directory§" +
-                            "\n  touch [NAME]§" +
-                            "\n    Creates a file§" +
-                            "\n  mkdir [NAME]§" +
-                            "\n    Creates a directory§" +
-                            "\n  connect [IP]§" +
-                            "\n    Connects to another computer§" +
-                            "\n  disconnect / dc§" +
-                            "\n    Disconnects from computer§" +
-                            "\n  ifconfig§" +
-                            "\n    Shows the IP address of the computer§" +
-                            "\n  clear / cls§" +
-                            "\n    Clears the terminal§" +
-                            "\n  sshnuke§" +
-                            "\n    Gain root access on another system§" +
-                            "\n  note [OPTIONS] [TEXT OR NOTE ID]§" +
-                            "\n    Add or remove note§" +
-                            "\n  help§" +
-                            "\n    Shows this help text§");
+                        Programs.Help.Execute();
                         break;
                     }
                 default:
-                    terminal.Write("\n" + data[0] + ": command not found");
-                    break;
+                    {
+                        terminal.Write("\n" + command + ": command not found");
+                        return "\n" + command + ": command not found";
+                    }
             }
+            return "";
         }
     }
 }

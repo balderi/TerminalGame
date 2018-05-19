@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Utilities;
-using TerminalGame.Computers;
 
 namespace TerminalGame.UI.Modules
 {
     class NotesModule : Module
     {
         // TODO: Word-wrapping on notes
+
+        // TODO: Limit notes to length of window (or implement some kind of scrolling?)
+
         public override SpriteFont Font { get; set; }
         public override Color BackgroundColor { get; set; }
         public override Color BorderColor { get; set; }

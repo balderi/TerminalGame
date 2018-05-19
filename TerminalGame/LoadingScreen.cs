@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace TerminalGame
@@ -13,7 +8,7 @@ namespace TerminalGame
         public string LoadItem { get; set; }
 
         private SpriteFont largeFont, smallFont;
-        private string loading;
+        private readonly string loading;
         private Vector2 loadCenter, itemCenter;
         
         public LoadingScreen(SpriteFont LargeFont, SpriteFont SmallFont)
@@ -21,6 +16,7 @@ namespace TerminalGame
             largeFont = LargeFont;
             smallFont = SmallFont;
             loading = "Loading...";
+            LoadItem = "";
         }
 
         public void Update(GameTime gameTime)

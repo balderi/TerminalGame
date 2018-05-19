@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace TerminalGame.OS
@@ -10,6 +7,8 @@ namespace TerminalGame.OS
     {
         private static Programs instance;
         UI.Modules.Terminal terminal;
+        Player player = Player.GetInstance();
+        readonly OS os = OS.GetInstance();
         Timer timer;
         int count;
         string[] textToWrite;
@@ -29,67 +28,64 @@ namespace TerminalGame.OS
         #region Programs
 #pragma warning disable IDE1006 // Naming Styles
 
-        public string ls()
+        public int ls()
         {
-            return "";
+            if (player.ConnectedComputer.PlayerHasRoot)
+            {
+                terminal.Write(player.ConnectedComputer.FileSystem.ListFiles());
+                return 0;
+            }
+            else
+            {
+                return NoPriv("ls");
+            }
         }
 
-        public string cd(string folder)
+        
+
+        public int echo(string text = null)
         {
-            return "";
+            if (!String.IsNullOrEmpty(text))
+            {
+                terminal.Write("\n" + text);
+            }
+            else
+            {
+                terminal.Write("\n");
+            }
+            return 0;
         }
 
-        public string rm(string[] args)
+
+#pragma warning restore IDE1006 // Naming Styles
+        #endregion
+
+        #region other methods
+        private int NoPriv(string program)
         {
-            return "";
+            terminal.Write("\n" + program + ": Permission denied");
+            return 1;
         }
 
-        public string connect(string ip)
-        {
-            return "";
-        }
-
-        public string disconnect()
-        {
-            return "";
-        }
-
-        public void sshnuke()
+        public void TimedWrite(string[] text, int initialDelay, int tickDelay)
         {
             var autoEvent = new AutoResetEvent(false);
-            terminal.Write("\nConnecting to " + Player.GetInstance().ConnectedComputer.IP + ":ssh ");
             count = 0;
-            textToWrite = new string[]
-            {
-                ".",
-                ".",
-                ".",
-                " successful.\nAttempting to exploit SSHv1 CRC32 ",
-                ".",
-                ".",
-                ".",
-                " successful.",
-                "\nResetting root password to \"password\".",
-                "\nSystem open: Access level <9>"
-            };
-            timer = new Timer(write, autoEvent, 1000, 333);
+            textToWrite = text;
+            timer = new Timer(GenericTimedWriter, autoEvent, initialDelay, tickDelay);
         }
 
-        private void write(Object stateInfo)
+        private void GenericTimedWriter(Object stateInfo)
         {
             AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
             terminal.Write(textToWrite[count++]);
-            if(count == textToWrite.Length)
+            if (count == textToWrite.Length)
             {
-                Player.GetInstance().ConnectedComputer.GetRoot();
-                Player.GetInstance().ConnectedComputer.Connect();
                 count = 0;
                 autoEvent.Set();
                 timer.Dispose();
             }
         }
-
-#pragma warning restore IDE1006 // Naming Styles
         #endregion
     }
 }

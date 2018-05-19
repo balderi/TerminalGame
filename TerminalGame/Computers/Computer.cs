@@ -2,9 +2,6 @@
 using System;
 using TerminalGame.Computers.FileSystems;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 
 namespace TerminalGame.Computers
 {
@@ -92,7 +89,7 @@ namespace TerminalGame.Computers
             }
         }
 
-        private void BuildBasicFileSystem()
+        public void BuildBasicFileSystem()
         {
             FileSystem = new FileSystem();
             string[] baseDirs = { "bin", "usr", "home", "sys", "logs" };

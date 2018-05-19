@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TerminalGame.Computers.FileSystems
 {
@@ -128,6 +125,7 @@ namespace TerminalGame.Computers.FileSystems
             CurrentDir.Children.Add(f);
         }
 
+        // TODO: Add ability to take full paths as input, e.g. /bin/subfolder/file
         public void AddFileToDir(string directoryName, string name, string contents = null)
         {
             if (TryFindFile(directoryName, true))

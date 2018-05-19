@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Threading;
 using System.Collections.Generic;
 using TerminalGame.Utilities;
 using TerminalGame.Utilities.TextHandler;
@@ -99,7 +98,7 @@ namespace TerminalGame.UI.Modules
 
         public void Write(string text)
         {
-            string[] formattedOut = Format(text);
+            string[] formattedOut = Format(TextWrap(text));
             for(int i = 0; i < formattedOut.Length; i++)
             {
                 output.Add(TextWrap(formattedOut[i]));
@@ -163,11 +162,13 @@ namespace TerminalGame.UI.Modules
         /// </summary>
         public void Clear()
         {
+            UpdateOutput();
             for (int i = 0; i < linesToDraw + 1; i++)
             {
                 output.Add("\n");
             }
             output.RemoveAt(0); // Leave room for the next prepended newline
+            UpdateOutput();
             Console.WriteLine("TERMINAL CLEAR");
         }
 
