@@ -9,6 +9,7 @@ namespace TerminalGame.Scenes
 {
     abstract class Scene : IScene
     {
+        // TODO: Make a scene for wach game state - somehow
         public Scene()
         {
 

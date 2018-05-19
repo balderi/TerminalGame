@@ -117,7 +117,7 @@ namespace TerminalGame.Computers
         /// <param name="Action">The action performed e.g. gained root</param>
         public void GenerateLog(Computer Source, string Action)
         {
-
+            FileSystem.AddFileToDir("logs", String.Format("{0} {1} {2}", DateTime.Now.ToShortTimeString(), Source.IP, Action).Replace(' ', '_'), String.Format("{0} {1}", DateTime.Now.ToShortTimeString(), Source.IP, Action));
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace TerminalGame.Computers
         /// <param name="AffectedFile">The affected file</param>
         public void GenerateLog(Computer Source, string Action, File AffectedFile)
         {
-
+            FileSystem.AddFileToDir("logs", String.Format("{0} {1} {2}", DateTime.Now.ToShortTimeString(), Source.IP, Action, AffectedFile.Name).Replace(' ', '_'), String.Format("{0} {1}", DateTime.Now.ToShortTimeString(), Source.IP, Action, AffectedFile.Name));
         }
 
         /// <summary>

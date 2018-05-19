@@ -20,10 +20,20 @@ namespace TerminalGame.Computers.FileSystems
             Children = new List<File>() { root };
         }
 
-        public File FindFile(string name, bool isDir)
+        private File FindRoot(File sourceDir)
+        {
+            while (CurrentDir.Parent.Parent != CurrentDir.Parent)
+                FindRoot(CurrentDir.Parent);
+            return sourceDir.Parent;
+        }
+
+        public File FindFile(string name, bool isDir, bool fromRoot = false)
         {
             if (name == "..")
                 return CurrentDir.Parent;
+
+            if (name == "/")
+                return FindRoot(CurrentDir);
 
             bool findFile(File f)
             {
@@ -31,28 +41,61 @@ namespace TerminalGame.Computers.FileSystems
                     return f.Name == name && f.IsDirectory;
                 return f.Name == name;
             }
-            return CurrentDir.Children.Find(findFile);
+            if (fromRoot)
+            {
+                return FindRoot(CurrentDir).Children.Find(findFile);
+            }
+            else
+            {
+                return CurrentDir.Children.Find(findFile);
+            }
         }
 
-        public bool TryFindFile(string name, bool isDir)
+        public bool TryFindFile(string name, bool isDir, bool fromRoot = false)
         {
             if (name == "..")
                 return true;
-            
-            foreach (File f in CurrentDir.Children)
+
+            if (name == "/")
+                return true;
+
+            if (fromRoot)
             {
-                if (isDir)
+                foreach (File f in FindRoot(CurrentDir).Children)
                 {
-                    if (f.Name == name && f.IsDirectory)
+                    if (isDir)
                     {
-                        return true;
+                        if (f.Name == name && f.IsDirectory)
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if (f.Name == name && !f.IsDirectory)
+                        {
+                            return true;
+                        }
                     }
                 }
-                else
+            }
+            else
+            {
+                foreach (File f in CurrentDir.Children)
                 {
-                    if (f.Name == name && !f.IsDirectory)
+                    if (isDir)
                     {
-                        return true;
+                        if (f.Name == name && f.IsDirectory)
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if (f.Name == name && !f.IsDirectory)
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -65,13 +108,17 @@ namespace TerminalGame.Computers.FileSystems
             {
                 CurrentDir = CurrentDir.Parent;
             }
+            else if (name == "/")
+            {
+                CurrentDir = FindRoot(CurrentDir);
+            }
             else if (FindFile(name, true) != null)
             {
                 bool findFile(File f)
                 { return f.Name == name && f.IsDirectory && !f.Equals(CurrentDir); }
                 CurrentDir = CurrentDir.Children.Find(findFile);
+                ChangeDirirectory?.Invoke(this, new EventArgs());
             }
-            ChangeDirirectory?.Invoke(this, new EventArgs());
         }
 
         public void AddFile(string name, string contents = null)
@@ -79,6 +126,24 @@ namespace TerminalGame.Computers.FileSystems
             File f = new File(name, contents);
             f.SetParent(CurrentDir);
             CurrentDir.Children.Add(f);
+        }
+
+        public void AddFileToDir(string directoryName, string name, string contents = null)
+        {
+            if (TryFindFile(directoryName, true))
+            {
+                File f = new File(name, contents);
+                f.SetParent(FindFile(directoryName, true));
+                FindFile(directoryName, true).Children.Add(f);
+            }
+            else if (TryFindFile(directoryName, true, true))
+            {
+                File f = new File(name, contents);
+                f.SetParent(FindFile(directoryName, true, true));
+                FindFile(directoryName, true, true).Children.Add(f);
+            }
+            else
+                throw new Exception(directoryName + " is not a directory.");
         }
 
         public void RemoveFile(File file)

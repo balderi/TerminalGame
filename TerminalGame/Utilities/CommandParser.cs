@@ -71,6 +71,7 @@ namespace TerminalGame.Utilities
                 case "sshnuke":
                     {
                         OS.Programs.GetInstance().sshnuke();
+                        player.ConnectedComputer.GenerateLog(player.PlayersComputer, "gained root");
                         break;
                     }
                 case "shutdown":
@@ -176,6 +177,7 @@ namespace TerminalGame.Utilities
                             if (Programs.Connection.Connect(data[1]))
                             {
                                 terminal.Write("\nConnected to " + data[1]);
+                                player.ConnectedComputer.GenerateLog(player.PlayersComputer, "connected");
                                 break;
                             }
                             else
@@ -192,6 +194,7 @@ namespace TerminalGame.Utilities
                     {
                         if (!player.PlayersComputer.IsPlayerConnected)
                         {
+                            player.ConnectedComputer.GenerateLog(player.PlayersComputer, "disconnected");
                             Programs.Connection.Disconnect();
                             terminal.Write("\nDisconnected");
                             break;
@@ -209,9 +212,14 @@ namespace TerminalGame.Utilities
                         if (player.ConnectedComputer.PlayerHasRoot)
                         {
                             if (data.Length > 2 && data[2].Contains("\""))
+                            {
                                 player.ConnectedComputer.FileSystem.AddFile(data[1], command.Split('"')[1]);
+                            }
                             else if (data.Length > 1)
+                            {
                                 player.ConnectedComputer.FileSystem.AddFile(data[1]);
+                            }
+                            player.ConnectedComputer.GenerateLog(player.PlayersComputer, "created file", player.ConnectedComputer.FileSystem.FindFile(data[1], false));
                             break;
                         }
                         else
@@ -225,7 +233,9 @@ namespace TerminalGame.Utilities
                         if (player.ConnectedComputer.PlayerHasRoot)
                         {
                             if (data.Length > 1)
+                            {
                                 player.ConnectedComputer.FileSystem.AddDir(data[1]);
+                            }
                             break;
                         }
                         else
@@ -265,6 +275,7 @@ namespace TerminalGame.Utilities
                                 if (player.ConnectedComputer.FileSystem.TryFindFile(data[1], false))
                                 {
                                     terminal.Write("\n" + player.ConnectedComputer.FileSystem.FindFile(data[1], false).Execute());
+                                    player.ConnectedComputer.GenerateLog(player.PlayersComputer, "accessed file", player.ConnectedComputer.FileSystem.FindFile(data[1], false));
                                     break;
                                 }
                                 terminal.Write("\n" + data[0] + ": no such file or directory");

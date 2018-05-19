@@ -143,7 +143,6 @@ namespace TerminalGame.UI.Modules
                 terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
                 Console.WriteLine("DN :: CI:{0} | HC:{1}", currentIndex, history.Count);
             }
-            updateInp = true;
         }
 
         private void TerminalInput_UpArrow(object sender, KeyboardInput.KeyEventArgs e)
@@ -157,7 +156,6 @@ namespace TerminalGame.UI.Modules
                 terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
                 Console.WriteLine("UP :: CI:{0} | HC:{1}", currentIndex, history.Count);
             }
-            updateInp = true;
         }
 
         /// <summary>
@@ -172,9 +170,8 @@ namespace TerminalGame.UI.Modules
             output.RemoveAt(0); // Leave room for the next prepended newline
             Console.WriteLine("TERMINAL CLEAR");
         }
+
         /// <summary>
-        /// We have to re-create the textbox each time its length should change,
-        /// otherwise the text will get deformed.
         /// Disposes of current textbox and creates a brand new one with the proper dimensions.
         /// </summary>
         /// <returns>A brand new textbox</returns>
@@ -212,6 +209,7 @@ namespace TerminalGame.UI.Modules
             connectedAddress = "root@127.0.0.1 > ";
             terminalOutput = "";
             history = new List<string>();
+            history.Insert(0, "");
             output = new List<string>();
             connAdd = new Rectangle(container.X + 3, container.Height - RenderHeader().Height, (int)(terminalFont.MeasureString(connectedAddress).X), (int)(terminalFont.MeasureString(connectedAddress).Y));
             inputViewport = new Rectangle(connAdd.Width, connAdd.Y, container.Width - connAdd.Width, (int)(terminalFont.MeasureString("MEASURE ME").Y));
@@ -256,13 +254,22 @@ namespace TerminalGame.UI.Modules
             connectedAddress = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
             updateInp = true;
         }
-        
+
+        /// <summary>
+        /// We have to re-create the textbox each time its length should change,
+        /// otherwise the text will get deformed.
+        /// </summary>
         private void UpdateInputSize()
         {
-            connAdd.Width = (int)(terminalFont.MeasureString(connectedAddress).X);
-            inputViewport.X = connAdd.X + connAdd.Width;
-            inputViewport.Width = container.Width - connAdd.Width;
-            terminalInput = TextBox();
+            int oldWidth = connAdd.Width;
+            int newWidth = (int)(terminalFont.MeasureString(connectedAddress).X);
+            if(newWidth != oldWidth)
+            {
+                connAdd.Width = newWidth;
+                inputViewport.X = connAdd.X + connAdd.Width;
+                inputViewport.Width = container.Width - connAdd.Width;
+                terminalInput = TextBox();
+            }
         }
 
         /// <summary>
