@@ -71,8 +71,8 @@ namespace TerminalGame
             
             IsMouseVisible = true;
 
-            //graphics.PreferredBackBufferHeight = 960;
-            //graphics.PreferredBackBufferWidth = 1440;
+            //graphics.PreferredBackBufferHeight = 768;
+            //graphics.PreferredBackBufferWidth = 1366;
 
             //Set game to fullscreen
             graphics.HardwareModeSwitch = false;
@@ -245,9 +245,16 @@ namespace TerminalGame
             Player.GetInstance().PlayersComputer = playerComp;
 
             bgR = new Rectangle(new Point(0, 0), new Point(bg.Width, bg.Height));
-            
+
+            int thirdWidth = graphics.PreferredBackBufferWidth / 3;
+            int thirdHeight = graphics.PreferredBackBufferHeight / 3;
+            int tqWidth = Convert.ToInt32(graphics.PreferredBackBufferWidth * 0.75);
+
             Console.WriteLine("Loading terminal...");
-            terminal = new Terminal(GraphicsDevice, new Rectangle(2, 1, 700, graphics.PreferredBackBufferHeight - 2), font)
+            terminal = new Terminal(GraphicsDevice, 
+                new Rectangle(2, 2, 
+                thirdWidth - 4, graphics.PreferredBackBufferHeight - 4), 
+                font)
             {
                 BackgroundColor = Color.Black * 0.75f,
                 BorderColor = Color.RoyalBlue,
@@ -257,7 +264,10 @@ namespace TerminalGame
             };
 
             Console.WriteLine("Loading networkmap...");
-            networkMap = new NetworkMap(GraphicsDevice, new Rectangle(705, graphics.PreferredBackBufferHeight - 299, graphics.PreferredBackBufferWidth - 706, 298), computer, fontS, NetworkNodeSpinners)
+            networkMap = new NetworkMap(GraphicsDevice, 
+                new Rectangle(terminal.Container.Width + 5, graphics.PreferredBackBufferHeight - thirdHeight + 2, 
+                graphics.PreferredBackBufferWidth - terminal.Container.Width - 7, thirdHeight - 4), 
+                computer, fontS, NetworkNodeSpinners)
             {
                 BackgroundColor = Color.Black * 0.75f,
                 BorderColor = Color.RoyalBlue,
@@ -267,7 +277,10 @@ namespace TerminalGame
             };
 
             Console.WriteLine("Loading statusbar...");
-            statusBar = new StatusBar(GraphicsDevice, new Rectangle(705, 1, graphics.PreferredBackBufferWidth - 706, (int)fontL.MeasureString("A").Y - 1), fontXS)
+            statusBar = new StatusBar(GraphicsDevice, 
+                new Rectangle(terminal.Container.Width + 5, 2, 
+                graphics.PreferredBackBufferWidth - terminal.Container.Width - 7, (int)fontL.MeasureString("A").Y - 4), 
+                fontXS)
             {
                 BackgroundColor = Color.MidnightBlue,
                 BorderColor = Color.MidnightBlue,
@@ -277,7 +290,10 @@ namespace TerminalGame
             };
 
             Console.WriteLine("Loading remoteview...");
-            remoteView = new RemoteView(GraphicsDevice, new Rectangle(705, (int)fontL.MeasureString("A").Y + 4, graphics.PreferredBackBufferWidth - 706 - 304, graphics.PreferredBackBufferHeight - 304 - (int)fontL.MeasureString("A").Y - 2), fontL, font)
+            remoteView = new RemoteView(GraphicsDevice, 
+                new Rectangle(terminal.Container.Width + 5, statusBar.Container.Height + 5, 
+                tqWidth - terminal.Container.Width - 7, graphics.PreferredBackBufferHeight - networkMap.Container.Height - statusBar.Container.Height - 10), 
+                fontL, font)
             {
                 BackgroundColor = Color.Black * 0.75f,
                 BorderColor = Color.RoyalBlue,
@@ -287,7 +303,10 @@ namespace TerminalGame
             };
 
             Console.WriteLine("Loading notes...");
-            notes = new NotesModule(GraphicsDevice, new Rectangle(704 + graphics.PreferredBackBufferWidth - 706 - 300, (int)fontL.MeasureString("A").Y + 4, 301, graphics.PreferredBackBufferHeight - 304 - (int)fontL.MeasureString("A").Y - 2), font)
+            notes = new NotesModule(GraphicsDevice, 
+                new Rectangle(remoteView.Container.X + remoteView.Container.Width + 3, statusBar.Container.Height + 5,
+                graphics.PreferredBackBufferWidth - remoteView.Container.X - remoteView.Container.Width - 5, graphics.PreferredBackBufferHeight - networkMap.Container.Height - statusBar.Container.Height - 10), 
+                font)
             {
                 BackgroundColor = Color.Black * 0.75f,
                 BorderColor = Color.RoyalBlue,

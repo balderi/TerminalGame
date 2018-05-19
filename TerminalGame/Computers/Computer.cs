@@ -103,8 +103,8 @@ namespace TerminalGame.Computers
         {
             if (!LinkedComputers.Contains(computer))
                 LinkedComputers.Add(computer);
-            if (!computer.LinkedComputers.Contains(this))
-                computer.Link(this);
+            //if (!computer.LinkedComputers.Contains(this))
+            //    computer.Link(this);
         }
 
         /// <summary>

@@ -15,7 +15,7 @@ namespace TerminalGame.UI.Modules
         private int linesToDraw, currentIndex;
         private string terminalOutput, connectedAddress;
         private List<string> history, output;
-        private SpriteFont terminalFont;
+        private SpriteFont TerminalFont;
         private bool isMultiLine, isInputBlocked, updateInp;
         private Computer connectedComputer;
 
@@ -26,10 +26,12 @@ namespace TerminalGame.UI.Modules
         public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
         public override string Title { get; set; }
+        public override Rectangle Container { get; set; }
 
-        public Terminal(GraphicsDevice Graphics, Rectangle Container, SpriteFont TerminalFont) : base(Graphics, Container)
+        public Terminal(GraphicsDevice graphics, Rectangle container, SpriteFont terminalFont) : base(graphics, container)
         {
-            terminalFont = TerminalFont;
+            TerminalFont = terminalFont;
+            Container = container;
             updateInp = true;
             if (BackgroundColor == null)
             {
@@ -181,8 +183,8 @@ namespace TerminalGame.UI.Modules
             if (terminalInput == null)
             {
                 Console.WriteLine("*** CREATE TEXTBOX");
-                int maxChars = ((int)(container.Width - Font.MeasureString(connectedAddress).Length()) / (int)Font.MeasureString("_").Length()) + 200;
-                TextBox retval = new TextBox(inputViewport, maxChars, "", graphics, terminalFont, Color.LightGray, Color.DarkGreen, 30);
+                int maxChars = ((int)(Container.Width - TerminalFont.MeasureString(connectedAddress).Length()) / (int)TerminalFont.MeasureString("_").Length()) + 200;
+                TextBox retval = new TextBox(inputViewport, maxChars, "", Graphics, TerminalFont, Color.LightGray, Color.DarkGreen, 30);
                 retval.Renderer.Color = Color.LightGray;
                 retval.Cursor.Selection = new Color(Color.PeachPuff, .4f);
                 retval.Active = true;
@@ -212,14 +214,14 @@ namespace TerminalGame.UI.Modules
             history = new List<string>();
             history.Insert(0, "");
             output = new List<string>();
-            connAdd = new Rectangle(container.X + 3, container.Height - RenderHeader().Height, (int)(terminalFont.MeasureString(connectedAddress).X), (int)(terminalFont.MeasureString(connectedAddress).Y));
-            inputViewport = new Rectangle(connAdd.Width, connAdd.Y, container.Width - connAdd.Width, (int)(terminalFont.MeasureString("MEASURE ME").Y));
+            connAdd = new Rectangle(Container.X + 3, Container.Height - RenderHeader().Height, (int)(TerminalFont.MeasureString(connectedAddress).X), (int)(TerminalFont.MeasureString(connectedAddress).Y));
+            inputViewport = new Rectangle(connAdd.Width, connAdd.Y, Container.Width - connAdd.Width, (int)(TerminalFont.MeasureString("MEASURE ME").Y));
 
             terminalInput = TextBox();
 
-            outputViewport = new Rectangle(container.X, container.Y + RenderHeader().Height + 2, container.Width, container.Height - (inputViewport.Height) - RenderHeader().Height);
+            outputViewport = new Rectangle(Container.X, Container.Y + RenderHeader().Height + 2, Container.Width, Container.Height - (inputViewport.Height) - RenderHeader().Height);
             
-            linesToDraw = (int)(outputViewport.Height / terminalFont.MeasureString("MEASURE THIS").Y);
+            linesToDraw = (int)(outputViewport.Height / TerminalFont.MeasureString("MEASURE THIS").Y);
             Console.WriteLine("INIT: 0x4C54443D" + linesToDraw);
             Clear();
 
@@ -263,12 +265,12 @@ namespace TerminalGame.UI.Modules
         private void UpdateInputSize()
         {
             int oldWidth = connAdd.Width;
-            int newWidth = (int)(terminalFont.MeasureString(connectedAddress).X);
+            int newWidth = (int)(TerminalFont.MeasureString(connectedAddress).X);
             if(newWidth != oldWidth)
             {
                 connAdd.Width = newWidth;
                 inputViewport.X = connAdd.X + connAdd.Width;
-                inputViewport.Width = container.Width - connAdd.Width;
+                inputViewport.Width = Container.Width - connAdd.Width;
                 terminalInput = TextBox();
             }
         }
@@ -323,15 +325,15 @@ namespace TerminalGame.UI.Modules
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Texture2D texture = Drawing.DrawBlankTexture(graphics);
-            spriteBatch.Draw(texture, container, BackgroundColor);
+            Texture2D texture = Drawing.DrawBlankTexture(Graphics);
+            spriteBatch.Draw(texture, Container, BackgroundColor);
             spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
             spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
-            Drawing.DrawBorder(spriteBatch, container, texture, 1, BorderColor);
+            Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
 
-            spriteBatch.DrawString(terminalFont, connectedAddress, new Vector2(connAdd.X, connAdd.Y), Color.LightGray);
-            spriteBatch.DrawString(terminalFont, terminalOutput, new Vector2(outputViewport.X + 3 + TestClass.ShakeStuff(1), outputViewport.Y + TestClass.ShakeStuff(1)), Color.Green);
-            spriteBatch.DrawString(terminalFont, terminalOutput, new Vector2(outputViewport.X + 3, outputViewport.Y), Color.LightGray);
+            spriteBatch.DrawString(TerminalFont, connectedAddress, new Vector2(connAdd.X, connAdd.Y), Color.LightGray);
+            spriteBatch.DrawString(TerminalFont, terminalOutput, new Vector2(outputViewport.X + 3 + TestClass.ShakeStuff(1), outputViewport.Y + TestClass.ShakeStuff(1)), Color.Green);
+            spriteBatch.DrawString(TerminalFont, terminalOutput, new Vector2(outputViewport.X + 3, outputViewport.Y), Color.LightGray);
             terminalInput.Draw(spriteBatch);
         }
 
@@ -343,8 +345,9 @@ namespace TerminalGame.UI.Modules
 
         private string TextWrap(string text)
         {
+            Console.WriteLine("TextWrap");
             isMultiLine = false;
-            int maxlen = 77;
+            int maxlen = Container.Width / (int)TerminalFont.MeasureString("_").Length() * 2;
             if (text.Length <= maxlen || text.Contains("§"))
                 return text;
 
@@ -358,8 +361,9 @@ namespace TerminalGame.UI.Modules
 
         private string InputWrap(string text)
         {
+            Console.WriteLine("InputWrap");
             isMultiLine = false;
-            int maxlen = 77;
+            int maxlen = Container.Width / (int)TerminalFont.MeasureString("_").Length() * 2;
             if (text.Length <= maxlen)
                 return text;
 
@@ -373,7 +377,7 @@ namespace TerminalGame.UI.Modules
 
         protected override Rectangle RenderHeader()
         {
-            return new Rectangle(container.X, container.Y, container.Width, (int)Font.MeasureString(Title).Y);
+            return new Rectangle(Container.X, Container.Y, Container.Width, (int)Font.MeasureString(Title).Y);
         }
     }
 }

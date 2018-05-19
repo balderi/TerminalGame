@@ -18,7 +18,8 @@ namespace TerminalGame.UI.Modules
         public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
         public override string Title { get; set; }
-        
+        public override Rectangle Container { get; set ; }
+
         List<NetworkNode> nodes;
         Random rnd;
         private readonly SpriteFont SpriteFont;
@@ -54,7 +55,7 @@ namespace TerminalGame.UI.Modules
                         intersects = false;
                     }
                 }
-                NetworkNode n = new NetworkNode(texture, c, cont, new PopUpBox(c.Name + "\n" + c.IP, new Point(0,0), SpriteFont, Color.White, Color.Black * 0.5f, Color.White, graphics), nodeSpinners);
+                NetworkNode n = new NetworkNode(texture, c, cont, new PopUpBox(c.Name + "\n" + c.IP, new Point(0,0), SpriteFont, Color.White, Color.Black * 0.5f, Color.White, Graphics), nodeSpinners);
                 nodes.Add(n);
                 n.Click += OnNodeClick;
                 Thread.Sleep(5);
@@ -64,8 +65,8 @@ namespace TerminalGame.UI.Modules
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Texture2D texture = Drawing.DrawBlankTexture(graphics);
-            spriteBatch.Draw(texture, container, BackgroundColor);
+            Texture2D texture = Drawing.DrawBlankTexture(Graphics);
+            spriteBatch.Draw(texture, Container, BackgroundColor);
 
             foreach (NetworkNode node in nodes)
             {
@@ -75,7 +76,7 @@ namespace TerminalGame.UI.Modules
                     {
                         if (node.Computer.LinkedComputers.Contains(node2.Computer))
                         {
-                            Drawing.DrawLine(spriteBatch, texture, Color.White * 0.5f, node.CenterPosition.ToVector2(), node2.CenterPosition.ToVector2());
+                            Drawing.DrawLine(spriteBatch, texture, Color.White * 0.33f, node.CenterPosition.ToVector2(), node2.CenterPosition.ToVector2());
                         }
                     }
                 }
@@ -98,7 +99,7 @@ namespace TerminalGame.UI.Modules
                     node.InfoBox.Draw(spriteBatch);
             }
 
-            Drawing.DrawBorder(spriteBatch, container, texture, 1, BorderColor);
+            Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
             spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
             spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
         }
@@ -119,7 +120,7 @@ namespace TerminalGame.UI.Modules
 
         protected override Rectangle RenderHeader()
         {
-            return new Rectangle(container.X, container.Y, container.Width, (int)Font.MeasureString(Title).Y);
+            return new Rectangle(Container.X, Container.Y, Container.Width, (int)Font.MeasureString(Title).Y);
         }
     }
 }

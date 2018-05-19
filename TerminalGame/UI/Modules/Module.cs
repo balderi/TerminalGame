@@ -14,19 +14,20 @@ namespace TerminalGame.UI.Modules
         public abstract Color HeaderColor { get; set; }
         public abstract bool IsActive { get; set; }
         public abstract string Title { get; set; }
-        
-        protected GraphicsDevice graphics;
-        protected Rectangle container;
+        public abstract Rectangle Container{ get; set; }
+
+        protected GraphicsDevice Graphics;
 
         /// <summary>
         /// Base UI module constructor
         /// </summary>
         /// <param name="Graphics"></param>
         /// <param name="Container"></param>
-        protected Module(GraphicsDevice Graphics, Rectangle Container)
+        protected Module(GraphicsDevice graphics, Rectangle container)
         {
-            graphics = Graphics;
-            container = Container;
+            Graphics = graphics;
+            Container = container;
+
         }
 
         protected abstract Rectangle RenderHeader();

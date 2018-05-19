@@ -13,6 +13,7 @@ namespace TerminalGame.UI.Modules
         public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
         public override string Title { get; set; }
+        public override Rectangle Container { get; set; }
 
         private Button button;
         
@@ -51,9 +52,9 @@ namespace TerminalGame.UI.Modules
 
             var width = 200;
             var height = 50;
-            var x = container.X + (container.Width / 2) - width / 2;
-            var y = container.Y + (container.Height - height) - 15;
-            button = new Button("CLICK ME!", new Rectangle(x, y, width, height), fnt, Color.White, Color.Pink, Color.HotPink, Color.Red, graphics);
+            var x = Container.X + (Container.Width / 2) - width / 2;
+            var y = Container.Y + (Container.Height - height) - 15;
+            button = new Button("CLICK ME!", new Rectangle(x, y, width, height), fnt, Color.White, Color.Pink, Color.HotPink, Color.Red, Graphics);
             button.Click += Button_Click;
         }
 
@@ -68,19 +69,19 @@ namespace TerminalGame.UI.Modules
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Texture2D texture = Drawing.DrawBlankTexture(graphics);
-            Drawing.DrawBorder(spriteBatch, container, texture, 1, BorderColor);
-            spriteBatch.Draw(texture, container, BackgroundColor);
+            Texture2D texture = Drawing.DrawBlankTexture(Graphics);
+            Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
+            spriteBatch.Draw(texture, Container, BackgroundColor);
             spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
             spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y + 2), Color.White);
-            spriteBatch.DrawString(Font, buttonClicks, new Vector2(container.X + (container.Width / 2) - Font.MeasureString(buttonClicks).X / 2, container.Y + (container.Height / 2) - Font.MeasureString(buttonClicks).Y / 2), Color.White);
+            spriteBatch.DrawString(Font, buttonClicks, new Vector2(Container.X + (Container.Width / 2) - Font.MeasureString(buttonClicks).X / 2, Container.Y + (Container.Height / 2) - Font.MeasureString(buttonClicks).Y / 2), Color.White);
             
             button.Draw(spriteBatch);
         }
 
         protected override Rectangle RenderHeader()
         {
-            return new Rectangle(container.X, container.Y, container.Width, (int)Font.MeasureString(Title).Y);
+            return new Rectangle(Container.X, Container.Y, Container.Width, (int)Font.MeasureString(Title).Y);
         }
 
         public override void Update(GameTime gameTime)

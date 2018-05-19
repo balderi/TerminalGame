@@ -15,6 +15,8 @@ namespace TerminalGame.UI.Modules
         public override string Title { get; set; }
 
         public Computer ConnectedComputer { get; private set; }
+        public override Rectangle Container { get; set; }
+
         private readonly SpriteFont TitleFont, SubtitleFont;
         private string ConnectionName, ConnectionIP, UserLevel;
 
@@ -30,14 +32,14 @@ namespace TerminalGame.UI.Modules
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Texture2D texture = Drawing.DrawBlankTexture(graphics);
-            Drawing.DrawBorder(spriteBatch, container, texture, 1, BorderColor);
-            spriteBatch.Draw(texture, container, BackgroundColor);
+            Texture2D texture = Drawing.DrawBlankTexture(Graphics);
+            Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
+            spriteBatch.Draw(texture, Container, BackgroundColor);
             spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
             spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
-            spriteBatch.DrawString(TitleFont, ConnectionName, new Vector2(container.X + 10, container.Y + RenderHeader().Height + 10), Color.White);
-            spriteBatch.DrawString(SubtitleFont, ConnectionIP, new Vector2(container.X + 10, TitleFont.MeasureString("A").Y + container.Y + RenderHeader().Height + 10), Color.White);
-            spriteBatch.DrawString(SubtitleFont, UserLevel, new Vector2(SubtitleFont.MeasureString(ConnectionIP).Length() + container.X + 20, TitleFont.MeasureString("A").Y + container.Y + RenderHeader().Height + 10), Player.GetInstance().ConnectedComputer.PlayerHasRoot ? Color.Lime : Color.Red);
+            spriteBatch.DrawString(TitleFont, ConnectionName, new Vector2(Container.X + 10, Container.Y + RenderHeader().Height + 10), Color.White);
+            spriteBatch.DrawString(SubtitleFont, ConnectionIP, new Vector2(Container.X + 10, TitleFont.MeasureString("A").Y + Container.Y + RenderHeader().Height + 10), Color.White);
+            spriteBatch.DrawString(SubtitleFont, UserLevel, new Vector2(SubtitleFont.MeasureString(ConnectionIP).Length() + Container.X + 20, TitleFont.MeasureString("A").Y + Container.Y + RenderHeader().Height + 10), Player.GetInstance().ConnectedComputer.PlayerHasRoot ? Color.Lime : Color.Red);
         }
 
         public override void Update(GameTime gameTime)
@@ -50,7 +52,7 @@ namespace TerminalGame.UI.Modules
 
         protected override Rectangle RenderHeader()
         {
-            return new Rectangle(container.X, container.Y, container.Width, (int)Font.MeasureString(Title).Y);
+            return new Rectangle(Container.X, Container.Y, Container.Width, (int)Font.MeasureString(Title).Y);
         }
     }
 }

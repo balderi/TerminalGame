@@ -13,6 +13,7 @@ namespace TerminalGame.UI.Modules
         public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
         public override string Title { get; set; }
+        public override Rectangle Container { get; set; }
 
         private readonly SpriteFont lilFont;
         private string connectionInfo;
@@ -47,14 +48,14 @@ namespace TerminalGame.UI.Modules
         public override void Draw(SpriteBatch spriteBatch)
         {
             Font.LineSpacing = 0;
-            Texture2D texture = Drawing.DrawBlankTexture(graphics);
-            Drawing.DrawBorder(spriteBatch, container, texture, 1, BorderColor);
-            spriteBatch.Draw(texture, container, BackgroundColor);
+            Texture2D texture = Drawing.DrawBlankTexture(Graphics);
+            Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
+            spriteBatch.Draw(texture, Container, BackgroundColor);
             spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
-            spriteBatch.DrawString(Font, Title, new Vector2(container.X + 10, container.Height / 2 - (int)Font.MeasureString("A").Y / 2 + 5), Color.White);
-            spriteBatch.DrawString(lilFont, connectionInfo, new Vector2(container.X + 10 + Font.MeasureString(Title).X, 
-                container.Height / 2 - (int)Font.MeasureString("A").Y / 2 + 7), Color.White);
-            spriteBatch.DrawString(lilFont, buildNumber, new Vector2(container.Right - lilFont.MeasureString(buildNumber).Length() - 5, 5), Color.White);
+            spriteBatch.DrawString(Font, Title, new Vector2(Container.X + 10, Container.Height / 2 - (int)Font.MeasureString("A").Y / 2 + 5), Color.White);
+            spriteBatch.DrawString(lilFont, connectionInfo, new Vector2(Container.X + 10 + Font.MeasureString(Title).X,
+                Container.Height / 2 - (int)Font.MeasureString("A").Y / 2 + 7), Color.White);
+            spriteBatch.DrawString(lilFont, buildNumber, new Vector2(Container.Right - lilFont.MeasureString(buildNumber).Length() - 5, 5), Color.White);
         }
 
         public override void Update(GameTime gameTime)
