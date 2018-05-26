@@ -11,7 +11,7 @@ namespace TerminalGame.Computers
 
         readonly Type type;
         public enum AccessLevel { root, user }
-        AccessLevel access;
+        public AccessLevel Access { get; private set; }
 
         public string IP { get; private set; }
         public string Name { get; private set; }
@@ -99,6 +99,11 @@ namespace TerminalGame.Computers
             }
         }
 
+        public void ChangePassword(string password)
+        {
+            RootPassword = password;
+        }
+
         public void Link(Computer computer)
         {
             if (!LinkedComputers.Contains(computer))
@@ -148,7 +153,7 @@ namespace TerminalGame.Computers
 
         public void Update(GameTime gameTime)
         {
-            access = PlayerHasRoot ? AccessLevel.root : AccessLevel.user;
+            Access = PlayerHasRoot ? AccessLevel.root : AccessLevel.user;
         }
     }
 }

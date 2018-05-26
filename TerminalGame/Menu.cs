@@ -80,6 +80,7 @@ namespace TerminalGame
                 b.Update();
             }
         }
+
         public void Draw(SpriteBatch spriteBatch, GameWindow Window, SpriteFont Font)
         {
             Vector2 textMiddlePoint = Font.MeasureString(gameTitle) / 2;

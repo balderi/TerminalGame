@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace TerminalGame.States
@@ -18,15 +19,20 @@ namespace TerminalGame.States
             return this;
         }
 
-        public void DrawState(GameTime gameTime)
+        public void DrawState(SpriteBatch spriteBatch)
         {
-            CurrentState.Draw(gameTime);
+            CurrentState.Draw(spriteBatch);
         }
 
-        public void DrawTransition(GameTime gameTime, Keys key)
+        public void UpdateState(GameTime gameTime)
+        {
+            CurrentState.Update(gameTime);
+        }
+
+        public void DrawTransition(SpriteBatch spriteBatch, Keys key)
         {
             Transition(key);
-            DrawState(gameTime);
+            DrawState(spriteBatch);
         }
     }
 }

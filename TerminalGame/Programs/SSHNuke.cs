@@ -14,6 +14,7 @@ namespace TerminalGame.Programs
 
         public static void Execute()
         {
+            terminal.BlockInput();
             player.PlayersComputer.FileSystem.ChangeDir("/");
             player.PlayersComputer.FileSystem.ChangeDir("bin");
             if (player.PlayersComputer.FileSystem.TryFindFile("sshnuke", false))
@@ -26,7 +27,8 @@ namespace TerminalGame.Programs
                 ".",
                 ".",
                 ".",
-                " successful.\nAttempting to exploit SSHv1 CRC32 ",
+                " successful.",
+                "\nAttempting to exploit SSHv1 CRC32 ",
                 ".",
                 ".",
                 ".",
@@ -34,23 +36,26 @@ namespace TerminalGame.Programs
                 "\nResetting root password to \"password\".",
                 "\nSystem open: Access level <9>"
                 };
-                timer = new Timer(SSHNukeWriter, autoEvent, 1000, 333);
+                timer = new Timer(SSHNukeWriter, autoEvent, 1000, 500);
             }
             else
             {
                 terminal.Write("\nThe program \'sshnuke\' is currently not installed");
+                terminal.UnblockInput();
             }
             player.PlayersComputer.FileSystem.ChangeDir("/");
         }
-
+        
         private static void SSHNukeWriter(Object stateInfo)
         {
             AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
             terminal.Write(textToWrite[count++]);
             if (count == textToWrite.Length)
             {
-                Player.GetInstance().ConnectedComputer.GetRoot();
-                Player.GetInstance().ConnectedComputer.Connect();
+                player.ConnectedComputer.GetRoot();
+                player.ConnectedComputer.Connect();
+                player.ConnectedComputer.ChangePassword("password");
+                terminal.UnblockInput();
                 count = 0;
                 autoEvent.Set();
                 timer.Dispose();

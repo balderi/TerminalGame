@@ -27,12 +27,6 @@
 /processorParam:TextureFormat=NoChange
 /build:Fonts/terminalFontXL.spritefont
 
-#begin Audio/Music/bgm.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Audio/Music/bgm.mp3
-
 #begin Fonts/terminalFontS.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -79,12 +73,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/bg.jpg
 
-#begin Audio/Music/testo.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Audio/Music/testo.ogg
-
 #begin Audio/Sounds/yay.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -96,12 +84,6 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Audio/Sounds/click1.wav
-
-#begin Audio/Music/ambientbgm1_2.ogg
-/importer:OggImporter
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Audio/Music/ambientbgm1_2.ogg
 
 #begin Textures/nmapComputer.png
 /importer:TextureImporter
@@ -210,4 +192,10 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/spinner08.png
+
+#begin Audio/Music/ambientbgm1_2.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Music/ambientbgm1_2.ogg
 

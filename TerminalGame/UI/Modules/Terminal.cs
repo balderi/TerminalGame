@@ -10,6 +10,8 @@ namespace TerminalGame.UI.Modules
 {
     class Terminal : Module
     {
+        // TODO: Add command queue for when input is blocked by running program
+
         private TextBox terminalInput;
         private Rectangle connAdd, inputViewport, outputViewport;
         private int linesToDraw, currentIndex;
@@ -18,8 +20,8 @@ namespace TerminalGame.UI.Modules
         private SpriteFont TerminalFont;
         private bool isMultiLine, isInputBlocked, updateInp;
         private Computer connectedComputer;
-
-
+        
+        public bool IsTakingSpecialInput { get; set; }
         public override SpriteFont Font { get; set; }
         public override Color BackgroundColor { get; set; }
         public override Color BorderColor { get; set; }
@@ -103,7 +105,7 @@ namespace TerminalGame.UI.Modules
             string[] formattedOut = Format(TextWrap(text));
             for(int i = 0; i < formattedOut.Length; i++)
             {
-                output.Add(TextWrap(formattedOut[i]));
+                output.Add(formattedOut[i]);
                 UpdateOutput();
             }
         }
@@ -214,12 +216,14 @@ namespace TerminalGame.UI.Modules
             history = new List<string>();
             history.Insert(0, "");
             output = new List<string>();
-            connAdd = new Rectangle(Container.X + 3, Container.Height - RenderHeader().Height, (int)(TerminalFont.MeasureString(connectedAddress).X), (int)(TerminalFont.MeasureString(connectedAddress).Y));
+            connAdd = new Rectangle(Container.X + 3, Container.Height - RenderHeader().Height, 
+                (int)(TerminalFont.MeasureString(connectedAddress).X), (int)(TerminalFont.MeasureString(connectedAddress).Y));
             inputViewport = new Rectangle(connAdd.Width, connAdd.Y, Container.Width - connAdd.Width, (int)(TerminalFont.MeasureString("MEASURE ME").Y));
 
             terminalInput = TextBox();
 
-            outputViewport = new Rectangle(Container.X, Container.Y + RenderHeader().Height + 2, Container.Width, Container.Height - (inputViewport.Height) - RenderHeader().Height);
+            outputViewport = new Rectangle(Container.X, Container.Y + RenderHeader().Height + 2, 
+                Container.Width, Container.Height - (inputViewport.Height) - RenderHeader().Height);
             
             linesToDraw = (int)(outputViewport.Height / TerminalFont.MeasureString("MEASURE THIS").Y);
             Console.WriteLine("INIT: 0x4C54443D" + linesToDraw);
@@ -314,7 +318,8 @@ namespace TerminalGame.UI.Modules
             float lerpAmount = (float)(gameTime.TotalGameTime.TotalMilliseconds % 500f / 500f);
 
             terminalInput.Cursor.Color = Color.Lerp(Color.DarkGray, Color.LightGray, lerpAmount);
-            connectedAddress = connectedComputer.PlayerHasRoot ? "root@" + connectedComputer.IP + connectedComputer.FileSystem.CurrentDir.PrintFullPath() + " > " : "user@" + connectedComputer.IP + connectedComputer.FileSystem.CurrentDir.PrintFullPath() + " > ";
+            if(!IsTakingSpecialInput)
+                connectedAddress = connectedComputer.Access + "@" + connectedComputer.IP + connectedComputer.FileSystem.CurrentDir.PrintFullPath() + " > ";
             if (updateInp)
             {
                 UpdateInputSize();

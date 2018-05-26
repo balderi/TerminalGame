@@ -17,11 +17,13 @@ namespace TerminalGame.Programs
         {
             if (!String.IsNullOrEmpty(ip))
             {
+                terminal.BlockInput();
                 IP = ip;
 
                 if (ip == player.ConnectedComputer.IP || ip == player.ConnectedComputer.Name)
                 {
                     terminal.Write("\nYou are already connected to " + player.ConnectedComputer.Name + "@" + player.ConnectedComputer.IP);
+                    terminal.UnblockInput();
                     return;
                 }
 
@@ -66,7 +68,7 @@ namespace TerminalGame.Programs
                 }
                 if(!conn)
                     terminal.Write("\nCould not connect to " + IP);
-
+                terminal.UnblockInput();
                 count = 0;
                 autoEvent.Set();
                 timer.Dispose();

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace TerminalGame.States
@@ -18,6 +19,6 @@ namespace TerminalGame.States
 
         public abstract void Update(GameTime gameTime);
 
-        public abstract void Draw(GameTime gameTime);
+        public abstract void Draw(SpriteBatch spriteBatch);
     }
 }

@@ -96,8 +96,15 @@
     <Compile Include="Programs\Help.cs" />
     <Compile Include="Programs\Ls.cs" />
     <Compile Include="Programs\SSHNuke.cs" />
+    <Compile Include="Scenes\GameScene.cs" />
     <Compile Include="Scenes\IScene.cs" />
+    <Compile Include="Scenes\LoadingScene.cs" />
+    <Compile Include="Scenes\MenuScene.cs" />
     <Compile Include="Scenes\Scene.cs" />
+    <Compile Include="Scenes\SceneManager.cs" />
+    <Compile Include="States\GameLoadingState.cs" />
+    <Compile Include="States\GameRunningState.cs" />
+    <Compile Include="States\GameMenuState.cs" />
     <Compile Include="States\State.cs" />
     <Compile Include="States\StateMachine.cs" />
     <Compile Include="UI\MainMenuButton.cs" />
@@ -117,6 +124,8 @@
     <Compile Include="UI\Modules\TestModule.cs" />
     <Compile Include="Utilities\CommandParser.cs" />
     <Compile Include="Utilities\Drawing.cs" />
+    <Compile Include="Utilities\FontManager.cs" />
+    <Compile Include="Utilities\TerminalDateTime.cs" />
     <Compile Include="Utilities\TextHandler\Cursor.cs" />
     <Compile Include="Utilities\TextHandler\Extensions.cs" />
     <Compile Include="Utilities\TextHandler\KeyboardInput.cs" />

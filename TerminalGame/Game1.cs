@@ -7,7 +7,11 @@ using System.Collections.Generic;
 using TerminalGame.UI.Modules;
 using TerminalGame.Utilities.TextHandler;
 using TerminalGame.Computers;
+using TerminalGame.States;
 using System.Reflection;
+using TerminalGame.Utilities;
+using TerminalGame.Scenes;
+using System.Threading;
 
 namespace TerminalGame
 {
@@ -18,7 +22,9 @@ namespace TerminalGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Menu mainMenu;
+        StateMachine stateMachine;
+
+        Thread loadingThread;
 
         LoadingScreen load;
 
@@ -27,17 +33,20 @@ namespace TerminalGame
         private SpriteFont font, fontL, fontXL, menuFont, fontS, fontXS;
         private Song bgm_game, bgm_menu;
         private readonly string GameTitle;
+        private float musicVolume, audioVolume, masterVolume;
+        private bool gameStarted;
 
-        enum GameState { Menu, Game, Loading }
+        MenuScene menuScene;
+        LoadingScene loadingScene;
+        GameScene gameScene;
 
-        GameState gameState;
 
         Terminal terminal;
         NetworkMap networkMap;
         StatusBar statusBar;
         RemoteView remoteView;
         NotesModule notes;
-
+        
         Computer playerComp;
 
         Rectangle bgR;
@@ -55,6 +64,7 @@ namespace TerminalGame
             Version version = Assembly.GetEntryAssembly().GetName().Version;
             GameTitle = String.Format("TerminalGame v{0}.{1}a", version.Major, version.Minor);
             IsFixedTimeStep = true;
+            gameStarted = false;
         }
 
         /// <summary>
@@ -70,6 +80,12 @@ namespace TerminalGame
             Window.Title = GameTitle;
             
             IsMouseVisible = true;
+            
+            stateMachine = new StateMachine(GameMenuState.Instance);
+
+            masterVolume = 1.0f;
+            musicVolume = 0.2f;
+            audioVolume = 1.0f;
 
             //graphics.PreferredBackBufferHeight = 768;
             //graphics.PreferredBackBufferWidth = 1366;
@@ -80,8 +96,9 @@ namespace TerminalGame
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
             graphics.IsFullScreen = true;
             graphics.ApplyChanges();
-            
-            MediaPlayer.Volume = 0.2f;
+            Console.WriteLine("Resolution is now " + graphics.PreferredBackBufferWidth + " x " + graphics.PreferredBackBufferHeight);
+
+            MediaPlayer.Volume = musicVolume * masterVolume; // 0.5f;
             MediaPlayer.IsRepeating = true;
             base.Initialize();
             Console.WriteLine("Done initializing");
@@ -117,9 +134,18 @@ namespace TerminalGame
             Console.WriteLine("Done");
             MediaPlayer.Play(bgm_menu);
 
-            mainMenu = new Menu(GameTitle, spriteBatch, menuFont, GraphicsDevice);
+            FontManager.SetFonts(fontXS, fontS, font, fontL, fontXL);
 
-            mainMenu.ButtonClicked += MainMenu_ButtonClicked;
+            Console.WriteLine("Loading scenes...");
+            menuScene = new MenuScene(GameTitle, Window, fontL, fontXL, GraphicsDevice);
+            menuScene.ButtonClicked += MainMenu_ButtonClicked;
+            loadingScene = new LoadingScene(new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2));
+            Console.WriteLine("Screen center is " + graphics.PreferredBackBufferWidth / 2 +"x, " + graphics.PreferredBackBufferHeight / 2 + "y");
+            gameScene = new GameScene();
+
+            SceneManager.SetScenes(menuScene, loadingScene, gameScene);
+
+            Window.TextInput += Window_TextInput;
 
             load = new LoadingScreen(fontL, fontS);
 
@@ -127,6 +153,7 @@ namespace TerminalGame
             bg = Content.Load<Texture2D>("Textures/bg");
             computer = Content.Load<Texture2D>("Textures/nmapComputer");
 
+            // Various markers for the networkmap
             spinner01 = Content.Load<Texture2D>("Textures/spinner01");
             spinner02 = Content.Load<Texture2D>("Textures/spinner02");
             spinner03 = Content.Load<Texture2D>("Textures/spinner03");
@@ -151,6 +178,14 @@ namespace TerminalGame
             Console.WriteLine("Done loading");
         }
 
+        private void Window_TextInput(object sender, TextInputEventArgs e)
+        {
+            if(e.Key == Keys.Escape && gameStarted)
+            {
+                stateMachine.Transition(e.Key);
+            }
+        }
+
         /// <summary>
         /// To happen when Exit has been called
         /// </summary>
@@ -173,8 +208,9 @@ namespace TerminalGame
             {
                 case "New Game":
                     {
-                        gameState = GameState.Loading;
-                        StartNewGame();
+                        stateMachine.Transition(Keys.Attn);
+                        loadingThread = new Thread(new ThreadStart(StartNewGame));
+                        loadingThread.Start();
                         break;
                     }
                 case "Load Game":
@@ -227,7 +263,9 @@ namespace TerminalGame
         private void StartNewGame()
         {
             Console.WriteLine("Starting new game...");
-            
+
+            loadingScene.LoadItem = "Generating computers...";
+
             os = OS.OS.GetInstance();
 
             playerComp = new Computer(Computer.Type.Workstation, "127.0.0.1", "localhost", "pasword");
@@ -244,11 +282,23 @@ namespace TerminalGame
 
             Player.GetInstance().PlayersComputer = playerComp;
 
+            loadingScene.LoadItem = "Loading modules...";
+
             bgR = new Rectangle(new Point(0, 0), new Point(bg.Width, bg.Height));
 
             int thirdWidth = graphics.PreferredBackBufferWidth / 3;
             int thirdHeight = graphics.PreferredBackBufferHeight / 3;
             int tqWidth = Convert.ToInt32(graphics.PreferredBackBufferWidth * 0.75);
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // MODULE SIZING: (may still need to be properly refined, as border/margin stuff relies heavily on magic numbers (bad)) //
+            // Terminal is one third of the screen width minus 2px on either side (1px border + 1px margin)                         //
+            // Network map is Full screen width minus terminal width minus 7px                                                      //
+            //                    (terminal border/margin + map border/margin + 1px space between modules)                          //
+            // Remote view is thee-quarters of full screen width minus terminal width minus border/margin)                          //
+            // Notes module is full screen width minus terminal width minus remote view width minus border/margin                   //
+            // Status bar is full screen width minus terminal width minus border/margin                                             //
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             Console.WriteLine("Loading terminal...");
             terminal = new Terminal(GraphicsDevice, 
@@ -315,6 +365,8 @@ namespace TerminalGame
                 Font = fontS,
             };
 
+            loadingScene.LoadItem = "Initializing...";
+
             os.Init(terminal, remoteView, networkMap, statusBar, notes);
 
             Console.WriteLine("INIT: Name:" + playerComp.Name);
@@ -323,11 +375,14 @@ namespace TerminalGame
             terminal.Init();
             Console.WriteLine("Game started");
 
-            gameState = GameState.Game;
+            gameStarted = true;
 
             MediaPlayer.Stop();
+            stateMachine.Transition(Keys.Attn);
             MediaPlayer.Play(bgm_game);
         }
+
+        
 
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -339,33 +394,15 @@ namespace TerminalGame
             base.Update(gameTime);
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-                MediaPlayer.Stop();
-                if(gameState > 0)
-                    terminal.ForceQuit();
-                Exit();
+                //MediaPlayer.Stop();
+                //if(gameState > 0)
+                //    terminal.ForceQuit();
+                //Exit();
             }
-            
+
             KeyboardInput.Update();
-            switch((int)gameState)
-            {
-                case 0:
-                    {
-                        mainMenu.Update();
-                        break;
-                    }
-                case 1:
-                    {
-                        os.Update(gameTime);
-                        break;
-                    }
-                case 2:
-                    {
-                        load.Update(gameTime);
-                        break;
-                    }
-                default:
-                    break;
-            }
+
+            stateMachine.UpdateState(gameTime);
         }
 
         /// <summary>
@@ -377,27 +414,9 @@ namespace TerminalGame
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(blendState: BlendState.AlphaBlend);
             base.Draw(gameTime);
-            switch ((int)gameState)
-            {
-                case 0:
-                    {
-                        mainMenu.Draw(spriteBatch, Window, fontXL);
-                        break;
-                    }
-                case 1:
-                    {
-                        spriteBatch.Draw(bg, bgR, Color.White);
-                        os.Draw(spriteBatch);
-                        break;
-                    }
-                case 2:
-                    {
-                        load.Draw(spriteBatch, new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2));
-                        break;
-                    }
-                default:
-                        break;
-            }
+
+            stateMachine.DrawState(spriteBatch);
+
             spriteBatch.End();
         }
     }
