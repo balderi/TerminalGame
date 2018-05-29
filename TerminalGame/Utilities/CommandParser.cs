@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace TerminalGame.Utilities
 {
@@ -40,7 +41,10 @@ namespace TerminalGame.Utilities
                     }
                 case "sshnuke":
                     {
-                        Programs.SSHNuke.Execute();
+                        Thread sshnukeThread = new Thread(new ThreadStart(Programs.SSHNuke.Execute));
+                        Console.WriteLine("Starting new thread for sshnuke");
+                        sshnukeThread.Start();
+                        //Programs.SSHNuke.Execute();
                         break;
                     }
                 case "shutdown":

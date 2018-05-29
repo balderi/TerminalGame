@@ -98,6 +98,8 @@ namespace TerminalGame
             graphics.ApplyChanges();
             Console.WriteLine("Resolution is now " + graphics.PreferredBackBufferWidth + " x " + graphics.PreferredBackBufferHeight);
 
+            Drawing.SetBlankTexture(GraphicsDevice);
+
             MediaPlayer.Volume = musicVolume * masterVolume; // 0.5f;
             MediaPlayer.IsRepeating = true;
             base.Initialize();
@@ -139,7 +141,7 @@ namespace TerminalGame
             Console.WriteLine("Loading scenes...");
             menuScene = new MenuScene(GameTitle, Window, fontL, fontXL, GraphicsDevice);
             menuScene.ButtonClicked += MainMenu_ButtonClicked;
-            loadingScene = new LoadingScene(new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2));
+            loadingScene = new LoadingScene(new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2), Window, GraphicsDevice);
             Console.WriteLine("Screen center is " + graphics.PreferredBackBufferWidth / 2 +"x, " + graphics.PreferredBackBufferHeight / 2 + "y");
             gameScene = new GameScene();
 
@@ -174,6 +176,8 @@ namespace TerminalGame
                 { "07", spinner07 },
                 { "HoverSpinner", spinner08 },
             };
+
+            bgR = new Rectangle(new Point(0, 0), new Point(bg.Width, bg.Height));
 
             Console.WriteLine("Done loading");
         }
@@ -272,6 +276,7 @@ namespace TerminalGame
             playerComp.FileSystem.ChangeDir("bin");
             playerComp.FileSystem.AddFile("sshnuke", "01110011011100110110100001101110011101010110101101100101001000000110000101101100011011000110111101110111011100110010000001111001011011110111010100100000011101000110111100100000011001110110000101101001011011100010000001110101011011100110000101110101011101000110100001101111011100100110100101111010011001010110010000100000011001010110111001110100011100100111100100100000011010010110111001110100011011110010000001110010011001010110110101101111011101000110010100100000011100110111100101110011011101000110010101101101011100110010000001100010011110010010000001100011011000010111010101110011011010010110111001100111001000000110000100100000011000100111010101100110011001100110010101110010001000000110111101110110011001010111001001100110011011000110111101110111001000000110100101101110001000000110000100100000011000110110100001110101011011100110101100100000011011110110011000100000011000110110111101100100011001010010000001100100011001010111001101101001011001110110111001100101011001000010000001110100011011110010000001100111011101010110000101110010011001000010000001100001011001110110000101101001011011100111001101110100001000000110001101110010011110010111000001110100011011110110011101110010011000010111000001101000011010010110001100100000011000010111010001110100011000010110001101101011011100110010000001101111011011100010000001010011010100110100100000100000011101100110010101110010011100110110100101101111011011100010000001101111011011100110010100101110");
             playerComp.FileSystem.ChangeDir("/");
+            playerComp.SetSpeed(1.0f);
 
             Console.WriteLine("Setting up computers...");
             Computers.Computers.DoComputers();
@@ -283,9 +288,7 @@ namespace TerminalGame
             Player.GetInstance().PlayersComputer = playerComp;
 
             loadingScene.LoadItem = "Loading modules...";
-
-            bgR = new Rectangle(new Point(0, 0), new Point(bg.Width, bg.Height));
-
+            
             int thirdWidth = graphics.PreferredBackBufferWidth / 3;
             int thirdHeight = graphics.PreferredBackBufferHeight / 3;
             int tqWidth = Convert.ToInt32(graphics.PreferredBackBufferWidth * 0.75);
@@ -414,6 +417,8 @@ namespace TerminalGame
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(blendState: BlendState.AlphaBlend);
             base.Draw(gameTime);
+
+            spriteBatch.Draw(bg, bgR, Color.White);
 
             stateMachine.DrawState(spriteBatch);
 

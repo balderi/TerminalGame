@@ -8,11 +8,9 @@ namespace TerminalGame.Computers
     class Computer
     {
         public enum Type { Workstation, Server, Mainframe, Laptop }
-
-        readonly Type type;
         public enum AccessLevel { root, user }
         public AccessLevel Access { get; private set; }
-
+        public float Speed { get; private set; }
         public string IP { get; private set; }
         public string Name { get; private set; }
         public string RootPassword { get; private set; }
@@ -23,7 +21,9 @@ namespace TerminalGame.Computers
 
         public event EventHandler<ConnectEventArgs> Connected;
         public event EventHandler<ConnectEventArgs> Disonnected;
-        
+
+        readonly Type type;
+
         public Computer(Type type, string IP, string Name, string RootPassword, FileSystem FileSystem)
         {
             this.type = type;
@@ -97,6 +97,16 @@ namespace TerminalGame.Computers
             {
                 FileSystem.AddDir(baseDirs[i]);
             }
+        }
+
+        public void SetSpeed(float speed)
+        {
+            Speed = speed;
+        }
+
+        public void ChangeSpeed(float changePercentage)
+        {
+            Speed *= (1 + changePercentage);
         }
 
         public void ChangePassword(string password)

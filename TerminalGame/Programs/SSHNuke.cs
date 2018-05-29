@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using TerminalGame.Computers;
 
 namespace TerminalGame.Programs
 {
@@ -7,6 +8,7 @@ namespace TerminalGame.Programs
     {
         static Player player = Player.GetInstance();
         static OS.OS os = OS.OS.GetInstance();
+        static Computer playerComp = Player.GetInstance().PlayersComputer;
         static UI.Modules.Terminal terminal = os.Terminal;
         static Timer timer;
         static int count;
@@ -32,11 +34,23 @@ namespace TerminalGame.Programs
                 ".",
                 ".",
                 ".",
-                " successful.",
-                "\nResetting root password to \"password\".",
-                "\nSystem open: Access level <9>"
+                " successful."
                 };
-                timer = new Timer(SSHNukeWriter, autoEvent, 1000, 500);
+
+                for(int i = 0; i<textToWrite.Length; i++)
+                {
+                    terminal.Write(textToWrite[i]);
+                    Thread.Sleep((int)(1000 * playerComp.Speed));
+                }
+
+                terminal.Write("\nResetting root password to \"password\".");
+                Thread.Sleep(500);
+                player.ConnectedComputer.ChangePassword("password");
+                player.ConnectedComputer.GetRoot();
+                player.ConnectedComputer.Connect();
+                terminal.Write("\nSystem open: Access level <9>");
+                terminal.UnblockInput();
+                //timer = new Timer(SSHNukeWriter, autoEvent, 1000, 500);
             }
             else
             {

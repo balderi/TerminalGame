@@ -6,6 +6,13 @@ namespace TerminalGame.Utilities
 {
     class Drawing
     {
+        static Texture2D texture2D;
+        public static void SetBlankTexture(GraphicsDevice Graphics)
+        {
+            texture2D = new Texture2D(Graphics, 1, 1);
+            texture2D.SetData(new[] { Color.White });
+        }
+
         /// <summary>
         /// Will draw a blank texture. Add color in draw call with SpriteBatch.
         /// </summary>
@@ -13,9 +20,10 @@ namespace TerminalGame.Utilities
         /// <returns>Blank (white) Texture2D</returns>
         public static Texture2D DrawBlankTexture(GraphicsDevice Graphics)
         {
-            Texture2D retval = new Texture2D(Graphics, 1, 1);
-            retval.SetData(new[] { Color.White });
-            return retval;
+            //Texture2D retval = new Texture2D(Graphics, 1, 1);
+            //retval.SetData(new[] { Color.White });
+            //return retval;
+            return texture2D;
         }
 
         /// <summary>

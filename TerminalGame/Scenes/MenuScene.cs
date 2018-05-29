@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.UI;
+using TerminalGame.Utilities;
 
 namespace TerminalGame.Scenes
 {
@@ -18,12 +19,14 @@ namespace TerminalGame.Scenes
         private string gameTitle;
         private SpriteFont _titleFont;
         private GameWindow _gameWindow;
+        private GraphicsDevice _graphics;
 
         public MenuScene(string GameTitle, GameWindow gameWindow, SpriteFont buttonFont, SpriteFont titleFont, GraphicsDevice graphics)
         {
             gameTitle = GameTitle;
             _titleFont = titleFont;
             _gameWindow = gameWindow;
+            _graphics = graphics;
 
             float leftMargin = 50f;
             float topMargin = 250f;
@@ -92,6 +95,7 @@ namespace TerminalGame.Scenes
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            spriteBatch.Draw(Drawing.DrawBlankTexture(_graphics), _gameWindow.ClientBounds, Color.Black);
             Vector2 textMiddlePoint = _titleFont.MeasureString(gameTitle) / 2;
             Vector2 position = new Vector2((_gameWindow.ClientBounds.Width - textMiddlePoint.X - 15), textMiddlePoint.Y + 15);
             Vector2 position2 = new Vector2((_gameWindow.ClientBounds.Width - textMiddlePoint.X - 15) + TestClass.ShakeStuff(3), textMiddlePoint.Y + 15 + TestClass.ShakeStuff(3));

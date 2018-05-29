@@ -213,6 +213,7 @@ namespace TerminalGame.UI.Modules
             connectedComputer = Player.GetInstance().ConnectedComputer;
             connectedAddress = "root@127.0.0.1 > ";
             terminalOutput = "";
+            IsTakingSpecialInput = false;
             history = new List<string>();
             history.Insert(0, "");
             output = new List<string>();
@@ -268,6 +269,7 @@ namespace TerminalGame.UI.Modules
         /// </summary>
         private void UpdateInputSize()
         {
+            string text = terminalInput.Text.String;
             int oldWidth = connAdd.Width;
             int newWidth = (int)(TerminalFont.MeasureString(connectedAddress).X);
             if(newWidth != oldWidth)
@@ -276,6 +278,8 @@ namespace TerminalGame.UI.Modules
                 inputViewport.X = connAdd.X + connAdd.Width;
                 inputViewport.Width = Container.Width - connAdd.Width;
                 terminalInput = TextBox();
+                terminalInput.Text.String = text;
+                terminalInput.Cursor.TextCursor = text.Length;
             }
         }
 
@@ -318,8 +322,12 @@ namespace TerminalGame.UI.Modules
             float lerpAmount = (float)(gameTime.TotalGameTime.TotalMilliseconds % 500f / 500f);
 
             terminalInput.Cursor.Color = Color.Lerp(Color.DarkGray, Color.LightGray, lerpAmount);
-            if(!IsTakingSpecialInput)
-                connectedAddress = connectedComputer.Access + "@" + connectedComputer.IP + connectedComputer.FileSystem.CurrentDir.PrintFullPath() + " > ";
+            if (!IsTakingSpecialInput)
+            {
+                connectedAddress = connectedComputer.PlayerHasRoot ? "root" : "user";
+                connectedAddress += "@" + connectedComputer.IP + connectedComputer.FileSystem.CurrentDir.PrintFullPath() + " > ";
+            }
+
             if (updateInp)
             {
                 UpdateInputSize();

@@ -140,8 +140,8 @@ namespace TerminalGame.Computers.FileSystems
                 f.SetParent(FindFile(directoryName, true, true));
                 FindFile(directoryName, true, true).Children.Add(f);
             }
-            else
-                throw new Exception(directoryName + " is not a directory.");
+            //else
+            //    throw new Exception(directoryName + " is not a directory.");
         }
 
         public void RemoveFile(File file)
