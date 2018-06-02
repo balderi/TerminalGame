@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace TerminalGame.Utilities
 {
@@ -27,6 +28,10 @@ namespace TerminalGame.Utilities
             string[] args = new string[data.Length - 1];
             Array.Copy(data, 1, args, 0, data.Length - 1);
 
+            // Prevent arg being null
+            if (args.Length == 0)
+                args = new string[] { "" };
+
             string noPriv = "\n" + command + ": Permission denied";
 
             switch (command)
@@ -41,23 +46,27 @@ namespace TerminalGame.Utilities
                     }
                 case "sshnuke":
                     {
-                        Thread sshnukeThread = new Thread(new ThreadStart(Programs.SSHNuke.Execute));
-                        Console.WriteLine("Starting new thread for sshnuke");
-                        sshnukeThread.Start();
-                        //Programs.SSHNuke.Execute();
+                        Task task = Task.Factory.StartNew(() => Programs.SSHNuke.Execute());
+                        Console.WriteLine("Starting new task for sshnuke");
                         break;
                     }
                 case "shutdown":
                     {
-                        return "\nI'm sorry Dave, I'm afraid I can't do that.";
+                        var task = Task.Factory.StartNew(() => Programs.Placeholder.Execute());
+                        Console.WriteLine("Starting new task for shutdown");
+                        break;
                     }
                 case "reboot":
                     {
-                        return "\nI'm sorry Dave, I'm afraid I can't do that.";
+                        var task = Task.Factory.StartNew(() => Programs.Placeholder.Execute());
+                        Console.WriteLine("Starting new task for reboot");
+                        break;
                     }
                 case "exit":
                     {
-                        return "\nI'm sorry Dave, I'm afraid I can't do that.";
+                        var task = Task.Factory.StartNew(() => Programs.Placeholder.Execute());
+                        Console.WriteLine("Starting new task for exit");
+                        break;
                     }
                 case "":
                     {
@@ -140,16 +149,15 @@ namespace TerminalGame.Utilities
                     }
                 case "connect":
                     {
-                        if (args.Length != 0)
-                            Programs.Connect.Execute(args[0]);
-                        else
-                            Programs.Connect.Execute();
+                        Task task = Task.Factory.StartNew(() => Programs.Connect.Execute(args[0]));
+                        Console.WriteLine("Starting new task for connect");
                         break;
                     }
                 case "dc":
                 case "disconnect":
                     {
-                        Programs.Disconnect.Execute();
+                        Task task = Task.Factory.StartNew(() => Programs.Disconnect.Execute());
+                        Console.WriteLine("Starting new task for disconnect");
                         break;
                     }
                 case "ipconfig":
@@ -203,23 +211,20 @@ namespace TerminalGame.Utilities
                 case "ls":
                 case "dir":
                     {
-                        Programs.Ls.Execute(command);
+                        Task task = Task.Factory.StartNew(() => Programs.Ls.Execute(command));
+                        Console.WriteLine("Starting new task for ls/dir");
                         break;
                     }
                 case "cat":
                     {
-                        if(args.Length != 0)
-                            Programs.Cat.Execute(args[0]);
-                        else
-                            Programs.Cat.Execute();
+                        Task task = Task.Factory.StartNew(() => Programs.Cat.Execute(args[0]));
+                        Console.WriteLine("Starting new task for cat");
                         break;
                     }
                 case "cd":
                     {
-                        if (args.Length != 0)
-                            Programs.Cd.Execute(args[0]);
-                        else
-                            Programs.Cd.Execute();
+                        Task task = Task.Factory.StartNew(() => Programs.Cd.Execute(args[0]));
+                        Console.WriteLine("Starting new task for cd");
                         break;
                     }
                 case "cls":
@@ -230,7 +235,8 @@ namespace TerminalGame.Utilities
                     }
                 case "help":
                     {
-                        Programs.Help.Execute();
+                        Task task = Task.Factory.StartNew(() => Programs.Help.Execute());
+                        Console.WriteLine("Starting new task for help");
                         break;
                     }
                 default:

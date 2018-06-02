@@ -95,6 +95,7 @@
     <Compile Include="Programs\Disconnect.cs" />
     <Compile Include="Programs\Help.cs" />
     <Compile Include="Programs\Ls.cs" />
+    <Compile Include="Programs\Placeholder.cs" />
     <Compile Include="Programs\SSHNuke.cs" />
     <Compile Include="Scenes\GameScene.cs" />
     <Compile Include="Scenes\IScene.cs" />
