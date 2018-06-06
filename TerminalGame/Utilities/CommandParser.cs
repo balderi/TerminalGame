@@ -46,8 +46,9 @@ namespace TerminalGame.Utilities
                     }
                 case "sshnuke":
                     {
-                        Task task = Task.Factory.StartNew(() => Programs.SSHNuke.Execute());
+                        Task<int> task = Task.Factory.StartNew(() => Programs.SSHNuke.Execute());
                         Console.WriteLine("Starting new task for sshnuke");
+                        Console.WriteLine(task.Result);
                         break;
                     }
                 case "shutdown":
@@ -163,7 +164,9 @@ namespace TerminalGame.Utilities
                 case "ipconfig":
                 case "ifconfig":
                     {
-                        return "\nIP: " + player.ConnectedComputer.IP;
+                        terminal.Write("\n" + player.ConnectedComputer.IP);
+                        break;
+                        //return "\nIP: " + player.ConnectedComputer.IP;
                     }
                 case "touch":
                     {

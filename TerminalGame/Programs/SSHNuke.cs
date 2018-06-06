@@ -14,7 +14,7 @@ namespace TerminalGame.Programs
         static int count;
         static string[] textToWrite;
 
-        public static void Execute()
+        public static int Execute()
         {
             terminal.BlockInput();
             player.PlayersComputer.FileSystem.ChangeDir("/");
@@ -50,12 +50,14 @@ namespace TerminalGame.Programs
                 player.ConnectedComputer.Connect();
                 terminal.Write("\nSystem open: Access level <9>");
                 terminal.UnblockInput();
+                return 0;
                 //timer = new Timer(SSHNukeWriter, autoEvent, 1000, 500);
             }
             else
             {
                 terminal.Write("\nThe program \'sshnuke\' is currently not installed");
                 terminal.UnblockInput();
+                return 1;
             }
             player.PlayersComputer.FileSystem.ChangeDir("/");
         }

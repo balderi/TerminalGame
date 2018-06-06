@@ -177,7 +177,7 @@ namespace TerminalGame
                 { "HoverSpinner", spinner08 },
             };
 
-            bgR = new Rectangle(new Point(0, 0), new Point(bg.Width, bg.Height));
+            bgR = new Rectangle(new Point(0, 0), new Point(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight));
 
             Console.WriteLine("Done loading");
         }
