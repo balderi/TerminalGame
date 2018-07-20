@@ -39,7 +39,10 @@ namespace TerminalGame.Programs
 
                 for(int i = 0; i<textToWrite.Length; i++)
                 {
-                    terminal.Write(textToWrite[i]);
+                    if (textToWrite[i].Contains("\n"))
+                        terminal.Write(textToWrite[i]);
+                    else
+                        terminal.WritePartialLine(textToWrite[i]);
                     Thread.Sleep((int)(1000 * playerComp.Speed));
                 }
 
@@ -50,31 +53,15 @@ namespace TerminalGame.Programs
                 player.ConnectedComputer.Connect();
                 terminal.Write("\nSystem open: Access level <9>");
                 terminal.UnblockInput();
+                player.PlayersComputer.FileSystem.ChangeDir("/");
                 return 0;
-                //timer = new Timer(SSHNukeWriter, autoEvent, 1000, 500);
             }
             else
             {
                 terminal.Write("\nThe program \'sshnuke\' is currently not installed");
                 terminal.UnblockInput();
+                player.PlayersComputer.FileSystem.ChangeDir("/");
                 return 1;
-            }
-            player.PlayersComputer.FileSystem.ChangeDir("/");
-        }
-        
-        private static void SSHNukeWriter(Object stateInfo)
-        {
-            AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
-            terminal.Write(textToWrite[count++]);
-            if (count == textToWrite.Length)
-            {
-                player.ConnectedComputer.GetRoot();
-                player.ConnectedComputer.Connect();
-                player.ConnectedComputer.ChangePassword("password");
-                terminal.UnblockInput();
-                count = 0;
-                autoEvent.Set();
-                timer.Dispose();
             }
         }
     }

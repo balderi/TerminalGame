@@ -37,6 +37,7 @@ namespace TerminalGame
         private bool gameStarted;
 
         MenuScene menuScene;
+        SettingsScene settingsScene;
         LoadingScene loadingScene;
         GameScene gameScene;
 
@@ -137,22 +138,15 @@ namespace TerminalGame
             MediaPlayer.Play(bgm_menu);
 
             FontManager.SetFonts(fontXS, fontS, font, fontL, fontXL);
-
-            Console.WriteLine("Loading scenes...");
-            menuScene = new MenuScene(GameTitle, Window, fontL, fontXL, GraphicsDevice);
-            menuScene.ButtonClicked += MainMenu_ButtonClicked;
-            loadingScene = new LoadingScene(new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2), Window, GraphicsDevice);
-            Console.WriteLine("Screen center is " + graphics.PreferredBackBufferWidth / 2 +"x, " + graphics.PreferredBackBufferHeight / 2 + "y");
-            gameScene = new GameScene();
-
-            SceneManager.SetScenes(menuScene, loadingScene, gameScene);
-
+            
             Window.TextInput += Window_TextInput;
 
             load = new LoadingScreen(fontL, fontS);
 
             Console.WriteLine("Loading textures");
+            bgR = new Rectangle(new Point(0, 0), new Point(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight));
             bg = Content.Load<Texture2D>("Textures/bg");
+
             computer = Content.Load<Texture2D>("Textures/nmapComputer");
 
             // Various markers for the networkmap
@@ -177,9 +171,17 @@ namespace TerminalGame
                 { "HoverSpinner", spinner08 },
             };
 
-            bgR = new Rectangle(new Point(0, 0), new Point(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight));
+            Console.WriteLine("Loading scenes...");
+            menuScene = new MenuScene(GameTitle, Window, fontL, fontXL, GraphicsDevice);
+            menuScene.ButtonClicked += MainMenu_ButtonClicked;
+            settingsScene = new SettingsScene(Window, font, font, GraphicsDevice);
+            loadingScene = new LoadingScene(new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2), Window, GraphicsDevice);
+            gameScene = new GameScene(bg, bgR);
+
+            SceneManager.SetScenes(menuScene, settingsScene, loadingScene, gameScene);
 
             Console.WriteLine("Done loading");
+            stateMachine.Transition(Keys.A);
         }
 
         private void Window_TextInput(object sender, TextInputEventArgs e)
@@ -223,6 +225,7 @@ namespace TerminalGame
                     }
                 case "Settings":
                     {
+                        stateMachine.Transition(Keys.Apps);
                         break;
                     }
                 case "Quit Game":
@@ -304,9 +307,9 @@ namespace TerminalGame
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             Console.WriteLine("Loading terminal...");
-            terminal = new Terminal(GraphicsDevice, 
-                new Rectangle(2, 2, 
-                thirdWidth - 4, graphics.PreferredBackBufferHeight - 4), 
+            terminal = new Terminal(GraphicsDevice,
+                new Rectangle(2, 2,
+                thirdWidth - 4, graphics.PreferredBackBufferHeight - 4),
                 font)
             {
                 BackgroundColor = Color.Black * 0.75f,
@@ -314,6 +317,8 @@ namespace TerminalGame
                 HeaderColor = Color.RoyalBlue,
                 Title = "Terminal",
                 Font = fontS,
+                IsActive = true,
+                IsVisible = true,
             };
 
             Console.WriteLine("Loading networkmap...");
@@ -327,6 +332,8 @@ namespace TerminalGame
                 HeaderColor = Color.RoyalBlue,
                 Title = "Network Map",
                 Font = fontS,
+                IsActive = true,
+                IsVisible = true,
             };
 
             Console.WriteLine("Loading statusbar...");
@@ -340,6 +347,8 @@ namespace TerminalGame
                 HeaderColor = Color.MidnightBlue,
                 Title = "Status Bar",
                 Font = fontL,
+                IsActive = true,
+                IsVisible = true,
             };
 
             Console.WriteLine("Loading remoteview...");
@@ -353,6 +362,8 @@ namespace TerminalGame
                 HeaderColor = Color.RoyalBlue,
                 Title = "Remote System",
                 Font = fontS,
+                IsActive = true,
+                IsVisible = true,
             };
 
             Console.WriteLine("Loading notes...");
@@ -366,6 +377,8 @@ namespace TerminalGame
                 HeaderColor = Color.RoyalBlue,
                 Title = "Friendly neighborhood notepad",
                 Font = fontS,
+                IsActive = true,
+                IsVisible = true,
             };
 
             loadingScene.LoadItem = "Initializing...";
@@ -418,7 +431,7 @@ namespace TerminalGame
             spriteBatch.Begin(blendState: BlendState.AlphaBlend);
             base.Draw(gameTime);
 
-            spriteBatch.Draw(bg, bgR, Color.White);
+            //spriteBatch.Draw(bg, bgR, Color.White);
 
             stateMachine.DrawState(spriteBatch);
 

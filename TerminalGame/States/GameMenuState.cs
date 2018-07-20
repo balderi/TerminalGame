@@ -22,6 +22,8 @@ namespace TerminalGame.States
                 return Next();
             else if (key == Keys.Attn)
                 return GameLoadingState.Instance;
+            else if (key == Keys.Apps)
+                return GameSettingsState.Instance;
             else
                 return this;
         }

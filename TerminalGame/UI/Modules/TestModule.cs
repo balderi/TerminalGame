@@ -12,6 +12,7 @@ namespace TerminalGame.UI.Modules
         public override Color BorderColor { get; set; }
         public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
+        public override bool IsVisible { get; set; }
         public override string Title { get; set; }
         public override Rectangle Container { get; set; }
 

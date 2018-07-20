@@ -18,6 +18,7 @@ namespace TerminalGame.Computers
         public bool PlayerHasRoot { get; private set; }
         public FileSystem FileSystem { get; private set; }
         public List<Computer> LinkedComputers { get; private set; }
+        public List<int> OpenPorts { get; private set; }
 
         public event EventHandler<ConnectEventArgs> Connected;
         public event EventHandler<ConnectEventArgs> Disonnected;
@@ -32,6 +33,7 @@ namespace TerminalGame.Computers
             this.RootPassword = RootPassword;
             this.FileSystem = FileSystem;
             LinkedComputers = new List<Computer>();
+            OpenPorts = new List<int>();
         }
 
         public Computer(Type type, string IP, string Name, string RootPassword)
@@ -42,6 +44,7 @@ namespace TerminalGame.Computers
             this.RootPassword = RootPassword;
             BuildBasicFileSystem();
             LinkedComputers = new List<Computer>();
+            OpenPorts = new List<int>();
         }
 
         /// <summary>
@@ -87,6 +90,16 @@ namespace TerminalGame.Computers
                 Console.WriteLine("*** DISC: GOING HOME");
                 Player.GetInstance().PlayersComputer.Connect(true);
             }
+        }
+
+        public List<int> GetOpenPorts()
+        {
+            return OpenPorts;
+        }
+
+        public bool CheckPortOpen(int port)
+        {
+            return OpenPorts.Exists(x => x == port);
         }
 
         public void BuildBasicFileSystem()

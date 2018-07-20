@@ -48,7 +48,6 @@ namespace TerminalGame.Utilities
                     {
                         Task<int> task = Task.Factory.StartNew(() => Programs.SSHNuke.Execute());
                         Console.WriteLine("Starting new task for sshnuke");
-                        Console.WriteLine(task.Result);
                         break;
                     }
                 case "shutdown":

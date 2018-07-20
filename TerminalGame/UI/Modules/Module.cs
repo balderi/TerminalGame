@@ -13,6 +13,7 @@ namespace TerminalGame.UI.Modules
         public abstract Color BorderColor { get; set; }
         public abstract Color HeaderColor { get; set; }
         public abstract bool IsActive { get; set; }
+        public abstract bool IsVisible { get; set; }
         public abstract string Title { get; set; }
         public abstract Rectangle Container{ get; set; }
 

@@ -12,6 +12,7 @@ namespace TerminalGame.UI.Modules
         public override Color BorderColor { get; set; }
         public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
+        public override bool IsVisible { get; set; }
         public override string Title { get; set; }
         public override Rectangle Container { get; set; }
 
@@ -47,15 +48,18 @@ namespace TerminalGame.UI.Modules
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Font.LineSpacing = 0;
-            Texture2D texture = Drawing.DrawBlankTexture(Graphics);
-            Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
-            spriteBatch.Draw(texture, Container, BackgroundColor);
-            spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
-            spriteBatch.DrawString(Font, Title, new Vector2(Container.X + 10, Container.Height / 2 - (int)Font.MeasureString("A").Y / 2 + 5), Color.White);
-            spriteBatch.DrawString(lilFont, connectionInfo, new Vector2(Container.X + 10 + Font.MeasureString(Title).X,
-                Container.Height / 2 - (int)Font.MeasureString("A").Y / 2 + 7), Color.White);
-            spriteBatch.DrawString(lilFont, buildNumber, new Vector2(Container.Right - lilFont.MeasureString(buildNumber).Length() - 5, 5), Color.White);
+            if (IsVisible)
+            {
+                Font.LineSpacing = 0;
+                Texture2D texture = Drawing.DrawBlankTexture(Graphics);
+                Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
+                spriteBatch.Draw(texture, Container, BackgroundColor);
+                spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
+                spriteBatch.DrawString(Font, Title, new Vector2(Container.X + 10, Container.Height / 2 - (int)Font.MeasureString("A").Y / 2 + 5), Color.White);
+                spriteBatch.DrawString(lilFont, connectionInfo, new Vector2(Container.X + 10 + Font.MeasureString(Title).X,
+                    Container.Height / 2 - (int)Font.MeasureString("A").Y / 2 + 7), Color.White);
+                spriteBatch.DrawString(lilFont, buildNumber, new Vector2(Container.Right - lilFont.MeasureString(buildNumber).Length() - 5, 5), Color.White);
+            }
         }
 
         public override void Update(GameTime gameTime)

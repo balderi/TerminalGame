@@ -11,11 +11,12 @@ namespace TerminalGame.Scenes
         public enum Scene
         {
             Menu,
+            Settings,
             Loading,
             Game
         }
 
-        private static IScene _menu, _loading, _game;
+        private static IScene _menu, _settings, _loading, _game;
 
         public static IScene GetScene(Scene scene)
         {
@@ -23,6 +24,8 @@ namespace TerminalGame.Scenes
             {
                 case Scene.Menu:
                     return _menu;
+                case Scene.Settings:
+                    return _settings;
                 case Scene.Loading:
                     return _loading;
                 case Scene.Game:
@@ -32,9 +35,10 @@ namespace TerminalGame.Scenes
             }
         }
 
-        public static void SetScenes(IScene menu, IScene loading, IScene game)
+        public static void SetScenes(IScene menu, IScene settings, IScene loading, IScene game)
         {
             _menu = menu;
+            _settings = settings;
             _loading = loading;
             _game = game;
         }

@@ -73,12 +73,24 @@ namespace TerminalGame.OS
 
         public void HideModule(Module module)
         {
-
+            foreach(Module m in Modules)
+            {
+                if(m.Equals(module))
+                {
+                    m.IsActive = false;
+                }
+            }
         }
 
         public void ShowModule(Module module)
         {
-
+            foreach (Module m in Modules)
+            {
+                if (m.Equals(module))
+                {
+                    m.IsActive = true;
+                }
+            }
         }
 
         public void Update(GameTime gameTime)

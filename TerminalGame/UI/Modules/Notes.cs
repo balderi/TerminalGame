@@ -17,6 +17,7 @@ namespace TerminalGame.UI.Modules
         public override Color BorderColor { get; set; }
         public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
+        public override bool IsVisible { get; set; }
         public override string Title { get; set; }
         public List<string> Notes { get; private set; }
         public override Rectangle Container { get; set; }
@@ -36,7 +37,11 @@ namespace TerminalGame.UI.Modules
             Notes.Add(sample2);
             Notes.Add(sample3);
             noteRender = "";
-            bar = "-------------------------------";
+            bar = "";
+            for(int i = 0; i < (Container.Width/noteFont.MeasureString("_").X - 1); i++)
+            {
+                bar += "-";
+            }
         }
 
         public void AddNote(string text)
@@ -62,12 +67,15 @@ namespace TerminalGame.UI.Modules
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Texture2D texture = Drawing.DrawBlankTexture(Graphics);
-            Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
-            spriteBatch.Draw(texture, Container, BackgroundColor);
-            spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
-            spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
-            spriteBatch.DrawString(NoteFont, noteRender, new Vector2(Container.X + 10, Container.Y + Font.MeasureString("A").Y + 10), Color.White);
+            if (IsVisible)
+            {
+                Texture2D texture = Drawing.DrawBlankTexture(Graphics);
+                Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
+                spriteBatch.Draw(texture, Container, BackgroundColor);
+                spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
+                spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
+                spriteBatch.DrawString(NoteFont, noteRender, new Vector2(Container.X + 10, Container.Y + Font.MeasureString("A").Y + 10), Color.White);
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -76,7 +84,7 @@ namespace TerminalGame.UI.Modules
             foreach(string s in Notes)
             {
                 id = "<Note" + Notes.IndexOf(s) + ">";
-                divider = bar.Substring(0, 2) + id + bar.Substring(0, bar.Length - id.Length - 2);
+                divider = bar.Substring(0, 2) + id + bar.Substring(0, bar.Length - id.Length - 3);
                 noteRender += String.Format("{0}\n{1}\n",divider,s);
             }
         }

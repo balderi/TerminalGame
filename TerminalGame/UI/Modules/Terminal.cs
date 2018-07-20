@@ -28,6 +28,7 @@ namespace TerminalGame.UI.Modules
         public override Color BorderColor { get; set; }
         public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
+        public override bool IsVisible { get; set; }
         public override string Title { get; set; }
         public override Rectangle Container { get; set; }
 
@@ -111,6 +112,12 @@ namespace TerminalGame.UI.Modules
             }
         }
 
+        public void WritePartialLine(string text)
+        {
+            output[output.Count - 1] += text;
+            UpdateOutput();
+        }
+
         private string[] Format(string text)
         {
             return text.Split('§');
@@ -150,7 +157,7 @@ namespace TerminalGame.UI.Modules
         }
 
         private void TerminalInput_UpArrow(object sender, KeyboardInput.KeyEventArgs e)
-            {
+        {
             if (!isInputBlocked)
             {
                 if (history.Count > 0 && currentIndex < history.Count)
@@ -289,39 +296,41 @@ namespace TerminalGame.UI.Modules
         /// </summary>
         public void UpdateOutput()
         {
+            List<string> tempOut = output;
             int counter = 0;
             int lines = 0;
-            foreach (string s in output)
+            foreach (string s in tempOut)
             {
                 if (s.Contains("\n"))
                     lines++;
             }
             while (lines > linesToDraw - 1)
             {
-                output.RemoveAt(0);
+                tempOut.RemoveAt(0);
                 lines--;
                 counter++;
             }
             while (lines < linesToDraw - 1)
             {
-                output.Insert(0, "\n");
+                tempOut.Insert(0, "\n");
                 lines++;
             }
             if (output.Count > 0)
             {
                 string holder = "";
-                foreach (string s in output)
+                foreach (string s in tempOut)
                 {
                     holder += s;
                 }
                 terminalOutput = holder;
             }
+            output = tempOut;
         }
 
         public override void Update(GameTime gameTime)
         {
             float lerpAmount = (float)(gameTime.TotalGameTime.TotalMilliseconds % 500f / 500f);
-
+            
             terminalInput.Cursor.Color = Color.Lerp(Color.DarkGray, Color.LightGray, lerpAmount);
             if (!IsTakingSpecialInput)
             {
@@ -339,16 +348,19 @@ namespace TerminalGame.UI.Modules
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Texture2D texture = Drawing.DrawBlankTexture(Graphics);
-            spriteBatch.Draw(texture, Container, BackgroundColor);
-            spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
-            spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
-            Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
+            if (IsVisible)
+            {
+                Texture2D texture = Drawing.DrawBlankTexture(Graphics);
+                spriteBatch.Draw(texture, Container, BackgroundColor);
+                spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
+                spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
+                Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
 
-            spriteBatch.DrawString(TerminalFont, connectedAddress, new Vector2(connAdd.X, connAdd.Y), Color.LightGray);
-            spriteBatch.DrawString(TerminalFont, terminalOutput, new Vector2(outputViewport.X + 3 + TestClass.ShakeStuff(1), outputViewport.Y + TestClass.ShakeStuff(1)), Color.Green);
-            spriteBatch.DrawString(TerminalFont, terminalOutput, new Vector2(outputViewport.X + 3, outputViewport.Y), Color.LightGray);
-            terminalInput.Draw(spriteBatch);
+                spriteBatch.DrawString(TerminalFont, connectedAddress, new Vector2(connAdd.X, connAdd.Y), Color.LightGray);
+                spriteBatch.DrawString(TerminalFont, terminalOutput, new Vector2(outputViewport.X + 3 + TestClass.ShakeStuff(1), outputViewport.Y + TestClass.ShakeStuff(1)), Color.Green);
+                spriteBatch.DrawString(TerminalFont, terminalOutput, new Vector2(outputViewport.X + 3, outputViewport.Y), Color.LightGray);
+                terminalInput.Draw(spriteBatch);
+            }
         }
 
         public void ForceQuit()
