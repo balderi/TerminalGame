@@ -86,13 +86,13 @@ namespace TerminalGame.UI.Modules
                 }
                 foreach (NetworkNode node in nodes)
                 {
-                    if (node.Computer != Player.GetInstance().ConnectedComputer && node.Computer != Player.GetInstance().PlayersComputer && !node.IsHovering)
+                    if (node.Computer != Player.GetInstance().ConnectedComputer && node.Computer != Player.GetInstance().PlayersComputer && !node.IsHovering && !node.Computer.IsMissionObjective)
                         node.Draw(spriteBatch);
                 }
                 // Makes sure that nodes with spinners are drawn on top, so other nodes don't obtruct them
                 foreach (NetworkNode node in nodes)
                 {
-                    if (node.Computer == Player.GetInstance().ConnectedComputer || node.Computer == Player.GetInstance().PlayersComputer)
+                    if (node.Computer == Player.GetInstance().ConnectedComputer || node.Computer == Player.GetInstance().PlayersComputer || node.Computer.IsMissionObjective)
                         node.Draw(spriteBatch);
                 }
 

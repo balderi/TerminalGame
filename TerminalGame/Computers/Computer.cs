@@ -9,6 +9,7 @@ namespace TerminalGame.Computers
     {
         public enum Type { Workstation, Server, Mainframe, Laptop }
         public enum AccessLevel { root, user }
+        public Type ComputerType { get; private set; }
         public AccessLevel Access { get; private set; }
         public float Speed { get; private set; }
         public string IP { get; private set; }
@@ -16,6 +17,8 @@ namespace TerminalGame.Computers
         public string RootPassword { get; private set; }
         public bool IsPlayerConnected { get; private set; }
         public bool PlayerHasRoot { get; private set; }
+        public bool IsMissionObjective { get; private set; }
+        public bool IsShownOnMap { get; private set; }
         public FileSystem FileSystem { get; private set; }
         public List<Computer> LinkedComputers { get; private set; }
         public List<int> OpenPorts { get; private set; }
@@ -23,25 +26,23 @@ namespace TerminalGame.Computers
         public event EventHandler<ConnectEventArgs> Connected;
         public event EventHandler<ConnectEventArgs> Disonnected;
 
-        readonly Type type;
-
-        public Computer(Type type, string IP, string Name, string RootPassword, FileSystem FileSystem)
+        public Computer(Type type, string ip, string name, string rootPassword, FileSystem fileSystem)
         {
-            this.type = type;
-            this.IP = IP;
-            this.Name = Name;
-            this.RootPassword = RootPassword;
-            this.FileSystem = FileSystem;
+            ComputerType = type;
+            IP = ip;
+            Name = name;
+            RootPassword = rootPassword;
+            FileSystem = fileSystem;
             LinkedComputers = new List<Computer>();
             OpenPorts = new List<int>();
         }
 
-        public Computer(Type type, string IP, string Name, string RootPassword)
+        public Computer(Type type, string ip, string name, string rootPassword)
         {
-            this.type = type;
-            this.IP = IP;
-            this.Name = Name;
-            this.RootPassword = RootPassword;
+            ComputerType = type;
+            IP = ip;
+            Name = name;
+            RootPassword = rootPassword;
             BuildBasicFileSystem();
             LinkedComputers = new List<Computer>();
             OpenPorts = new List<int>();
@@ -92,15 +93,15 @@ namespace TerminalGame.Computers
             }
         }
 
-        public List<int> GetOpenPorts()
-        {
-            return OpenPorts;
-        }
+        public void ToggleShowOnMap() => IsShownOnMap = !IsShownOnMap;
 
-        public bool CheckPortOpen(int port)
-        {
-            return OpenPorts.Exists(x => x == port);
-        }
+        public void SetAsObjective() => IsMissionObjective = true;
+
+        public void RemoveAsObjective() => IsMissionObjective = false;
+
+        public List<int> GetOpenPorts() => OpenPorts;
+
+        public bool CheckPortOpen(int port) => OpenPorts.Exists(x => x == port);
 
         public void BuildBasicFileSystem()
         {
@@ -112,20 +113,11 @@ namespace TerminalGame.Computers
             }
         }
 
-        public void SetSpeed(float speed)
-        {
-            Speed = speed;
-        }
+        public void SetSpeed(float speed) => Speed = speed;
 
-        public void ChangeSpeed(float changePercentage)
-        {
-            Speed *= (1 + changePercentage);
-        }
+        public void ChangeSpeed(float changePercentage) => Speed *= (1 + changePercentage);
 
-        public void ChangePassword(string password)
-        {
-            RootPassword = password;
-        }
+        public void ChangePassword(string password) => RootPassword = password;
 
         public void Link(Computer computer)
         {
@@ -169,14 +161,8 @@ namespace TerminalGame.Computers
         /// <summary>
         /// Grant the player eleveted (root) permission on this computer.
         /// </summary>
-        public void GetRoot()
-        {
-            PlayerHasRoot = true;
-        }
+        public void GetRoot() => PlayerHasRoot = true;
 
-        public void Update(GameTime gameTime)
-        {
-            Access = PlayerHasRoot ? AccessLevel.root : AccessLevel.user;
-        }
+        public void Update(GameTime gameTime) => Access = PlayerHasRoot ? AccessLevel.root : AccessLevel.user;
     }
 }

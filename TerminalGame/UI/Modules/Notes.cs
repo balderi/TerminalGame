@@ -44,9 +44,15 @@ namespace TerminalGame.UI.Modules
             }
         }
 
-        public void AddNote(string text)
+        public bool AddNote(string text)
         {
-            Notes.Add(text);
+            if (!Notes.Contains(text))
+            {
+                Notes.Add(text);
+                return true;
+            }
+            else
+                return false;
         }
 
         public bool RemoveNote(int id)

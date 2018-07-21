@@ -39,14 +39,19 @@ namespace TerminalGame.Programs
                 {
                     if(!String.IsNullOrEmpty(text))
                     {
-                        os.Notes.AddNote(text);
+                        if (os.Notes.AddNote(text))
+                            terminal.Write("\nNote added");
+                        else
+                            terminal.Write("\nNote already exists.");
                     }
                     else
                     {
-                        os.Notes.AddNote(args[0]);
+                        if (os.Notes.AddNote(args[0]))
+                            terminal.Write("\nNote added");
+                        else
+                            terminal.Write("\nNote already exists.");
+                        return;
                     }
-                    terminal.Write("\nNote added");
-                    return;
                 }
             }
             terminal.Write("\nUsage: note [OPTIONS] [NOTE OR NOTE ID]");
