@@ -24,9 +24,11 @@ namespace TerminalGame.Programs
             player.PlayersComputer.FileSystem.ChangeDir("bin");
             if (player.PlayersComputer.FileSystem.TryFindFile("nmap", false))
             {
+                player.PlayersComputer.FileSystem.ChangeDir("/");
                 if (!String.IsNullOrEmpty(ip))
                 {
                     terminal.Write("\nStarting Nmap scan for " + ip);
+                    Thread.Sleep(2000);
                     if (HostExists(ip))
                     {
                         textToWrite = new string[]
@@ -66,7 +68,7 @@ namespace TerminalGame.Programs
                     }
                     else
                     {
-                        Thread.Sleep(3000);
+                        Thread.Sleep(2000);
                         terminal.Write("\nNo response from host " + ip + " ...");
                     }
                 }
@@ -74,7 +76,7 @@ namespace TerminalGame.Programs
                 {
                     terminal.Write("\nUsage: nmap [IP or Hostname]");
                 }
-                
+
                 terminal.UnblockInput();
                 return 0;
             }

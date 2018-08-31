@@ -50,8 +50,8 @@ namespace TerminalGame.Programs
                             terminal.Write("\nNote added");
                         else
                             terminal.Write("\nNote already exists.");
-                        return;
                     }
+                    return;
                 }
             }
             terminal.Write("\nUsage: note [OPTIONS] [NOTE OR NOTE ID]");
