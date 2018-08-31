@@ -21,21 +21,28 @@ namespace TerminalGame.Computers
         public bool IsShownOnMap { get; private set; }
         public FileSystem FileSystem { get; private set; }
         public List<Computer> LinkedComputers { get; private set; }
-        public List<int> OpenPorts { get; private set; }
+        public Dictionary<int, string> OpenPorts { get; private set; }
 
         public event EventHandler<ConnectEventArgs> Connected;
         public event EventHandler<ConnectEventArgs> Disonnected;
 
-        public Computer(Type type, string ip, string name, string rootPassword, FileSystem fileSystem)
+        private enum KnownPorts
         {
-            ComputerType = type;
-            IP = ip;
-            Name = name;
-            RootPassword = rootPassword;
-            FileSystem = fileSystem;
-            LinkedComputers = new List<Computer>();
-            OpenPorts = new List<int>();
-        }
+            FTP = 21,
+            SSH = 22,
+            Telnet = 23,
+            SMTP = 25,
+            DNS = 53,
+            DHCP = 67,
+            TFTP = 69,
+            HTTP = 80,
+            POP = 110,
+            NTP = 123,
+            IMAP = 143,
+            HTTPS = 443
+        };
+
+        private int[] _defaultPorts = { 25, 80, 110, 143 };
 
         public Computer(Type type, string ip, string name, string rootPassword)
         {
@@ -43,9 +50,26 @@ namespace TerminalGame.Computers
             IP = ip;
             Name = name;
             RootPassword = rootPassword;
-            BuildBasicFileSystem();
             LinkedComputers = new List<Computer>();
-            OpenPorts = new List<int>();
+            Initialize();
+        }
+
+        public Computer(Type type, string ip, string name, string rootPassword, FileSystem fileSystem) : this (type, ip, name, rootPassword)
+        {
+            FileSystem = fileSystem;
+        }
+
+        public Computer(Type type, string ip, string name, string rootPassword, FileSystem fileSystem, int[] openPorts) : this(type, ip, name, rootPassword, fileSystem)
+        {
+            OpenPorts = BuildPorts(openPorts);
+        }
+
+        private void Initialize()
+        {
+            if(OpenPorts == null)
+                OpenPorts = BuildPorts(_defaultPorts);
+            if(FileSystem == null)
+                BuildBasicFileSystem();
         }
 
         /// <summary>
@@ -99,9 +123,28 @@ namespace TerminalGame.Computers
 
         public void RemoveAsObjective() => IsMissionObjective = false;
 
-        public List<int> GetOpenPorts() => OpenPorts;
+        public Dictionary<int, string> GetOpenPorts() => OpenPorts;
 
-        public bool CheckPortOpen(int port) => OpenPorts.Exists(x => x == port);
+        public bool CheckPortOpen(int port)
+        {
+            foreach(int key in OpenPorts.Keys)
+            {
+                if (key == port)
+                    return true;
+            }
+            return false;
+        }
+
+        public Dictionary<int,string> BuildPorts(int[] ports)
+        {
+            var retval = new Dictionary<int, string>();
+            int p = ports.Length;
+            for(int i = 0; i < p; i++)
+            {
+                retval.Add(ports[i], ((KnownPorts)ports[i]).ToString());
+            }
+            return retval;
+        }
 
         public void BuildBasicFileSystem()
         {

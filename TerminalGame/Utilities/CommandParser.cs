@@ -229,6 +229,12 @@ namespace TerminalGame.Utilities
                         Console.WriteLine("Starting new task for cd");
                         break;
                     }
+                case "nmap":
+                    {
+                        Task task = Task.Factory.StartNew(() => Programs.Nmap.Execute(args[0]));
+                        Console.WriteLine("Starting new task for nmap");
+                        break;
+                    }
                 case "cls":
                 case "clear":
                     {

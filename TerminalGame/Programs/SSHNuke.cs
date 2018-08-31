@@ -10,8 +10,6 @@ namespace TerminalGame.Programs
         static OS.OS os = OS.OS.GetInstance();
         static Computer playerComp = Player.GetInstance().PlayersComputer;
         static UI.Modules.Terminal terminal = os.Terminal;
-        static Timer timer;
-        static int count;
         static string[] textToWrite;
 
         public static int Execute()
@@ -21,9 +19,7 @@ namespace TerminalGame.Programs
             player.PlayersComputer.FileSystem.ChangeDir("bin");
             if (player.PlayersComputer.FileSystem.TryFindFile("sshnuke", false))
             {
-                var autoEvent = new AutoResetEvent(false);
                 terminal.Write("\nConnecting to " + Player.GetInstance().ConnectedComputer.IP + ":ssh ");
-                count = 0;
                 textToWrite = new string[]
                 {
                 ".",
