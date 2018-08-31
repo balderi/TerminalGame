@@ -141,6 +141,9 @@ namespace TerminalGame.UI
     /// </summary>
     public class NodeClickedEventArgs : EventArgs
     {
+        /// <summary>
+        /// IP address of the active node
+        /// </summary>
         public string IP { get; set; }
     }
 
@@ -149,8 +152,17 @@ namespace TerminalGame.UI
     /// </summary>
     public class NodeHoverEventArgs : EventArgs
     {
+        /// <summary>
+        /// IP address of the computer belonging to the active node
+        /// </summary>
         public string IP { get; set; }
+        /// <summary>
+        /// Host name of the computer belonging to the active node
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// Node location on map
+        /// </summary>
         public Point Location { get; set; }
     }
 }

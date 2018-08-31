@@ -42,7 +42,7 @@ namespace TerminalGame.Computers
             HTTPS = 443
         };
 
-        private int[] _defaultPorts = { 25, 80, 110, 143 };
+        private readonly int[] _defaultPorts = { 25, 80, 110, 143 };
 
         public Computer(Type type, string ip, string name, string rootPassword)
         {
@@ -69,7 +69,11 @@ namespace TerminalGame.Computers
             if(OpenPorts == null)
                 OpenPorts = BuildPorts(_defaultPorts);
             if(FileSystem == null)
-                BuildBasicFileSystem();
+            {
+                FileSystem fs = new FileSystem();
+                fs.BuildBasicFileSystem();
+                this.FileSystem = fs;
+            }
         }
 
         /// <summary>
@@ -139,9 +143,11 @@ namespace TerminalGame.Computers
         {
             var retval = new Dictionary<int, string>();
             int p = ports.Length;
+            string service;
             for(int i = 0; i < p; i++)
             {
-                retval.Add(ports[i], ((KnownPorts)ports[i]).ToString());
+                service = Enum.IsDefined(typeof(KnownPorts), ports[i]) ? ((KnownPorts)ports[i]).ToString() : "Unknown";
+                retval.Add(ports[i], service);
             }
             return retval;
         }

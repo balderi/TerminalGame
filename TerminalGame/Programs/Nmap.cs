@@ -16,65 +16,69 @@ namespace TerminalGame.Programs
         static Computer remoteComp;
         static UI.Modules.Terminal terminal = os.Terminal;
         static string[] textToWrite;
+        static Random rnd;
 
         public static int Execute(string ip = null)
         {
+            rnd = new Random(DateTime.Now.Millisecond);
+            int randomNumber = rnd.Next(10, 99);
             terminal.BlockInput();
             player.PlayersComputer.FileSystem.ChangeDir("/");
             player.PlayersComputer.FileSystem.ChangeDir("bin");
             if (player.PlayersComputer.FileSystem.TryFindFile("nmap", false))
             {
                 player.PlayersComputer.FileSystem.ChangeDir("/");
-                if (!String.IsNullOrEmpty(ip))
+                if (String.IsNullOrEmpty(ip))
                 {
-                    terminal.Write("\nStarting Nmap scan for " + ip);
-                    Thread.Sleep(2000);
-                    if (HostExists(ip))
-                    {
-                        textToWrite = new string[]
-                        {
-                            "\nNmap scan report for " + remoteComp.Name + " (" + remoteComp.IP + ")",
-                            "\nHost is up",
-                            "\nNot shown: " + (1000 - remoteComp.OpenPorts.Count) + " filtered ports",
-                            "\n",
-                            "\nPORT   STATE  SERVICE",
-                            "\n",
-                            "\n",
-                            "\nDevice type: " + remoteComp.ComputerType,
-                            "\nNo exact OS matches for host (test conditions non-ideal).",
-                            "\n",
-                            "\nNmap done: 1 IP address (1 host up) scanned",
-                        };
+                    Console.WriteLine("** WARN: nmap IP was NULL or EMPTY");
+                    remoteComp = player.ConnectedComputer;
+                    ip = remoteComp.Name;
+                }
 
-                        for (int i = 0; i < textToWrite.Length; i++)
+                terminal.Write("\nStarting Nmap scan for " + ip);
+                Thread.Sleep(20 * randomNumber);
+                if (HostExists(ip))
+                {
+                    textToWrite = new string[]
+                    {
+                        "\nNmap scan report for " + remoteComp.Name + " (" + remoteComp.IP + ")",
+                        "\nHost is up (0." + randomNumber + "s latency).",
+                        "\nNot shown: " + (1000 - remoteComp.OpenPorts.Count) + " filtered ports",
+                        "\n",
+                        "\nPORT   STATE  SERVICE",
+                        "\n",
+                        "\n",
+                        "\nDevice type: " + remoteComp.ComputerType,
+                        "\nNo exact OS matches for host (test conditions non-ideal).",
+                        "\n",
+                        "\nNmap done: 1 IP address (1 host up) scanned",
+                        "\n",
+                    };
+
+                    for (int i = 0; i < textToWrite.Length; i++)
+                    {
+                        if (i == 5)
                         {
-                            if (i == 5)
+                            foreach (var port in remoteComp.OpenPorts)
                             {
-                                foreach (var port in remoteComp.OpenPorts)
-                                {
-                                    terminal.Write("\n" + PrettyPrintPorts(port.Key, port.Value));
-                                    Thread.Sleep(500);
-                                }
-                            }
-                            else
-                            {
-                                if (textToWrite[i].Contains("\n"))
-                                    terminal.Write(textToWrite[i]);
-                                else
-                                    terminal.WritePartialLine(textToWrite[i]);
-                                Thread.Sleep((int)(100 * playerComp.Speed));
+                                terminal.Write("\n" + PrettyPrintPorts(port.Key, port.Value));
+                                Thread.Sleep(5 * randomNumber);
                             }
                         }
-                    }
-                    else
-                    {
-                        Thread.Sleep(2000);
-                        terminal.Write("\nNo response from host " + ip + " ...");
+                        else
+                        {
+                            if (textToWrite[i].Contains("\n"))
+                                terminal.Write(textToWrite[i]);
+                            else
+                                terminal.WritePartialLine(textToWrite[i]);
+                            Thread.Sleep((int)(randomNumber * playerComp.Speed));
+                        }
                     }
                 }
                 else
                 {
-                    terminal.Write("\nUsage: nmap [IP or Hostname]");
+                    Thread.Sleep(20 * randomNumber);
+                    terminal.Write("\nNo response from host " + ip + ".");
                 }
 
                 terminal.UnblockInput();

@@ -17,6 +17,15 @@ namespace TerminalGame.Computers.FileSystems
             Children = new List<File>() { root };
         }
 
+        public void BuildBasicFileSystem()
+        {
+            string[] baseDirs = { "bin", "usr", "home", "sys", "logs" };
+            for (int i = 0; i < baseDirs.Length; i++)
+            {
+                AddDir(baseDirs[i]);
+            }
+        }
+
         private File FindRoot(File sourceDir)
         {
             while (CurrentDir.Parent.Parent != CurrentDir.Parent)

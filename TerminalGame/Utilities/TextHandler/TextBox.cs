@@ -26,19 +26,54 @@ namespace TerminalGame.Utilities.TextHandler
             set { Renderer.Area = value; }
         }
 
+        /// <summary>
+        /// OG author did not comment anything
+        /// </summary>
         public readonly Text Text;
+        /// <summary>
+        /// OG author did not comment anything
+        /// </summary>
         public readonly TextRenderer Renderer;
+        /// <summary>
+        /// OG author did not comment anything
+        /// </summary>
         public readonly Cursor Cursor;
 
+        /// <summary>
+        /// OG author did not comment anything
+        /// </summary>
         public event EventHandler<KeyboardInput.KeyEventArgs> EnterDown;
+        /// <summary>
+        /// OG author did not comment anything
+        /// </summary>
         public event EventHandler<KeyboardInput.KeyEventArgs> UpArrow;
+        /// <summary>
+        /// OG author did not comment anything
+        /// </summary>
         public event EventHandler<KeyboardInput.KeyEventArgs> DnArrow;
+        /// <summary>
+        /// OG author did not comment anything
+        /// </summary>
         public event EventHandler<KeyboardInput.KeyEventArgs> TabDown;
 
         private string clipboard;
 
+        /// <summary>
+        /// OG author did not comment anything
+        /// </summary>
         public bool Active { get; set; }
 
+        /// <summary>
+        /// OG author did not comment anything
+        /// </summary>
+        /// <param name="area"></param>
+        /// <param name="maxCharacters"></param>
+        /// <param name="text"></param>
+        /// <param name="graphicsDevice"></param>
+        /// <param name="spriteFont"></param>
+        /// <param name="cursorColor"></param>
+        /// <param name="selectionColor"></param>
+        /// <param name="ticksPerToggle"></param>
         public TextBox(Rectangle area, int maxCharacters, string text, GraphicsDevice graphicsDevice,
             SpriteFont spriteFont,
             Color cursorColor, Color selectionColor, int ticksPerToggle)
@@ -63,11 +98,17 @@ namespace TerminalGame.Utilities.TextHandler
             KeyboardInput.KeyPressed += KeyPressed;
         }
 
+        /// <summary>
+        /// OG author did not comment anything
+        /// </summary>
         public void Dispose()
         {
             KeyboardInput.Dispose();
         }
 
+        /// <summary>
+        /// OG author did not comment anything
+        /// </summary>
         public void Clear()
         {
             Text.RemoveCharacters(0, Text.Length);
@@ -259,11 +300,23 @@ namespace TerminalGame.Utilities.TextHandler
             return result;
         }
 
+        /// <summary>
+        /// OG author did not comment anything
+        /// </summary>
+        /// <param name="font"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
         public static bool IsLegalCharacter(SpriteFont font, char c)
         {
             return font.Characters.Contains(c) || c == '\r' || c == '\n';
         }
 
+        /// <summary>
+        /// OG author did not comment anything
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="characters"></param>
+        /// <returns></returns>
         public static int IndexOfNextCharAfterWhitespace(int pos, char[] characters)
         {
             char[] chars = characters;
@@ -289,6 +342,12 @@ namespace TerminalGame.Utilities.TextHandler
             }
         }
 
+        /// <summary>
+        /// OG author did not comment anything
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="characters"></param>
+        /// <returns></returns>
         public static int IndexOfLastCharBeforeWhitespace(int pos, char[] characters)
         {
             char[] chars = characters;
@@ -317,12 +376,19 @@ namespace TerminalGame.Utilities.TextHandler
             }
         }
 
+        /// <summary>
+        /// OG author did not comment anything
+        /// </summary>
         public void Update()
         {
             Renderer.Update();
             Cursor.Update();
         }
 
+        /// <summary>
+        /// OG author did not comment anything
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
             Renderer.Draw(spriteBatch);

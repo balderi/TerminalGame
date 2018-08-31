@@ -12,13 +12,13 @@ namespace TerminalGame.Utilities
         private DateTime _now;
         private DateTimeOffset lastChange;
 
-        public TerminalDateTime Instance { get; private set; }
+        private TerminalDateTime _instance;
 
         public TerminalDateTime GetInstance()
         {
-            if (Instance == null)
-                Instance = new TerminalDateTime();
-            return Instance;
+            if (_instance == null)
+                _instance = new TerminalDateTime();
+            return _instance;
         }
 
         private TerminalDateTime()
@@ -46,6 +46,5 @@ namespace TerminalGame.Utilities
 
             lastChange = _now + TimeSpan.FromSeconds(gameTime.ElapsedGameTime.TotalMilliseconds * 10);
         }
-
     }
 }

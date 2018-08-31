@@ -27,6 +27,14 @@ namespace TerminalGame.UI.Modules
         Point size;
         Rectangle cont;
 
+        /// <summary>
+        /// Constructor for the NetworkMap module. Draws a map of computers on the net.
+        /// </summary>
+        /// <param name="Graphics">Graphics Device</param>
+        /// <param name="Container">Container for the window</param>
+        /// <param name="texture">Texture for the window</param>
+        /// <param name="font">Font used for the node labels (the infoboxes that pops up when hovering over a node)</param>
+        /// <param name="nodeSpinners">Dictionary of \"spinners\" denoting points of interest on the map</param>
         public NetworkMap(GraphicsDevice Graphics, Rectangle Container, Texture2D texture, SpriteFont font, Dictionary<string, Texture2D> nodeSpinners) : base(Graphics, Container)
         {
             size = new Point(32, 32);
@@ -64,6 +72,10 @@ namespace TerminalGame.UI.Modules
             IsActive = true;
         }
 
+        /// <summary>
+        /// Draw method
+        /// </summary>
+        /// <param name="spriteBatch">SpriteBatch</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (IsVisible)
@@ -116,6 +128,10 @@ namespace TerminalGame.UI.Modules
             }
         }
 
+        /// <summary>
+        /// Update method
+        /// </summary>
+        /// <param name="gameTime">GameTime</param>
         public override void Update(GameTime gameTime)
         {
             foreach (NetworkNode node in nodes)
