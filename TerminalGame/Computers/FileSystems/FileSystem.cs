@@ -5,7 +5,7 @@ namespace TerminalGame.Computers.FileSystems
 {
     class FileSystem
     {
-        public event EventHandler ChangeDirirectory;
+        public event EventHandler ChangeDirectory;
         public List<File> Children;
         public File CurrentDir { get; private set; }
 
@@ -28,9 +28,7 @@ namespace TerminalGame.Computers.FileSystems
 
         private File FindRoot(File sourceDir)
         {
-            while (CurrentDir.Parent.Parent != CurrentDir.Parent)
-                FindRoot(CurrentDir.Parent);
-            return sourceDir.Parent;
+            return sourceDir.Parent.Parent != sourceDir.Parent ? FindRoot(sourceDir.Parent) : sourceDir.Parent;
         }
 
         public File FindFile(string name, bool isDir, bool fromRoot = false)
@@ -43,18 +41,9 @@ namespace TerminalGame.Computers.FileSystems
 
             bool findFile(File f)
             {
-                if(isDir)
-                    return f.Name == name && f.IsDirectory;
-                return f.Name == name;
+                return isDir ? f.Name == name && f.IsDirectory : f.Name == name;
             }
-            if (fromRoot)
-            {
-                return FindRoot(CurrentDir).Children.Find(findFile);
-            }
-            else
-            {
-                return CurrentDir.Children.Find(findFile);
-            }
+            return fromRoot ? FindRoot(CurrentDir).Children.Find(findFile) : CurrentDir.Children.Find(findFile);
         }
 
         public bool TryFindFile(string name, bool isDir, bool fromRoot = false)
@@ -69,19 +58,9 @@ namespace TerminalGame.Computers.FileSystems
             {
                 foreach (File f in FindRoot(CurrentDir).Children)
                 {
-                    if (isDir)
+                    if (f.Name == name)
                     {
-                        if (f.Name == name && f.IsDirectory)
-                        {
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        if (f.Name == name && !f.IsDirectory)
-                        {
-                            return true;
-                        }
+                        return isDir ? f.IsDirectory : !f.IsDirectory;
                     }
                 }
             }
@@ -89,19 +68,9 @@ namespace TerminalGame.Computers.FileSystems
             {
                 foreach (File f in CurrentDir.Children)
                 {
-                    if (isDir)
+                    if (f.Name == name)
                     {
-                        if (f.Name == name && f.IsDirectory)
-                        {
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        if (f.Name == name && !f.IsDirectory)
-                        {
-                            return true;
-                        }
+                        return isDir ? f.IsDirectory : !f.IsDirectory;
                     }
                 }
             }
@@ -123,7 +92,7 @@ namespace TerminalGame.Computers.FileSystems
                 bool findFile(File f)
                 { return f.Name == name && f.IsDirectory && !f.Equals(CurrentDir); }
                 CurrentDir = CurrentDir.Children.Find(findFile);
-                ChangeDirirectory?.Invoke(this, new EventArgs());
+                ChangeDirectory?.Invoke(this, new EventArgs());
             }
         }
 
@@ -177,18 +146,18 @@ namespace TerminalGame.Computers.FileSystems
             return ListFiles(CurrentDir);
         }
 
-        private string ListFiles(File file)
+        private string ListFiles(File directory)
         {
             //Sorts alphabetically
-            file.Children.Sort();
+            directory.Children.Sort();
             string retval = "";
-            if (file.Parent != CurrentDir)
+            if (directory.Parent != CurrentDir)
             {
                 retval += "\n    <DIR>    .§";
                 retval += "\n    <DIR>    ..§";
             }
             
-            foreach (File f in file.Children)
+            foreach (File f in directory.Children)
             {
                 if (f.IsDirectory)
                     retval += "\n    <DIR>    " + f.Name + "§";

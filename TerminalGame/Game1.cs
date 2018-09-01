@@ -90,14 +90,14 @@ namespace TerminalGame
             musicVolume = 0.2f;
             //audioVolume = 1.0f;
 
-            //graphics.PreferredBackBufferHeight = 768;
-            //graphics.PreferredBackBufferWidth = 1366;
+            graphics.PreferredBackBufferHeight = 768;
+            graphics.PreferredBackBufferWidth = 1366;
 
             //Set game to fullscreen
-            graphics.HardwareModeSwitch = false;
-            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
-            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
-            graphics.IsFullScreen = true;
+            //graphics.HardwareModeSwitch = false;
+            //graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            //graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            //graphics.IsFullScreen = true;
             graphics.ApplyChanges();
             Console.WriteLine("Resolution is now " + graphics.PreferredBackBufferWidth + " x " + graphics.PreferredBackBufferHeight);
 

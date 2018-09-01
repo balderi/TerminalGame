@@ -242,7 +242,7 @@ namespace TerminalGame.UI.Modules
             {
                 c.Connected += ConnectedComputer_Connected;
                 c.Disonnected += ConnectedComputer_Disonnected;
-                c.FileSystem.ChangeDirirectory += FileSystem_ChangeDir;
+                c.FileSystem.ChangeDirectory += FileSystem_ChangeDir;
             }
         }
 
