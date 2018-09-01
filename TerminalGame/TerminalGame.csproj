@@ -131,6 +131,7 @@
     <Compile Include="Utilities\CommandParser.cs" />
     <Compile Include="Utilities\Drawing.cs" />
     <Compile Include="Utilities\FontManager.cs" />
+    <Compile Include="Utilities\Passwords.cs" />
     <Compile Include="Utilities\TerminalDateTime.cs" />
     <Compile Include="Utilities\TextHandler\Cursor.cs" />
     <Compile Include="Utilities\TextHandler\Extensions.cs" />

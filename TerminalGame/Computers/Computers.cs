@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using TerminalGame.Utilities;
 
 namespace TerminalGame.Computers
 {
@@ -41,7 +42,7 @@ namespace TerminalGame.Computers
 
             for (int i = 0; i < 25; i++)
             {
-                Computer c = new Computer(Computer.Type.Workstation, IPgen(), "Workstation" + i, "password");
+                Computer c = new Computer(Computer.Type.Workstation, IPgen(), "Workstation" + i, Passwords.GeneratePassword());
                 computerList.Add(c);
             }
         }

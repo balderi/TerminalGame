@@ -14,6 +14,7 @@ using TerminalGame.Scenes;
 using System.Threading;
 using TerminalGame.Computers.FileSystems;
 
+
 namespace TerminalGame
 {
     /// <summary>
@@ -42,7 +43,7 @@ namespace TerminalGame
         LoadingScene loadingScene;
         GameScene gameScene;
 
-
+        
         Terminal terminal;
         NetworkMap networkMap;
         StatusBar statusBar;
@@ -142,7 +143,7 @@ namespace TerminalGame
             
             Window.TextInput += Window_TextInput;
 
-            load = new LoadingScreen(fontL, fontS);
+            load = new LoadingScreen(FontManager.GetFont(FontManager.FontSize.Large), FontManager.GetFont(FontManager.FontSize.Small));
 
             Console.WriteLine("Loading textures");
             bgR = new Rectangle(new Point(0, 0), new Point(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight));
@@ -173,9 +174,9 @@ namespace TerminalGame
             };
 
             Console.WriteLine("Loading scenes...");
-            menuScene = new MenuScene(GameTitle, Window, fontL, fontXL, GraphicsDevice);
+            menuScene = new MenuScene(GameTitle, Window, FontManager.GetFont(FontManager.FontSize.Large), FontManager.GetFont(FontManager.FontSize.XLarge), GraphicsDevice);
             menuScene.ButtonClicked += MainMenu_ButtonClicked;
-            settingsScene = new SettingsScene(Window, font, font, GraphicsDevice);
+            settingsScene = new SettingsScene(Window, FontManager.GetFont(FontManager.FontSize.Medium), FontManager.GetFont(FontManager.FontSize.Medium), GraphicsDevice);
             loadingScene = new LoadingScene(new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2), Window, GraphicsDevice);
             gameScene = new GameScene(bg, bgR);
 

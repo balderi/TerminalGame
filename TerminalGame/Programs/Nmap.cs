@@ -21,7 +21,8 @@ namespace TerminalGame.Programs
         public static int Execute(string ip = null)
         {
             rnd = new Random(DateTime.Now.Millisecond);
-            int randomNumber = rnd.Next(10, 99);
+            // TODO: Make latency dependent on distance from player computer. Maybe make this a property of computers.
+            int latency = rnd.Next(10, 99);
             terminal.BlockInput();
             player.PlayersComputer.FileSystem.ChangeDir("/");
             player.PlayersComputer.FileSystem.ChangeDir("bin");
@@ -36,13 +37,13 @@ namespace TerminalGame.Programs
                 }
 
                 terminal.Write("\nStarting Nmap scan for " + ip);
-                Thread.Sleep(20 * randomNumber);
+                Thread.Sleep(20 * latency);
                 if (HostExists(ip))
                 {
                     textToWrite = new string[]
                     {
                         "\nNmap scan report for " + remoteComp.Name + " (" + remoteComp.IP + ")",
-                        "\nHost is up (0." + randomNumber + "s latency).",
+                        "\nHost is up (0." + latency + "s latency).",
                         "\nNot shown: " + (1000 - remoteComp.OpenPorts.Count) + " filtered ports",
                         "\n",
                         "\nPORT   STATE  SERVICE",
@@ -62,7 +63,7 @@ namespace TerminalGame.Programs
                             foreach (var port in remoteComp.OpenPorts)
                             {
                                 terminal.Write("\n" + PrettyPrintPorts(port.Key, port.Value));
-                                Thread.Sleep(5 * randomNumber);
+                                Thread.Sleep(5 * latency);
                             }
                         }
                         else
@@ -71,13 +72,13 @@ namespace TerminalGame.Programs
                                 terminal.Write(textToWrite[i]);
                             else
                                 terminal.WritePartialLine(textToWrite[i]);
-                            Thread.Sleep((int)(randomNumber * playerComp.Speed));
+                            Thread.Sleep((int)(latency * playerComp.Speed));
                         }
                     }
                 }
                 else
                 {
-                    Thread.Sleep(20 * randomNumber);
+                    Thread.Sleep(20 * latency);
                     terminal.Write("\nNo response from host " + ip + ".");
                 }
 
