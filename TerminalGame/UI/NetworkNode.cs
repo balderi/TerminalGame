@@ -11,9 +11,13 @@ namespace TerminalGame.UI
     {
         public event NodeHoverEventHandler Hover;
         public event NodeClickedEventHandler Click;
+        public event MouseEnterEventHandler Enter;
+        public event MouseLeaveEventHandler Leave;
 
-        public delegate void NodeClickedEventHandler(NodeClickedEventArgs e);
         public delegate void NodeHoverEventHandler(NodeHoverEventArgs e);
+        public delegate void NodeClickedEventHandler(NodeClickedEventArgs e);
+        public delegate void MouseEnterEventHandler(MouseEventArgs e);
+        public delegate void MouseLeaveEventHandler(MouseEventArgs e);
 
         public Computer Computer { get; private set; }
         public Point Position { get; private set; }
@@ -27,7 +31,13 @@ namespace TerminalGame.UI
         readonly Dictionary<string, Texture2D> NodeSpinners;
         private Color Color, HoverColor, CurrentColor, ConnectedColor, PlayerColor, ConnectedSpinnerColor, PlayerSpinnerColor, HoverSpinnerColor;
         private float rotationCW, rotationCCW;
-        Point spinnerS, spinnerN, spinnerL;
+        private Point spinnerS, spinnerN, spinnerL;
+
+        private NodeHoverEventArgs nh;
+        private NodeClickedEventArgs nc;
+        private MouseEventArgs enter, leave;
+
+        private bool newMouseHoverState, previousMouseHoverState;
 
         public NetworkNode(Texture2D texture, Computer computer, Rectangle container, PopUpBox infoBox, Dictionary<string, Texture2D> nodeSpinners)
         {
@@ -52,6 +62,21 @@ namespace TerminalGame.UI
             spinnerS = new Point(40, 40);
             spinnerN = new Point(55, 55);
             spinnerL = new Point(70, 70);
+
+            nh = new NodeHoverEventArgs()
+            {
+                IP = Computer.IP,
+                Name = Computer.Name,
+                Location = Position
+            };
+
+            nc = new NodeClickedEventArgs()
+            {
+                IP = Computer.IP
+            };
+
+            enter = new MouseEventArgs();
+            leave = new MouseEventArgs();
         }
 
         public void Update(GameTime gameTime)
@@ -66,24 +91,24 @@ namespace TerminalGame.UI
             if (mouseRectangle.Intersects(Container))
             {
                 IsHovering = true;
-
-                NodeHoverEventArgs nh = new NodeHoverEventArgs()
-                {
-                    IP = Computer.IP,
-                    Name = Computer.Name,
-                    Location = Position
-                };
                 Hover?.Invoke(nh);
 
                 if (CurrentMouseState.LeftButton == ButtonState.Released && PreviousMouseState.LeftButton == ButtonState.Pressed)
                 {
-                    NodeClickedEventArgs nc = new NodeClickedEventArgs()
-                    {
-                        IP = Computer.IP
-                    };
                     Click?.Invoke(nc);
                 }
             }
+
+            newMouseHoverState = IsHovering;
+            if(newMouseHoverState != previousMouseHoverState)
+            {
+                if (newMouseHoverState)
+                    Enter?.Invoke(enter);
+                else
+                    Leave?.Invoke(leave);
+            }
+            previousMouseHoverState = newMouseHoverState;
+
             rotationCW += 0.01f;
             rotationCCW -= 0.01f;
             ConnectedSpinnerColor = ConnectedColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 2) + 1) * 0.5f + 0.2f);
@@ -134,6 +159,10 @@ namespace TerminalGame.UI
             }
             throw new Exception("No element matches key \'" + key + "\'");
         }
+    }
+
+    public class MouseEventArgs : EventArgs
+    {
     }
 
     /// <summary>

@@ -235,3 +235,9 @@
 /processorParam:TextureFormat=Color
 /build:Textures/bg4.jpg
 
+#begin Audio/Sounds/interface4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sounds/interface4.wav
+

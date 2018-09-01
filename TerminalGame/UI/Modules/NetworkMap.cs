@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 using TerminalGame.Utilities;
 using TerminalGame.Computers;
 
@@ -19,7 +20,9 @@ namespace TerminalGame.UI.Modules
         public override bool IsActive { get; set; }
         public override bool IsVisible { get; set; }
         public override string Title { get; set; }
-        public override Rectangle Container { get; set ; }
+        public override Rectangle Container { get; set; }
+        public SoundEffect Hover { get; set; }
+        public SoundEffect Click { get; set; }
 
         List<NetworkNode> nodes;
         Random rnd;
@@ -67,6 +70,8 @@ namespace TerminalGame.UI.Modules
                 NetworkNode n = new NetworkNode(texture, c, cont, new PopUpBox(c.Name + "\n" + c.IP, new Point(0,0), SpriteFont, Color.White, Color.Black * 0.5f, Color.White, Graphics), nodeSpinners);
                 nodes.Add(n);
                 n.Click += OnNodeClick;
+                n.Hover += OnNodeHover;
+                n.Enter += OnMouseEnter;
                 Thread.Sleep(5);
             }
             IsActive = true;
@@ -140,10 +145,29 @@ namespace TerminalGame.UI.Modules
             }
         }
 
+        private void OnMouseEnter(MouseEventArgs e)
+        {
+            try
+            {
+                Hover.Play(0.25f, 1f, 0f);
+            }
+            catch (Exception ex) { }
+        }
+
         private void OnNodeClick(NodeClickedEventArgs e)
         {
             if(IsActive)
                 CommandParser.ParseCommand("connect " + e.IP);
+
+            try
+            {
+                Click.Play(0.25f, 1f, 0f);
+            }
+            catch (Exception ex) { }
+        }
+
+        private void OnNodeHover(NodeHoverEventArgs e)
+        {
         }
 
         protected override Rectangle RenderHeader()

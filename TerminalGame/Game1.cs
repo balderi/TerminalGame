@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Collections.Generic;
 using TerminalGame.UI.Modules;
@@ -34,6 +35,7 @@ namespace TerminalGame
 
         private SpriteFont font, fontL, fontXL, menuFont, fontS, fontXS;
         private Song bgm_game, bgm_menu;
+        private SoundEffect networkMapNodeHover, networkMapNodeClick;
         private readonly string GameTitle;
         private float musicVolume, /*audioVolume,*/ masterVolume;
         private bool gameStarted;
@@ -132,12 +134,18 @@ namespace TerminalGame
             fontXL = Content.Load<SpriteFont>("Fonts/terminalFontXL");
             Console.Write(".");
             menuFont = Content.Load<SpriteFont>("Fonts/terminalFontL");
-            Console.Write(".");
-            bgm_game = Content.Load<Song>("Audio/Music/ambientbgm1_2");
-            Console.Write(".");
-            bgm_menu = Content.Load<Song>("Audio/Music/mainmenu");
             Console.WriteLine("Done");
+            
+            Console.Write("Loading music");
+            bgm_game = Content.Load<Song>("Audio/Music/ambientbgm1_2");
+            bgm_menu = Content.Load<Song>("Audio/Music/mainmenu");
             MediaPlayer.Play(bgm_menu);
+            Console.WriteLine("Done");
+
+            Console.WriteLine("Loading audio");
+            networkMapNodeHover = Content.Load<SoundEffect>("Audio/Sounds/interface4");
+            networkMapNodeClick = Content.Load<SoundEffect>("Audio/Sounds/click1");
+            Console.WriteLine("Done");
 
             FontManager.SetFonts(fontXS, fontS, font, fontL, fontXL);
             
@@ -342,6 +350,8 @@ namespace TerminalGame
                 IsActive = true,
                 IsVisible = true,
             };
+            networkMap.Hover = networkMapNodeHover;
+            networkMap.Click = networkMapNodeClick;
 
             Console.WriteLine("Loading statusbar...");
             statusBar = new StatusBar(GraphicsDevice, 
