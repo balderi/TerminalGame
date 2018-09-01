@@ -11,13 +11,13 @@ namespace TerminalGame.UI
     /// </summary>
     public class Button : Component
     {
-        private MouseState currentMouseState, previousMouseState;
-        private bool isHovering, isClicked;
-        private Texture2D texture;
-        private SpriteFont font;
-        private Color fontColor, backColor, hoverColor, activeColor, currentColor;
-        private Rectangle container;
-        private string text;
+        private MouseState _currentMouseState, _previousMouseState;
+        private bool _isHovering, _isClicked;
+        private readonly Texture2D _texture;
+        private SpriteFont _font;
+        private Color _fontColor, _backColor, _hoverColor, _activeColor, _currentColor;
+        private Rectangle _container;
+        private string _text;
 
         /// <summary>
         /// EventHandler delegate for when the button is clicked
@@ -37,24 +37,24 @@ namespace TerminalGame.UI
         /// <summary>
         /// Button constructor
         /// </summary>
-        /// <param name="Text">Button text</param>
-        /// <param name="Container">Specifies width/height of button</param>
-        /// <param name="Font">Font used to draw button text</param>
-        /// <param name="FontColor">Text color</param>
-        /// <param name="BackColor">Button color</param>
-        /// <param name="HoverColor">Button color when hovering</param>
-        /// <param name="ActiveColor">Button color when clicking</param>
-        /// <param name="GraphicsDevice">GraphicsDevice used to render</param>
-        public Button(string Text, Rectangle Container, SpriteFont Font, Color FontColor, Color BackColor, Color HoverColor, Color ActiveColor, GraphicsDevice GraphicsDevice)
+        /// <param name="text">Button text</param>
+        /// <param name="container">Specifies width/height of button</param>
+        /// <param name="font">Font used to draw button text</param>
+        /// <param name="fontColor">Text color</param>
+        /// <param name="backColor">Button color</param>
+        /// <param name="hoverColor">Button color when hovering</param>
+        /// <param name="activeColor">Button color when clicking</param>
+        /// <param name="graphicsDevice">GraphicsDevice used to render</param>
+        public Button(string text, Rectangle container, SpriteFont font, Color fontColor, Color backColor, Color hoverColor, Color activeColor, GraphicsDevice graphicsDevice)
         {
-            text = Text;
-            container = Container;
-            font = Font;
-            fontColor = FontColor;
-            backColor = BackColor;
-            hoverColor = HoverColor;
-            activeColor = ActiveColor;
-            texture = Drawing.DrawBlankTexture(GraphicsDevice);
+            _text = text;
+            _container = container;
+            _font = font;
+            _fontColor = fontColor;
+            _backColor = backColor;
+            _hoverColor = hoverColor;
+            _activeColor = activeColor;
+            _texture = Drawing.DrawBlankTexture(graphicsDevice);
         }
 
         /// <summary>
@@ -66,14 +66,14 @@ namespace TerminalGame.UI
         /// <param name="GraphicsDevice">GraphicsDevice used to render</param>
         public Button(string Text, Rectangle Container, SpriteFont Font, GraphicsDevice GraphicsDevice)
         {
-            text = Text;
-            container = Container;
-            font = Font;
-            fontColor = Color.Black;
-            backColor = Color.Gray;
-            hoverColor = Color.LightGray;
-            activeColor = Color.DarkGray;
-            texture = Drawing.DrawBlankTexture(GraphicsDevice);
+            _text = Text;
+            _container = Container;
+            _font = Font;
+            _fontColor = Color.Black;
+            _backColor = Color.Gray;
+            _hoverColor = Color.LightGray;
+            _activeColor = Color.DarkGray;
+            _texture = Drawing.DrawBlankTexture(GraphicsDevice);
         }
 
         /// <summary>
@@ -82,23 +82,23 @@ namespace TerminalGame.UI
         /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
-            currentColor = backColor;
-            if (isHovering)
+            _currentColor = _backColor;
+            if (_isHovering)
             {
-                currentColor = hoverColor;
-                if (isClicked)
-                    currentColor = activeColor;
+                _currentColor = _hoverColor;
+                if (_isClicked)
+                    _currentColor = _activeColor;
             }
             
-            if(!string.IsNullOrEmpty(text))
+            if(!string.IsNullOrEmpty(_text))
             {
-                int stringHeight = (int)font.MeasureString(text).Y;
-                int stringWidth = (int)font.MeasureString(text).X;
-                var x = container.X + (container.Width / 2 - stringWidth / 2);
-                var y = container.Y + (container.Height / 2 - stringHeight / 2);
+                int stringHeight = (int)_font.MeasureString(_text).Y;
+                int stringWidth = (int)_font.MeasureString(_text).X;
+                var x = _container.X + (_container.Width / 2 - stringWidth / 2);
+                var y = _container.Y + (_container.Height / 2 - stringHeight / 2);
 
-                spriteBatch.Draw(texture, container, currentColor);
-                spriteBatch.DrawString(font, text, new Vector2(x, y), fontColor);
+                spriteBatch.Draw(_texture, _container, _currentColor);
+                spriteBatch.DrawString(_font, _text, new Vector2(x, y), _fontColor);
             }
         }
 
@@ -107,26 +107,26 @@ namespace TerminalGame.UI
         /// </summary>
         public override void Update()
         {
-            previousMouseState = currentMouseState;
-            currentMouseState = Mouse.GetState();
+            _previousMouseState = _currentMouseState;
+            _currentMouseState = Mouse.GetState();
 
-            var mouseRectangle = new Rectangle(currentMouseState.X, currentMouseState.Y, 1, 1);
+            var mouseRectangle = new Rectangle(_currentMouseState.X, _currentMouseState.Y, 1, 1);
 
-            isHovering = false;
-            isClicked = false;
+            _isHovering = false;
+            _isClicked = false;
 
-            if (mouseRectangle.Intersects(container))
+            if (mouseRectangle.Intersects(_container))
             {
-                isHovering = true;
+                _isHovering = true;
 
-                if(currentMouseState.LeftButton == ButtonState.Pressed)
-                    isClicked = true;
+                if(_currentMouseState.LeftButton == ButtonState.Pressed)
+                    _isClicked = true;
 
-                if (currentMouseState.LeftButton == ButtonState.Released && previousMouseState.LeftButton == ButtonState.Pressed)
+                if (_currentMouseState.LeftButton == ButtonState.Released && _previousMouseState.LeftButton == ButtonState.Pressed)
                 {
                     ButtonPressedEventArgs bp = new ButtonPressedEventArgs()
                     {
-                        Button = text
+                        Button = _text
                     };
                     Click?.Invoke(bp);
                 }

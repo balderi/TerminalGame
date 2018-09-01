@@ -16,21 +16,21 @@ namespace TerminalGame.UI.Modules
         public override string Title { get; set; }
         public override Rectangle Container { get; set; }
 
-        private Button button;
+        private Button _button;
         
-        private readonly SpriteFont fnt;
+        private readonly SpriteFont _fnt;
         
-        private int counter;
-        private string buttonClicks;
+        private int _counter;
+        private string _buttonClicks;
 
-        SoundEffect Click, Yay;
+        private SoundEffect _click, _yay;
 
         public TestModule(GraphicsDevice Graphics, Rectangle Container, SpriteFont font, SoundEffect click, SoundEffect yay) : base(Graphics, Container)
         {
-            Yay = yay;
-            Click = click;
+            _yay = yay;
+            _click = click;
 
-            fnt = font;
+            _fnt = font;
             if(BackgroundColor == null)
             {
                 BackgroundColor = Color.LightPink;
@@ -48,36 +48,36 @@ namespace TerminalGame.UI.Modules
                 Title = "!!! UNNAMED WINDOW !!!";
             }
 
-            counter = 0;
-            buttonClicks = counter + " button clicks!";
+            _counter = 0;
+            _buttonClicks = _counter + " button clicks!";
 
             var width = 200;
             var height = 50;
             var x = Container.X + (Container.Width / 2) - width / 2;
             var y = Container.Y + (Container.Height - height) - 15;
-            button = new Button("CLICK ME!", new Rectangle(x, y, width, height), fnt, Color.White, Color.Pink, Color.HotPink, Color.Red, Graphics);
-            button.Click += Button_Click;
+            _button = new Button("CLICK ME!", new Rectangle(x, y, width, height), _fnt, Color.White, Color.Pink, Color.HotPink, Color.Red, Graphics);
+            _button.Click += Button_Click;
         }
 
         private void Button_Click(ButtonPressedEventArgs e)
         {
-            Click.Play(0.1f, 0.0f, 0.0f);
-            counter++;
-            if (counter % 100 == 0)
-                Yay.Play(0.1f, 0.0f, 0.0f);
-            buttonClicks = counter + " button clicks!";
+            _click.Play(0.1f, 0.0f, 0.0f);
+            _counter++;
+            if (_counter % 100 == 0)
+                _yay.Play(0.1f, 0.0f, 0.0f);
+            _buttonClicks = _counter + " button clicks!";
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Texture2D texture = Drawing.DrawBlankTexture(Graphics);
+            Texture2D texture = Drawing.DrawBlankTexture(_graphics);
             Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
             spriteBatch.Draw(texture, Container, BackgroundColor);
             spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
             spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y + 2), Color.White);
-            spriteBatch.DrawString(Font, buttonClicks, new Vector2(Container.X + (Container.Width / 2) - Font.MeasureString(buttonClicks).X / 2, Container.Y + (Container.Height / 2) - Font.MeasureString(buttonClicks).Y / 2), Color.White);
+            spriteBatch.DrawString(Font, _buttonClicks, new Vector2(Container.X + (Container.Width / 2) - Font.MeasureString(_buttonClicks).X / 2, Container.Y + (Container.Height / 2) - Font.MeasureString(_buttonClicks).Y / 2), Color.White);
             
-            button.Draw(spriteBatch);
+            _button.Draw(spriteBatch);
         }
 
         protected override Rectangle RenderHeader()
@@ -87,7 +87,7 @@ namespace TerminalGame.UI.Modules
 
         public override void Update(GameTime gameTime)
         {
-            button.Update();
+            _button.Update();
         }
     }
 }

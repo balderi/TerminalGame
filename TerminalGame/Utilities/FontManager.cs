@@ -40,7 +40,7 @@ namespace TerminalGame.Utilities
             XLarge
         }
 
-        private static SpriteFont fontXS, fontS, fontM, fontL, fontXL;
+        private static SpriteFont _fontXS, _fontS, _fontM, _fontL, _fontXL;
 
         /// <summary>
         /// Get the font relative to the provided font size
@@ -52,17 +52,17 @@ namespace TerminalGame.Utilities
             switch(fontSize)
             {
                 case FontSize.XSmall:
-                    return fontXS;
+                    return _fontXS;
                 case FontSize.Small:
-                    return fontS;
+                    return _fontS;
                 case FontSize.Medium:
-                    return fontM;
+                    return _fontM;
                 case FontSize.Large:
-                    return fontL;
+                    return _fontL;
                 case FontSize.XLarge:
-                    return fontXL;
+                    return _fontXL;
                 default:
-                    return fontM;
+                    return _fontM;
             }
         }
 
@@ -76,11 +76,11 @@ namespace TerminalGame.Utilities
         /// <param name="xlarge"></param>
         public static void SetFonts(SpriteFont xsmall, SpriteFont small, SpriteFont medium, SpriteFont large, SpriteFont xlarge)
         {
-            fontXS = xsmall;
-            fontS = small;
-            fontM = medium;
-            fontL = large;
-            fontXL = xlarge;
+            _fontXS = xsmall;
+            _fontS = small;
+            _fontM = medium;
+            _fontL = large;
+            _fontXL = xlarge;
         }
     }
 }

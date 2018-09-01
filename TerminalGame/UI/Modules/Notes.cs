@@ -22,25 +22,25 @@ namespace TerminalGame.UI.Modules
         public List<string> Notes { get; private set; }
         public override Rectangle Container { get; set; }
 
-        private readonly SpriteFont NoteFont;
-        string noteRender, divider, id, bar;
+        private readonly SpriteFont _noteFont;
+        private string _noteRender, _divider, _id, _bar;
         
 
-        public NotesModule(GraphicsDevice Graphics, Rectangle Container, SpriteFont noteFont) : base(Graphics, Container)
+        public NotesModule(GraphicsDevice graphics, Rectangle container, SpriteFont noteFont) : base(graphics, container)
         {
             Notes = new List<string>();
-            NoteFont = noteFont;
+            _noteFont = noteFont;
             string sample = "Use\n  note [TEXT]\nto add a note.\nE.g. note \"this is a test\"\n(Note the quotes!)";
             string sample2 = "Use\n  note -r [ID]\nto remove a note.\nE.g. note -r 1\nwould remove this note (Note1).";
             string sample3 = "Or\n  note -r *\nto remove all notes.";
             Notes.Add(sample);
             Notes.Add(sample2);
             Notes.Add(sample3);
-            noteRender = "";
-            bar = "";
-            for(int i = 0; i < (Container.Width/noteFont.MeasureString("_").X - 1); i++)
+            _noteRender = "";
+            _bar = "";
+            for(int i = 0; i < (container.Width/noteFont.MeasureString("_").X - 1); i++)
             {
-                bar += "-";
+                _bar += "-";
             }
         }
 
@@ -75,23 +75,23 @@ namespace TerminalGame.UI.Modules
         {
             if (IsVisible)
             {
-                Texture2D texture = Drawing.DrawBlankTexture(Graphics);
+                Texture2D texture = Drawing.DrawBlankTexture(_graphics);
                 Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
                 spriteBatch.Draw(texture, Container, BackgroundColor);
                 spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
                 spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
-                spriteBatch.DrawString(NoteFont, noteRender, new Vector2(Container.X + 10, Container.Y + Font.MeasureString("A").Y + 10), Color.White);
+                spriteBatch.DrawString(_noteFont, _noteRender, new Vector2(Container.X + 10, Container.Y + Font.MeasureString("A").Y + 10), Color.White);
             }
         }
 
         public override void Update(GameTime gameTime)
         {
-            noteRender = "";
+            _noteRender = "";
             foreach(string s in Notes)
             {
-                id = "<Note" + Notes.IndexOf(s) + ">";
-                divider = bar.Substring(0, 2) + id + bar.Substring(0, bar.Length - id.Length - 3);
-                noteRender += String.Format("{0}\n{1}\n",divider,s);
+                _id = "<Note" + Notes.IndexOf(s) + ">";
+                _divider = _bar.Substring(0, 2) + _id + _bar.Substring(0, _bar.Length - _id.Length - 3);
+                _noteRender += String.Format("{0}\n{1}\n",_divider,s);
             }
         }
 

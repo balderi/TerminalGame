@@ -6,40 +6,40 @@ namespace TerminalGame.Utilities
 {
     class Drawing
     {
-        static Texture2D texture2D;
-        public static void SetBlankTexture(GraphicsDevice Graphics)
+        private static Texture2D _texture2D;
+        public static void SetBlankTexture(GraphicsDevice graphics)
         {
-            texture2D = new Texture2D(Graphics, 1, 1);
-            texture2D.SetData(new[] { Color.White });
+            _texture2D = new Texture2D(graphics, 1, 1);
+            _texture2D.SetData(new[] { Color.White });
         }
 
         /// <summary>
         /// Will draw a blank texture. Add color in draw call with SpriteBatch.
         /// </summary>
-        /// <param name="Graphics">GraphicsAdapter</param>
+        /// <param name="graphics">GraphicsAdapter</param>
         /// <returns>Blank (white) Texture2D</returns>
-        public static Texture2D DrawBlankTexture(GraphicsDevice Graphics)
+        public static Texture2D DrawBlankTexture(GraphicsDevice graphics)
         {
             //Texture2D retval = new Texture2D(Graphics, 1, 1);
             //retval.SetData(new[] { Color.White });
             //return retval;
-            return texture2D;
+            return _texture2D;
         }
 
         /// <summary>
         /// Draws a border around the object.
         /// </summary>
         /// <param name="spriteBatch"></param>
-        /// <param name="Object">Size of border</param>
-        /// <param name="Texture"></param>
-        /// <param name="BorderWidth">Width of border. Negative values draws the border inside the object. (I think -b)</param>
-        /// <param name="BorderColor">Color of the border. Use eg. Color.Red * 0.5f to make border 50% transparent</param>
-        public static void DrawBorder(SpriteBatch spriteBatch, Rectangle Object, Texture2D Texture, int BorderWidth, Color BorderColor)
+        /// <param name="rectangle">Size of border</param>
+        /// <param name="texture"></param>
+        /// <param name="borderWidth">Width of border. Negative values draws the border inside the object. (I think -b)</param>
+        /// <param name="borderColor">Color of the border. Use eg. Color.Red * 0.5f to make border 50% transparent</param>
+        public static void DrawBorder(SpriteBatch spriteBatch, Rectangle rectangle, Texture2D texture, int borderWidth, Color borderColor)
         {
-            spriteBatch.Draw(Texture, new Rectangle(Object.Left - BorderWidth, Object.Top - BorderWidth, BorderWidth, Object.Height + 2 * BorderWidth), BorderColor); // Left
-            spriteBatch.Draw(Texture, new Rectangle(Object.Right, Object.Top - BorderWidth, BorderWidth, Object.Height + 2 * BorderWidth), BorderColor); // Right
-            spriteBatch.Draw(Texture, new Rectangle(Object.Left, Object.Top - BorderWidth, Object.Width, BorderWidth), BorderColor); // Top
-            spriteBatch.Draw(Texture, new Rectangle(Object.Left, Object.Bottom, Object.Width, BorderWidth), BorderColor); // Bottom
+            spriteBatch.Draw(texture, new Rectangle(rectangle.Left - borderWidth, rectangle.Top - borderWidth, borderWidth, rectangle.Height + 2 * borderWidth), borderColor); // Left
+            spriteBatch.Draw(texture, new Rectangle(rectangle.Right, rectangle.Top - borderWidth, borderWidth, rectangle.Height + 2 * borderWidth), borderColor); // Right
+            spriteBatch.Draw(texture, new Rectangle(rectangle.Left, rectangle.Top - borderWidth, rectangle.Width, borderWidth), borderColor); // Top
+            spriteBatch.Draw(texture, new Rectangle(rectangle.Left, rectangle.Bottom, rectangle.Width, borderWidth), borderColor); // Bottom
         }
 
         public static void DrawLine(SpriteBatch spriteBatch, Texture2D texture, Color color, Vector2 start, Vector2 end)

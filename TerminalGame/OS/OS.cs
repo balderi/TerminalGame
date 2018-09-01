@@ -7,7 +7,7 @@ namespace TerminalGame.OS
 {
     class OS
     {
-        private static OS instance;
+        private static OS _instance;
 
         public Terminal Terminal { get; private set; }
         public RemoteView RemoteView { get; private set; }
@@ -41,11 +41,11 @@ namespace TerminalGame.OS
 
         public static OS GetInstance()
         {
-            if (instance == null)
+            if (_instance == null)
             {
-                instance = new OS();
+                _instance = new OS();
             }
-            return instance;
+            return _instance;
         }
 
         public void EnableModule(Module module)

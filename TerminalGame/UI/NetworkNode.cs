@@ -26,99 +26,98 @@ namespace TerminalGame.UI
         public bool IsHovering { get; private set; }
         public Rectangle Container { get; private set; }
 
-        private MouseState CurrentMouseState, PreviousMouseState;
-        private readonly Texture2D Texture;
-        readonly Dictionary<string, Texture2D> NodeSpinners;
-        private Color Color, HoverColor, CurrentColor, ConnectedColor, PlayerColor, ConnectedSpinnerColor, PlayerSpinnerColor, HoverSpinnerColor;
-        private float rotationCW, rotationCCW;
-        private Point spinnerS, spinnerN, spinnerL;
+        private MouseState _currentMouseState, _previousMouseState;
+        private readonly Texture2D _texture;
+        readonly Dictionary<string, Texture2D> _nodeSpinners;
+        private Color _color, _hoverColor, _currentColor, _connectedColor, _playerColor, _connectedSpinnerColor, _playerSpinnerColor, _hoverSpinnerColor;
+        private float _rotationCW, _rotationCCW;
+        private Point _spinnerS, _spinnerN, _spinnerL;
 
-        private NodeHoverEventArgs nh;
-        private NodeClickedEventArgs nc;
-        private MouseEventArgs enter, leave;
-
-        private bool newMouseHoverState, previousMouseHoverState;
+        private readonly NodeHoverEventArgs _nh;
+        private readonly NodeClickedEventArgs _nc;
+        private readonly MouseEventArgs _enter, _leave;
+        private bool _newMouseHoverState, _previousMouseHoverState;
 
         public NetworkNode(Texture2D texture, Computer computer, Rectangle container, PopUpBox infoBox, Dictionary<string, Texture2D> nodeSpinners)
         {
-            Texture = texture;
+            _texture = texture;
             Computer = computer;
             Container = container;
-            Color = Color.RoyalBlue;
-            HoverColor = Color.DarkOrange;
-            ConnectedColor = Color.Green;
-            PlayerColor = Color.Blue;
+            _color = Color.RoyalBlue;
+            _hoverColor = Color.DarkOrange;
+            _connectedColor = Color.Green;
+            _playerColor = Color.Blue;
             Position = Container.Location;
             InfoBox = infoBox;
             var holder = InfoBox.Container;
             holder.Location = Position + new Point(Container.Width + 5, 0);
             InfoBox.Container = holder;
             InfoBox.Text = Computer.Name + "\n" + Computer.IP;
-            NodeSpinners = nodeSpinners;
-            rotationCW = 0.0f;
+            _nodeSpinners = nodeSpinners;
+            _rotationCW = 0.0f;
 
             CenterPosition = new Point(Position.X + Container.Width / 2, Position.Y + Container.Height / 2);
 
-            spinnerS = new Point(40, 40);
-            spinnerN = new Point(55, 55);
-            spinnerL = new Point(70, 70);
+            _spinnerS = new Point(40, 40);
+            _spinnerN = new Point(55, 55);
+            _spinnerL = new Point(70, 70);
 
-            nh = new NodeHoverEventArgs()
+            _nh = new NodeHoverEventArgs()
             {
                 IP = Computer.IP,
                 Name = Computer.Name,
                 Location = Position
             };
 
-            nc = new NodeClickedEventArgs()
+            _nc = new NodeClickedEventArgs()
             {
                 IP = Computer.IP
             };
 
-            enter = new MouseEventArgs();
-            leave = new MouseEventArgs();
+            _enter = new MouseEventArgs();
+            _leave = new MouseEventArgs();
         }
 
         public void Update(GameTime gameTime)
         {
-            PreviousMouseState = CurrentMouseState;
-            CurrentMouseState = Mouse.GetState();
+            _previousMouseState = _currentMouseState;
+            _currentMouseState = Mouse.GetState();
 
-            var mouseRectangle = new Rectangle(CurrentMouseState.X, CurrentMouseState.Y, 1, 1);
+            var mouseRectangle = new Rectangle(_currentMouseState.X, _currentMouseState.Y, 1, 1);
 
             IsHovering = false;
 
             if (mouseRectangle.Intersects(Container))
             {
                 IsHovering = true;
-                Hover?.Invoke(nh);
+                Hover?.Invoke(_nh);
 
-                if (CurrentMouseState.LeftButton == ButtonState.Released && PreviousMouseState.LeftButton == ButtonState.Pressed)
+                if (_currentMouseState.LeftButton == ButtonState.Released && _previousMouseState.LeftButton == ButtonState.Pressed)
                 {
-                    Click?.Invoke(nc);
+                    Click?.Invoke(_nc);
                 }
             }
 
-            newMouseHoverState = IsHovering;
-            if(newMouseHoverState != previousMouseHoverState)
+            _newMouseHoverState = IsHovering;
+            if(_newMouseHoverState != _previousMouseHoverState)
             {
-                if (newMouseHoverState)
-                    Enter?.Invoke(enter);
+                if (_newMouseHoverState)
+                    Enter?.Invoke(_enter);
                 else
-                    Leave?.Invoke(leave);
+                    Leave?.Invoke(_leave);
             }
-            previousMouseHoverState = newMouseHoverState;
+            _previousMouseHoverState = _newMouseHoverState;
 
-            rotationCW += 0.01f;
-            rotationCCW -= 0.01f;
-            ConnectedSpinnerColor = ConnectedColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 2) + 1) * 0.5f + 0.2f);
-            PlayerSpinnerColor = PlayerColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1) + 1) * 0.5f + 0.2f);
-            HoverSpinnerColor = HoverColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1.5) + 1) * 0.5f + 0.2f);
+            _rotationCW += 0.01f;
+            _rotationCCW -= 0.01f;
+            _connectedSpinnerColor = _connectedColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 2) + 1) * 0.5f + 0.2f);
+            _playerSpinnerColor = _playerColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1) + 1) * 0.5f + 0.2f);
+            _hoverSpinnerColor = _hoverColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1.5) + 1) * 0.5f + 0.2f);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            CurrentColor = Color;
+            _currentColor = _color;
             Texture2D connectedSpinner, playerSpinner, hoverSpinner, missionSpinner;
 
             connectedSpinner = SelectSpinner("ConnectedSpinner");
@@ -128,29 +127,29 @@ namespace TerminalGame.UI
 
             if (Computer == Player.GetInstance().PlayersComputer)
             {
-                CurrentColor = PlayerColor;
-                spriteBatch.Draw(playerSpinner, new Rectangle(new Point(Container.Location.X + (Container.Width / 2), Container.Location.Y + (Container.Height / 2)), spinnerS), null, PlayerSpinnerColor, rotationCW, new Vector2(playerSpinner.Width / 2, playerSpinner.Height / 2), SpriteEffects.None, 0);
+                _currentColor = _playerColor;
+                spriteBatch.Draw(playerSpinner, new Rectangle(new Point(Container.Location.X + (Container.Width / 2), Container.Location.Y + (Container.Height / 2)), _spinnerS), null, _playerSpinnerColor, _rotationCW, new Vector2(playerSpinner.Width / 2, playerSpinner.Height / 2), SpriteEffects.None, 0);
 
             }
             if (Computer == Player.GetInstance().ConnectedComputer)
             {
-                CurrentColor = ConnectedColor;
-                spriteBatch.Draw(connectedSpinner, new Rectangle(new Point(Container.Location.X + (Container.Width / 2), Container.Location.Y + (Container.Height / 2)), spinnerN), null, ConnectedSpinnerColor, rotationCCW, new Vector2(connectedSpinner.Width / 2, connectedSpinner.Height / 2), SpriteEffects.None, 0);
+                _currentColor = _connectedColor;
+                spriteBatch.Draw(connectedSpinner, new Rectangle(new Point(Container.Location.X + (Container.Width / 2), Container.Location.Y + (Container.Height / 2)), _spinnerN), null, _connectedSpinnerColor, _rotationCCW, new Vector2(connectedSpinner.Width / 2, connectedSpinner.Height / 2), SpriteEffects.None, 0);
 
             }
             if (IsHovering)
             {
-                CurrentColor = HoverColor;
-                spriteBatch.Draw(hoverSpinner, new Rectangle(new Point(Container.Location.X + (Container.Width / 2), Container.Location.Y + (Container.Height / 2)), spinnerL), null, HoverSpinnerColor, rotationCW, new Vector2(hoverSpinner.Width / 2, hoverSpinner.Height / 2), SpriteEffects.None, 0);
+                _currentColor = _hoverColor;
+                spriteBatch.Draw(hoverSpinner, new Rectangle(new Point(Container.Location.X + (Container.Width / 2), Container.Location.Y + (Container.Height / 2)), _spinnerL), null, _hoverSpinnerColor, _rotationCW, new Vector2(hoverSpinner.Width / 2, hoverSpinner.Height / 2), SpriteEffects.None, 0);
 
             }
 
-            spriteBatch.Draw(Texture, Container, CurrentColor);
+            spriteBatch.Draw(_texture, Container, _currentColor);
         }
 
         private Texture2D SelectSpinner(string key)
         {
-            foreach(KeyValuePair<string, Texture2D> spinner in NodeSpinners)
+            foreach(KeyValuePair<string, Texture2D> spinner in _nodeSpinners)
             {
                 if (spinner.Key == key)
                 {
@@ -161,12 +160,15 @@ namespace TerminalGame.UI
         }
     }
 
+    /// <summary>
+    /// Generic mouse event args
+    /// </summary>
     public class MouseEventArgs : EventArgs
     {
     }
 
     /// <summary>
-    /// Fires when node is clicked
+    /// Arguments for when the node is clicked
     /// </summary>
     public class NodeClickedEventArgs : EventArgs
     {
@@ -177,7 +179,7 @@ namespace TerminalGame.UI
     }
 
     /// <summary>
-    /// Fires when mouse hovers over the node
+    /// Arguments for when mouse hovers over the node
     /// </summary>
     public class NodeHoverEventArgs : EventArgs
     {

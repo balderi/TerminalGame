@@ -6,10 +6,9 @@ namespace TerminalGame.UI
 {
     class PopUpBox
     {
-        private readonly Texture2D backgroundTexture;
-        private readonly Texture2D borderTexture;
-        private SpriteFont font;
-        private Color fontColor, backColor, borderColor;
+        private readonly Texture2D _backgroundTexture, _borderTexture;
+        private SpriteFont _font;
+        private Color _fontColor, _backColor, _borderColor;
         public Rectangle Container { get; set; }
         public Point Location { get; set; }
         public string Text { get; set; }
@@ -18,23 +17,23 @@ namespace TerminalGame.UI
         /// <summary>
         /// Creates a pop-up box with info
         /// </summary>
-        /// <param name="Text">Pop-up box text</param>
-        /// <param name="Container">Specifies width/height of Pop-up box</param>
-        /// <param name="Font">Font used to draw Pop-up box text</param>
-        /// <param name="FontColor">Text color</param>
-        /// <param name="BackColor">Pop-up box color</param>
-        /// <param name="BorderColor">Pop-up box color when hovering</param>
-        /// <param name="GraphicsDevice">GraphicsDevice used to render</param>
-        public PopUpBox(string Text, Rectangle Container, SpriteFont Font, Color FontColor, Color BackColor, Color BorderColor, GraphicsDevice GraphicsDevice)
+        /// <param name="text">Pop-up box text</param>
+        /// <param name="container">Specifies width/height of Pop-up box</param>
+        /// <param name="font">Font used to draw Pop-up box text</param>
+        /// <param name="fontColor">Text color</param>
+        /// <param name="backColor">Pop-up box color</param>
+        /// <param name="borderColor">Pop-up box color when hovering</param>
+        /// <param name="graphicsDevice">GraphicsDevice used to render</param>
+        public PopUpBox(string text, Rectangle container, SpriteFont font, Color fontColor, Color backColor, Color borderColor, GraphicsDevice graphicsDevice)
         {
-            this.Text = Text;
-            this.Container = Container;
-            font = Font;
-            fontColor = FontColor;
-            backColor = BackColor;
-            borderColor = BorderColor;
-            backgroundTexture = Drawing.DrawBlankTexture(GraphicsDevice);
-            borderTexture = Drawing.DrawBlankTexture(GraphicsDevice);
+            this.Text = text;
+            this.Container = container;
+            _font = font;
+            _fontColor = fontColor;
+            _backColor = backColor;
+            _borderColor = borderColor;
+            _backgroundTexture = Drawing.DrawBlankTexture(graphicsDevice);
+            _borderTexture = Drawing.DrawBlankTexture(graphicsDevice);
         }
 
         /// <summary>
@@ -50,27 +49,27 @@ namespace TerminalGame.UI
         public PopUpBox(string Text, Point Location, SpriteFont Font, Color FontColor, Color BackColor, Color BorderColor, GraphicsDevice GraphicsDevice)
         {
             this.Text = Text;
-            font = Font;
-            fontColor = FontColor;
-            backColor = BackColor;
-            borderColor = BorderColor;
-            backgroundTexture = Drawing.DrawBlankTexture(GraphicsDevice);
-            borderTexture = Drawing.DrawBlankTexture(GraphicsDevice);
-            Container = new Rectangle(Location.X, Location.Y, (int)font.MeasureString(Text).Length() + 20, (int)font.MeasureString(Text).Y + 10);
+            _font = Font;
+            _fontColor = FontColor;
+            _backColor = BackColor;
+            _borderColor = BorderColor;
+            _backgroundTexture = Drawing.DrawBlankTexture(GraphicsDevice);
+            _borderTexture = Drawing.DrawBlankTexture(GraphicsDevice);
+            Container = new Rectangle(Location.X, Location.Y, (int)_font.MeasureString(Text).Length() + 20, (int)_font.MeasureString(Text).Y + 10);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             if (!string.IsNullOrEmpty(Text))
             {
-                int stringHeight = (int)font.MeasureString(Text).Y;
-                int stringWidth = (int)font.MeasureString(Text).X;
+                int stringHeight = (int)_font.MeasureString(Text).Y;
+                int stringWidth = (int)_font.MeasureString(Text).X;
                 var x = Container.X + 10;
                 var y = Container.Y + (Container.Height / 2 - stringHeight / 2);
 
-                spriteBatch.Draw(backgroundTexture, Container, backColor);
-                spriteBatch.DrawString(font, Text, new Vector2(x, y), fontColor);
-                Drawing.DrawBorder(spriteBatch, Container, borderTexture, 1, Color.White);
+                spriteBatch.Draw(_backgroundTexture, Container, _backColor);
+                spriteBatch.DrawString(_font, Text, new Vector2(x, y), _fontColor);
+                Drawing.DrawBorder(spriteBatch, Container, _borderTexture, 1, Color.White);
             }
         }
 

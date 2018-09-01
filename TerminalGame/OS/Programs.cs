@@ -5,24 +5,24 @@ namespace TerminalGame.OS
 {
     class Programs
     {
-        private static Programs instance;
-        UI.Modules.Terminal terminal;
-        Player player = Player.GetInstance();
-        readonly OS os = OS.GetInstance();
-        Timer timer;
-        int count;
-        string[] textToWrite;
+        private static Programs _instance;
+        private UI.Modules.Terminal _terminal;
+        private Player _player = Player.GetInstance();
+        private readonly OS _os = OS.GetInstance();
+        private Timer _timer;
+        private int _count;
+        private string[] _textToWrite;
 
         public static Programs GetInstance()
         {
-            if (instance == null)
-                instance = new Programs();
-            return instance;
+            if (_instance == null)
+                _instance = new Programs();
+            return _instance;
         }
 
         private Programs()
         {
-            terminal = OS.GetInstance().Terminal;
+            _terminal = OS.GetInstance().Terminal;
         }
 
         #region Programs
@@ -30,9 +30,9 @@ namespace TerminalGame.OS
 
         public int ls()
         {
-            if (player.ConnectedComputer.PlayerHasRoot)
+            if (_player.ConnectedComputer.PlayerHasRoot)
             {
-                terminal.Write(player.ConnectedComputer.FileSystem.ListFiles());
+                _terminal.Write(_player.ConnectedComputer.FileSystem.ListFiles());
                 return 0;
             }
             else
@@ -47,11 +47,11 @@ namespace TerminalGame.OS
         {
             if (!String.IsNullOrEmpty(text))
             {
-                terminal.Write("\n" + text);
+                _terminal.Write("\n" + text);
             }
             else
             {
-                terminal.Write("\n");
+                _terminal.Write("\n");
             }
             return 0;
         }
@@ -63,27 +63,27 @@ namespace TerminalGame.OS
         #region other methods
         private int NoPriv(string program)
         {
-            terminal.Write("\n" + program + ": Permission denied");
+            _terminal.Write("\n" + program + ": Permission denied");
             return 1;
         }
 
         public void TimedWrite(string[] text, int initialDelay, int tickDelay)
         {
             var autoEvent = new AutoResetEvent(false);
-            count = 0;
-            textToWrite = text;
-            timer = new Timer(GenericTimedWriter, autoEvent, initialDelay, tickDelay);
+            _count = 0;
+            _textToWrite = text;
+            _timer = new Timer(GenericTimedWriter, autoEvent, initialDelay, tickDelay);
         }
 
         private void GenericTimedWriter(Object stateInfo)
         {
             AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
-            terminal.Write(textToWrite[count++]);
-            if (count == textToWrite.Length)
+            _terminal.Write(_textToWrite[_count++]);
+            if (_count == _textToWrite.Length)
             {
-                count = 0;
+                _count = 0;
                 autoEvent.Set();
-                timer.Dispose();
+                _timer.Dispose();
             }
         }
         #endregion

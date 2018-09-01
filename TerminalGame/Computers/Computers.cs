@@ -9,15 +9,15 @@ namespace TerminalGame.Computers
     {
         public static List<Computer> computerList;
 
-        private static Computers instance;
-        private static Random rnd;
+        private static Computers _instance;
+        private static Random _rnd;
         public static Computers GetInstance()
         {
-            if (instance == null)
+            if (_instance == null)
             {
-                instance = new Computers();
+                _instance = new Computers();
             }
-            return instance;
+            return _instance;
         }
 
         /// <summary>
@@ -53,13 +53,13 @@ namespace TerminalGame.Computers
         /// <returns></returns>
         private static string IPgen()
         {
-            rnd = new Random(DateTime.Now.Millisecond);
+            _rnd = new Random(DateTime.Now.Millisecond);
             string retval = "";
             for (int i = 0; i < 4; i++)
             {
                 //Make sure each computer gets a different IP. Less than 5ms might work. More than 5ms might be needed.
                 Thread.Sleep(5);
-                retval += rnd.Next(1, 254) + ".";
+                retval += _rnd.Next(1, 254) + ".";
             }
             return retval.TrimEnd('.');
         }

@@ -5,32 +5,32 @@ namespace TerminalGame.Programs
 {
     class Connect
     {
-        static Player player = Player.GetInstance();
-        static OS.OS os = OS.OS.GetInstance();
-        static UI.Modules.Terminal terminal = os.Terminal;
-        static Timer timer;
-        static int count;
-        static string[] textToWrite;
-        static string IP;
+        private static Player _player = Player.GetInstance();
+        private static OS.OS _os = OS.OS.GetInstance();
+        private static UI.Modules.Terminal _terminal = _os.Terminal;
+        private static Timer _timer;
+        private static int _count;
+        private static string[] _textToWrite;
+        private static string _ip;
 
         public static void Execute(string ip = null)
         {
             if (!String.IsNullOrEmpty(ip))
             {
-                terminal.BlockInput();
-                IP = ip;
+                _terminal.BlockInput();
+                _ip = ip;
 
-                if (ip == player.ConnectedComputer.IP || ip == player.ConnectedComputer.Name)
+                if (ip == _player.ConnectedComputer.IP || ip == _player.ConnectedComputer.Name)
                 {
-                    terminal.Write("\nYou are already connected to " + player.ConnectedComputer.Name + "@" + player.ConnectedComputer.IP);
-                    terminal.UnblockInput();
+                    _terminal.Write("\nYou are already connected to " + _player.ConnectedComputer.Name + "@" + _player.ConnectedComputer.IP);
+                    _terminal.UnblockInput();
                     return;
                 }
 
                 var autoEvent = new AutoResetEvent(false);
-                count = 0;
+                _count = 0;
 
-                textToWrite = new string[]
+                _textToWrite = new string[]
                 {
                     "\nEstablishing connection to " + ip,
                     ".",
@@ -38,13 +38,13 @@ namespace TerminalGame.Programs
                     ".§"
                 };
 
-                os.NetworkMap.IsActive = false;
+                _os.NetworkMap.IsActive = false;
 
-                timer = new Timer(ConnectionWriter, autoEvent, 100, 500);
+                _timer = new Timer(ConnectionWriter, autoEvent, 100, 500);
             }
             else
             {
-                terminal.Write("\nUsage: connect [IP]");
+                _terminal.Write("\nUsage: connect [IP]");
                 return;
             }
         }
@@ -52,26 +52,26 @@ namespace TerminalGame.Programs
         private static void ConnectionWriter(Object stateInfo)
         {
             AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
-            terminal.Write(textToWrite[count++]);
-            if (count == textToWrite.Length)
+            _terminal.Write(_textToWrite[_count++]);
+            if (_count == _textToWrite.Length)
             {
                 bool conn = false;
                 foreach (Computers.Computer c in Computers.Computers.computerList)
                 {
-                    if (IP == c.IP || IP == c.Name)
+                    if (_ip == c.IP || _ip == c.Name)
                     {
                         conn = true;
                         c.Connect(false);
-                        terminal.Write("\nConnection established");
-                        os.NetworkMap.IsActive = true;
+                        _terminal.Write("\nConnection established");
+                        _os.NetworkMap.IsActive = true;
                     }
                 }
                 if(!conn)
-                    terminal.Write("\nCould not connect to " + IP);
-                terminal.UnblockInput();
-                count = 0;
+                    _terminal.Write("\nCould not connect to " + _ip);
+                _terminal.UnblockInput();
+                _count = 0;
                 autoEvent.Set();
-                timer.Dispose();
+                _timer.Dispose();
             }
         }
     }

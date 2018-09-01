@@ -4,29 +4,29 @@ namespace TerminalGame.Programs
 {
     class Cd
     {
-        static Player player = Player.GetInstance();
-        static OS.OS os = OS.OS.GetInstance();
-        static UI.Modules.Terminal terminal = os.Terminal;
+        private static Player _player = Player.GetInstance();
+        private static OS.OS _os = OS.OS.GetInstance();
+        private static UI.Modules.Terminal _terminal = _os.Terminal;
 
         public static void Execute(string folder = null)
         {
-            if (player.ConnectedComputer.PlayerHasRoot)
+            if (_player.ConnectedComputer.PlayerHasRoot)
             {
                 if (!String.IsNullOrEmpty(folder))
                 {
-                    if (player.ConnectedComputer.FileSystem.TryFindFile(folder, true))
+                    if (_player.ConnectedComputer.FileSystem.TryFindFile(folder, true))
                     {
-                        player.ConnectedComputer.FileSystem.ChangeDir(folder);
+                        _player.ConnectedComputer.FileSystem.ChangeDir(folder);
                         return;
                     }
-                    terminal.Write("\ncd: " + folder + ": no such file or directory");
+                    _terminal.Write("\ncd: " + folder + ": no such file or directory");
                     return;
                 }
-                terminal.Write("\nUsage: cd [DIRECTORY]");
+                _terminal.Write("\nUsage: cd [DIRECTORY]");
                 return;
             }
             else
-                terminal.Write("\ncd: Permission denied");
+                _terminal.Write("\ncd: Permission denied");
         }
     }
 }

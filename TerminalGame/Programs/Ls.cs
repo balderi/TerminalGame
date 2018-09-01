@@ -2,18 +2,18 @@
 {
     class Ls
     {
-        static Player player = Player.GetInstance();
-        static OS.OS os = OS.OS.GetInstance();
-        static UI.Modules.Terminal terminal = os.Terminal;
+        private static Player _player = Player.GetInstance();
+        private static OS.OS _os = OS.OS.GetInstance();
+        private static UI.Modules.Terminal _terminal = _os.Terminal;
 
         public static void Execute(string variant)
         {
-            if (player.ConnectedComputer.PlayerHasRoot)
+            if (_player.ConnectedComputer.PlayerHasRoot)
             {
-                terminal.Write(player.ConnectedComputer.FileSystem.ListFiles());
+                _terminal.Write(_player.ConnectedComputer.FileSystem.ListFiles());
             }
             else
-                terminal.Write("\n" + variant + ": Permission denied");
+                _terminal.Write("\n" + variant + ": Permission denied");
         }
     }
 }

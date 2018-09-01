@@ -44,7 +44,7 @@ namespace TerminalGame.UI.Modules
         /// <summary>
         /// Graphics Device
         /// </summary>
-        protected GraphicsDevice Graphics;
+        protected GraphicsDevice _graphics;
 
         /// <summary>
         /// Base UI module constructor
@@ -53,7 +53,7 @@ namespace TerminalGame.UI.Modules
         /// <param name="container">Container for the module</param>
         protected Module(GraphicsDevice graphics, Rectangle container)
         {
-            Graphics = graphics;
+            _graphics = graphics;
             Container = container;
 
         }

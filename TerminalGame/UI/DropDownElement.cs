@@ -16,8 +16,8 @@ namespace TerminalGame.UI
         public string ElementText { get; private set; }
         public Rectangle Container { get; private set; }
 
-        private SpriteFont _font;
-        private Texture2D _texture;
+        private readonly SpriteFont _font;
+        private readonly Texture2D _texture;
 
         public DropDownElement(string elementText, Rectangle container, SpriteFont font, GraphicsDevice graphics)
         {

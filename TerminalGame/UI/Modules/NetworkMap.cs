@@ -24,26 +24,26 @@ namespace TerminalGame.UI.Modules
         public SoundEffect Hover { get; set; }
         public SoundEffect Click { get; set; }
 
-        List<NetworkNode> nodes;
-        Random rnd;
-        private readonly SpriteFont SpriteFont;
-        Point size;
-        Rectangle cont;
+        private List<NetworkNode> _nodes;
+        private Random _rnd;
+        private readonly SpriteFont _spriteFont;
+        private Point _size;
+        private Rectangle _cont;
 
         /// <summary>
         /// Constructor for the NetworkMap module. Draws a map of computers on the net.
         /// </summary>
-        /// <param name="Graphics">Graphics Device</param>
-        /// <param name="Container">Container for the window</param>
+        /// <param name="graphics">Graphics Device</param>
+        /// <param name="container">Container for the window</param>
         /// <param name="texture">Texture for the window</param>
         /// <param name="font">Font used for the node labels (the infoboxes that pops up when hovering over a node)</param>
         /// <param name="nodeSpinners">Dictionary of \"spinners\" denoting points of interest on the map</param>
-        public NetworkMap(GraphicsDevice Graphics, Rectangle Container, Texture2D texture, SpriteFont font, Dictionary<string, Texture2D> nodeSpinners) : base(Graphics, Container)
+        public NetworkMap(GraphicsDevice graphics, Rectangle container, Texture2D texture, SpriteFont font, Dictionary<string, Texture2D> nodeSpinners) : base(graphics, container)
         {
-            size = new Point(32, 32);
-            SpriteFont = font;
-            rnd = new Random(DateTime.Now.Millisecond);
-            nodes = new List<NetworkNode>();
+            _size = new Point(32, 32);
+            _spriteFont = font;
+            _rnd = new Random(DateTime.Now.Millisecond);
+            _nodes = new List<NetworkNode>();
             foreach (Computer c in Computers.Computers.computerList)
             {
                 // Prevent the nodes from overlapping on the map
@@ -51,14 +51,14 @@ namespace TerminalGame.UI.Modules
                 bool intersects = true;
                 while (intersects)
                 {
-                    Point position = new Point(rnd.Next(Container.X + 15, Container.X + Container.Width - 115), rnd.Next(Container.Y + 25, Container.Y + Container.Height - 50));
-                    cont = new Rectangle(position, size);
-                    if (nodes.Count > 0)
+                    Point position = new Point(_rnd.Next(container.X + 15, container.X + container.Width - 115), _rnd.Next(container.Y + 25, container.Y + container.Height - 50));
+                    _cont = new Rectangle(position, _size);
+                    if (_nodes.Count > 0)
                     {
                         intersects = false;
-                        foreach (NetworkNode node in nodes)
+                        foreach (NetworkNode node in _nodes)
                         {
-                            if (cont.Intersects(node.Container))
+                            if (_cont.Intersects(node.Container))
                                 intersects = true;
                         }
                     }
@@ -67,8 +67,8 @@ namespace TerminalGame.UI.Modules
                         intersects = false;
                     }
                 }
-                NetworkNode n = new NetworkNode(texture, c, cont, new PopUpBox(c.Name + "\n" + c.IP, new Point(0,0), SpriteFont, Color.White, Color.Black * 0.5f, Color.White, Graphics), nodeSpinners);
-                nodes.Add(n);
+                NetworkNode n = new NetworkNode(texture, c, _cont, new PopUpBox(c.Name + "\n" + c.IP, new Point(0,0), _spriteFont, Color.White, Color.Black * 0.5f, Color.White, graphics), nodeSpinners);
+                _nodes.Add(n);
                 n.Click += OnNodeClick;
                 n.Hover += OnNodeHover;
                 n.Enter += OnMouseEnter;
@@ -85,14 +85,14 @@ namespace TerminalGame.UI.Modules
         {
             if (IsVisible)
             {
-                Texture2D texture = Drawing.DrawBlankTexture(Graphics);
+                Texture2D texture = Drawing.DrawBlankTexture(_graphics);
                 spriteBatch.Draw(texture, Container, BackgroundColor);
 
-                foreach (NetworkNode node in nodes)
+                foreach (NetworkNode node in _nodes)
                 {
                     if (node.Computer.LinkedComputers.Count != 0)
                     {
-                        foreach (NetworkNode node2 in nodes)
+                        foreach (NetworkNode node2 in _nodes)
                         {
                             if (node.Computer.LinkedComputers.Contains(node2.Computer))
                             {
@@ -101,27 +101,27 @@ namespace TerminalGame.UI.Modules
                         }
                     }
                 }
-                foreach (NetworkNode node in nodes)
+                foreach (NetworkNode node in _nodes)
                 {
                     if (node.Computer != Player.GetInstance().ConnectedComputer && node.Computer != Player.GetInstance().PlayersComputer && !node.IsHovering && !node.Computer.IsMissionObjective)
                         node.Draw(spriteBatch);
                 }
                 // Makes sure that nodes with spinners are drawn on top, so other nodes don't obtruct them
-                foreach (NetworkNode node in nodes)
+                foreach (NetworkNode node in _nodes)
                 {
                     if (node.Computer == Player.GetInstance().ConnectedComputer || node.Computer == Player.GetInstance().PlayersComputer || node.Computer.IsMissionObjective)
                         node.Draw(spriteBatch);
                 }
 
                 // Makes sure that the hover-spinner is always on top of other spinners
-                foreach (NetworkNode node in nodes)
+                foreach (NetworkNode node in _nodes)
                 {
                     if (node.IsHovering)
                         node.Draw(spriteBatch);
                 }
 
                 // Makes sure that infoboxes are drawn on top, so other nodes don't obtruct them
-                foreach (NetworkNode node in nodes)
+                foreach (NetworkNode node in _nodes)
                 {
                     if (node.IsHovering)
                         node.InfoBox.Draw(spriteBatch);
@@ -139,7 +139,7 @@ namespace TerminalGame.UI.Modules
         /// <param name="gameTime">GameTime</param>
         public override void Update(GameTime gameTime)
         {
-            foreach (NetworkNode node in nodes)
+            foreach (NetworkNode node in _nodes)
             {
                 node.Update(gameTime);
             }
@@ -151,7 +151,7 @@ namespace TerminalGame.UI.Modules
             {
                 Hover.Play(0.25f, 1f, 0f);
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
         }
 
         private void OnNodeClick(NodeClickedEventArgs e)
@@ -163,7 +163,7 @@ namespace TerminalGame.UI.Modules
             {
                 Click.Play(0.25f, 1f, 0f);
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
         }
 
         private void OnNodeHover(NodeHoverEventArgs e)

@@ -8,13 +8,13 @@ namespace TerminalGame.UI
 {
     class MainMenuButton : Component
     {
-        private MouseState currentMouseState, previousMouseState;
-        private bool isHovering;
-        private SpriteFont font;
-        private string text;
-        private GraphicsDevice graphics;
-        private int width, height;
-        private Texture2D texture;
+        private MouseState _currentMouseState, _previousMouseState;
+        private bool _isHovering;
+        private SpriteFont _font;
+        private string _text;
+        private readonly GraphicsDevice _graphics;
+        private readonly int _width, _height;
+        private readonly Texture2D _texture;
 
         public delegate void ButtonPressedEventHandler(ButtonPressedEventArgs e);
         public event ButtonPressedEventHandler Click;
@@ -25,21 +25,21 @@ namespace TerminalGame.UI
         {
             get
             {
-                return new Rectangle((int)Position.X, (int)Position.Y, width, height);
+                return new Rectangle((int)Position.X, (int)Position.Y, _width, _height);
             }
         }
         public string Text { get; set; }
 
         public MainMenuButton(string Text, int Width, int Height, SpriteFont Font, GraphicsDevice GraphicsDevice)
         {
-            font = Font;
+            _font = Font;
             Console.WriteLine("Button '" + Text + "' font loaded");
-            text = Text;
-            width = Width;
-            height = Height;
-            graphics = GraphicsDevice;
+            _text = Text;
+            _width = Width;
+            _height = Height;
+            _graphics = GraphicsDevice;
 
-            texture = Drawing.DrawBlankTexture(graphics);
+            _texture = Drawing.DrawBlankTexture(_graphics);
             FontColor = Color.Black;
         }
 
@@ -47,54 +47,54 @@ namespace TerminalGame.UI
         {
             var color = Color.DarkGray;
 
-            if (isHovering)
+            if (_isHovering)
             {
                 color = Color.LightGray;
             }
             if (Clicked)
                 color = Color.SlateGray;
 
-            if (!string.IsNullOrEmpty(text))
+            if (!string.IsNullOrEmpty(_text))
             {
                 var x = (Rectangle.X + 15);
-                var y = (Rectangle.Y + (Rectangle.Height / 2)) - ((font.MeasureString(text).Y / 2) - 5);
+                var y = (Rectangle.Y + (Rectangle.Height / 2)) - ((_font.MeasureString(_text).Y / 2) - 5);
 
-                if (isHovering)
+                if (_isHovering)
                 {
-                    spriteBatch.Draw(texture, new Rectangle(Rectangle.X + 2 + TestClass.ShakeStuff(3), Rectangle.Y + 2 + TestClass.ShakeStuff(3), Rectangle.Width - 4, Rectangle.Height - 4), Color.Green);
+                    spriteBatch.Draw(_texture, new Rectangle(Rectangle.X + 2 + TestClass.ShakeStuff(3), Rectangle.Y + 2 + TestClass.ShakeStuff(3), Rectangle.Width - 4, Rectangle.Height - 4), Color.Green);
                 }
                 else
                 {
-                    spriteBatch.Draw(texture, Rectangle, Color.Gray);
+                    spriteBatch.Draw(_texture, Rectangle, Color.Gray);
                 }
-                spriteBatch.Draw(texture, new Rectangle(Rectangle.X + 2, Rectangle.Y + 2, Rectangle.Width - 4, Rectangle.Height - 4), color);
+                spriteBatch.Draw(_texture, new Rectangle(Rectangle.X + 2, Rectangle.Y + 2, Rectangle.Width - 4, Rectangle.Height - 4), color);
 
-                spriteBatch.DrawString(font, text, new Vector2(x, y), Color.Black);
+                spriteBatch.DrawString(_font, _text, new Vector2(x, y), Color.Black);
             }
         }
 
         public override void Update()
         {
-            previousMouseState = currentMouseState;
-            currentMouseState = Mouse.GetState();
+            _previousMouseState = _currentMouseState;
+            _currentMouseState = Mouse.GetState();
 
-            var mouseRectangle = new Rectangle(currentMouseState.X, currentMouseState.Y, 1, 1);
+            var mouseRectangle = new Rectangle(_currentMouseState.X, _currentMouseState.Y, 1, 1);
 
-            isHovering = false;
+            _isHovering = false;
             Clicked = false;
 
             if (mouseRectangle.Intersects(Rectangle))
             {
-                isHovering = true;
+                _isHovering = true;
 
-                if (currentMouseState.LeftButton == ButtonState.Pressed)
+                if (_currentMouseState.LeftButton == ButtonState.Pressed)
                     Clicked = true;
 
-                if (currentMouseState.LeftButton == ButtonState.Released && previousMouseState.LeftButton == ButtonState.Pressed)
+                if (_currentMouseState.LeftButton == ButtonState.Released && _previousMouseState.LeftButton == ButtonState.Pressed)
                 {
                     ButtonPressedEventArgs bp = new ButtonPressedEventArgs()
                     {
-                        Button = text
+                        Button = _text
                     };
                     Click?.Invoke(bp);
                 }

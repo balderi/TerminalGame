@@ -4,8 +4,8 @@ namespace TerminalGame.Programs
 {
     class Note
     {
-        static OS.OS os = OS.OS.GetInstance();
-        static UI.Modules.Terminal terminal = os.Terminal;
+        private static OS.OS _os = OS.OS.GetInstance();
+        private static UI.Modules.Terminal _terminal = _os.Terminal;
 
         public static void Execute(string[] args, string text = null)
         {
@@ -15,46 +15,46 @@ namespace TerminalGame.Programs
                 {
                     if (args[1] == "*")
                     {
-                        os.Notes.Clear();
-                        terminal.Write("\nAll notes removed");
+                        _os.Notes.Clear();
+                        _terminal.Write("\nAll notes removed");
                         return;
                     }
                     if (Int32.TryParse(args[1], out int id))
                     {
-                        if (os.Notes.RemoveNote(id))
+                        if (_os.Notes.RemoveNote(id))
                         {
-                            terminal.Write("\nNote removed");
+                            _terminal.Write("\nNote removed");
                             return;
                         }
                     }
-                    terminal.Write("\nNo note with id \'" + args[1] + "\'");
+                    _terminal.Write("\nNo note with id \'" + args[1] + "\'");
                     return;
                 }
                 else if (args[0] == "-r" && args.Length < 2)
                 {
-                    terminal.Write("\nnote: missing operand");
+                    _terminal.Write("\nnote: missing operand");
                     return;
                 }
                 else
                 {
                     if(!String.IsNullOrEmpty(text))
                     {
-                        if (os.Notes.AddNote(text))
-                            terminal.Write("\nNote added");
+                        if (_os.Notes.AddNote(text))
+                            _terminal.Write("\nNote added");
                         else
-                            terminal.Write("\nNote already exists.");
+                            _terminal.Write("\nNote already exists.");
                     }
                     else
                     {
-                        if (os.Notes.AddNote(args[0]))
-                            terminal.Write("\nNote added");
+                        if (_os.Notes.AddNote(args[0]))
+                            _terminal.Write("\nNote added");
                         else
-                            terminal.Write("\nNote already exists.");
+                            _terminal.Write("\nNote already exists.");
                     }
                     return;
                 }
             }
-            terminal.Write("\nUsage: note [OPTIONS] [NOTE OR NOTE ID]");
+            _terminal.Write("\nUsage: note [OPTIONS] [NOTE OR NOTE ID]");
         }
     }
 }

@@ -13,14 +13,14 @@ namespace TerminalGame.UI.Modules
         // TODO: Fix multiple external writes to the same line acting as seperate line when removed (breaks terminal)
         // TODO: Add command queue for when input is blocked by running program (maybe, might be dumb)
 
-        private TextBox terminalInput;
-        private Rectangle connAdd, inputViewport, outputViewport;
-        private int linesToDraw, currentIndex;
-        private string terminalOutput, connectedAddress;
-        private List<string> history, output;
-        private SpriteFont TerminalFont;
-        private bool isMultiLine, isInputBlocked, updateInp;
-        private Computer connectedComputer;
+        private TextBox _terminalInput;
+        private Rectangle _connAdd, _inputViewport, _outputViewport;
+        private int _linesToDraw, _currentIndex;
+        private string _terminalOutput, _connectedAddress;
+        private List<string> _history, _output;
+        private SpriteFont _terminalFont;
+        private bool _isMultiLine, _isInputBlocked, _updateInp;
+        private Computer _connectedComputer;
         
         public bool IsTakingSpecialInput { get; set; }
         public override SpriteFont Font { get; set; }
@@ -34,9 +34,9 @@ namespace TerminalGame.UI.Modules
 
         public Terminal(GraphicsDevice graphics, Rectangle container, SpriteFont terminalFont) : base(graphics, container)
         {
-            TerminalFont = terminalFont;
+            _terminalFont = terminalFont;
             Container = container;
-            updateInp = true;
+            _updateInp = true;
             if (BackgroundColor == null)
             {
                 BackgroundColor = Color.LightPink;
@@ -63,18 +63,18 @@ namespace TerminalGame.UI.Modules
         /// <param name="e">EventArgs</param>
         private void TerminalInput_EnterDown(object sender, KeyboardInput.KeyEventArgs e)
         {
-            if (!isInputBlocked)
+            if (!_isInputBlocked)
             {
-                Console.WriteLine("CMD: " + terminalInput.Text.String);
-                history.Insert(0, terminalInput.Text.String);
+                Console.WriteLine("CMD: " + _terminalInput.Text.String);
+                _history.Insert(0, _terminalInput.Text.String);
                 string input;
-                if (terminalInput.Text.String.Contains("§"))
+                if (_terminalInput.Text.String.Contains("§"))
                 {
-                    string temp = terminalInput.Text.String.Replace('§', '?');
-                    input = InputWrap("\n" + connectedAddress + temp);
+                    string temp = _terminalInput.Text.String.Replace('§', '?');
+                    input = InputWrap("\n" + _connectedAddress + temp);
                 }
                 else
-                    input = InputWrap("\n" + connectedAddress + terminalInput.Text.String);
+                    input = InputWrap("\n" + _connectedAddress + _terminalInput.Text.String);
 
                 string[] inp = input.Split('§');
 
@@ -82,23 +82,23 @@ namespace TerminalGame.UI.Modules
                 {
                     if (inp[i] != "\n")
                     {
-                        output.Add(inp[i]);
+                        _output.Add(inp[i]);
                     }
                 }
                 
-                currentIndex = 0;
+                _currentIndex = 0;
 
-                if (!string.IsNullOrEmpty(terminalInput.Text.String) && !terminalInput.Text.String.Contains("§"))
-                    CommandParser.ParseCommand(terminalInput.Text.String);
+                if (!string.IsNullOrEmpty(_terminalInput.Text.String) && !_terminalInput.Text.String.Contains("§"))
+                    CommandParser.ParseCommand(_terminalInput.Text.String);
                 
                 UpdateOutput();
-                terminalInput.Clear();
+                _terminalInput.Clear();
 
-                if (isMultiLine)
+                if (_isMultiLine)
                     UpdateOutput();
 
-                connectedComputer = Player.GetInstance().ConnectedComputer;
-                updateInp = true;
+                _connectedComputer = Player.GetInstance().ConnectedComputer;
+                _updateInp = true;
             }
         }
 
@@ -107,14 +107,14 @@ namespace TerminalGame.UI.Modules
             string[] formattedOut = Format(TextWrap(text));
             for(int i = 0; i < formattedOut.Length; i++)
             {
-                output.Add(formattedOut[i]);
+                _output.Add(formattedOut[i]);
                 UpdateOutput();
             }
         }
 
         public void WritePartialLine(string text)
         {
-            output[output.Count - 1] += text;
+            _output[_output.Count - 1] += text;
             UpdateOutput();
         }
 
@@ -125,47 +125,47 @@ namespace TerminalGame.UI.Modules
 
         public void BlockInput()
         {
-            isInputBlocked = true;
+            _isInputBlocked = true;
         }
 
         public void UnblockInput()
         {
-            isInputBlocked = false;
+            _isInputBlocked = false;
         }
 
         private void TerminalInput_TabDown(object sender, KeyboardInput.KeyEventArgs e)
         {
-            if (!isInputBlocked)
+            if (!_isInputBlocked)
             {
                 // TODO: Make autocomplete work as intended
-                terminalInput.Text.String = "Autocomplete command";
-                terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
+                _terminalInput.Text.String = "Autocomplete command";
+                _terminalInput.Cursor.TextCursor = _terminalInput.Text.String.Length;
             }
         }
 
         private void TerminalInput_DnArrow(object sender, KeyboardInput.KeyEventArgs e)
         {
-            if (!isInputBlocked)
+            if (!_isInputBlocked)
             {
-                if (currentIndex > 0)
+                if (_currentIndex > 0)
                 {
-                    terminalInput.Text.String = history[--currentIndex];
+                    _terminalInput.Text.String = _history[--_currentIndex];
                 }
-                terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
-                Console.WriteLine("DN :: CI:{0} | HC:{1}", currentIndex, history.Count);
+                _terminalInput.Cursor.TextCursor = _terminalInput.Text.String.Length;
+                Console.WriteLine("DN :: CI:{0} | HC:{1}", _currentIndex, _history.Count);
             }
         }
 
         private void TerminalInput_UpArrow(object sender, KeyboardInput.KeyEventArgs e)
         {
-            if (!isInputBlocked)
+            if (!_isInputBlocked)
             {
-                if (history.Count > 0 && currentIndex < history.Count)
+                if (_history.Count > 0 && _currentIndex < _history.Count)
                 {
-                    terminalInput.Text.String = history[currentIndex++];
+                    _terminalInput.Text.String = _history[_currentIndex++];
                 }
-                terminalInput.Cursor.TextCursor = terminalInput.Text.String.Length;
-                Console.WriteLine("UP :: CI:{0} | HC:{1}", currentIndex, history.Count);
+                _terminalInput.Cursor.TextCursor = _terminalInput.Text.String.Length;
+                Console.WriteLine("UP :: CI:{0} | HC:{1}", _currentIndex, _history.Count);
             }
         }
 
@@ -175,11 +175,11 @@ namespace TerminalGame.UI.Modules
         public void Clear()
         {
             UpdateOutput();
-            for (int i = 0; i < linesToDraw + 1; i++)
+            for (int i = 0; i < _linesToDraw + 1; i++)
             {
-                output.Add("\n");
+                _output.Add("\n");
             }
-            output.RemoveAt(0); // Leave room for the next prepended newline
+            _output.RemoveAt(0); // Leave room for the next prepended newline
             UpdateOutput();
             Console.WriteLine("TERMINAL CLEAR");
         }
@@ -190,11 +190,11 @@ namespace TerminalGame.UI.Modules
         /// <returns>A brand new textbox</returns>
         private TextBox TextBox()
         {
-            if (terminalInput == null)
+            if (_terminalInput == null)
             {
                 Console.WriteLine("*** CREATE TEXTBOX");
-                int maxChars = ((int)(Container.Width - TerminalFont.MeasureString(connectedAddress).Length()) / (int)TerminalFont.MeasureString("_").Length()) + 200;
-                TextBox retval = new TextBox(inputViewport, maxChars, "", Graphics, TerminalFont, Color.LightGray, Color.DarkGreen, 30);
+                int maxChars = ((int)(Container.Width - _terminalFont.MeasureString(_connectedAddress).Length()) / (int)_terminalFont.MeasureString("_").Length()) + 200;
+                TextBox retval = new TextBox(_inputViewport, maxChars, "", _graphics, _terminalFont, Color.LightGray, Color.DarkGreen, 30);
                 retval.Renderer.Color = Color.LightGray;
                 retval.Cursor.Selection = new Color(Color.PeachPuff, .4f);
                 retval.Active = true;
@@ -207,8 +207,8 @@ namespace TerminalGame.UI.Modules
             else
             {
                 Console.WriteLine("*** DISPOSE TEXTBOX");
-                terminalInput?.Dispose();
-                terminalInput = null;
+                _terminalInput?.Dispose();
+                _terminalInput = null;
                 return TextBox();
             }
         }
@@ -218,24 +218,24 @@ namespace TerminalGame.UI.Modules
         /// </summary>
         public void Init()
         {
-            connectedComputer = Player.GetInstance().ConnectedComputer;
-            connectedAddress = "root@127.0.0.1 > ";
-            terminalOutput = "";
+            _connectedComputer = Player.GetInstance().ConnectedComputer;
+            _connectedAddress = "root@127.0.0.1 > ";
+            _terminalOutput = "";
             IsTakingSpecialInput = false;
-            history = new List<string>();
-            history.Insert(0, "");
-            output = new List<string>();
-            connAdd = new Rectangle(Container.X + 3, Container.Height - RenderHeader().Height, 
-                (int)(TerminalFont.MeasureString(connectedAddress).X), (int)(TerminalFont.MeasureString(connectedAddress).Y));
-            inputViewport = new Rectangle(connAdd.Width, connAdd.Y, Container.Width - connAdd.Width, (int)(TerminalFont.MeasureString("MEASURE ME").Y));
+            _history = new List<string>();
+            _history.Insert(0, "");
+            _output = new List<string>();
+            _connAdd = new Rectangle(Container.X + 3, Container.Height - RenderHeader().Height, 
+                (int)(_terminalFont.MeasureString(_connectedAddress).X), (int)(_terminalFont.MeasureString(_connectedAddress).Y));
+            _inputViewport = new Rectangle(_connAdd.Width, _connAdd.Y, Container.Width - _connAdd.Width, (int)(_terminalFont.MeasureString("MEASURE ME").Y));
 
-            terminalInput = TextBox();
+            _terminalInput = TextBox();
 
-            outputViewport = new Rectangle(Container.X, Container.Y + RenderHeader().Height + 2, 
-                Container.Width, Container.Height - (inputViewport.Height) - RenderHeader().Height);
+            _outputViewport = new Rectangle(Container.X, Container.Y + RenderHeader().Height + 2, 
+                Container.Width, Container.Height - (_inputViewport.Height) - RenderHeader().Height);
             
-            linesToDraw = (int)(outputViewport.Height / TerminalFont.MeasureString("MEASURE THIS").Y);
-            Console.WriteLine("INIT: 0x4C54443D" + linesToDraw);
+            _linesToDraw = (int)(_outputViewport.Height / _terminalFont.MeasureString("MEASURE THIS").Y);
+            Console.WriteLine("INIT: 0x4C54443D" + _linesToDraw);
             Clear();
 
             foreach(Computer c in Computers.Computers.computerList)
@@ -248,27 +248,27 @@ namespace TerminalGame.UI.Modules
 
         private void FileSystem_ChangeDir(object sender, EventArgs e)
         {
-            updateInp = true;
+            _updateInp = true;
         }
 
         private void ConnectedComputer_Disonnected(object sender, ConnectEventArgs e)
         {
             Console.WriteLine("*** DISCONNECTION EVENT FIRED");
-            connectedComputer = Player.GetInstance().ConnectedComputer;
+            _connectedComputer = Player.GetInstance().ConnectedComputer;
             Console.WriteLine("*** CON_STR: " + e.ConnectionString.ToString() + ", IS_RT: " + e.IsRoot.ToString());
             UpdateOutput();
-            connectedAddress = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
-            updateInp = true;
+            _connectedAddress = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
+            _updateInp = true;
         }
 
         private void ConnectedComputer_Connected(object sender, ConnectEventArgs e)
         {
             Console.WriteLine("*** CONNECTION EVENT FIRED");
-            connectedComputer = Player.GetInstance().ConnectedComputer;
+            _connectedComputer = Player.GetInstance().ConnectedComputer;
             Console.WriteLine("*** CON_STR: " + e.ConnectionString.ToString() + ", IS_RT: " + e.IsRoot.ToString());
             UpdateOutput();
-            connectedAddress = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
-            updateInp = true;
+            _connectedAddress = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
+            _updateInp = true;
         }
 
         /// <summary>
@@ -277,17 +277,17 @@ namespace TerminalGame.UI.Modules
         /// </summary>
         private void UpdateInputSize()
         {
-            string text = terminalInput.Text.String;
-            int oldWidth = connAdd.Width;
-            int newWidth = (int)(TerminalFont.MeasureString(connectedAddress).X);
+            string text = _terminalInput.Text.String;
+            int oldWidth = _connAdd.Width;
+            int newWidth = (int)(_terminalFont.MeasureString(_connectedAddress).X);
             if(newWidth != oldWidth)
             {
-                connAdd.Width = newWidth;
-                inputViewport.X = connAdd.X + connAdd.Width;
-                inputViewport.Width = Container.Width - connAdd.Width;
-                terminalInput = TextBox();
-                terminalInput.Text.String = text;
-                terminalInput.Cursor.TextCursor = text.Length;
+                _connAdd.Width = newWidth;
+                _inputViewport.X = _connAdd.X + _connAdd.Width;
+                _inputViewport.Width = Container.Width - _connAdd.Width;
+                _terminalInput = TextBox();
+                _terminalInput.Text.String = text;
+                _terminalInput.Cursor.TextCursor = text.Length;
             }
         }
 
@@ -296,7 +296,7 @@ namespace TerminalGame.UI.Modules
         /// </summary>
         public void UpdateOutput()
         {
-            List<string> tempOut = output;
+            List<string> tempOut = _output;
             int counter = 0;
             int lines = 0;
             foreach (string s in tempOut)
@@ -304,80 +304,80 @@ namespace TerminalGame.UI.Modules
                 if (s.Contains("\n"))
                     lines++;
             }
-            while (lines > linesToDraw - 1)
+            while (lines > _linesToDraw - 1)
             {
                 tempOut.RemoveAt(0);
                 lines--;
                 counter++;
             }
-            while (lines < linesToDraw - 1)
+            while (lines < _linesToDraw - 1)
             {
                 tempOut.Insert(0, "\n");
                 lines++;
             }
-            if (output.Count > 0)
+            if (_output.Count > 0)
             {
                 string holder = "";
                 foreach (string s in tempOut)
                 {
                     holder += s;
                 }
-                terminalOutput = holder;
+                _terminalOutput = holder;
             }
-            output = tempOut;
+            _output = tempOut;
         }
 
         public override void Update(GameTime gameTime)
         {
             float lerpAmount = (float)(gameTime.TotalGameTime.TotalMilliseconds % 500f / 500f);
             
-            terminalInput.Cursor.Color = Color.Lerp(Color.DarkGray, Color.LightGray, lerpAmount);
+            _terminalInput.Cursor.Color = Color.Lerp(Color.DarkGray, Color.LightGray, lerpAmount);
             if (!IsTakingSpecialInput)
             {
-                connectedAddress = connectedComputer.PlayerHasRoot ? "root" : "user";
-                connectedAddress += "@" + connectedComputer.IP + connectedComputer.FileSystem.CurrentDir.PrintFullPath() + " > ";
+                _connectedAddress = _connectedComputer.PlayerHasRoot ? "root" : "user";
+                _connectedAddress += "@" + _connectedComputer.IP + _connectedComputer.FileSystem.CurrentDir.PrintFullPath() + " > ";
             }
 
-            if (updateInp)
+            if (_updateInp)
             {
                 UpdateInputSize();
-                updateInp = false;
+                _updateInp = false;
             }
-            terminalInput.Update();
+            _terminalInput.Update();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (IsVisible)
             {
-                Texture2D texture = Drawing.DrawBlankTexture(Graphics);
+                Texture2D texture = Drawing.DrawBlankTexture(_graphics);
                 spriteBatch.Draw(texture, Container, BackgroundColor);
                 spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
                 spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
                 Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
 
-                spriteBatch.DrawString(TerminalFont, connectedAddress, new Vector2(connAdd.X, connAdd.Y), Color.LightGray);
-                spriteBatch.DrawString(TerminalFont, terminalOutput, new Vector2(outputViewport.X + 3 + TestClass.ShakeStuff(1), outputViewport.Y + TestClass.ShakeStuff(1)), Color.Green);
-                spriteBatch.DrawString(TerminalFont, terminalOutput, new Vector2(outputViewport.X + 3, outputViewport.Y), Color.LightGray);
-                terminalInput.Draw(spriteBatch);
+                spriteBatch.DrawString(_terminalFont, _connectedAddress, new Vector2(_connAdd.X, _connAdd.Y), Color.LightGray);
+                spriteBatch.DrawString(_terminalFont, _terminalOutput, new Vector2(_outputViewport.X + 3 + TestClass.ShakeStuff(1), _outputViewport.Y + TestClass.ShakeStuff(1)), Color.Green);
+                spriteBatch.DrawString(_terminalFont, _terminalOutput, new Vector2(_outputViewport.X + 3, _outputViewport.Y), Color.LightGray);
+                _terminalInput.Draw(spriteBatch);
             }
         }
 
         public void ForceQuit()
         {
-            output.Add("\n\nKernel panic - not syncing: Fatal exception in interrupt\n\n");
+            _output.Add("\n\nKernel panic - not syncing: Fatal exception in interrupt\n\n");
             UpdateOutput();
         }
 
         private string TextWrap(string text)
         {
             Console.WriteLine("TextWrap");
-            isMultiLine = false;
-            int maxlen = Container.Width / (int)TerminalFont.MeasureString("_").Length() * 2;
+            _isMultiLine = false;
+            int maxlen = Container.Width / (int)_terminalFont.MeasureString("_").Length() * 2;
             if (text.Length <= maxlen || text.Contains("§"))
                 return text;
 
-            isMultiLine = true;
+            _isMultiLine = true;
             for (int i = 0; i < (text.Length / maxlen); i++)
             {
                 text = text.Insert((i + 1) * maxlen - 1, "§\n");
@@ -388,12 +388,12 @@ namespace TerminalGame.UI.Modules
         private string InputWrap(string text)
         {
             Console.WriteLine("InputWrap");
-            isMultiLine = false;
-            int maxlen = Container.Width / (int)TerminalFont.MeasureString("_").Length() * 2;
+            _isMultiLine = false;
+            int maxlen = Container.Width / (int)_terminalFont.MeasureString("_").Length() * 2;
             if (text.Length <= maxlen)
                 return text;
 
-            isMultiLine = true;
+            _isMultiLine = true;
             for(int i = 0; i < (text.Length / maxlen); i++)
             {
                  text = text.Insert((i + 1) * maxlen - 1, "§\n");

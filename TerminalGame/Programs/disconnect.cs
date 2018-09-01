@@ -2,20 +2,20 @@
 {
     static class Disconnect
     {
-        static Player player = Player.GetInstance();
-        static OS.OS os = OS.OS.GetInstance();
-        static UI.Modules.Terminal terminal = os.Terminal;
+        private static Player _player = Player.GetInstance();
+        private static OS.OS _os = OS.OS.GetInstance();
+        private static UI.Modules.Terminal _terminal = _os.Terminal;
 
         public static void Execute()
         {
-            if (!player.PlayersComputer.IsPlayerConnected)
+            if (!_player.PlayersComputer.IsPlayerConnected)
             {
-                player.ConnectedComputer.GenerateLog(player.PlayersComputer, "disconnected");
-                player.ConnectedComputer.Disconnect(false);
-                terminal.Write("\nDisconnected");
+                _player.ConnectedComputer.GenerateLog(_player.PlayersComputer, "disconnected");
+                _player.ConnectedComputer.Disconnect(false);
+                _terminal.Write("\nDisconnected");
                 return;
             }
-            terminal.Write("\nCannot disconnect from gateway");
+            _terminal.Write("\nCannot disconnect from gateway");
         }
     }
 }

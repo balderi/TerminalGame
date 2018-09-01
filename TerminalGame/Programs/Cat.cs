@@ -4,29 +4,30 @@ namespace TerminalGame.Programs
 {
     class Cat
     {
-        static Player player = Player.GetInstance();
-        static OS.OS os = OS.OS.GetInstance();
-        static UI.Modules.Terminal terminal = os.Terminal;
+        private static Player _player = Player.GetInstance();
+        private static OS.OS _os = OS.OS.GetInstance();
+        private static UI.Modules.Terminal _terminal = _os.Terminal;
+
         public static void Execute(string filename = null)
         {
-            if (player.ConnectedComputer.PlayerHasRoot)
+            if (_player.ConnectedComputer.PlayerHasRoot)
             {
                 if (!String.IsNullOrEmpty(filename))
                 {
-                    if (player.ConnectedComputer.FileSystem.TryFindFile(filename, false))
+                    if (_player.ConnectedComputer.FileSystem.TryFindFile(filename, false))
                     {
-                        player.ConnectedComputer.GenerateLog(player.PlayersComputer, "accessed file", player.ConnectedComputer.FileSystem.FindFile(filename, false));
-                        terminal.Write("\n" + player.ConnectedComputer.FileSystem.FindFile(filename, false).Execute());
+                        _player.ConnectedComputer.GenerateLog(_player.PlayersComputer, "accessed file", _player.ConnectedComputer.FileSystem.FindFile(filename, false));
+                        _terminal.Write("\n" + _player.ConnectedComputer.FileSystem.FindFile(filename, false).Execute());
                         return;
                     }
-                    terminal.Write("\ncat: no such file or directory");
+                    _terminal.Write("\ncat: no such file or directory");
                     return;
                 }
-                terminal.Write("\nUsage: cat [FILE]");
+                _terminal.Write("\nUsage: cat [FILE]");
                 return;
             }
             else
-                terminal.Write("\ncat: Permission denied");
+                _terminal.Write("\ncat: Permission denied");
         }
     }
 }

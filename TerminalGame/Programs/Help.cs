@@ -2,12 +2,12 @@
 {
     class Help
     {
-        static OS.OS os = OS.OS.GetInstance();
-        static UI.Modules.Terminal terminal = os.Terminal;
+        private static OS.OS _os = OS.OS.GetInstance();
+        private static UI.Modules.Terminal _terminal = _os.Terminal;
 
         public static void Execute()
         {
-            terminal.Write("\n  cd [DIRECTORY]§" +
+            _terminal.Write("\n  cd [DIRECTORY]§" +
                             "\n    Change directory§" +
                             "\n  rm [OPTIONS] [FILE]§" +
                             "\n    Remove a file or directory§" +

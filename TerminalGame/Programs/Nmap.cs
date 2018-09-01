@@ -10,86 +10,86 @@ namespace TerminalGame.Programs
 {
     class Nmap
     {
-        static Player player = Player.GetInstance();
-        static OS.OS os = OS.OS.GetInstance();
-        static Computer playerComp = Player.GetInstance().PlayersComputer;
-        static Computer remoteComp;
-        static UI.Modules.Terminal terminal = os.Terminal;
-        static string[] textToWrite;
-        static Random rnd;
+        private static Player _player = Player.GetInstance();
+        private static OS.OS _os = OS.OS.GetInstance();
+        private static Computer _playerComp = Player.GetInstance().PlayersComputer;
+        private static Computer _remoteComp;
+        private static UI.Modules.Terminal _terminal = _os.Terminal;
+        private static string[] _textToWrite;
+        private static Random _rnd;
 
         public static int Execute(string ip = null)
         {
-            rnd = new Random(DateTime.Now.Millisecond);
+            _rnd = new Random(DateTime.Now.Millisecond);
             // TODO: Make latency dependent on distance from player computer. Maybe make this a property of computers.
-            int latency = rnd.Next(10, 99);
-            terminal.BlockInput();
-            player.PlayersComputer.FileSystem.ChangeDir("/");
-            player.PlayersComputer.FileSystem.ChangeDir("bin");
-            if (player.PlayersComputer.FileSystem.TryFindFile("nmap", false))
+            int latency = _rnd.Next(10, 99);
+            _terminal.BlockInput();
+            _player.PlayersComputer.FileSystem.ChangeDir("/");
+            _player.PlayersComputer.FileSystem.ChangeDir("bin");
+            if (_player.PlayersComputer.FileSystem.TryFindFile("nmap", false))
             {
-                player.PlayersComputer.FileSystem.ChangeDir("/");
+                _player.PlayersComputer.FileSystem.ChangeDir("/");
                 if (String.IsNullOrEmpty(ip))
                 {
                     Console.WriteLine("** WARN: nmap IP was NULL or EMPTY");
-                    remoteComp = player.ConnectedComputer;
-                    ip = remoteComp.Name;
+                    _remoteComp = _player.ConnectedComputer;
+                    ip = _remoteComp.Name;
                 }
 
-                terminal.Write("\nStarting Nmap scan for " + ip);
+                _terminal.Write("\nStarting Nmap scan for " + ip);
                 Thread.Sleep(20 * latency);
                 if (HostExists(ip))
                 {
-                    textToWrite = new string[]
+                    _textToWrite = new string[]
                     {
-                        "\nNmap scan report for " + remoteComp.Name + " (" + remoteComp.IP + ")",
+                        "\nNmap scan report for " + _remoteComp.Name + " (" + _remoteComp.IP + ")",
                         "\nHost is up (0." + latency + "s latency).",
-                        "\nNot shown: " + (1000 - remoteComp.OpenPorts.Count) + " filtered ports",
+                        "\nNot shown: " + (1000 - _remoteComp.OpenPorts.Count) + " filtered ports",
                         "\n",
                         "\nPORT   STATE  SERVICE",
                         "\n",
                         "\n",
-                        "\nDevice type: " + remoteComp.ComputerType,
+                        "\nDevice type: " + _remoteComp.ComputerType,
                         "\nNo exact OS matches for host (test conditions non-ideal).",
                         "\n",
                         "\nNmap done: 1 IP address (1 host up) scanned",
                         "\n",
                     };
 
-                    for (int i = 0; i < textToWrite.Length; i++)
+                    for (int i = 0; i < _textToWrite.Length; i++)
                     {
                         if (i == 5)
                         {
-                            foreach (var port in remoteComp.OpenPorts)
+                            foreach (var port in _remoteComp.OpenPorts)
                             {
-                                terminal.Write("\n" + PrettyPrintPorts(port.Key, port.Value));
+                                _terminal.Write("\n" + PrettyPrintPorts(port.Key, port.Value));
                                 Thread.Sleep(5 * latency);
                             }
                         }
                         else
                         {
-                            if (textToWrite[i].Contains("\n"))
-                                terminal.Write(textToWrite[i]);
+                            if (_textToWrite[i].Contains("\n"))
+                                _terminal.Write(_textToWrite[i]);
                             else
-                                terminal.WritePartialLine(textToWrite[i]);
-                            Thread.Sleep((int)(latency * playerComp.Speed));
+                                _terminal.WritePartialLine(_textToWrite[i]);
+                            Thread.Sleep((int)(latency * _playerComp.Speed));
                         }
                     }
                 }
                 else
                 {
                     Thread.Sleep(20 * latency);
-                    terminal.Write("\nNo response from host " + ip + ".");
+                    _terminal.Write("\nNo response from host " + ip + ".");
                 }
 
-                terminal.UnblockInput();
+                _terminal.UnblockInput();
                 return 0;
             }
             else
             {
-                terminal.Write("\nThe program \'nmap\' is currently not installed");
-                terminal.UnblockInput();
-                player.PlayersComputer.FileSystem.ChangeDir("/");
+                _terminal.Write("\nThe program \'nmap\' is currently not installed");
+                _terminal.UnblockInput();
+                _player.PlayersComputer.FileSystem.ChangeDir("/");
                 return 1;
             }
         }
@@ -100,7 +100,7 @@ namespace TerminalGame.Programs
             {
                 if (comp.IP == ip || comp.Name == ip)
                 {
-                    remoteComp = comp;
+                    _remoteComp = comp;
                     return true;
                 }
             }
