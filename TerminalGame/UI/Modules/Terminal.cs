@@ -297,7 +297,6 @@ namespace TerminalGame.UI.Modules
         public void UpdateOutput()
         {
             List<string> tempOut = _output;
-            int counter = 0;
             int lines = 0;
             foreach (string s in tempOut)
             {
@@ -308,7 +307,6 @@ namespace TerminalGame.UI.Modules
             {
                 tempOut.RemoveAt(0);
                 lines--;
-                counter++;
             }
             while (lines < _linesToDraw - 1)
             {
@@ -371,9 +369,9 @@ namespace TerminalGame.UI.Modules
 
         private string TextWrap(string text)
         {
-            Console.WriteLine("TextWrap");
             _isMultiLine = false;
             int maxlen = Container.Width / (int)_terminalFont.MeasureString("_").Length() * 2;
+            maxlen += maxlen / 5;
             if (text.Length <= maxlen || text.Contains("§"))
                 return text;
 
@@ -387,7 +385,6 @@ namespace TerminalGame.UI.Modules
 
         private string InputWrap(string text)
         {
-            Console.WriteLine("InputWrap");
             _isMultiLine = false;
             int maxlen = Container.Width / (int)_terminalFont.MeasureString("_").Length() * 2;
             if (text.Length <= maxlen)

@@ -13,13 +13,14 @@ namespace TerminalGame.Scenes
     class MenuScene : IScene
     {
         public delegate void ButtonPressedEventHandler(ButtonPressedEventArgs e);
-        List<MainMenuButton> buttons;
+
+        readonly List<MainMenuButton> buttons;
         public event ButtonPressedEventHandler ButtonClicked;
 
-        private string gameTitle;
+        private readonly string gameTitle;
         private SpriteFont _titleFont;
         private GameWindow _gameWindow;
-        private GraphicsDevice _graphics;
+        private readonly GraphicsDevice _graphics;
 
         public MenuScene(string GameTitle, GameWindow gameWindow, SpriteFont buttonFont, SpriteFont titleFont, GraphicsDevice graphics)
         {
