@@ -10,28 +10,27 @@ using TerminalGame.Utilities;
 
 namespace TerminalGame.States
 {
-    class GameRunningState : State
+    class LoadMenuState : State
     {
-        public static GameRunningState Instance => new GameRunningState();
+        public static LoadMenuState Instance => new LoadMenuState();
 
-        private GameRunningState() { }
+        private LoadMenuState() { }
 
         public override State Next(GameState state)
         {
             if (state == GameState.MainMenu)
                 return MainMenuState.Instance;
-            else
-                return this;
+            return this;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Scenes.SceneManager.GetScene(Scenes.SceneManager.Scene.Game).Draw(spriteBatch);
+            Scenes.SceneManager.GetScene(Scenes.SceneManager.Scene.LoadMenu).Draw(spriteBatch);
         }
 
         public override void Update(GameTime gameTime)
         {
-            Scenes.SceneManager.GetScene(Scenes.SceneManager.Scene.Game).Update(gameTime);
+            Scenes.SceneManager.GetScene(Scenes.SceneManager.Scene.LoadMenu).Update(gameTime);
         }
     }
 }

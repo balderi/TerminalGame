@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using TerminalGame.States;
 using TerminalGame.UI;
 using TerminalGame.Utilities;
 
@@ -21,13 +23,16 @@ namespace TerminalGame.Scenes
         private SpriteFont _titleFont;
         private GameWindow _gameWindow;
         private readonly GraphicsDevice _graphics;
+        KeyboardState _prevKbState, _newKbState;
+        readonly StateMachine _stateMachine;
 
-        public MenuScene(string GameTitle, GameWindow gameWindow, SpriteFont buttonFont, SpriteFont titleFont, GraphicsDevice graphics)
+        public MenuScene(string GameTitle, GameWindow gameWindow, SpriteFont buttonFont, SpriteFont titleFont, GraphicsDevice graphics, StateMachine stateMachine)
         {
             gameTitle = GameTitle;
             _titleFont = titleFont;
             _gameWindow = gameWindow;
             _graphics = graphics;
+            _stateMachine = stateMachine;
 
             float leftMargin = 50f;
             float topMargin = 250f;
@@ -88,6 +93,15 @@ namespace TerminalGame.Scenes
 
         public void Update(GameTime gameTime)
         {
+            _newKbState = Keyboard.GetState();
+            if (_newKbState != _prevKbState)
+            {
+                if (GameManager.IsGameRunning && Keyboard.GetState().IsKeyDown(Keys.Escape))
+                {
+                    _stateMachine.Transition(GameState.GameRunning);
+                }
+            }
+            _prevKbState = _newKbState;
             foreach (MainMenuButton b in buttons)
             {
                 b.Update();

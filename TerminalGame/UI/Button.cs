@@ -85,6 +85,8 @@ namespace TerminalGame.UI
             _currentColor = _backColor;
             if (_isHovering)
             {
+                spriteBatch.Draw(_texture, new Rectangle(_container.X + TestClass.ShakeStuff(3), _container.Y + TestClass.ShakeStuff(3), _container.Width, _container.Height), Color.Green);
+
                 _currentColor = _hoverColor;
                 if (_isClicked)
                     _currentColor = _activeColor;

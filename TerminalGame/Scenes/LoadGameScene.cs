@@ -12,9 +12,9 @@ using TerminalGame.Utilities;
 
 namespace TerminalGame.Scenes
 {
-    class SettingsScene : IScene
+    class LoadGameScene : IScene
     {
-        
+
         private readonly SpriteFont _font;
         private readonly GameWindow _gameWindow;
         private readonly GraphicsDevice _graphics;
@@ -22,7 +22,7 @@ namespace TerminalGame.Scenes
         readonly StateMachine _stateMachine;
         MainMenuButton backButton;
 
-        public SettingsScene(GameWindow gameWindow, SpriteFont buttonFont, SpriteFont font, GraphicsDevice graphics, StateMachine stateMachine)
+        public LoadGameScene(GameWindow gameWindow, SpriteFont buttonFont, SpriteFont font, GraphicsDevice graphics, StateMachine stateMachine)
         {
             _font = font;
             _gameWindow = gameWindow;
@@ -38,13 +38,13 @@ namespace TerminalGame.Scenes
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Drawing.DrawBlankTexture(_graphics), _gameWindow.ClientBounds, Color.Black);
-            Vector2 textMiddlePoint = _font.MeasureString("Settings") / 2;
+            Vector2 textMiddlePoint = _font.MeasureString("Load Game") / 2;
             Vector2 position = new Vector2((_gameWindow.ClientBounds.Width - textMiddlePoint.X - 15), textMiddlePoint.Y + 15);
             Vector2 position2 = new Vector2((_gameWindow.ClientBounds.Width - textMiddlePoint.X - 15) + TestClass.ShakeStuff(3), textMiddlePoint.Y + 15 + TestClass.ShakeStuff(3));
-            spriteBatch.DrawString(_font, "Settings", position2, Color.Green, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
-            spriteBatch.DrawString(_font, "Settings", position, Color.LightGray, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
+            spriteBatch.DrawString(_font, "Load Game", position2, Color.Green, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
+            spriteBatch.DrawString(_font, "Load Game", position, Color.LightGray, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
 
-            //spriteBatch.DrawString(_font, "SettingsScene", new Vector2(10, 10), Color.White);
+            //spriteBatch.DrawString(_font, "LoadGameScene", new Vector2(10, 10), Color.White);
             backButton.Draw(spriteBatch);
         }
 

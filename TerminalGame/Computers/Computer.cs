@@ -43,7 +43,7 @@ namespace TerminalGame.Computers
             HTTPS = 443
         };
 
-        private readonly int[] _defaultPorts = { 25, 80, 110, 143 };
+        private readonly int[] _defaultPorts = { 22, 25, 80, 443 };
 
         public Computer(Type type, string ip, string name, string rootPassword)
         {

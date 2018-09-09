@@ -16,7 +16,7 @@ namespace TerminalGame.States
         /// </summary>
         /// <param name="key"></param>
         /// <returns>Next state</returns>
-        public virtual State Next(Keys key)
+        public virtual State Next(GameState state)
         {
             return Next();
         }

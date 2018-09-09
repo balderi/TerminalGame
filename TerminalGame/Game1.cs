@@ -27,7 +27,7 @@ namespace TerminalGame
         SpriteBatch _spriteBatch;
         StateMachine _stateMachine;
 
-        KeyboardState _prevState, _newState;
+        KeyboardState _prevKbState, _newKbState;
 
         Thread _loadingThread;
 
@@ -40,10 +40,11 @@ namespace TerminalGame
         private SoundEffect networkMapNodeHover, networkMapNodeClick;
         private readonly string GameTitle;
         private float musicVolume, /*audioVolume,*/ masterVolume;
-        private bool gameStarted, bloomEnabled;
+        private bool bloomEnabled;
 
-        MenuScene menuScene;
-        SettingsScene settingsScene;
+        MenuScene mainMenuScene;
+        SettingsScene settingsMenuScene;
+        LoadGameScene loadGameMenuScene;
         LoadingScene loadingScene;
         GameScene gameScene;
 
@@ -59,10 +60,12 @@ namespace TerminalGame
 
         Rectangle bgR;
         Texture2D bg, computer, spinner01, spinner02, spinner03, spinner04, spinner05, spinner06, spinner07, spinner08;
+        Texture2D[] backgrounds;
 
         Dictionary<string, Texture2D> NetworkNodeSpinners;
         
         private BloomFilter _bloomFilter;
+        private Random _random;
 
         /// <summary>
         /// Main game constructor
@@ -78,7 +81,7 @@ namespace TerminalGame
             _graphics.SynchronizeWithVerticalRetrace = true;
             _graphics.GraphicsProfile = GraphicsProfile.HiDef;
 
-            gameStarted = false;
+            GameManager.IsGameRunning = false;
         }
 
         /// <summary>
@@ -94,23 +97,25 @@ namespace TerminalGame
             Window.Title = GameTitle;
             
             IsMouseVisible = true;
-
+            GameManager.IsGameRunning = false;
             bloomEnabled = true;
 
-            _stateMachine = new StateMachine(GameMenuState.Instance);
+            _stateMachine = new StateMachine(MainMenuState.Instance);
+
+            _random = new Random(DateTime.Now.Millisecond);
 
             masterVolume = 1.0f;
             musicVolume = 0.2f;
             //audioVolume = 1.0f;
 
-            //_graphics.PreferredBackBufferHeight = 768;
-            //_graphics.PreferredBackBufferWidth = 1366;
+            _graphics.PreferredBackBufferHeight = 768;
+            _graphics.PreferredBackBufferWidth = 1366;
 
             //Set game to fullscreen
             _graphics.HardwareModeSwitch = false;
-            _graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
-            _graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
-            _graphics.IsFullScreen = true;
+            //_graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            //_graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            //_graphics.IsFullScreen = true;
             _graphics.ApplyChanges();
             Console.WriteLine("Resolution is now " + _graphics.PreferredBackBufferWidth + " x " + _graphics.PreferredBackBufferHeight);
 
@@ -174,7 +179,15 @@ namespace TerminalGame
 
             Console.WriteLine("Loading textures");
             bgR = new Rectangle(new Point(0, 0), new Point(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight));
-            bg = Content.Load<Texture2D>("Textures/bg");
+            //bg = Content.Load<Texture2D>("Textures/bg");
+
+            backgrounds = new Texture2D[]
+            {
+                Content.Load<Texture2D>("Textures/bg"),
+                Content.Load<Texture2D>("Textures/bg2"),
+                Content.Load<Texture2D>("Textures/bg3"),
+                Content.Load<Texture2D>("Textures/bg4"),
+            };
 
             computer = Content.Load<Texture2D>("Textures/nmapComputer");
 
@@ -200,14 +213,17 @@ namespace TerminalGame
                 { "HoverSpinner", spinner08 },
             };
 
-            Console.WriteLine("Loading scenes...");
-            menuScene = new MenuScene(GameTitle, Window, FontManager.GetFont(FontManager.FontSize.Large), FontManager.GetFont(FontManager.FontSize.XLarge), GraphicsDevice);
-            menuScene.ButtonClicked += MainMenu_ButtonClicked;
-            settingsScene = new SettingsScene(Window, FontManager.GetFont(FontManager.FontSize.Medium), FontManager.GetFont(FontManager.FontSize.Medium), GraphicsDevice);
-            loadingScene = new LoadingScene(new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2), Window, GraphicsDevice);
-            gameScene = new GameScene(bg, bgR);
+            bg = backgrounds[_random.Next(0, backgrounds.Length)];
 
-            SceneManager.SetScenes(menuScene, settingsScene, loadingScene, gameScene);
+            Console.WriteLine("Loading scenes...");
+            mainMenuScene = new MenuScene(GameTitle, Window, FontManager.GetFont(FontManager.FontSize.Large), FontManager.GetFont(FontManager.FontSize.XLarge), GraphicsDevice, _stateMachine);
+            mainMenuScene.ButtonClicked += MainMenu_ButtonClicked;
+            loadGameMenuScene = new LoadGameScene(Window, FontManager.GetFont(FontManager.FontSize.Large), FontManager.GetFont(FontManager.FontSize.XLarge), GraphicsDevice, _stateMachine);
+            settingsMenuScene = new SettingsScene(Window, FontManager.GetFont(FontManager.FontSize.Large), FontManager.GetFont(FontManager.FontSize.XLarge), GraphicsDevice, _stateMachine);
+            loadingScene = new LoadingScene(new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2), Window, GraphicsDevice);
+            gameScene = new GameScene(bg, bgR, _stateMachine);
+
+            SceneManager.SetScenes(mainMenuScene, settingsMenuScene, loadGameMenuScene, loadingScene, gameScene);
             
             //Load our Bloomfilter!
             _bloomFilter = new BloomFilter();
@@ -219,14 +235,14 @@ namespace TerminalGame
             _bloomFilter.BloomStrengthMultiplier = 0.5f;
 
             Console.WriteLine("Done loading");
-            _stateMachine.Transition(Keys.A);
+            _stateMachine.Transition(GameState.MainMenu);
         }
 
         private void Window_TextInput(object sender, TextInputEventArgs e)
         {
-            if(e.Key == Keys.Escape && gameStarted)
+            if(e.Key == Keys.Escape && GameManager.IsGameRunning)
             {
-                _stateMachine.Transition(e.Key);
+                _stateMachine.Transition(GameState.MainMenu);
             }
         }
 
@@ -252,18 +268,19 @@ namespace TerminalGame
             {
                 case "New Game":
                     {
-                        _stateMachine.Transition(Keys.Attn);
+                        _stateMachine.Transition(GameState.GameLoading);
                         _loadingThread = new Thread(new ThreadStart(StartNewGame));
                         _loadingThread.Start();
                         break;
                     }
                 case "Load Game":
                     {
+                        _stateMachine.Transition(GameState.LoadMenu);
                         break;
                     }
                 case "Settings":
                     {
-                        _stateMachine.Transition(Keys.Apps);
+                        _stateMachine.Transition(GameState.SettingsMenu);
                         break;
                     }
                 case "Quit Game":
@@ -340,6 +357,8 @@ namespace TerminalGame
             int thirdHeight = _graphics.PreferredBackBufferHeight / 3;
             int tqWidth = Convert.ToInt32(_graphics.PreferredBackBufferWidth * 0.75);
 
+
+            // TLDR: It's a mess... good luck!
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // MODULE SIZING: (may still need to be properly refined, as border/margin stuff relies heavily on magic numbers (bad)) //
             // Terminal is one third of the screen width minus 2px on either side (1px border + 1px margin)                         //
@@ -356,7 +375,7 @@ namespace TerminalGame
                 thirdWidth - 4, _graphics.PreferredBackBufferHeight - 4),
                 _font)
             {
-                BackgroundColor = Color.Black * 0.75f,
+                BackgroundColor = Color.Black * 0.9f,
                 BorderColor = Color.RoyalBlue,
                 HeaderColor = Color.RoyalBlue,
                 Title = "Terminal",
@@ -371,7 +390,7 @@ namespace TerminalGame
                 _graphics.PreferredBackBufferWidth - terminal.Container.Width - 7, thirdHeight - 4), 
                 computer, _fontS, NetworkNodeSpinners)
             {
-                BackgroundColor = Color.Black * 0.75f,
+                BackgroundColor = Color.Black * 0.9f,
                 BorderColor = Color.RoyalBlue,
                 HeaderColor = Color.RoyalBlue,
                 Title = "Network Map",
@@ -403,7 +422,7 @@ namespace TerminalGame
                 tqWidth - terminal.Container.Width - 7, _graphics.PreferredBackBufferHeight - networkMap.Container.Height - statusBar.Container.Height - 10), 
                 _fontL, _font)
             {
-                BackgroundColor = Color.Black * 0.75f,
+                BackgroundColor = Color.Black * 0.9f,
                 BorderColor = Color.RoyalBlue,
                 HeaderColor = Color.RoyalBlue,
                 Title = "Remote System",
@@ -418,7 +437,7 @@ namespace TerminalGame
                 _graphics.PreferredBackBufferWidth - remoteView.Container.X - remoteView.Container.Width - 5, _graphics.PreferredBackBufferHeight - networkMap.Container.Height - statusBar.Container.Height - 10), 
                 _font)
             {
-                BackgroundColor = Color.Black * 0.75f,
+                BackgroundColor = Color.Black * 0.9f,
                 BorderColor = Color.RoyalBlue,
                 HeaderColor = Color.RoyalBlue,
                 Title = "Friendly neighborhood notepad",
@@ -428,7 +447,7 @@ namespace TerminalGame
             };
 
             loadingScene.LoadItem = "Initializing...";
-
+            
             _os.Init(terminal, remoteView, networkMap, statusBar, notes);
 
             Console.WriteLine("INIT: Name:" + playerComp.Name);
@@ -437,10 +456,10 @@ namespace TerminalGame
             terminal.Init();
             Console.WriteLine("Game started");
 
-            gameStarted = true;
+            GameManager.IsGameRunning = true;
 
             MediaPlayer.Stop();
-            _stateMachine.Transition(Keys.Attn);
+            _stateMachine.Transition(GameState.GameRunning);
             MediaPlayer.Play(bgm_game);
         }
 
@@ -454,23 +473,16 @@ namespace TerminalGame
         protected override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                //MediaPlayer.Stop();
-                //if(gameState > 0)
-                //    terminal.ForceQuit();
-                //Exit();
-            }
 
-            _newState = Keyboard.GetState();
-            if(_newState != _prevState)
+            _newKbState = Keyboard.GetState();
+            if(_newKbState != _prevKbState)
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.F1))
                 {
                     bloomEnabled = !bloomEnabled;
                 }
             }
-            _prevState = _newState;
+            _prevKbState = _newKbState;
 
             KeyboardInput.Update();
 
@@ -483,13 +495,14 @@ namespace TerminalGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            GraphicsDevice.Clear(Color.Black);
             if (bloomEnabled)
             {
                 GraphicsDevice.SetRenderTarget(renderTarget);
                 _spriteBatch.Begin(blendState: BlendState.AlphaBlend);
-                GraphicsDevice.Clear(Color.Black);
                 _stateMachine.DrawState(_spriteBatch);
                 _spriteBatch.End();
+                _bloomFilter.BloomStrengthMultiplier = 1 * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds) + 1) * 0.1f + 0.5f);
                 Texture2D bloom = _bloomFilter.Draw(renderTarget, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
                 _spriteBatch.Begin(blendState: BlendState.Additive);
                 _spriteBatch.Draw(renderTarget, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
@@ -500,21 +513,10 @@ namespace TerminalGame
             else
             {
                 _spriteBatch.Begin(blendState: BlendState.AlphaBlend);
-                GraphicsDevice.Clear(Color.Black);
                 _stateMachine.DrawState(_spriteBatch);
                 _spriteBatch.End();
             }
             base.Draw(gameTime);
-        }
-
-        protected void DrawSceneToTexture(RenderTarget2D renderTarget)
-        {
-            GraphicsDevice.SetRenderTarget(renderTarget);
-            _spriteBatch.Begin(blendState: BlendState.AlphaBlend);
-            GraphicsDevice.Clear(Color.Black);
-            _stateMachine.DrawState(_spriteBatch);
-            _spriteBatch.End();
-            GraphicsDevice.SetRenderTarget(null);
         }
     }
 }

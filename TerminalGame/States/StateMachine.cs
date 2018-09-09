@@ -4,6 +4,17 @@ using Microsoft.Xna.Framework.Input;
 
 namespace TerminalGame.States
 {
+    public enum GameState
+    {
+        MainMenu,
+        SettingsMenu,
+        LoadMenu,
+        SaveMenu,
+        GameLoading,
+        NewGame,
+        GameRunning,
+    };
+
     class StateMachine
     {
         public State CurrentState { get; private set; }
@@ -13,9 +24,9 @@ namespace TerminalGame.States
             CurrentState = startState;
         }
 
-        public StateMachine Transition(Keys key)
+        public StateMachine Transition(GameState state)
         {
-            CurrentState = CurrentState.Next(key);
+            CurrentState = CurrentState.Next(state);
             return this;
         }
 
@@ -27,12 +38,6 @@ namespace TerminalGame.States
         public void UpdateState(GameTime gameTime)
         {
             CurrentState.Update(gameTime);
-        }
-
-        public void DrawTransition(SpriteBatch spriteBatch, Keys key)
-        {
-            Transition(key);
-            DrawState(spriteBatch);
         }
     }
 }

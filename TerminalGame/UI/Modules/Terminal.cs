@@ -16,6 +16,7 @@ namespace TerminalGame.UI.Modules
         private TextBox _terminalInput;
         private Rectangle _connAdd, _inputViewport, _outputViewport;
         private int _linesToDraw, _currentIndex;
+        private readonly int _maxlen;
         private string _terminalOutput, _connectedAddress;
         private List<string> _history, _output;
         private SpriteFont _terminalFont;
@@ -53,6 +54,8 @@ namespace TerminalGame.UI.Modules
             {
                 Title = "!!! UNNAMED WINDOW !!!";
             }
+            _maxlen = Container.Width / (int)_terminalFont.MeasureString("_").Length() * 2;
+            _maxlen += _maxlen / 5;
         }
 
         /// <summary>
@@ -296,6 +299,7 @@ namespace TerminalGame.UI.Modules
         /// </summary>
         public void UpdateOutput()
         {
+            BlockInput();
             List<string> tempOut = _output;
             int lines = 0;
             foreach (string s in tempOut)
@@ -323,6 +327,7 @@ namespace TerminalGame.UI.Modules
                 _terminalOutput = holder;
             }
             _output = tempOut;
+            UnblockInput();
         }
 
         public override void Update(GameTime gameTime)
@@ -370,15 +375,13 @@ namespace TerminalGame.UI.Modules
         private string TextWrap(string text)
         {
             _isMultiLine = false;
-            int maxlen = Container.Width / (int)_terminalFont.MeasureString("_").Length() * 2;
-            maxlen += maxlen / 5;
-            if (text.Length <= maxlen || text.Contains("§"))
+            if (text.Length <= _maxlen || text.Contains("§"))
                 return text;
 
             _isMultiLine = true;
-            for (int i = 0; i < (text.Length / maxlen); i++)
+            for (int i = 0; i < (text.Length / _maxlen); i++)
             {
-                text = text.Insert((i + 1) * maxlen - 1, "§\n");
+                text = text.Insert((i + 1) * _maxlen - 1, "§\n");
             }
             return text;
         }
@@ -386,14 +389,13 @@ namespace TerminalGame.UI.Modules
         private string InputWrap(string text)
         {
             _isMultiLine = false;
-            int maxlen = Container.Width / (int)_terminalFont.MeasureString("_").Length() * 2;
-            if (text.Length <= maxlen)
+            if (text.Length <= _maxlen)
                 return text;
 
             _isMultiLine = true;
-            for(int i = 0; i < (text.Length / maxlen); i++)
+            for(int i = 0; i < (text.Length / _maxlen); i++)
             {
-                 text = text.Insert((i + 1) * maxlen - 1, "§\n");
+                 text = text.Insert((i + 1) * _maxlen - 1, "§\n");
             }
             return text;
         }

@@ -19,7 +19,7 @@ namespace TerminalGame.Programs
             _player.PlayersComputer.FileSystem.ChangeDir("bin");
             if (_player.PlayersComputer.FileSystem.TryFindFile("sshnuke", false))
             {
-                _terminal.Write("\nConnecting to " + Player.GetInstance().ConnectedComputer.IP + ":ssh ");
+                _terminal.Write("\nConnecting to " + _player.ConnectedComputer.IP + ":ssh ");
                 _textToWrite = new string[]
                 {
                 ".",
@@ -35,6 +35,17 @@ namespace TerminalGame.Programs
 
                 for(int i = 0; i<_textToWrite.Length; i++)
                 {
+                    if(i == 3)
+                    {
+                        if (!_player.ConnectedComputer.CheckPortOpen(22))
+                        {
+                            Thread.Sleep((int)(500 * _playerComp.Speed));
+                            _terminal.WritePartialLine(" failed.");
+                            _terminal.Write("\nsshnuke: error: port 22 not open");
+                            _terminal.UnblockInput();
+                            return 1;
+                        }
+                    }
                     if (_textToWrite[i].Contains("\n"))
                         _terminal.Write(_textToWrite[i]);
                     else

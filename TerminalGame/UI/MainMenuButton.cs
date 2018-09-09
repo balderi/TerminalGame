@@ -61,7 +61,7 @@ namespace TerminalGame.UI
 
                 if (_isHovering)
                 {
-                    spriteBatch.Draw(_texture, new Rectangle(Rectangle.X + 2 + TestClass.ShakeStuff(3), Rectangle.Y + 2 + TestClass.ShakeStuff(3), Rectangle.Width - 4, Rectangle.Height - 4), Color.Green);
+                    spriteBatch.Draw(_texture, new Rectangle(Rectangle.X + TestClass.ShakeStuff(2), Rectangle.Y + TestClass.ShakeStuff(2), Rectangle.Width, Rectangle.Height), Color.Green);
                 }
                 else
                 {

@@ -16,16 +16,11 @@ namespace TerminalGame.States
 
         private GameLoadingState() { }
 
-        public override State Next(Keys key)
+        public override State Next(GameState state)
         {
-            if (key == Keys.Attn)
-                return Next();
+            if (state == GameState.GameRunning)
+                return GameRunningState.Instance;
             return this;
-        }
-
-        public override State Next()
-        {
-            return GameRunningState.Instance;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
