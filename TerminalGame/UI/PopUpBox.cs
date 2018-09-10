@@ -26,8 +26,9 @@ namespace TerminalGame.UI
         /// <param name="graphicsDevice">GraphicsDevice used to render</param>
         public PopUpBox(string text, Rectangle container, SpriteFont font, Color fontColor, Color backColor, Color borderColor, GraphicsDevice graphicsDevice)
         {
-            this.Text = text;
-            this.Container = container;
+            Text = text;
+            Location = container.Location;
+            Container = container;
             _font = font;
             _fontColor = fontColor;
             _backColor = backColor;
@@ -39,23 +40,24 @@ namespace TerminalGame.UI
         /// <summary>
         /// Creates an auto-sizing pop-up box with info
         /// </summary>
-        /// <param name="Text">Pop-up box text</param>
-        /// <param name="Location">Specifies position of Pop-up box</param>
-        /// <param name="Font">Font used to draw Pop-up box text</param>
-        /// <param name="FontColor">Text color</param>
-        /// <param name="BackColor">Pop-up box color</param>
-        /// <param name="BorderColor">Pop-up box color when hovering</param>
-        /// <param name="GraphicsDevice">GraphicsDevice used to render</param>
-        public PopUpBox(string Text, Point Location, SpriteFont Font, Color FontColor, Color BackColor, Color BorderColor, GraphicsDevice GraphicsDevice)
+        /// <param name="text">Pop-up box text</param>
+        /// <param name="location">Specifies position of Pop-up box</param>
+        /// <param name="font">Font used to draw Pop-up box text</param>
+        /// <param name="fontColor">Text color</param>
+        /// <param name="backColor">Pop-up box color</param>
+        /// <param name="borderColor">Pop-up box color when hovering</param>
+        /// <param name="graphicsDevice">GraphicsDevice used to render</param>
+        public PopUpBox(string text, Point location, SpriteFont font, Color fontColor, Color backColor, Color borderColor, GraphicsDevice graphicsDevice)
         {
-            this.Text = Text;
-            _font = Font;
-            _fontColor = FontColor;
-            _backColor = BackColor;
-            _borderColor = BorderColor;
-            _backgroundTexture = Drawing.DrawBlankTexture(GraphicsDevice);
-            _borderTexture = Drawing.DrawBlankTexture(GraphicsDevice);
-            Container = new Rectangle(Location.X, Location.Y, (int)_font.MeasureString(Text).Length() + 20, (int)_font.MeasureString(Text).Y + 10);
+            Text = text;
+            Location = location;
+            _font = font;
+            _fontColor = fontColor;
+            _backColor = backColor;
+            _borderColor = borderColor;
+            _backgroundTexture = Drawing.DrawBlankTexture(graphicsDevice);
+            _borderTexture = Drawing.DrawBlankTexture(graphicsDevice);
+            Container = new Rectangle(Location.X, Location.Y, (int)_font.MeasureString(text).Length() + 20, (int)_font.MeasureString(text).Y + 10);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -75,7 +77,7 @@ namespace TerminalGame.UI
 
         public void Update(GameTime gameTime)
         {
-
+            Container = new Rectangle(Location.X, Location.Y, (int)_font.MeasureString(Text).Length() + 20, (int)_font.MeasureString(Text).Y + 10);
         }
     }
 }

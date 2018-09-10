@@ -29,6 +29,7 @@ namespace TerminalGame.UI.Modules
         private readonly SpriteFont _spriteFont;
         private Point _size;
         private Rectangle _cont;
+        private readonly GameWindow _gameWindow;
 
         /// <summary>
         /// Constructor for the NetworkMap module. Draws a map of computers on the net.
@@ -38,8 +39,9 @@ namespace TerminalGame.UI.Modules
         /// <param name="texture">Texture for the window</param>
         /// <param name="font">Font used for the node labels (the infoboxes that pops up when hovering over a node)</param>
         /// <param name="nodeSpinners">Dictionary of \"spinners\" denoting points of interest on the map</param>
-        public NetworkMap(GraphicsDevice graphics, Rectangle container, Texture2D texture, SpriteFont font, Dictionary<string, Texture2D> nodeSpinners) : base(graphics, container)
+        public NetworkMap(GameWindow gameWindow, GraphicsDevice graphics, Rectangle container, Texture2D texture, SpriteFont font, Dictionary<string, Texture2D> nodeSpinners) : base(graphics, container)
         {
+            _gameWindow = gameWindow;
             _size = new Point(32, 32);
             _spriteFont = font;
             _rnd = new Random(DateTime.Now.Millisecond);
@@ -51,8 +53,9 @@ namespace TerminalGame.UI.Modules
                 bool intersects = true;
                 while (intersects)
                 {
-                    Point position = new Point(_rnd.Next(container.X + 15, container.X + container.Width - 115), _rnd.Next(container.Y + 25, container.Y + container.Height - 50));
+                    Point position = new Point(_rnd.Next(container.X + 15, container.X + container.Width - _size.Y - 10), _rnd.Next(container.Y + 25, container.Y + container.Height - 50));
                     _cont = new Rectangle(position, _size);
+
                     if (_nodes.Count > 0)
                     {
                         intersects = false;
@@ -67,7 +70,7 @@ namespace TerminalGame.UI.Modules
                         intersects = false;
                     }
                 }
-                NetworkNode n = new NetworkNode(texture, c, _cont, new PopUpBox(c.Name + "\n" + c.IP, new Point(0,0), _spriteFont, Color.White, Color.Black * 0.5f, Color.White, graphics), nodeSpinners);
+                NetworkNode n = new NetworkNode(texture, c, _cont, new PopUpBox(c.Name + "\n" + c.IP, new Rectangle(_cont.X + _cont.Width + 10, _cont.Y - 5, 0, 0), _spriteFont, Color.White, Color.Black * 0.5f, Color.White, graphics), nodeSpinners);
                 _nodes.Add(n);
                 n.Click += OnNodeClick;
                 n.Hover += OnNodeHover;
@@ -124,7 +127,9 @@ namespace TerminalGame.UI.Modules
                 foreach (NetworkNode node in _nodes)
                 {
                     if (node.IsHovering)
+                    {
                         node.InfoBox.Draw(spriteBatch);
+                    }
                 }
 
                 Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
@@ -141,6 +146,10 @@ namespace TerminalGame.UI.Modules
         {
             foreach (NetworkNode node in _nodes)
             {
+                if (node.InfoBox.Container.X + node.InfoBox.Container.Width >= _gameWindow.ClientBounds.Width - 10)
+                {
+                    node.InfoBox.Location = new Point(node.Position.X - node.InfoBox.Container.Width - 10, node.Position.Y);
+                }
                 node.Update(gameTime);
             }
         }
@@ -151,7 +160,10 @@ namespace TerminalGame.UI.Modules
             {
                 Hover.Play(0.25f, 1f, 0f);
             }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private void OnNodeClick(NodeClickedEventArgs e)
@@ -163,7 +175,10 @@ namespace TerminalGame.UI.Modules
             {
                 Click.Play(0.25f, 1f, 0f);
             }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private void OnNodeHover(NodeHoverEventArgs e)

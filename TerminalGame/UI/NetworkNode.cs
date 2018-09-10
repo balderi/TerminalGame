@@ -113,6 +113,7 @@ namespace TerminalGame.UI
             _connectedSpinnerColor = _connectedColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 2) + 1) * 0.5f + 0.2f);
             _playerSpinnerColor = _playerColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1) + 1) * 0.5f + 0.2f);
             _hoverSpinnerColor = _hoverColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1.5) + 1) * 0.5f + 0.2f);
+            InfoBox.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)

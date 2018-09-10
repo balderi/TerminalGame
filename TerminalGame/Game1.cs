@@ -385,7 +385,7 @@ namespace TerminalGame
             };
 
             Console.WriteLine("Loading networkmap...");
-            networkMap = new NetworkMap(GraphicsDevice, 
+            networkMap = new NetworkMap(Window, GraphicsDevice, 
                 new Rectangle(terminal.Container.Width + 5, _graphics.PreferredBackBufferHeight - thirdHeight + 2, 
                 _graphics.PreferredBackBufferWidth - terminal.Container.Width - 7, thirdHeight - 4), 
                 computer, _fontS, NetworkNodeSpinners)
