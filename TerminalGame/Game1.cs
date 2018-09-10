@@ -158,28 +158,33 @@ namespace TerminalGame
             _fontXL = Content.Load<SpriteFont>("Fonts/terminalFontXL");
             Console.Write(".");
             _menuFont = Content.Load<SpriteFont>("Fonts/terminalFontL");
+            Console.Write(".");
             Console.WriteLine("Done");
             
             Console.Write("Loading music");
             bgm_game = Content.Load<Song>("Audio/Music/ambientbgm1_2");
+            Console.Write(".");
             bgm_menu = Content.Load<Song>("Audio/Music/mainmenu");
+            Console.Write(".");
             MediaPlayer.Play(bgm_menu);
+            Console.Write(".");
             Console.WriteLine("Done");
 
-            Console.WriteLine("Loading audio");
+            Console.Write("Loading audio");
             networkMapNodeHover = Content.Load<SoundEffect>("Audio/Sounds/interface4");
+            Console.Write(".");
             networkMapNodeClick = Content.Load<SoundEffect>("Audio/Sounds/click1");
+            Console.Write(".");
             Console.WriteLine("Done");
 
             FontManager.SetFonts(_fontXS, _fontS, _font, _fontL, _fontXL);
             
-            Window.TextInput += Window_TextInput;
-
             _load = new LoadingScreen(FontManager.GetFont(FontManager.FontSize.Large), FontManager.GetFont(FontManager.FontSize.Small));
 
-            Console.WriteLine("Loading textures");
+            Console.Write("Loading textures");
             bgR = new Rectangle(new Point(0, 0), new Point(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight));
             //bg = Content.Load<Texture2D>("Textures/bg");
+            Console.Write(".");
 
             backgrounds = new Texture2D[]
             {
@@ -188,18 +193,28 @@ namespace TerminalGame
                 Content.Load<Texture2D>("Textures/bg3"),
                 Content.Load<Texture2D>("Textures/bg4"),
             };
+            Console.Write(".");
 
             computer = Content.Load<Texture2D>("Textures/nmapComputer");
+            Console.Write(".");
 
             // Various markers for the networkmap
             spinner01 = Content.Load<Texture2D>("Textures/spinner01");
+            Console.Write(".");
             spinner02 = Content.Load<Texture2D>("Textures/spinner02");
+            Console.Write(".");
             spinner03 = Content.Load<Texture2D>("Textures/spinner03");
+            Console.Write(".");
             spinner04 = Content.Load<Texture2D>("Textures/spinner04");
+            Console.Write(".");
             spinner05 = Content.Load<Texture2D>("Textures/spinner05");
+            Console.Write(".");
             spinner06 = Content.Load<Texture2D>("Textures/spinner06");
+            Console.Write(".");
             spinner07 = Content.Load<Texture2D>("Textures/spinner07");
+            Console.Write(".");
             spinner08 = Content.Load<Texture2D>("Textures/spinner08");
+            Console.Write(".");
 
             NetworkNodeSpinners = new Dictionary<string, Texture2D>()
             {
@@ -212,19 +227,29 @@ namespace TerminalGame
                 { "07", spinner07 },
                 { "HoverSpinner", spinner08 },
             };
+            Console.Write(".");
 
             bg = backgrounds[_random.Next(0, backgrounds.Length)];
+            Console.Write(".");
+            Console.WriteLine("Done");
 
-            Console.WriteLine("Loading scenes...");
+            Console.Write("Loading scenes");
             mainMenuScene = new MenuScene(GameTitle, Window, FontManager.GetFont(FontManager.FontSize.Large), FontManager.GetFont(FontManager.FontSize.XLarge), GraphicsDevice, _stateMachine);
+            Console.Write(".");
             mainMenuScene.ButtonClicked += MainMenu_ButtonClicked;
+            Console.Write(".");
             loadGameMenuScene = new LoadGameScene(Window, FontManager.GetFont(FontManager.FontSize.Large), FontManager.GetFont(FontManager.FontSize.XLarge), GraphicsDevice, _stateMachine);
+            Console.Write(".");
             settingsMenuScene = new SettingsScene(Window, FontManager.GetFont(FontManager.FontSize.Large), FontManager.GetFont(FontManager.FontSize.XLarge), GraphicsDevice, _stateMachine);
+            Console.Write(".");
             loadingScene = new LoadingScene(new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2), Window, GraphicsDevice);
+            Console.Write(".");
             gameScene = new GameScene(bg, bgR, _stateMachine);
+            Console.Write(".");
 
             SceneManager.SetScenes(mainMenuScene, settingsMenuScene, loadGameMenuScene, loadingScene, gameScene);
-            
+            Console.Write(".");
+            Console.WriteLine("Done");
             //Load our Bloomfilter!
             _bloomFilter = new BloomFilter();
             _bloomFilter.Load(GraphicsDevice, Content, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
@@ -236,14 +261,6 @@ namespace TerminalGame
 
             Console.WriteLine("Done loading");
             _stateMachine.Transition(GameState.MainMenu);
-        }
-
-        private void Window_TextInput(object sender, TextInputEventArgs e)
-        {
-            if(e.Key == Keys.Escape && GameManager.IsGameRunning)
-            {
-                _stateMachine.Transition(GameState.MainMenu);
-            }
         }
 
         /// <summary>
@@ -263,7 +280,6 @@ namespace TerminalGame
         /// <param name="e">Contains the text of the pressed button</param>
         private void MainMenu_ButtonClicked(UI.ButtonPressedEventArgs e)
         {
-            Console.WriteLine("e: " + e.Button);
             switch(e.Button)
             {
                 case "New Game":
@@ -450,9 +466,6 @@ namespace TerminalGame
             
             _os.Init(terminal, remoteView, networkMap, statusBar, notes);
 
-            Console.WriteLine("INIT: Name:" + playerComp.Name);
-            Console.WriteLine("INIT: Connect: " + playerComp.IsPlayerConnected);
-            Console.WriteLine("CHK: Connect: " + (Player.GetInstance().PlayersComputer != null).ToString());
             terminal.Init();
             Console.WriteLine("Game started");
 
@@ -462,9 +475,7 @@ namespace TerminalGame
             _stateMachine.Transition(GameState.GameRunning);
             MediaPlayer.Play(bgm_game);
         }
-
         
-
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.

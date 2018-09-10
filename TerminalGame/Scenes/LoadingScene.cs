@@ -14,10 +14,10 @@ namespace TerminalGame.Scenes
         public string LoadItem { get; set; }
 
         private SpriteFont _largeFont, _smallFont;
-        private string _loading;
+        private readonly string _loading;
         private Vector2 _loadCenter, _itemCenter, _screenCenter;
         private GameWindow _gameWindow;
-        private GraphicsDevice _graphics;
+        private readonly GraphicsDevice _graphics;
 
         public LoadingScene(Vector2 screenCenter, GameWindow gameWindow, GraphicsDevice graphics)
         {

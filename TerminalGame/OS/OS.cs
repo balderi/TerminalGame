@@ -18,7 +18,7 @@ namespace TerminalGame.OS
         
         private OS()
         {
-            
+            System.Console.WriteLine("Starting OS");
         }
 
         public void Init(Terminal terminal, RemoteView remoteView, NetworkMap networkmap, StatusBar statusBar, NotesModule notes)

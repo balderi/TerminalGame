@@ -33,7 +33,6 @@ namespace TerminalGame.UI
         public MainMenuButton(string Text, int Width, int Height, SpriteFont Font, GraphicsDevice GraphicsDevice)
         {
             _font = Font;
-            Console.WriteLine("Button '" + Text + "' font loaded");
             _text = Text;
             _width = Width;
             _height = Height;

@@ -85,7 +85,6 @@ namespace TerminalGame.Computers
         {
             if (GoingHome)
             {
-                Console.WriteLine("*** CONN: GOING HOME");
                 Player.GetInstance().ConnectedComputer = this;
                 IsPlayerConnected = true;
             }
@@ -95,7 +94,6 @@ namespace TerminalGame.Computers
                 Player.GetInstance().ConnectedComputer = this;
                 IsPlayerConnected = true;
             }
-            Console.WriteLine("CONN: Calling Connected?.Invoke with IP:" + IP + " and PHR: " + PlayerHasRoot.ToString());
             Connected?.Invoke(null, new ConnectEventArgs(IP, PlayerHasRoot));
             Console.WriteLine("CONN: Connected to " + IP);
         }
@@ -107,17 +105,11 @@ namespace TerminalGame.Computers
         public void Disconnect(bool reconnect = false)
         {
             IsPlayerConnected = false;
-
-            Console.WriteLine("DISC: Calling Disconnected?.Invoke");
+            
             Disonnected?.Invoke(null, new ConnectEventArgs(IP, PlayerHasRoot));
             Console.WriteLine("DISC: Disconnecting from " + IP);
-            if (reconnect)
+            if (!reconnect)
             {
-                Console.WriteLine("DISC: RECONNECT");
-            }
-            else
-            {
-                Console.WriteLine("*** DISC: GOING HOME");
                 Player.GetInstance().PlayersComputer.Connect(true);
             }
         }
@@ -173,8 +165,6 @@ namespace TerminalGame.Computers
         {
             if (!LinkedComputers.Contains(computer))
                 LinkedComputers.Add(computer);
-            //if (!computer.LinkedComputers.Contains(this))
-            //    computer.Link(this);
         }
 
         /// <summary>

@@ -19,7 +19,6 @@ namespace TerminalGame.Utilities
             Player _player = Player.GetInstance();
             OS.OS _os = OS.OS.GetInstance();
             UI.Modules.Terminal _terminal = _os.Terminal;
-            OS.Programs _programs = OS.Programs.GetInstance();
 
             var _data = input.Trim(' ').Split();
 
@@ -77,7 +76,7 @@ namespace TerminalGame.Utilities
                         if (_data.Length > 1 && input.Contains("\""))
                         {
                             string output = input.Split('"')[1];
-                            _programs.echo(output);
+                            _terminal.Write("\n" + output);
                             return "\n" + output;
                         }
                         return "\n";

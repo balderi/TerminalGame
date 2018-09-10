@@ -93,7 +93,6 @@
     <Compile Include="Programs\Cat.cs" />
     <Compile Include="Programs\Cd.cs" />
     <Compile Include="Programs\Connect.cs" />
-    <Compile Include="OS\Programs.cs" />
     <Compile Include="Programs\Disconnect.cs" />
     <Compile Include="Programs\Help.cs" />
     <Compile Include="Programs\Ls.cs" />

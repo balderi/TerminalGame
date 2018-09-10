@@ -16,7 +16,8 @@ namespace TerminalGame.Scenes
         public Texture2D Background { get; private set; }
         private Rectangle _bgRect;
         private Color _bgColor;
-        readonly StateMachine _stateMachine;
+        private bool _prevKbState, _newKbState;
+        private readonly StateMachine _stateMachine;
 
         public GameScene(Texture2D background, Rectangle bgRect, StateMachine stateMachine)
         {
@@ -36,6 +37,15 @@ namespace TerminalGame.Scenes
         {
             //_bgColor = Color.White * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds) + 1) * 0.5f + 0.75f);
             OS.OS.GetInstance().Update(gameTime);
+            _newKbState = Keyboard.GetState().IsKeyDown(Keys.Escape);
+            if (_newKbState != _prevKbState)
+            {
+                if (Keyboard.GetState().IsKeyUp(Keys.Escape))
+                {
+                    _stateMachine.Transition(GameState.MainMenu);
+                }
+            }
+            _prevKbState = _newKbState;
         }
     }
 }

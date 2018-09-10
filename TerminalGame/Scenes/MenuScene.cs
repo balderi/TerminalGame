@@ -23,7 +23,7 @@ namespace TerminalGame.Scenes
         private SpriteFont _titleFont;
         private GameWindow _gameWindow;
         private readonly GraphicsDevice _graphics;
-        KeyboardState _prevKbState, _newKbState;
+        bool _prevKbState, _newKbState;
         readonly StateMachine _stateMachine;
 
         public MenuScene(string GameTitle, GameWindow gameWindow, SpriteFont buttonFont, SpriteFont titleFont, GraphicsDevice graphics, StateMachine stateMachine)
@@ -93,10 +93,10 @@ namespace TerminalGame.Scenes
 
         public void Update(GameTime gameTime)
         {
-            _newKbState = Keyboard.GetState();
-            if (_newKbState != _prevKbState)
+            _newKbState = Keyboard.GetState().IsKeyDown(Keys.Escape);
+            if (_newKbState != _prevKbState && GameManager.IsGameRunning)
             {
-                if (GameManager.IsGameRunning && Keyboard.GetState().IsKeyDown(Keys.Escape))
+                if (Keyboard.GetState().IsKeyUp(Keys.Escape))
                 {
                     _stateMachine.Transition(GameState.GameRunning);
                 }

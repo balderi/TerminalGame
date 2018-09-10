@@ -18,9 +18,9 @@ namespace TerminalGame.Scenes
         private readonly SpriteFont _font;
         private readonly GameWindow _gameWindow;
         private readonly GraphicsDevice _graphics;
-        KeyboardState _prevKbState, _newKbState;
-        readonly StateMachine _stateMachine;
-        MainMenuButton backButton;
+        private bool _prevKbState, _newKbState;
+        private readonly StateMachine _stateMachine;
+        private MainMenuButton backButton;
 
         public LoadGameScene(GameWindow gameWindow, SpriteFont buttonFont, SpriteFont font, GraphicsDevice graphics, StateMachine stateMachine)
         {
@@ -51,10 +51,10 @@ namespace TerminalGame.Scenes
         public void Update(GameTime gameTime)
         {
             backButton.Update();
-            _newKbState = Keyboard.GetState();
+            _newKbState = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (_newKbState != _prevKbState)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                if (Keyboard.GetState().IsKeyUp(Keys.Escape))
                 {
                     _stateMachine.Transition(GameState.MainMenu);
                 }
