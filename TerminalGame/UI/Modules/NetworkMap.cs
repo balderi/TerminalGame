@@ -11,8 +11,6 @@ namespace TerminalGame.UI.Modules
 {
     class NetworkMap : Module
     {
-        //TODO: Make sure the info box stays inside game window
-
         public override SpriteFont Font { get; set; }
         public override Color BackgroundColor { get; set; }
         public override Color BorderColor { get; set; }
@@ -70,7 +68,7 @@ namespace TerminalGame.UI.Modules
                         intersects = false;
                     }
                 }
-                NetworkNode n = new NetworkNode(texture, c, _cont, new PopUpBox(c.Name + "\n" + c.IP, new Rectangle(_cont.X + _cont.Width + 10, _cont.Y - 5, 0, 0), _spriteFont, Color.White, Color.Black * 0.5f, Color.White, graphics), nodeSpinners);
+                NetworkNode n = new NetworkNode(texture, c, _cont, new PopUpBox(c.Name + "\n" + c.IP, new Point(_cont.X + _cont.Width + 10, _cont.Y - 5), _spriteFont, Color.White, Color.Black * 0.5f, Color.White, graphics), nodeSpinners);
                 _nodes.Add(n);
                 n.Click += OnNodeClick;
                 n.Hover += OnNodeHover;
@@ -148,7 +146,7 @@ namespace TerminalGame.UI.Modules
             {
                 if (node.InfoBox.Container.X + node.InfoBox.Container.Width >= _gameWindow.ClientBounds.Width - 10)
                 {
-                    node.InfoBox.Location = new Point(node.Position.X - node.InfoBox.Container.Width - 10, node.Position.Y);
+                    node.InfoBox.ChangeLocation(new Point(node.Position.X - node.InfoBox.Container.Width - 10, node.Position.Y));
                 }
                 node.Update(gameTime);
             }

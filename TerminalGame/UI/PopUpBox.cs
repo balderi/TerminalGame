@@ -57,7 +57,7 @@ namespace TerminalGame.UI
             _borderColor = borderColor;
             _backgroundTexture = Drawing.DrawBlankTexture(graphicsDevice);
             _borderTexture = Drawing.DrawBlankTexture(graphicsDevice);
-            Container = new Rectangle(Location.X, Location.Y, (int)_font.MeasureString(text).Length() + 20, (int)_font.MeasureString(text).Y + 10);
+            Container = new Rectangle(Location.X, Location.Y, (int)_font.MeasureString(Text).Length() + 20, (int)_font.MeasureString(Text).Y + 10);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -77,6 +77,12 @@ namespace TerminalGame.UI
 
         public void Update(GameTime gameTime)
         {
+
+        }
+
+        public void ChangeLocation(Point location)
+        {
+            Location = location;
             Container = new Rectangle(Location.X, Location.Y, (int)_font.MeasureString(Text).Length() + 20, (int)_font.MeasureString(Text).Y + 10);
         }
     }
