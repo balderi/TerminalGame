@@ -26,10 +26,7 @@ namespace TerminalGame.Computers.FileSystems
             }
         }
 
-        private File FindRoot(File sourceDir)
-        {
-            return sourceDir.Parent.Parent != sourceDir.Parent ? FindRoot(sourceDir.Parent) : sourceDir.Parent;
-        }
+        private File FindRoot(File sourceDir) => sourceDir.Parent.Parent != sourceDir.Parent ? FindRoot(sourceDir.Parent) : sourceDir.Parent;
 
         public File FindFile(string name, bool isDir, bool fromRoot = false)
         {
@@ -141,10 +138,7 @@ namespace TerminalGame.Computers.FileSystems
             CurrentDir.Children.Add(f);
         }
 
-        public string ListFiles()
-        {
-            return ListFiles(CurrentDir);
-        }
+        public string ListFiles() => ListFiles(CurrentDir);
 
         private string ListFiles(File directory)
         {
@@ -154,10 +148,11 @@ namespace TerminalGame.Computers.FileSystems
             // i.e. The output can overlay the input field
             directory.Children.Sort();
             string retval = "";
+
+            retval += "\n    <DIR>    .§"; // current directory
             if (directory.Parent != CurrentDir)
             {
-                retval += "\n    <DIR>    .§";
-                retval += "\n    <DIR>    ..§";
+                retval += "\n    <DIR>    ..§"; // parent directory
             }
             
             foreach (File f in directory.Children)

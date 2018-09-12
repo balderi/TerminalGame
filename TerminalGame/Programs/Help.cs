@@ -27,6 +27,8 @@
                             "\n    Show the IP address of the computer§" +
                             "\n  clear / cls§" +
                             "\n    Clear the terminal§" +
+                            "\n  nmap§" +
+                            "\n    Scan a system for open ports§" +
                             "\n  sshnuke§" +
                             "\n    Gain root access on another system§" +
                             "\n  note [OPTIONS] [TEXT OR NOTE ID]§" +

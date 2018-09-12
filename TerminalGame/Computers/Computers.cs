@@ -23,7 +23,7 @@ namespace TerminalGame.Computers
         /// <summary>
         /// Generates fixed and random computers and adds them to the computerList.
         /// </summary>
-        public static void DoComputers()
+        public static void DoComputers(int amount)
         {
             computerList = new List<Computer>();
             Computer c1 = new Computer(Computer.Type.Workstation, "123.123.123.123", "TestComputer", "abc123");
@@ -40,7 +40,7 @@ namespace TerminalGame.Computers
             c2.Link(c3);
             c3.Link(c4);
 
-            for (int i = 0; i < 25; i++)
+            for (int i = 0; i < amount; i++)
             {
                 Computer c = new Computer(Computer.Type.Workstation, IPgen(), "Workstation" + i, Passwords.GeneratePassword());
                 computerList.Add(c);

@@ -359,7 +359,7 @@ namespace TerminalGame
             playerComp.SetSpeed(1.0f);
 
             Console.WriteLine("Setting up computers...");
-            Computers.Computers.DoComputers();
+            Computers.Computers.DoComputers(50);
             Computers.Computers.computerList.Add(playerComp);
 
             playerComp.GetRoot();

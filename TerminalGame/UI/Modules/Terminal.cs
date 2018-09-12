@@ -10,7 +10,6 @@ namespace TerminalGame.UI.Modules
 {
     class Terminal : Module
     {
-        // TODO: Fix multiple external writes to the same line acting as seperate line when removed (breaks terminal)
         // TODO: Add command queue for when input is blocked by running program (maybe, might be dumb)
 
         private TextBox _terminalInput;
@@ -294,6 +293,7 @@ namespace TerminalGame.UI.Modules
             }
         }
 
+        // TODO: BUG: Something breaks during enumeration sometimes.
         /// <summary>
         /// Writes new text to the terminal. Adds any entered commands to the history.
         /// </summary>
