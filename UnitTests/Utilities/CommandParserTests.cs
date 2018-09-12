@@ -14,7 +14,7 @@ namespace TerminalGame.Utilities.Tests
             computer.GetRoot();
             computer.Connect(true);
             player.PlayersComputer = computer;
-            Computers.Computers.DoComputers();
+            Computers.Computers.DoComputers(10);
             Computers.Computers.computerList.Add(computer);
         }
 
