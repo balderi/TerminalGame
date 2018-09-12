@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using TerminalGame.Computers;
 
 namespace TerminalGame.Programs
 {
@@ -7,9 +8,8 @@ namespace TerminalGame.Programs
     {
         private static Player _player = Player.GetInstance();
         private static OS.OS _os = OS.OS.GetInstance();
+        private static Computer _playerComp = Player.GetInstance().PlayersComputer;
         private static UI.Modules.Terminal _terminal = _os.Terminal;
-        private static Timer _timer;
-        private static int _count;
         private static string[] _textToWrite;
         private static string _ip;
 
@@ -27,51 +27,46 @@ namespace TerminalGame.Programs
                     return;
                 }
 
-                var autoEvent = new AutoResetEvent(false);
-                _count = 0;
-
                 _textToWrite = new string[]
                 {
                     "\nEstablishing connection to " + ip,
                     ".",
                     ".",
-                    ".§"
+                    "."
                 };
 
                 _os.NetworkMap.IsActive = false;
-
-                _timer = new Timer(ConnectionWriter, autoEvent, 100, 500);
-            }
-            else
-            {
-                _terminal.Write("\nUsage: connect [IP]");
-                return;
-            }
-        }
-
-        private static void ConnectionWriter(Object stateInfo)
-        {
-            AutoResetEvent autoEvent = (AutoResetEvent)stateInfo;
-            _terminal.Write(_textToWrite[_count++]);
-            if (_count == _textToWrite.Length)
-            {
                 bool conn = false;
-                foreach (Computers.Computer c in Computers.Computers.computerList)
+
+                for (int i = 0; i < _textToWrite.Length; i++)
+                {
+                    if (_textToWrite[i].Contains("\n"))
+                        _terminal.Write(_textToWrite[i]);
+                    else
+                        _terminal.WritePartialLine(_textToWrite[i]);
+                    Thread.Sleep((int)(500 * _playerComp.Speed));
+                }
+
+                foreach (Computer c in Computers.Computers.computerList)
                 {
                     if (_ip == c.IP || _ip == c.Name)
                     {
                         conn = true;
                         c.Connect(false);
                         _terminal.Write("\nConnection established");
-                        _os.NetworkMap.IsActive = true;
                     }
                 }
-                if(!conn)
+
+                if (!conn)
                     _terminal.Write("\nCould not connect to " + _ip);
+
+                _os.NetworkMap.IsActive = true;
                 _terminal.UnblockInput();
-                _count = 0;
-                autoEvent.Set();
-                _timer.Dispose();
+            }
+            else
+            {
+                _terminal.Write("\nUsage: connect [IP]");
+                return;
             }
         }
     }

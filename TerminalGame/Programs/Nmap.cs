@@ -31,7 +31,6 @@ namespace TerminalGame.Programs
                 _player.PlayersComputer.FileSystem.ChangeDir("/");
                 if (String.IsNullOrEmpty(ip))
                 {
-                    Console.WriteLine("** WARN: nmap IP was NULL or EMPTY");
                     _remoteComp = _player.ConnectedComputer;
                     ip = _remoteComp.Name;
                 }

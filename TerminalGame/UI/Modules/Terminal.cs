@@ -302,10 +302,17 @@ namespace TerminalGame.UI.Modules
             BlockInput();
             List<string> tempOut = _output;
             int lines = 0;
-            foreach (string s in tempOut)
+            try
             {
-                if (s.Contains("\n"))
-                    lines++;
+                foreach (string s in tempOut)
+                {
+                    if (s.Contains("\n"))
+                        lines++;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
             while (lines > _linesToDraw - 1)
             {
@@ -320,9 +327,16 @@ namespace TerminalGame.UI.Modules
             if (_output.Count > 0)
             {
                 string holder = "";
-                foreach (string s in tempOut)
+                try
                 {
-                    holder += s;
+                    foreach (string s in tempOut)
+                    {
+                        holder += s;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
                 }
                 _terminalOutput = holder;
             }

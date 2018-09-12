@@ -149,6 +149,9 @@ namespace TerminalGame.Computers.FileSystems
         private string ListFiles(File directory)
         {
             //Sorts alphabetically
+
+            // TODO: BUG: Something causes the terminal to skip removing the last line when text is giong off screen
+            // i.e. The output can overlay the input field
             directory.Children.Sort();
             string retval = "";
             if (directory.Parent != CurrentDir)
