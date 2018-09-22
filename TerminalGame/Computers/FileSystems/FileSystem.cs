@@ -30,6 +30,9 @@ namespace TerminalGame.Computers.FileSystems
 
         public File FindFile(string name, bool isDir, bool fromRoot = false)
         {
+            if (name == ".")
+                return CurrentDir;
+
             if (name == "..")
                 return CurrentDir.Parent;
 
@@ -117,6 +120,24 @@ namespace TerminalGame.Computers.FileSystems
             }
             //else
             //    throw new Exception(directoryName + " is not a directory.");
+        }
+
+        public void AddFile(string directoryPath, string name, string contents = null)
+        {
+            string[] dirs = directoryPath.Split('\\');
+            string destinstaion = dirs[dirs.Length - 1];
+            bool isValid = true;
+
+            foreach(string dir in dirs)
+            {
+                isValid = isValid && TryFindFile(dir, true);
+            }
+            if(isValid)
+            {
+                File f = new File(name, contents);
+                f.SetParent(FindFile(destinstaion, true, true));
+                FindFile(destinstaion, true, true).Children.Add(f);
+            }
         }
 
         public void RemoveFile(File file)

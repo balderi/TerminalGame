@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 
 namespace TerminalGame.Utilities
 {
+    // TODO: Make singleton
+
     /// <summary>
     /// Command Parser
     /// </summary>
@@ -59,12 +61,6 @@ namespace TerminalGame.Utilities
                     {
                         var task = Task.Factory.StartNew(() => Programs.Placeholder.Execute());
                         Console.WriteLine("Starting new task for reboot");
-                        break;
-                    }
-                case "exit":
-                    {
-                        var task = Task.Factory.StartNew(() => Programs.Placeholder.Execute());
-                        Console.WriteLine("Starting new task for exit");
                         break;
                     }
                 case "":
@@ -244,6 +240,13 @@ namespace TerminalGame.Utilities
                     {
                         Task task = Task.Factory.StartNew(() => Programs.Help.Execute());
                         Console.WriteLine("Starting new task for help");
+                        break;
+                    }
+                case "quit":
+                case "exit":
+                    {
+                        Task task = Task.Factory.StartNew(() => Programs.Placeholder.Execute());
+                        //_terminal.ForceQuit();
                         break;
                     }
                 default:

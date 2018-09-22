@@ -413,7 +413,7 @@ namespace TerminalGame.UI.Modules
 
         public void ForceQuit()
         {
-            _output.Add("\n\nKernel panic - not syncing: Fatal exception in interrupt\n\n");
+            Write("\n\nKernel panic - not syncing: Fatal exception in interrupt\n\n");
             UpdateOutput();
         }
 
