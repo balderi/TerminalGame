@@ -94,7 +94,7 @@ namespace TerminalGame.Scenes
         public void Update(GameTime gameTime)
         {
             _newKbState = Keyboard.GetState().IsKeyDown(Keys.Escape);
-            if (_newKbState != _prevKbState && GameManager.IsGameRunning)
+            if (_newKbState != _prevKbState && GameManager.GetInstance().IsGameRunning)
             {
                 if (Keyboard.GetState().IsKeyUp(Keys.Escape))
                 {

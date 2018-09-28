@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace TerminalGame.Utilities
 {
-    // TODO: Make singleton
+    // TODO: Make singleton rather than static class (maybe?)
 
     /// <summary>
     /// Command Parser
@@ -14,8 +14,8 @@ namespace TerminalGame.Utilities
         /// <summary>
         /// Parses commands
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// <param name="input">The command string to parse</param>
+        /// <returns>Deprecated: No longer returns anything (blank string)</returns>
         public static string ParseCommand(string input)
         {
             Player _player = Player.GetInstance();

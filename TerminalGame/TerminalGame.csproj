@@ -83,6 +83,7 @@
     <Compile Include="Computers\Computers.cs" />
     <Compile Include="Computers\FileSystems\File.cs" />
     <Compile Include="Computers\FileSystems\FileSystem.cs" />
+    <Compile Include="Computers\RemoteUI.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="LoadingScreen.cs" />
     <Compile Include="Menu.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="States\LoadMenuState.cs" />
     <Compile Include="States\State.cs" />
     <Compile Include="States\StateMachine.cs" />
+    <Compile Include="UI\Checkbox.cs" />
     <Compile Include="UI\DropDownElement.cs" />
     <Compile Include="UI\DropDownMenu.cs" />
     <Compile Include="UI\MainMenuButton.cs" />

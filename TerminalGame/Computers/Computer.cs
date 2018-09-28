@@ -23,6 +23,7 @@ namespace TerminalGame.Computers
         public FileSystem FileSystem { get; private set; }
         public List<Computer> LinkedComputers { get; private set; }
         public Dictionary<int, string> OpenPorts { get; private set; }
+        public RemoteUI RemoteUI { get; private set; }
 
         public event EventHandler<ConnectEventArgs> Connected;
         public event EventHandler<ConnectEventArgs> Disonnected;
@@ -51,6 +52,18 @@ namespace TerminalGame.Computers
             IP = ip;
             Name = name;
             RootPassword = rootPassword;
+            RemoteUI = CreateRemoteUI();
+            LinkedComputers = new List<Computer>();
+            Initialize();
+        }
+
+        public Computer(Type type, string ip, string name, string rootPassword, RemoteUI remoteUI) : this(type, ip, name, rootPassword)
+        {
+            ComputerType = type;
+            IP = ip;
+            Name = name;
+            RootPassword = rootPassword;
+            RemoteUI = remoteUI;
             LinkedComputers = new List<Computer>();
             Initialize();
         }
@@ -73,7 +86,7 @@ namespace TerminalGame.Computers
             {
                 FileSystem fs = new FileSystem();
                 fs.BuildBasicFileSystem();
-                this.FileSystem = fs;
+                FileSystem = fs;
             }
         }
 
@@ -135,12 +148,9 @@ namespace TerminalGame.Computers
         public Dictionary<int,string> BuildPorts(int[] ports)
         {
             var retval = new Dictionary<int, string>();
-            int p = ports.Length;
-            string service;
-            for(int i = 0; i < p; i++)
+            foreach(int port in ports)
             {
-                service = Enum.IsDefined(typeof(KnownPorts), ports[i]) ? ((KnownPorts)ports[i]).ToString() : "Unknown";
-                retval.Add(ports[i], service);
+                retval.Add(port, Enum.IsDefined(typeof(KnownPorts), port) ? ((KnownPorts)port).ToString() : "Unknown");
             }
             return retval;
         }
@@ -153,6 +163,11 @@ namespace TerminalGame.Computers
             {
                 FileSystem.AddDir(baseDirs[i]);
             }
+        }
+
+        private RemoteUI CreateRemoteUI()
+        {
+            return new RemoteUI(this);
         }
 
         public void SetSpeed(float speed) => Speed = speed;

@@ -40,18 +40,22 @@ namespace TerminalGame.UI.Modules
                 spriteBatch.Draw(texture, Container, BackgroundColor);
                 spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
                 spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
+                ConnectedComputer.RemoteUI.Draw(spriteBatch, Container);
+                /*
                 spriteBatch.DrawString(_titleFont, _connectionName, new Vector2(Container.X + 10, Container.Y + RenderHeader().Height + 10), Color.White);
                 spriteBatch.DrawString(_subtitleFont, _connectionIP, new Vector2(Container.X + 10, _titleFont.MeasureString("A").Y + Container.Y + RenderHeader().Height + 10), Color.White);
                 spriteBatch.DrawString(_subtitleFont, _userLevel, new Vector2(_subtitleFont.MeasureString(_connectionIP).Length() + Container.X + 20, _titleFont.MeasureString("A").Y + Container.Y + RenderHeader().Height + 10), Player.GetInstance().ConnectedComputer.PlayerHasRoot ? Color.Lime : Color.Red);
+                */
             }
         }
 
         public override void Update(GameTime gameTime)
         {
             ConnectedComputer = Player.GetInstance().ConnectedComputer;
-            _connectionName = ConnectedComputer.Name;
-            _connectionIP = ConnectedComputer.IP;
-            _userLevel = ConnectedComputer.PlayerHasRoot ? "You have root access on this system" : "Access denied";
+            ConnectedComputer.RemoteUI.Update(gameTime);
+            //_connectionName = ConnectedComputer.Name;
+            //_connectionIP = ConnectedComputer.IP;
+            //_userLevel = ConnectedComputer.PlayerHasRoot ? "You have root access on this system" : "Access denied";
         }
 
         protected override Rectangle RenderHeader()

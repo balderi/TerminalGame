@@ -46,13 +46,8 @@ namespace TerminalGame.UI.Modules
 
         public bool AddNote(string text)
         {
-            if (!Notes.Contains(text))
-            {
-                Notes.Add(text);
-                return true;
-            }
-            else
-                return false;
+            Notes.Add(text);
+            return true;
         }
 
         public bool RemoveNote(int id)
@@ -87,9 +82,10 @@ namespace TerminalGame.UI.Modules
         public override void Update(GameTime gameTime)
         {
             _noteRender = "";
+            int counter = 0;
             foreach(string s in Notes)
             {
-                _id = "<Note" + Notes.IndexOf(s) + ">";
+                _id = "<Note" + counter++ + ">";
                 _divider = _bar.Substring(0, 2) + _id + _bar.Substring(0, _bar.Length - _id.Length - 3);
                 _noteRender += String.Format("{0}\n{1}\n",_divider,s);
             }

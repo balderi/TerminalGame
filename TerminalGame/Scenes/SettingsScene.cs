@@ -18,21 +18,41 @@ namespace TerminalGame.Scenes
         private readonly SpriteFont _font;
         private readonly GameWindow _gameWindow;
         private readonly GraphicsDevice _graphics;
-        bool _prevKbState, _newKbState;
-        readonly StateMachine _stateMachine;
-        MainMenuButton backButton;
+        private bool _prevKbState, _newKbState;
+        private readonly StateMachine _stateMachine;
+        private MainMenuButton _backButton, _applyButton;
+        private Checkbox _fullScreenCheckBox, _bloomCheckBox;
+        private List<Component> _components;
 
         public SettingsScene(GameWindow gameWindow, SpriteFont buttonFont, SpriteFont font, GraphicsDevice graphics, StateMachine stateMachine)
         {
+            _components = new List<Component>();
             _font = font;
             _gameWindow = gameWindow;
             _graphics = graphics;
             _stateMachine = stateMachine;
-            backButton = new MainMenuButton("< Back", 200, 50, buttonFont, _graphics)
+            _backButton = new MainMenuButton("< Back", 200, 50, buttonFont, _graphics)
             {
                 Position = new Vector2(50, _graphics.Viewport.Height - 50 - 50)
             };
-            backButton.Click += OnButtonClick;
+            _backButton.Click += OnBackButtonClick;
+            _components.Add(_backButton);
+            _applyButton = new MainMenuButton("Apply changes", 250, 50, buttonFont, _graphics)
+            {
+                Position = new Vector2(50 + 200 + 20, _graphics.Viewport.Height - 50 - 50)
+            };
+            _applyButton.Click += OnApplyButtonClick;
+            _components.Add(_applyButton);
+            _fullScreenCheckBox = new Checkbox("Full Screen", 20, buttonFont, _graphics, GameManager.GetInstance().IsFullScreen)
+            {
+                Position = new Vector2(100, 100)
+            };
+            _components.Add(_fullScreenCheckBox);
+            _bloomCheckBox = new Checkbox("Bloom", 20, buttonFont, _graphics, GameManager.GetInstance().BloomEnabled)
+            {
+                Position = new Vector2(100, 150)
+            };
+            _components.Add(_bloomCheckBox);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -45,12 +65,18 @@ namespace TerminalGame.Scenes
             spriteBatch.DrawString(_font, "Settings", position, Color.LightGray, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
 
             //spriteBatch.DrawString(_font, "SettingsScene", new Vector2(10, 10), Color.White);
-            backButton.Draw(spriteBatch);
+            foreach(Component comp in _components)
+            {
+                comp.Draw(spriteBatch);
+            }
         }
 
         public void Update(GameTime gameTime)
         {
-            backButton.Update();
+            foreach (Component comp in _components)
+            {
+                comp.Update();
+            }
             _newKbState = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (_newKbState != _prevKbState)
             {
@@ -62,9 +88,21 @@ namespace TerminalGame.Scenes
             _prevKbState = _newKbState;
         }
 
-        private void OnButtonClick(ButtonPressedEventArgs e)
+        private void OnBackButtonClick(ButtonPressedEventArgs e)
         {
             _stateMachine.Transition(GameState.MainMenu);
+        }
+
+        private void OnApplyButtonClick(ButtonPressedEventArgs e)
+        {
+            if(_fullScreenCheckBox.Checked != GameManager.GetInstance().IsFullScreen)
+            {
+                GameManager.GetInstance().ToggleFullScreen();
+            }
+            if(_bloomCheckBox.Checked != GameManager.GetInstance().BloomEnabled)
+            {
+                GameManager.GetInstance().BloomEnabled = !GameManager.GetInstance().BloomEnabled;
+            }
         }
     }
 }
