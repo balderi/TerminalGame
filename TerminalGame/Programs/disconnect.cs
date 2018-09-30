@@ -1,4 +1,6 @@
-﻿namespace TerminalGame.Programs
+﻿using TerminalGame.Utilities;
+
+namespace TerminalGame.Programs
 {
     static class Disconnect
     {
@@ -10,6 +12,7 @@
         {
             if (!_player.PlayersComputer.IsPlayerConnected)
             {
+                GameManager.GetInstance().ResetIntensity();
                 _player.ConnectedComputer.GenerateLog(_player.PlayersComputer, "disconnected");
                 _player.ConnectedComputer.Disconnect(false);
                 _terminal.Write("\nDisconnected");

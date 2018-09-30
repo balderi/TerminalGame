@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using TerminalGame.Computers;
+using TerminalGame.Utilities;
 
 namespace TerminalGame.Programs
 {
@@ -38,6 +39,8 @@ namespace TerminalGame.Programs
                 _os.NetworkMap.IsActive = false;
                 bool conn = false;
 
+                GameManager.GetInstance().UpIntensity();
+
                 for (int i = 0; i < _textToWrite.Length; i++)
                 {
                     if (_textToWrite[i].Contains("\n"))
@@ -58,7 +61,10 @@ namespace TerminalGame.Programs
                 }
 
                 if (!conn)
+                {
                     _terminal.Write("\nCould not connect to " + _ip);
+                    GameManager.GetInstance().ResetIntensity();
+                }
 
                 _os.NetworkMap.IsActive = true;
                 _terminal.UnblockInput();

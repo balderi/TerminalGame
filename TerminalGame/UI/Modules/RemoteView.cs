@@ -19,16 +19,16 @@ namespace TerminalGame.UI.Modules
         public override Rectangle Container { get; set; }
 
         private readonly SpriteFont _titleFont, _subtitleFont;
-        private string _connectionName, _connectionIP, _userLevel;
+        //private string _connectionName, _connectionIP, _userLevel;
 
         public RemoteView(GraphicsDevice graphics, Rectangle container, SpriteFont titleFont, SpriteFont subtitleFont) : base(graphics, container)
         {
             _titleFont = titleFont;
             _subtitleFont = subtitleFont;
             ConnectedComputer = Player.GetInstance().ConnectedComputer;
-            _connectionName = "";
-            _connectionIP = "";
-            _userLevel = "";
+            //_connectionName = "";
+            //_connectionIP = "";
+            //_userLevel = "";
         }
 
         public override void Draw(SpriteBatch spriteBatch)

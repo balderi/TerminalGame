@@ -58,9 +58,9 @@ namespace TerminalGame.UI
 
             CenterPosition = new Point(Position.X + Container.Width / 2, Position.Y + Container.Height / 2);
 
-            _spinnerS = new Point(40, 40);
-            _spinnerN = new Point(55, 55);
-            _spinnerL = new Point(70, 70);
+            _spinnerS = new Point((int)(container.Width * 1.25));
+            _spinnerN = new Point((int)(container.Width * 1.72));
+            _spinnerL = new Point((int)(container.Width * 2.12));
 
             _nh = new NodeHoverEventArgs()
             {
@@ -130,7 +130,6 @@ namespace TerminalGame.UI
             {
                 _currentColor = _playerColor;
                 spriteBatch.Draw(playerSpinner, new Rectangle(new Point(Container.Location.X + (Container.Width / 2), Container.Location.Y + (Container.Height / 2)), _spinnerS), null, _playerSpinnerColor, _rotationCW, new Vector2(playerSpinner.Width / 2, playerSpinner.Height / 2), SpriteEffects.None, 0);
-
             }
             if (Computer == Player.GetInstance().ConnectedComputer)
             {
@@ -145,7 +144,7 @@ namespace TerminalGame.UI
 
             }
 
-            spriteBatch.Draw(_texture, Container, _currentColor);
+            spriteBatch.Draw(_texture, Container, _currentColor * 0.9f);
         }
 
         private Texture2D SelectSpinner(string key)

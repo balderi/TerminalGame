@@ -15,7 +15,7 @@ namespace TerminalGame.UI
         private MouseState _currentMouseState, _previousMouseState;
         private bool _isHovering;
         private SpriteFont _font;
-        private string _text;
+        private readonly string _text;
         private readonly GraphicsDevice _graphics;
         private readonly int _width, _height;
         private readonly Texture2D _texture;

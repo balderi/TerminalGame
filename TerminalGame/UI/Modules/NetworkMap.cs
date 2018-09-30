@@ -40,7 +40,7 @@ namespace TerminalGame.UI.Modules
         public NetworkMap(GameWindow gameWindow, GraphicsDevice graphics, Rectangle container, Texture2D texture, SpriteFont font, Dictionary<string, Texture2D> nodeSpinners) : base(graphics, container)
         {
             _gameWindow = gameWindow;
-            _size = new Point(32, 32);
+            _size = new Point(24);
             _spriteFont = font;
             _rnd = new Random(DateTime.Now.Millisecond);
             _nodes = new List<NetworkNode>();
@@ -48,6 +48,7 @@ namespace TerminalGame.UI.Modules
             {
                 // Prevent the nodes from overlapping on the map
                 // More elegant way of doing this?
+                int attempts = 0;
                 bool intersects = true;
                 while (intersects)
                 {
@@ -66,6 +67,11 @@ namespace TerminalGame.UI.Modules
                     else
                     {
                         intersects = false;
+                    }
+                    if(++attempts > 29)
+                    {
+                        Console.WriteLine("Node for \"{0}\" intersects after {1} attempts -- ignore overlap and continue.", c.Name, attempts);
+                        break;
                     }
                 }
                 NetworkNode n = new NetworkNode(texture, c, _cont, new PopUpBox(c.Name + "\n" + c.IP, new Point(_cont.X + _cont.Width + 10, _cont.Y - 5), _spriteFont, Color.White, Color.Black * 0.5f, Color.White, graphics), nodeSpinners);

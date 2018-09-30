@@ -405,7 +405,7 @@ namespace TerminalGame.UI.Modules
                 Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
 
                 spriteBatch.DrawString(_terminalFont, _terminalPrompt, new Vector2(_prompt.X, _prompt.Y), Color.LightGray);
-                spriteBatch.DrawString(_terminalFont, _terminalOutput, new Vector2(_outputViewport.X + 3 + TestClass.ShakeStuff(1), _outputViewport.Y + TestClass.ShakeStuff(1)), Color.Green);
+                spriteBatch.DrawString(_terminalFont, _terminalOutput, new Vector2(_outputViewport.X + 3 + 1, _outputViewport.Y + 1), Color.Green);
                 spriteBatch.DrawString(_terminalFont, _terminalOutput, new Vector2(_outputViewport.X + 3, _outputViewport.Y), Color.LightGray);
                 _terminalInput.Draw(spriteBatch);
             }

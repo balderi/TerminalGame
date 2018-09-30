@@ -12,7 +12,8 @@ namespace TerminalGame.Computers
     class RemoteUI
     {
         private SpriteFont _titleFont, _subtitleFont;
-        private string _title, _subtitle, _userLevel;
+        private readonly string _title, _subtitle;
+        private string _userLevel;
         private Computer _computer;
         
         public RemoteUI(Computer computer)

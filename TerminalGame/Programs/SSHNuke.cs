@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using TerminalGame.Computers;
+using TerminalGame.Utilities;
 
 namespace TerminalGame.Programs
 {
@@ -19,6 +20,9 @@ namespace TerminalGame.Programs
             _player.PlayersComputer.FileSystem.ChangeDir("bin");
             if (_player.PlayersComputer.FileSystem.TryFindFile("sshnuke", false))
             {
+                if(_player.ConnectedComputer != _player.PlayersComputer)
+                    GameManager.GetInstance().UpIntensity();
+
                 _terminal.Write("\nConnecting to " + _player.ConnectedComputer.IP + ":ssh ");
                 _textToWrite = new string[]
                 {
