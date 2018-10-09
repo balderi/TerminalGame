@@ -85,6 +85,8 @@
     <Compile Include="Computers\FileSystems\FileSystem.cs" />
     <Compile Include="Computers\RemoteUI.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="IO\Parsing\ComputerToXml.cs" />
+    <Compile Include="IO\Validation.cs" />
     <Compile Include="LoadingScreen.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Programs\Nmap.cs" />
@@ -99,6 +101,11 @@
     <Compile Include="Programs\Ls.cs" />
     <Compile Include="Programs\Placeholder.cs" />
     <Compile Include="Programs\SSHNuke.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Scenes\GameScene.cs" />
     <Compile Include="Scenes\IScene.cs" />
     <Compile Include="Scenes\LoadGameScene.cs" />
@@ -139,6 +146,7 @@
     <Compile Include="Utilities\FontManager.cs" />
     <Compile Include="Utilities\GameIntensity.cs" />
     <Compile Include="Utilities\GameManager.cs" />
+    <Compile Include="Utilities\KnownPorts.cs" />
     <Compile Include="Utilities\MusicManager.cs" />
     <Compile Include="Utilities\Passwords.cs" />
     <Compile Include="Utilities\Settings.cs" />
@@ -203,7 +211,12 @@
       <Link>MonoGame.Framework.dll.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="app.config" />
     <None Include="app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="TerminalGame_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

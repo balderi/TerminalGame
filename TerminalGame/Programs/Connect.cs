@@ -39,8 +39,6 @@ namespace TerminalGame.Programs
                 _os.NetworkMap.IsActive = false;
                 bool conn = false;
 
-                GameManager.GetInstance().UpIntensity();
-
                 for (int i = 0; i < _textToWrite.Length; i++)
                 {
                     if (_textToWrite[i].Contains("\n"))
@@ -50,19 +48,22 @@ namespace TerminalGame.Programs
                     Thread.Sleep((int)(500 * _playerComp.Speed));
                 }
 
-                foreach (Computer c in Computers.Computers.computerList)
+                foreach (Computer c in Computers.Computers.ComputerList)
                 {
                     if (_ip == c.IP || _ip == c.Name)
                     {
                         conn = true;
                         c.Connect(false);
                         _terminal.Write("\nConnection established");
+
+                        GameManager.GetInstance().SetIntensity(1);
                     }
                 }
 
                 if (!conn)
                 {
                     _terminal.Write("\nCould not connect to " + _ip);
+
                     GameManager.GetInstance().ResetIntensity();
                 }
 

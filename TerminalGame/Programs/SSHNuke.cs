@@ -60,7 +60,7 @@ namespace TerminalGame.Programs
                 _terminal.Write("\nResetting root password to \"password\".");
                 Thread.Sleep(500);
                 _player.ConnectedComputer.ChangePassword("password");
-                _player.ConnectedComputer.GetRoot();
+                //_player.ConnectedComputer.GetRoot();
                 _player.ConnectedComputer.Connect();
                 _terminal.Write("\nSystem open: Access level <9>");
                 _terminal.UnblockInput();

@@ -95,7 +95,7 @@ namespace TerminalGame.Programs
 
         static bool HostExists(string ip)
         {
-            foreach(var comp in Computers.Computers.computerList)
+            foreach(var comp in Computers.Computers.ComputerList)
             {
                 if (comp.IP == ip || comp.Name == ip)
                 {

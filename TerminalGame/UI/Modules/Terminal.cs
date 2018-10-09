@@ -23,10 +23,10 @@ namespace TerminalGame.UI.Modules
         private Rectangle _prompt, _inputViewport, _outputViewport;
         private int _linesToDraw, _currentIndex;
         private readonly int _maxlen;
-        private string _terminalOutput, _terminalPrompt;
+        private string _terminalOutput, _terminalPrompt, _userName, _password;
         private List<string> _history, _output;
         private SpriteFont _terminalFont;
-        private bool _isMultiLine, _isInputBlocked, _updateInp, _isTakingSpecialInput;
+        private bool _isMultiLine, _isInputBlocked, _updateInp;
         private Computer _connectedComputer;
         private InputType _inputType;
         
@@ -74,40 +74,90 @@ namespace TerminalGame.UI.Modules
         {
             if (!_isInputBlocked)
             {
-                Console.WriteLine("CMD: " + _terminalInput.Text.String);
-                _history.Insert(0, _terminalInput.Text.String);
-                string input;
-                if (_terminalInput.Text.String.Contains("§"))
+                switch(_inputType)
                 {
-                    string temp = _terminalInput.Text.String.Replace('§', '?');
-                    input = InputWrap("\n" + _terminalPrompt + temp);
+                    case InputType.login:
+                        {
+                            Console.WriteLine(_terminalPrompt + _terminalInput.Text.String);
+                            if (!String.IsNullOrEmpty(_terminalInput.Text.String))
+                            {
+                                _history.Insert(0, _terminalInput.Text.String);
+                                _userName = _terminalInput.Text.String;
+                                _output.Add("\n" + _terminalPrompt + _userName);
+                                _currentIndex = 0;
+                                UpdateOutput();
+                                _terminalInput.Clear();
+                                _connectedComputer = Player.GetInstance().ConnectedComputer;
+                                _updateInp = true;
+                                _inputType = InputType.passwd;
+                            }
+                            else
+                            {
+                                Write("\nuser name cannot be blank.");
+                            }
+                            break;
+                        }
+                    case InputType.passwd:
+                        {
+                            Console.WriteLine(_terminalPrompt + _terminalInput.Text.String);
+                            _history.Insert(0,  _terminalInput.Text.String);
+                            _password = _terminalInput.Text.String;
+                            _output.Add("\n" + _terminalPrompt + _password);
+                            _currentIndex = 0;
+                            UpdateOutput();
+                            _terminalInput.Clear();
+                            _connectedComputer = Player.GetInstance().ConnectedComputer;
+                            _updateInp = true;
+                            _inputType = InputType.std;
+                            if(!Player.GetInstance().ConnectedComputer.Login(_userName, _password))
+                            {
+                                Write("\nIncorrect login information.");
+                            }
+                            else
+                            {
+                                Write("\nLogin successful..");
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            Console.WriteLine("CMD: " + _terminalInput.Text.String);
+                            _history.Insert(0, _terminalInput.Text.String);
+                            string input;
+                            if (_terminalInput.Text.String.Contains("§"))
+                            {
+                                string temp = _terminalInput.Text.String.Replace('§', '?');
+                                input = InputWrap("\n" + _terminalPrompt + temp);
+                            }
+                            else
+                                input = InputWrap("\n" + _terminalPrompt + _terminalInput.Text.String);
+
+                            string[] inp = input.Split('§');
+
+                            for (int i = 0; i < inp.Length; i++)
+                            {
+                                if (inp[i] != "\n")
+                                {
+                                    _output.Add(inp[i]);
+                                }
+                            }
+
+                            _currentIndex = 0;
+
+                            if (!string.IsNullOrEmpty(_terminalInput.Text.String) && !_terminalInput.Text.String.Contains("§"))
+                                CommandParser.ParseCommand(_terminalInput.Text.String);
+
+                            UpdateOutput();
+                            _terminalInput.Clear();
+
+                            if (_isMultiLine)
+                                UpdateOutput();
+
+                            _connectedComputer = Player.GetInstance().ConnectedComputer;
+                            _updateInp = true;
+                            break;
+                        }
                 }
-                else
-                    input = InputWrap("\n" + _terminalPrompt + _terminalInput.Text.String);
-
-                string[] inp = input.Split('§');
-
-                for (int i = 0; i < inp.Length; i++)
-                {
-                    if (inp[i] != "\n")
-                    {
-                        _output.Add(inp[i]);
-                    }
-                }
-                
-                _currentIndex = 0;
-
-                if (!string.IsNullOrEmpty(_terminalInput.Text.String) && !_terminalInput.Text.String.Contains("§"))
-                    CommandParser.ParseCommand(_terminalInput.Text.String);
-                
-                UpdateOutput();
-                _terminalInput.Clear();
-
-                if (_isMultiLine)
-                    UpdateOutput();
-
-                _connectedComputer = Player.GetInstance().ConnectedComputer;
-                _updateInp = true;
             }
         }
 
@@ -178,6 +228,12 @@ namespace TerminalGame.UI.Modules
             }
         }
 
+        public void BeginLogin()
+        {
+            if(_inputType != InputType.login && _inputType != InputType.passwd)
+                _inputType = InputType.login;
+        }
+
         /// <summary>
         /// Clear the terminal window
         /// </summary>
@@ -231,7 +287,6 @@ namespace TerminalGame.UI.Modules
             _terminalPrompt = "root@127.0.0.1 > ";
             _terminalOutput = "";
             _inputType = InputType.std;
-            _isTakingSpecialInput = false;
             _history = new List<string>();
             _history.Insert(0, "");
             _output = new List<string>();
@@ -247,8 +302,8 @@ namespace TerminalGame.UI.Modules
             _linesToDraw = (int)(_outputViewport.Height / _terminalFont.MeasureString("MEASURE THIS").Y);
             Console.WriteLine("INIT: " + _linesToDraw + " LN");
             Clear();
-
-            foreach(Computer c in Computers.Computers.computerList)
+            
+            foreach(Computer c in Computers.Computers.ComputerList)
             {
                 c.Connected += ConnectedComputer_Connected;
                 c.Disonnected += ConnectedComputer_Disonnected;
@@ -281,6 +336,45 @@ namespace TerminalGame.UI.Modules
             _updateInp = true;
         }
 
+        public void ForceQuit()
+        {
+            Write("\n\nKernel panic - not syncing: Fatal exception in interrupt\n\n");
+            UpdateOutput();
+        }
+
+        private string TextWrap(string text)
+        {
+            _isMultiLine = false;
+            if (text.Length <= _maxlen || text.Contains("§"))
+                return text;
+
+            _isMultiLine = true;
+            for (int i = 0; i < (text.Length / _maxlen); i++)
+            {
+                text = text.Insert((i + 1) * _maxlen - 1, "§\n");
+            }
+            return text;
+        }
+
+        private string InputWrap(string text)
+        {
+            _isMultiLine = false;
+            if (text.Length <= _maxlen)
+                return text;
+
+            _isMultiLine = true;
+            for (int i = 0; i < (text.Length / _maxlen); i++)
+            {
+                text = text.Insert((i + 1) * _maxlen - 1, "§\n");
+            }
+            return text;
+        }
+
+        protected override Rectangle RenderHeader()
+        {
+            return new Rectangle(Container.X, Container.Y, Container.Width, (int)Font.MeasureString(Title).Y);
+        }
+
         /// <summary>
         /// We have to re-create the textbox each time its length should change,
         /// otherwise the text will get deformed.
@@ -290,7 +384,7 @@ namespace TerminalGame.UI.Modules
             string text = _terminalInput.Text.String;
             int oldWidth = _prompt.Width;
             int newWidth = (int)(_terminalFont.MeasureString(_terminalPrompt).X);
-            if(newWidth != oldWidth)
+            if (newWidth != oldWidth)
             {
                 _prompt.Width = newWidth;
                 _inputViewport.X = _prompt.X + _prompt.Width;
@@ -352,28 +446,9 @@ namespace TerminalGame.UI.Modules
             UnblockInput();
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            float lerpAmount = (float)(gameTime.TotalGameTime.TotalMilliseconds % 500f / 500f);
-            
-            _terminalInput.Cursor.Color = Color.Lerp(Color.DarkGray, Color.LightGray, lerpAmount);
-            if (!_isTakingSpecialInput)
-            {
-                _terminalPrompt = _connectedComputer.PlayerHasRoot ? "root" : "user";
-                _terminalPrompt += "@" + _connectedComputer.IP + _connectedComputer.FileSystem.CurrentDir.PrintFullPath() + " > ";
-            }
-
-            if (_updateInp)
-            {
-                UpdateInputSize();
-                _updateInp = false;
-            }
-            _terminalInput.Update();
-        }
-
         private void UpdatePrompt()
         {
-            switch(_inputType)
+            switch (_inputType)
             {
                 case InputType.login:
                     {
@@ -394,6 +469,27 @@ namespace TerminalGame.UI.Modules
             }
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            float lerpAmount = (float)(gameTime.TotalGameTime.TotalMilliseconds % 500f / 500f);
+            
+            _terminalInput.Cursor.Color = Color.Lerp(Color.DarkGray, Color.LightGray, lerpAmount);
+            //if (!_isTakingSpecialInput)
+            //{
+            //    _terminalPrompt = _connectedComputer.PlayerHasRoot ? "root" : "user";
+            //    _terminalPrompt += "@" + _connectedComputer.IP + _connectedComputer.FileSystem.CurrentDir.PrintFullPath() + " > ";
+            //}
+            UpdatePrompt();
+
+            if (_updateInp)
+            {
+                UpdateInputSize();
+                _updateInp = false;
+            }
+            _terminalInput.Update();
+        }
+
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (IsVisible)
@@ -409,45 +505,6 @@ namespace TerminalGame.UI.Modules
                 spriteBatch.DrawString(_terminalFont, _terminalOutput, new Vector2(_outputViewport.X + 3, _outputViewport.Y), Color.LightGray);
                 _terminalInput.Draw(spriteBatch);
             }
-        }
-
-        public void ForceQuit()
-        {
-            Write("\n\nKernel panic - not syncing: Fatal exception in interrupt\n\n");
-            UpdateOutput();
-        }
-
-        private string TextWrap(string text)
-        {
-            _isMultiLine = false;
-            if (text.Length <= _maxlen || text.Contains("§"))
-                return text;
-
-            _isMultiLine = true;
-            for (int i = 0; i < (text.Length / _maxlen); i++)
-            {
-                text = text.Insert((i + 1) * _maxlen - 1, "§\n");
-            }
-            return text;
-        }
-
-        private string InputWrap(string text)
-        {
-            _isMultiLine = false;
-            if (text.Length <= _maxlen)
-                return text;
-
-            _isMultiLine = true;
-            for(int i = 0; i < (text.Length / _maxlen); i++)
-            {
-                 text = text.Insert((i + 1) * _maxlen - 1, "§\n");
-            }
-            return text;
-        }
-
-        protected override Rectangle RenderHeader()
-        {
-            return new Rectangle(Container.X, Container.Y, Container.Width, (int)Font.MeasureString(Title).Y);
         }
     }
 }

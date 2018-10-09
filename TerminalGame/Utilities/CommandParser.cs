@@ -45,6 +45,11 @@ namespace TerminalGame.Utilities
                             Programs.Note.Execute(_args);
                         break;
                     }
+                case "login":
+                    {
+                        _terminal.BeginLogin();
+                        break;
+                    }
                 case "sshnuke":
                     {
                         Task<int> task = Task.Factory.StartNew(() => Programs.SSHNuke.Execute());

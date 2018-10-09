@@ -78,8 +78,21 @@ namespace TerminalGame.Utilities
                 _intensity++;
                 TimeSpan pos = MediaPlayer.PlayPosition;
                 //MediaPlayer.Play(MusicManager.GetInstance().Songs[(int)_intensity], pos);
-                Console.WriteLine("Intensity upped to {0}", _intensity);
+                Console.WriteLine("Intensity upped to {0}.", _intensity);
             }
+        }
+
+        public void SetIntensity(int level)
+        {
+            if (_intensity != (GameIntensity)level)
+            {
+                _intensity = (GameIntensity)level;
+                TimeSpan pos = MediaPlayer.PlayPosition;
+                //MediaPlayer.Play(MusicManager.GetInstance().Songs[0], pos);
+                Console.WriteLine("Intensity set to {0}.", _intensity);
+            }
+            else
+                Console.WriteLine("Intensity is already {0} - no change.", _intensity);
         }
 
         public void ResetIntensity()
@@ -89,7 +102,7 @@ namespace TerminalGame.Utilities
                 _intensity = GameIntensity.Peaceful;
                 TimeSpan pos = MediaPlayer.PlayPosition;
                 //MediaPlayer.Play(MusicManager.GetInstance().Songs[0], pos);
-                Console.WriteLine("Intensity reset ({0})", _intensity);
+                Console.WriteLine("Intensity reset. ({0})", _intensity);
             }
         }
 

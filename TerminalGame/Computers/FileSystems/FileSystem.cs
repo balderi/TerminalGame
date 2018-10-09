@@ -19,7 +19,7 @@ namespace TerminalGame.Computers.FileSystems
 
         public void BuildBasicFileSystem()
         {
-            string[] baseDirs = { "bin", "usr", "home", "sys", "logs" };
+            string[] baseDirs = { "bin", "usr", "home", "sys", "log" };
             for (int i = 0; i < baseDirs.Length; i++)
             {
                 AddDir(baseDirs[i]);

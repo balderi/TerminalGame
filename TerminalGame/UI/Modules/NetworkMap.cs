@@ -25,7 +25,7 @@ namespace TerminalGame.UI.Modules
         private List<NetworkNode> _nodes;
         private Random _rnd;
         private readonly SpriteFont _spriteFont;
-        private Point _size;
+        private Point _nodeSize;
         private Rectangle _cont;
         private readonly GameWindow _gameWindow;
 
@@ -40,11 +40,11 @@ namespace TerminalGame.UI.Modules
         public NetworkMap(GameWindow gameWindow, GraphicsDevice graphics, Rectangle container, Texture2D texture, SpriteFont font, Dictionary<string, Texture2D> nodeSpinners) : base(graphics, container)
         {
             _gameWindow = gameWindow;
-            _size = new Point(24);
+            _nodeSize = new Point(24);
             _spriteFont = font;
             _rnd = new Random(DateTime.Now.Millisecond);
             _nodes = new List<NetworkNode>();
-            foreach (Computer c in Computers.Computers.computerList)
+            foreach (Computer c in Computers.Computers.ComputerList)
             {
                 // Prevent the nodes from overlapping on the map
                 // More elegant way of doing this?
@@ -52,8 +52,11 @@ namespace TerminalGame.UI.Modules
                 bool intersects = true;
                 while (intersects)
                 {
-                    Point position = new Point(_rnd.Next(container.X + 15, container.X + container.Width - _size.Y - 10), _rnd.Next(container.Y + 25, container.Y + container.Height - 50));
-                    _cont = new Rectangle(position, _size);
+                    int x = _rnd.Next(container.X + 15, container.X + container.Width - _nodeSize.Y - 10);
+                    int y = _rnd.Next(container.Y + 25, container.Y + container.Height - 50);
+
+                    Point position = new Point(x, y);
+                    _cont = new Rectangle(position, _nodeSize);
 
                     if (_nodes.Count > 0)
                     {
@@ -173,7 +176,12 @@ namespace TerminalGame.UI.Modules
         private void OnNodeClick(NodeClickedEventArgs e)
         {
             if(IsActive)
-                CommandParser.ParseCommand("connect " + e.IP);
+            {
+                if (e.IP == Player.GetInstance().PlayersComputer.IP)
+                    CommandParser.ParseCommand("dc");
+                else
+                    CommandParser.ParseCommand("connect " + e.IP);
+            }
 
             try
             {
