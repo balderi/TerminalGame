@@ -141,6 +141,8 @@
     <Compile Include="UI\Modules\TestModule.cs" />
     <Compile Include="UI\Shaders\BloomFilter.cs" />
     <Compile Include="UI\Shaders\QuadRenderer.cs" />
+    <Compile Include="UI\Themes\Theme.cs" />
+    <Compile Include="UI\Themes\ThemeManager.cs" />
     <Compile Include="Utilities\CommandParser.cs" />
     <Compile Include="Utilities\Drawing.cs" />
     <Compile Include="Utilities\FontManager.cs" />

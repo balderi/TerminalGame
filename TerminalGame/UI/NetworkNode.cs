@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Computers;
+using TerminalGame.UI.Themes;
 
 namespace TerminalGame.UI
 {
@@ -29,7 +30,7 @@ namespace TerminalGame.UI
         private MouseState _currentMouseState, _previousMouseState;
         private readonly Texture2D _texture;
         readonly Dictionary<string, Texture2D> _nodeSpinners;
-        private Color _color, _hoverColor, _currentColor, _connectedColor, _playerColor, _connectedSpinnerColor, _playerSpinnerColor, _hoverSpinnerColor;
+        private Color _currentColor, _connectedSpinnerColor, _playerSpinnerColor, _hoverSpinnerColor;
         private float _rotationCW, _rotationCCW;
         private Point _spinnerS, _spinnerN, _spinnerL;
 
@@ -43,10 +44,6 @@ namespace TerminalGame.UI
             _texture = texture;
             Computer = computer;
             Container = container;
-            _color = Color.RoyalBlue;
-            _hoverColor = Color.DarkOrange;
-            _connectedColor = Color.Green;
-            _playerColor = Color.Blue;
             Position = Container.Location;
             InfoBox = infoBox;
             var holder = InfoBox.Container;
@@ -110,15 +107,15 @@ namespace TerminalGame.UI
 
             _rotationCW += 0.01f;
             _rotationCCW -= 0.01f;
-            _connectedSpinnerColor = _connectedColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 2) + 1) * 0.5f + 0.2f);
-            _playerSpinnerColor = _playerColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1) + 1) * 0.5f + 0.2f);
-            _hoverSpinnerColor = _hoverColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1.5) + 1) * 0.5f + 0.2f);
+            _connectedSpinnerColor = ThemeManager.GetInstance().CurrentTheme.NetworkMapConnectedSpinnerColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 2) + 1) * 0.5f + 0.2f);
+            _playerSpinnerColor = ThemeManager.GetInstance().CurrentTheme.NetworkMapHomeSpinnerColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1) + 1) * 0.5f + 0.2f);
+            _hoverSpinnerColor = ThemeManager.GetInstance().CurrentTheme.NetworkMapHoverSpinnerColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1.5) + 1) * 0.5f + 0.2f);
             InfoBox.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _currentColor = _color;
+            _currentColor = ThemeManager.GetInstance().CurrentTheme.NetworkMapNodeColor;
             Texture2D connectedSpinner, playerSpinner, hoverSpinner, missionSpinner;
 
             connectedSpinner = SelectSpinner("ConnectedSpinner");
@@ -128,18 +125,18 @@ namespace TerminalGame.UI
 
             if (Computer == Player.GetInstance().PlayersComputer)
             {
-                _currentColor = _playerColor;
+                _currentColor = ThemeManager.GetInstance().CurrentTheme.NetworkMapHomeSpinnerColor;
                 spriteBatch.Draw(playerSpinner, new Rectangle(new Point(Container.Location.X + (Container.Width / 2), Container.Location.Y + (Container.Height / 2)), _spinnerS), null, _playerSpinnerColor, _rotationCW, new Vector2(playerSpinner.Width / 2, playerSpinner.Height / 2), SpriteEffects.None, 0);
             }
             if (Computer == Player.GetInstance().ConnectedComputer)
             {
-                _currentColor = _connectedColor;
+                _currentColor = ThemeManager.GetInstance().CurrentTheme.NetworkMapConnectedSpinnerColor;
                 spriteBatch.Draw(connectedSpinner, new Rectangle(new Point(Container.Location.X + (Container.Width / 2), Container.Location.Y + (Container.Height / 2)), _spinnerN), null, _connectedSpinnerColor, _rotationCCW, new Vector2(connectedSpinner.Width / 2, connectedSpinner.Height / 2), SpriteEffects.None, 0);
 
             }
             if (IsHovering)
             {
-                _currentColor = _hoverColor;
+                _currentColor = ThemeManager.GetInstance().CurrentTheme.NetworkMapHoverSpinnerColor;
                 spriteBatch.Draw(hoverSpinner, new Rectangle(new Point(Container.Location.X + (Container.Width / 2), Container.Location.Y + (Container.Height / 2)), _spinnerL), null, _hoverSpinnerColor, _rotationCW, new Vector2(hoverSpinner.Width / 2, hoverSpinner.Height / 2), SpriteEffects.None, 0);
 
             }

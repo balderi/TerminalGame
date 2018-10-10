@@ -121,6 +121,23 @@ namespace TerminalGame.Computers.FileSystems
             //else
             //    throw new Exception(directoryName + " is not a directory.");
         }
+        public void AddFileToDir(string directoryName, string name, string contents = null, File.FileType fileType = File.FileType.File)
+        {
+            if (TryFindFile(directoryName, true))
+            {
+                File f = new File(name, contents);
+                f.SetParent(FindFile(directoryName, true));
+                FindFile(directoryName, true).Children.Add(f);
+            }
+            else if (TryFindFile(directoryName, true, true))
+            {
+                File f = new File(name, contents);
+                f.SetParent(FindFile(directoryName, true, true));
+                FindFile(directoryName, true, true).Children.Add(f);
+            }
+            //else
+            //    throw new Exception(directoryName + " is not a directory.");
+        }
 
         public void AddFile(string directoryPath, string name, string contents = null)
         {

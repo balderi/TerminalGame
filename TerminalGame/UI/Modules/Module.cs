@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TerminalGame.UI.Themes;
 
 namespace TerminalGame.UI.Modules
 {
@@ -15,15 +16,15 @@ namespace TerminalGame.UI.Modules
         /// <summary>
         /// BG color of the window
         /// </summary>
-        public abstract Color BackgroundColor { get; set; }
+        //public abstract Color BackgroundColor { get; set; }
         /// <summary>
         /// Color of the window border
         /// </summary>
-        public abstract Color BorderColor { get; set; }
+        //public abstract Color BorderColor { get; set; }
         /// <summary>
         /// BG color of the window header
         /// </summary>
-        public abstract Color HeaderColor { get; set; }
+        //public abstract Color HeaderColor { get; set; }
         /// <summary>
         /// Whether or not the module is active
         /// </summary>
@@ -55,7 +56,6 @@ namespace TerminalGame.UI.Modules
         {
             _graphics = graphics;
             Container = container;
-
         }
 
         /// <summary>

@@ -6,15 +6,16 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
 using TerminalGame.Utilities;
 using TerminalGame.Computers;
+using TerminalGame.UI.Themes;
 
 namespace TerminalGame.UI.Modules
 {
     class NetworkMap : Module
     {
         public override SpriteFont Font { get; set; }
-        public override Color BackgroundColor { get; set; }
-        public override Color BorderColor { get; set; }
-        public override Color HeaderColor { get; set; }
+        //public override Color BackgroundColor { get; set; }
+        //public override Color BorderColor { get; set; }
+        //public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
         public override bool IsVisible { get; set; }
         public override string Title { get; set; }
@@ -44,6 +45,7 @@ namespace TerminalGame.UI.Modules
             _spriteFont = font;
             _rnd = new Random(DateTime.Now.Millisecond);
             _nodes = new List<NetworkNode>();
+
             foreach (Computer c in Computers.Computers.ComputerList)
             {
                 // Prevent the nodes from overlapping on the map
@@ -96,7 +98,7 @@ namespace TerminalGame.UI.Modules
             if (IsVisible)
             {
                 Texture2D texture = Drawing.DrawBlankTexture(_graphics);
-                spriteBatch.Draw(texture, Container, BackgroundColor);
+                spriteBatch.Draw(texture, Container, ThemeManager.GetInstance().CurrentTheme.ModuleBackgroundColor);
 
                 foreach (NetworkNode node in _nodes)
                 {
@@ -139,8 +141,8 @@ namespace TerminalGame.UI.Modules
                     }
                 }
 
-                Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
-                spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
+                Drawing.DrawBorder(spriteBatch, Container, texture, 1, ThemeManager.GetInstance().CurrentTheme.ModuleOutlineColor);
+                spriteBatch.Draw(texture, RenderHeader(), ThemeManager.GetInstance().CurrentTheme.ModuleHeaderBackgroundColor);
                 spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
             }
         }

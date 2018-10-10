@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using TerminalGame.UI.Themes;
 
 namespace TerminalGame.Utilities
 {
@@ -37,6 +38,14 @@ namespace TerminalGame.Utilities
 
             switch (_command)
             {
+                case "theme":
+                    {
+                        if (_args[0].Length == 0)
+                            _terminal.Write("\n" + ThemeManager.GetInstance().CurrentTheme.ThemeName);
+                        else
+                            ThemeManager.GetInstance().ChangeTheme(_args[0]);
+                        break;
+                    }
                 case "note":
                     {
                         if(_args.Length != 0 && input.Contains("\""))

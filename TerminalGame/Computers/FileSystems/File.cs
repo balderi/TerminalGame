@@ -9,6 +9,7 @@ namespace TerminalGame.Computers.FileSystems
         {
             Directory = 0,
             File,
+            Binary,
         }
 
         public List<File> Children { get; private set; }

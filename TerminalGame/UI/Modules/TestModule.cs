@@ -2,15 +2,16 @@
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Utilities;
 using Microsoft.Xna.Framework.Audio;
+using TerminalGame.UI.Themes;
 
 namespace TerminalGame.UI.Modules
 {
     class TestModule : Module
     {
         public override SpriteFont Font { get; set; }
-        public override Color BackgroundColor { get; set; }
-        public override Color BorderColor { get; set; }
-        public override Color HeaderColor { get; set; }
+        //public override Color BackgroundColor { get; set; }
+        //public override Color BorderColor { get; set; }
+        //public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
         public override bool IsVisible { get; set; }
         public override string Title { get; set; }
@@ -31,18 +32,18 @@ namespace TerminalGame.UI.Modules
             _click = click;
 
             _fnt = font;
-            if(BackgroundColor == null)
-            {
-                BackgroundColor = Color.LightPink;
-            }
-            if (BorderColor == null)
-            {
-                BackgroundColor = Color.Chartreuse;
-            }
-            if (HeaderColor == null)
-            {
-                BackgroundColor = Color.Red;
-            }
+            //if(BackgroundColor == null)
+            //{
+            //    BackgroundColor = Color.LightPink;
+            //}
+            //if (BorderColor == null)
+            //{
+            //    BackgroundColor = Color.Chartreuse;
+            //}
+            //if (HeaderColor == null)
+            //{
+            //    BackgroundColor = Color.Red;
+            //}
             if (string.IsNullOrEmpty(Title))
             {
                 Title = "!!! UNNAMED WINDOW !!!";
@@ -71,9 +72,9 @@ namespace TerminalGame.UI.Modules
         public override void Draw(SpriteBatch spriteBatch)
         {
             Texture2D texture = Drawing.DrawBlankTexture(_graphics);
-            Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
-            spriteBatch.Draw(texture, Container, BackgroundColor);
-            spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
+            Drawing.DrawBorder(spriteBatch, Container, texture, 1, ThemeManager.GetInstance().CurrentTheme.ModuleOutlineColor);
+            spriteBatch.Draw(texture, Container, ThemeManager.GetInstance().CurrentTheme.ModuleBackgroundColor);
+            spriteBatch.Draw(texture, RenderHeader(), ThemeManager.GetInstance().CurrentTheme.ModuleHeaderBackgroundColor);
             spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y + 2), Color.White);
             spriteBatch.DrawString(Font, _buttonClicks, new Vector2(Container.X + (Container.Width / 2) - Font.MeasureString(_buttonClicks).X / 2, Container.Y + (Container.Height / 2) - Font.MeasureString(_buttonClicks).Y / 2), Color.White);
             

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TerminalGame.Utilities;
 using TerminalGame.Utilities.TextHandler;
 using TerminalGame.Computers;
+using TerminalGame.UI.Themes;
 
 namespace TerminalGame.UI.Modules
 {
@@ -31,9 +32,9 @@ namespace TerminalGame.UI.Modules
         private InputType _inputType;
         
         public override SpriteFont Font { get; set; }
-        public override Color BackgroundColor { get; set; }
-        public override Color BorderColor { get; set; }
-        public override Color HeaderColor { get; set; }
+        //public override Color BackgroundColor { get; set; }
+        //public override Color BorderColor { get; set; }
+        //public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
         public override bool IsVisible { get; set; }
         public override string Title { get; set; }
@@ -44,18 +45,18 @@ namespace TerminalGame.UI.Modules
             _terminalFont = terminalFont;
             Container = container;
             _updateInp = true;
-            if (BackgroundColor == null)
-            {
-                BackgroundColor = Color.LightPink;
-            }
-            if (BorderColor == null)
-            {
-                BackgroundColor = Color.Chartreuse;
-            }
-            if (HeaderColor == null)
-            {
-                BackgroundColor = Color.Red;
-            }
+            //if (BackgroundColor == null)
+            //{
+            //    BackgroundColor = Color.LightPink;
+            //}
+            //if (BorderColor == null)
+            //{
+            //    BackgroundColor = Color.Chartreuse;
+            //}
+            //if (HeaderColor == null)
+            //{
+            //    BackgroundColor = Color.Red;
+            //}
             if (string.IsNullOrEmpty(Title))
             {
                 Title = "!!! UNNAMED WINDOW !!!";
@@ -495,10 +496,10 @@ namespace TerminalGame.UI.Modules
             if (IsVisible)
             {
                 Texture2D texture = Drawing.DrawBlankTexture(_graphics);
-                spriteBatch.Draw(texture, Container, BackgroundColor);
-                spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
+                spriteBatch.Draw(texture, Container, ThemeManager.GetInstance().CurrentTheme.ModuleBackgroundColor);
+                spriteBatch.Draw(texture, RenderHeader(), ThemeManager.GetInstance().CurrentTheme.ModuleHeaderBackgroundColor);
                 spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
-                Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
+                Drawing.DrawBorder(spriteBatch, Container, texture, 1, ThemeManager.GetInstance().CurrentTheme.ModuleOutlineColor);
 
                 spriteBatch.DrawString(_terminalFont, _terminalPrompt, new Vector2(_prompt.X, _prompt.Y), Color.LightGray);
                 spriteBatch.DrawString(_terminalFont, _terminalOutput, new Vector2(_outputViewport.X + 3 + 1, _outputViewport.Y + 1), Color.Green);
