@@ -13,6 +13,7 @@ namespace TerminalGame.States
         GameLoading,
         NewGame,
         GameRunning,
+        GameOver,
     };
 
     class StateMachine

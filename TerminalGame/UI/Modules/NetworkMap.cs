@@ -13,15 +13,10 @@ namespace TerminalGame.UI.Modules
     class NetworkMap : Module
     {
         public override SpriteFont Font { get; set; }
-        //public override Color BackgroundColor { get; set; }
-        //public override Color BorderColor { get; set; }
-        //public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
         public override bool IsVisible { get; set; }
         public override string Title { get; set; }
         public override Rectangle Container { get; set; }
-        public SoundEffect Hover { get; set; }
-        public SoundEffect Click { get; set; }
 
         private List<NetworkNode> _nodes;
         private Random _rnd;
@@ -29,6 +24,7 @@ namespace TerminalGame.UI.Modules
         private Point _nodeSize;
         private Rectangle _cont;
         private readonly GameWindow _gameWindow;
+        private SoundEffect _hover, _click;
 
         /// <summary>
         /// Constructor for the NetworkMap module. Draws a map of computers on the net.
@@ -45,6 +41,8 @@ namespace TerminalGame.UI.Modules
             _spriteFont = font;
             _rnd = new Random(DateTime.Now.Millisecond);
             _nodes = new List<NetworkNode>();
+            _hover = SoundManager.GetInstance().GetSound("networkNodeHover");
+            _click = SoundManager.GetInstance().GetSound("networkNodeClick");
 
             foreach (Computer c in Computers.Computers.ComputerList)
             {
@@ -98,7 +96,7 @@ namespace TerminalGame.UI.Modules
             if (IsVisible)
             {
                 Texture2D texture = Drawing.DrawBlankTexture(_graphics);
-                spriteBatch.Draw(texture, Container, ThemeManager.GetInstance().CurrentTheme.ModuleBackgroundColor);
+                spriteBatch.Draw(texture, Container, _themeManager.CurrentTheme.ModuleBackgroundColor);
 
                 foreach (NetworkNode node in _nodes)
                 {
@@ -141,9 +139,9 @@ namespace TerminalGame.UI.Modules
                     }
                 }
 
-                Drawing.DrawBorder(spriteBatch, Container, texture, 1, ThemeManager.GetInstance().CurrentTheme.ModuleOutlineColor);
-                spriteBatch.Draw(texture, RenderHeader(), ThemeManager.GetInstance().CurrentTheme.ModuleHeaderBackgroundColor);
-                spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
+                Drawing.DrawBorder(spriteBatch, Container, texture, 1, _themeManager.CurrentTheme.ModuleOutlineColor);
+                spriteBatch.Draw(texture, RenderHeader(), _themeManager.CurrentTheme.ModuleHeaderBackgroundColor);
+                spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), _themeManager.CurrentTheme.ModuleHeaderFontColor);
             }
         }
 
@@ -167,7 +165,7 @@ namespace TerminalGame.UI.Modules
         {
             try
             {
-                Hover.Play(0.25f, 1f, 0f);
+                _hover.Play(0.25f, 1f, 0f);
             }
             catch (Exception ex)
             {
@@ -187,7 +185,7 @@ namespace TerminalGame.UI.Modules
 
             try
             {
-                Click.Play(0.25f, 1f, 0f);
+                _click.Play(0.25f, 1f, 0f);
             }
             catch (Exception ex)
             {

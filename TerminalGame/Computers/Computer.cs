@@ -26,11 +26,13 @@ namespace TerminalGame.Computers
         public RemoteUI RemoteUI { get; private set; }
         public float MapX { get; set; }
         public float MapY { get; set; }
+        public ActiveTracer Tracer { get; private set; }
 
         public event EventHandler<ConnectEventArgs> Connected;
         public event EventHandler<ConnectEventArgs> Disonnected;
         
         private readonly int[] _defaultPorts = { 22, 25, 80, 443 };
+        private Random _random;
 
         public Computer(Type type, string ip, string name, string rootPassword)
         {
@@ -66,6 +68,7 @@ namespace TerminalGame.Computers
 
         private void Initialize()
         {
+            _random = new Random(DateTime.Now.Millisecond);
             if(OpenPorts == null)
                 OpenPorts = BuildPorts(_defaultPorts);
             if(FileSystem == null)
@@ -74,6 +77,12 @@ namespace TerminalGame.Computers
                 fs.BuildBasicFileSystem();
                 FileSystem = fs;
             }
+            Tracer = new ActiveTracer((float)_random.Next(1,101)/100);
+        }
+
+        public void AbortTrace()
+        {
+            Tracer.StopTrace();
         }
 
         /// <summary>
@@ -104,12 +113,20 @@ namespace TerminalGame.Computers
         public void Disconnect(bool reconnect = false)
         {
             IsPlayerConnected = false;
-            
+            Tracer.StopTrace();
             Disonnected?.Invoke(null, new ConnectEventArgs(IP, PlayerHasRoot));
             Console.WriteLine("DISC: Disconnecting from " + IP);
             if (!reconnect)
             {
                 Player.GetInstance().PlayersComputer.Connect(true);
+            }
+        }
+
+        public void DoOffensiveAction()
+        {
+            if (!PlayerHasRoot)
+            {
+                Tracer.StartTrace();
             }
         }
 

@@ -35,7 +35,8 @@ namespace TerminalGame.Scenes
 
         public void Update(GameTime gameTime)
         {
-            //_bgColor = Color.White * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds) + 1) * 0.5f + 0.75f);
+            if (!GameManager.GetInstance().IsGameRunning)
+                _stateMachine.Transition(GameState.GameOver);
             OS.OS.GetInstance().Update(gameTime);
             _newKbState = Keyboard.GetState().IsKeyDown(Keys.Escape);
             if (_newKbState != _prevKbState)

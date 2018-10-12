@@ -72,10 +72,10 @@ namespace TerminalGame.UI.Modules
         public override void Draw(SpriteBatch spriteBatch)
         {
             Texture2D texture = Drawing.DrawBlankTexture(_graphics);
-            Drawing.DrawBorder(spriteBatch, Container, texture, 1, ThemeManager.GetInstance().CurrentTheme.ModuleOutlineColor);
-            spriteBatch.Draw(texture, Container, ThemeManager.GetInstance().CurrentTheme.ModuleBackgroundColor);
-            spriteBatch.Draw(texture, RenderHeader(), ThemeManager.GetInstance().CurrentTheme.ModuleHeaderBackgroundColor);
-            spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y + 2), Color.White);
+            Drawing.DrawBorder(spriteBatch, Container, texture, 1, _themeManager.CurrentTheme.ModuleOutlineColor);
+            spriteBatch.Draw(texture, Container, _themeManager.CurrentTheme.ModuleBackgroundColor);
+            spriteBatch.Draw(texture, RenderHeader(), _themeManager.CurrentTheme.ModuleHeaderBackgroundColor);
+            spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y + 2), _themeManager.CurrentTheme.ModuleHeaderFontColor);
             spriteBatch.DrawString(Font, _buttonClicks, new Vector2(Container.X + (Container.Width / 2) - Font.MeasureString(_buttonClicks).X / 2, Container.Y + (Container.Height / 2) - Font.MeasureString(_buttonClicks).Y / 2), Color.White);
             
             _button.Draw(spriteBatch);

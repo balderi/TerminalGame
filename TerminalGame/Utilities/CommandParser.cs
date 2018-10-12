@@ -42,6 +42,8 @@ namespace TerminalGame.Utilities
                     {
                         if (_args[0].Length == 0)
                             _terminal.Write("\n" + ThemeManager.GetInstance().CurrentTheme.ThemeName);
+                        else if (_args[0].ToLower() == "flash")
+                            ThemeManager.GetInstance().CurrentTheme.Flash();
                         else
                             ThemeManager.GetInstance().ChangeTheme(_args[0]);
                         break;

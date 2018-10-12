@@ -27,7 +27,7 @@ namespace TerminalGame.UI.Modules
                 System.Reflection.Assembly.GetEntryAssembly().GetName().Version.Minor, 
                 System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetExecutingAssembly().Location).ToString("yyyyMMdd"));
 
-            _playerDeets = "Name: " + Player.GetInstance().Name + "\nBalance: $" + Player.GetInstance().Balance;
+            _playerDeets = "   Name: " + Player.GetInstance().Name + "\nBalance: $" + Player.GetInstance().Balance;
 
             _lilFont = spriteFont;
             _connectionInfo = "";
@@ -56,20 +56,20 @@ namespace TerminalGame.UI.Modules
             {
                 Font.LineSpacing = 0;
                 Texture2D texture = Drawing.DrawBlankTexture(_graphics);
-                Drawing.DrawBorder(spriteBatch, Container, texture, 1, ThemeManager.GetInstance().CurrentTheme.StatusBarBackgroundColor);
-                spriteBatch.Draw(texture, Container, ThemeManager.GetInstance().CurrentTheme.StatusBarBackgroundColor);
-                spriteBatch.Draw(texture, RenderHeader(), ThemeManager.GetInstance().CurrentTheme.StatusBarBackgroundColor);
+                Drawing.DrawBorder(spriteBatch, Container, texture, 1, _themeManager.CurrentTheme.StatusBarBackgroundColor);
+                spriteBatch.Draw(texture, Container, _themeManager.CurrentTheme.StatusBarBackgroundColor);
+                spriteBatch.Draw(texture, RenderHeader(), _themeManager.CurrentTheme.StatusBarBackgroundColor);
                 spriteBatch.DrawString(Font, Title, 
-                    new Vector2(Container.X + 10, Container.Height / 2 - (int)Font.MeasureString("A").Y / 2 + 5), 
-                    Color.White);
+                    new Vector2(Container.X + 10, Container.Height / 2 - (int)Font.MeasureString("A").Y / 2 + 5),
+                    _themeManager.CurrentTheme.ModuleHeaderFontColor);
                 spriteBatch.DrawString(_lilFont, _connectionInfo, new Vector2(Container.X + 10 + Font.MeasureString(Title).X,
-                    Container.Height / 2 - (int)Font.MeasureString("A").Y / 2 + 7), Color.White);
+                    Container.Height / 2 - (int)Font.MeasureString("A").Y / 2 + 7), _themeManager.CurrentTheme.ModuleHeaderFontColor);
                 spriteBatch.DrawString(_lilFont, _buildNumber, 
-                    new Vector2(Container.Right - _lilFont.MeasureString(_buildNumber).Length() - 5, 5), 
-                    Color.White);
+                    new Vector2(Container.Right - _lilFont.MeasureString(_buildNumber).Length() - 5, 5),
+                    _themeManager.CurrentTheme.ModuleHeaderFontColor);
                 spriteBatch.DrawString(_lilFont, _playerDeets, 
-                    new Vector2(Container.Right - _lilFont.MeasureString(_buildNumber).Length() - 5 - _lilFont.MeasureString(_playerDeets).Length() - 20, 5), 
-                    Color.White);
+                    new Vector2(Container.Right - _lilFont.MeasureString(_buildNumber).Length() - 5 - _lilFont.MeasureString(_playerDeets).Length() - 20, 5),
+                    _themeManager.CurrentTheme.ModuleHeaderFontColor);
             }
         }
 

@@ -10,18 +10,22 @@ namespace TerminalGame.Programs
         private static Player _player = Player.GetInstance();
         private static OS.OS _os = OS.OS.GetInstance();
         private static Computer _playerComp = Player.GetInstance().PlayersComputer;
+        private static Computer _connComp;
         private static UI.Modules.Terminal _terminal = _os.Terminal;
         private static string[] _textToWrite;
 
         public static int Execute()
         {
             _terminal.BlockInput();
+            _connComp = _player.ConnectedComputer;
             _player.PlayersComputer.FileSystem.ChangeDir("/");
             _player.PlayersComputer.FileSystem.ChangeDir("bin");
             if (_player.PlayersComputer.FileSystem.TryFindFile("sshnuke", false))
             {
                 if(_player.ConnectedComputer != _player.PlayersComputer)
                     GameManager.GetInstance().UpIntensity();
+
+                _player.ConnectedComputer.DoOffensiveAction();
 
                 _terminal.Write("\nConnecting to " + _player.ConnectedComputer.IP + ":ssh ");
                 _textToWrite = new string[]
@@ -39,6 +43,11 @@ namespace TerminalGame.Programs
 
                 for(int i = 0; i<_textToWrite.Length; i++)
                 {
+                    if(_connComp != _player.ConnectedComputer)
+                    {
+                        _terminal.Write("\nsshnuke: error: connection lost");
+                        return 1;
+                    }
                     if(i == 3)
                     {
                         if (!_player.ConnectedComputer.CheckPortOpen(22))
@@ -61,7 +70,7 @@ namespace TerminalGame.Programs
                 Thread.Sleep(500);
                 _player.ConnectedComputer.ChangePassword("password");
                 //_player.ConnectedComputer.GetRoot();
-                _player.ConnectedComputer.Connect();
+                //_player.ConnectedComputer.Connect();
                 _terminal.Write("\nSystem open: Access level <9>");
                 _terminal.UnblockInput();
                 _player.PlayersComputer.FileSystem.ChangeDir("/");

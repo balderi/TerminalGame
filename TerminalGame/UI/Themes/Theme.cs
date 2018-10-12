@@ -3,12 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TerminalGame.UI.Themes
 {
-    class Theme
+    public class Theme
     {
+        private bool _isFlashing;
+        private Color _oldHeaderBG, _oldStatusBG, _oldNodeColor, _oldOutlineColor;
+        private float _lerpAmount;
         public string ThemeName { get; private set; }
         public Color StatusBarBackgroundColor { get; private set; }
         public Color ModuleBackgroundColor { get; private set; }
@@ -28,15 +32,46 @@ namespace TerminalGame.UI.Themes
         {
             ThemeName = themeName;
             StatusBarBackgroundColor = statusBarBackgroundColor == null ? Color.DeepPink : (Color)statusBarBackgroundColor;
-            ModuleBackgroundColor = moduleBackgroundColor == null ? Color.Black * 0.75f : (Color)moduleBackgroundColor;
+            ModuleBackgroundColor = moduleBackgroundColor == null ? Color.DeepPink * 0.75f : (Color)moduleBackgroundColor;
             ModuleFontColor = moduleFontColor == null ? Color.White : (Color)moduleFontColor;
             ModuleHeaderBackgroundColor = moduleHeaderBackgroundColor == null ? Color.HotPink : (Color)moduleHeaderBackgroundColor;
             ModuleHeaderFontColor = moduleHeaderFontColor == null ? Color.White : (Color)moduleHeaderFontColor;
             ModuleOutlineColor = moduleOutlineColor == null ? Color.LightPink : (Color)moduleOutlineColor;
             NetworkMapNodeColor = networkMapNodeColor == null ? Color.Pink : (Color)networkMapNodeColor;
             NetworkMapHomeSpinnerColor = networkMapHomeSpinnerColor == null ? Color.Red : (Color)networkMapHomeSpinnerColor;
-            NetworkMapHoverSpinnerColor = networkMapHoverSpinnerColor == null ? Color.LightSeaGreen : (Color)networkMapHoverSpinnerColor;
-            NetworkMapConnectedSpinnerColor = networkMapConnectedSpinnerColor == null ? Color.Khaki : (Color)networkMapConnectedSpinnerColor;
+            NetworkMapHoverSpinnerColor = networkMapHoverSpinnerColor == null ? Color.Firebrick : (Color)networkMapHoverSpinnerColor;
+            NetworkMapConnectedSpinnerColor = networkMapConnectedSpinnerColor == null ? Color.Purple : (Color)networkMapConnectedSpinnerColor;
+            _isFlashing = false;
+            _oldHeaderBG = ModuleHeaderBackgroundColor;
+            _oldStatusBG = StatusBarBackgroundColor;
+            _oldNodeColor = NetworkMapNodeColor;
+            _oldOutlineColor = ModuleOutlineColor;
+        }
+
+        public void Flash()
+        {
+            _isFlashing = true;
+            _lerpAmount = 1f;
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            if (!_isFlashing)
+                return;
+            if(_lerpAmount > 0.0f)
+            {
+                ModuleHeaderBackgroundColor = Color.Lerp(_oldHeaderBG, Color.Red, _lerpAmount);
+                StatusBarBackgroundColor = Color.Lerp(_oldStatusBG, Color.Red, _lerpAmount);
+                NetworkMapNodeColor = Color.Lerp(_oldNodeColor, Color.Red, _lerpAmount);
+                ModuleOutlineColor = Color.Lerp(_oldOutlineColor, Color.Red, _lerpAmount);
+                _lerpAmount -= 0.025f;
+                return;
+            }
+            ModuleHeaderBackgroundColor = _oldHeaderBG;
+            StatusBarBackgroundColor = _oldStatusBG;
+            NetworkMapNodeColor = _oldNodeColor;
+            ModuleOutlineColor = _oldOutlineColor;
+            _isFlashing = false;
         }
     }
 }

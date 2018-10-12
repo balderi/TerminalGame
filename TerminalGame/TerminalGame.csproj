@@ -106,6 +106,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Scenes\GameOverScene.cs" />
     <Compile Include="Scenes\GameScene.cs" />
     <Compile Include="Scenes\IScene.cs" />
     <Compile Include="Scenes\LoadGameScene.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Scenes\SceneManager.cs" />
     <Compile Include="Scenes\SettingsScene.cs" />
     <Compile Include="States\GameLoadingState.cs" />
+    <Compile Include="States\GameOverState.cs" />
     <Compile Include="States\GameRunningState.cs" />
     <Compile Include="States\MainMenuState.cs" />
     <Compile Include="States\SettingsMenuState.cs" />
@@ -152,6 +154,7 @@
     <Compile Include="Utilities\MusicManager.cs" />
     <Compile Include="Utilities\Passwords.cs" />
     <Compile Include="Utilities\Settings.cs" />
+    <Compile Include="Utilities\SoundManager.cs" />
     <Compile Include="Utilities\TerminalDateTime.cs" />
     <Compile Include="Utilities\TextHandler\Cursor.cs" />
     <Compile Include="Utilities\TextHandler\Extensions.cs" />
@@ -159,6 +162,7 @@
     <Compile Include="Utilities\TextHandler\Text.cs" />
     <Compile Include="Utilities\TextHandler\TextBox.cs" />
     <Compile Include="Utilities\TextHandler\TextRenderer.cs" />
+    <Compile Include="Utilities\ActiveTracer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

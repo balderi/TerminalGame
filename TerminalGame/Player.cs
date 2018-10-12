@@ -1,4 +1,7 @@
-﻿using TerminalGame.Computers;
+﻿using System;
+using TerminalGame.Computers;
+using TerminalGame.States;
+using TerminalGame.Utilities;
 
 namespace TerminalGame
 {

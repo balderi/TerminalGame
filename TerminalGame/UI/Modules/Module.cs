@@ -47,6 +47,7 @@ namespace TerminalGame.UI.Modules
         /// </summary>
         protected GraphicsDevice _graphics;
 
+        protected ThemeManager _themeManager;
         /// <summary>
         /// Base UI module constructor
         /// </summary>
@@ -54,6 +55,7 @@ namespace TerminalGame.UI.Modules
         /// <param name="container">Container for the module</param>
         protected Module(GraphicsDevice graphics, Rectangle container)
         {
+            _themeManager = ThemeManager.GetInstance();
             _graphics = graphics;
             Container = container;
         }

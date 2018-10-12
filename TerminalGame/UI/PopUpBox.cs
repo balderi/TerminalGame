@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TerminalGame.UI.Themes;
 using TerminalGame.Utilities;
 
 namespace TerminalGame.UI
@@ -13,6 +14,8 @@ namespace TerminalGame.UI
         public Point Location { get; set; }
         public string Text { get; set; }
         public bool IsActive { get; set; }
+
+        private ThemeManager _themeManager;
 
         /// <summary>
         /// Creates a pop-up box with info
@@ -29,6 +32,7 @@ namespace TerminalGame.UI
             Text = text;
             Location = container.Location;
             Container = container;
+            _themeManager = ThemeManager.GetInstance();
             _font = font;
             _fontColor = fontColor;
             _backColor = backColor;
@@ -51,6 +55,7 @@ namespace TerminalGame.UI
         {
             Text = text;
             Location = location;
+            _themeManager = ThemeManager.GetInstance();
             _font = font;
             _fontColor = fontColor;
             _backColor = backColor;
@@ -69,9 +74,9 @@ namespace TerminalGame.UI
                 var x = Container.X + 10;
                 var y = Container.Y + (Container.Height / 2 - stringHeight / 2);
 
-                spriteBatch.Draw(_backgroundTexture, Container, _backColor);
-                spriteBatch.DrawString(_font, Text, new Vector2(x, y), _fontColor);
-                Drawing.DrawBorder(spriteBatch, Container, _borderTexture, 1, Color.White);
+                spriteBatch.Draw(_backgroundTexture, Container, _themeManager.CurrentTheme.ModuleBackgroundColor);
+                spriteBatch.DrawString(_font, Text, new Vector2(x, y), _themeManager.CurrentTheme.ModuleFontColor);
+                Drawing.DrawBorder(spriteBatch, Container, _borderTexture, 1, _themeManager.CurrentTheme.ModuleOutlineColor);
             }
         }
 

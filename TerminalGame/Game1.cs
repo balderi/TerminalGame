@@ -37,8 +37,8 @@ namespace TerminalGame
         OS.OS _os;
 
         private SpriteFont _font, _fontL, _fontXL, _menuFont, _fontS, _fontXS;
-        private Song bgm_game, bgm_menu;
-        private SoundEffect networkMapNodeHover, networkMapNodeClick;
+        //private Song bgm_game, bgm_menu;
+        //private SoundEffect networkMapNodeHover, networkMapNodeClick;
         private readonly string GameTitle;
         private float musicVolume, /*audioVolume,*/ masterVolume;
 
@@ -46,10 +46,11 @@ namespace TerminalGame
         SettingsScene settingsMenuScene;
         LoadGameScene loadGameMenuScene;
         LoadingScene loadingScene;
-        GameScene gameScene;
+        GameScene gameRunningScene;
+        GameOverScene gameOverScene;
 
         //RenderTarget2D renderTarget;
-        
+
         Terminal terminal;
         NetworkMap networkMap;
         StatusBar statusBar;
@@ -106,9 +107,7 @@ namespace TerminalGame
             GameManager.GetInstance().IsGameRunning = false;
             GameManager.GetInstance().IsFullScreen = false;
             GameManager.GetInstance().BloomEnabled = false;
-
-            _stateMachine = new StateMachine(MainMenuState.Instance);
-
+            
             _random = new Random(DateTime.Now.Millisecond);
 
             masterVolume = 1.0f;
@@ -166,17 +165,26 @@ namespace TerminalGame
             Console.WriteLine("Done");
             
             Console.Write("Loading music... ");
-            bgm_game = Content.Load<Song>("Audio/Music/ambientbgm1_2");
-            bgm_menu = Content.Load<Song>("Audio/Music/mainmenu");
+            //bgm_game = Content.Load<Song>("Audio/Music/ambientbgm1_2");
+            //bgm_menu = Content.Load<Song>("Audio/Music/mainmenu");
+            MusicManager.GetInstance().AddSong(Content.Load<Song>("Audio/Music/ambientbgm1_2"));
+            MusicManager.GetInstance().AddSong(Content.Load<Song>("Audio/Music/mainmenu"));
             MusicManager.GetInstance().AddSong(Content.Load<Song>("Audio/Music/dynamicsTest0"));
             MusicManager.GetInstance().AddSong(Content.Load<Song>("Audio/Music/dynamicsTest1"));
             MusicManager.GetInstance().AddSong(Content.Load<Song>("Audio/Music/dynamicsTest2"));
-            MediaPlayer.Play(bgm_menu);
+            MediaPlayer.Play(MusicManager.GetInstance().Songs[1]);
             Console.WriteLine("Done");
 
             Console.Write("Loading audio... ");
-            networkMapNodeHover = Content.Load<SoundEffect>("Audio/Sounds/interface4");
-            networkMapNodeClick = Content.Load<SoundEffect>("Audio/Sounds/click1");
+            SoundManager.GetInstance().LoadSound("networkNodeHover", 
+                Content.Load<SoundEffect>("Audio/Sounds/interface4"));
+            SoundManager.GetInstance().LoadSound("networkNodeClick", 
+                Content.Load<SoundEffect>("Audio/Sounds/click1"));
+            SoundManager.GetInstance().LoadSound("traceWarning", 
+                Content.Load<SoundEffect>("Audio/Sounds/trace_warn"));
+
+            //networkMapNodeHover = Content.Load<SoundEffect>("Audio/Sounds/interface4");
+            //networkMapNodeClick = Content.Load<SoundEffect>("Audio/Sounds/click1");
             Console.WriteLine("Done");
 
             FontManager.SetFonts(_fontXS, _fontS, _font, _fontL, _fontXL);
@@ -222,15 +230,22 @@ namespace TerminalGame
             bg = backgrounds[_random.Next(0, backgrounds.Length)];
             Console.WriteLine("Done");
 
+            _stateMachine = new StateMachine(MainMenuState.Instance);
+
             Console.Write("Loading scenes... ");
             mainMenuScene = new MenuScene(GameTitle, Window, FontManager.GetFont(FontManager.FontSize.Large), FontManager.GetFont(FontManager.FontSize.XLarge), GraphicsDevice, _stateMachine);
             mainMenuScene.ButtonClicked += MainMenu_ButtonClicked;
             loadGameMenuScene = new LoadGameScene(Window, FontManager.GetFont(FontManager.FontSize.Large), FontManager.GetFont(FontManager.FontSize.XLarge), GraphicsDevice, _stateMachine);
             settingsMenuScene = new SettingsScene(Window, FontManager.GetFont(FontManager.FontSize.Large), FontManager.GetFont(FontManager.FontSize.XLarge), GraphicsDevice, _stateMachine);
             loadingScene = new LoadingScene(new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2), Window, GraphicsDevice);
-            gameScene = new GameScene(bg, bgR, _stateMachine);
+            gameRunningScene = new GameScene(bg, bgR, _stateMachine);
+            gameOverScene = new GameOverScene(new Vector2(_graphics.PreferredBackBufferWidth / 2, 
+                _graphics.PreferredBackBufferHeight / 2), Window, 
+                FontManager.GetFont(FontManager.FontSize.Large),
+                GraphicsDevice, _stateMachine);
 
-            SceneManager.SetScenes(mainMenuScene, settingsMenuScene, loadGameMenuScene, loadingScene, gameScene);
+            SceneManager.SetScenes(mainMenuScene, settingsMenuScene, loadGameMenuScene, 
+                loadingScene, gameRunningScene, gameOverScene);
             Console.WriteLine("Done");
             //Load our Bloomfilter!
             _bloomFilter = new BloomFilter();
@@ -242,6 +257,7 @@ namespace TerminalGame
             _bloomFilter.BloomStrengthMultiplier = 0.5f;
 
             Console.WriteLine("Done loading");
+
             _stateMachine.Transition(GameState.MainMenu);
         }
 
@@ -252,6 +268,7 @@ namespace TerminalGame
         /// <param name="args"></param>
         protected override void OnExiting(object sender, EventArgs args)
         {
+            Player.GetInstance().ConnectedComputer.AbortTrace();
             Console.WriteLine("Exiting...");
             base.OnExiting(sender, args);
         }
@@ -330,7 +347,7 @@ namespace TerminalGame
             _os = OS.OS.GetInstance();
             var themeManager = UI.Themes.ThemeManager.GetInstance();
             Theme test = new Theme("test", new Color(51, 51, 55), Color.Black * 0.75f, 
-                Color.White, new Color(63, 63, 63), Color.White, new Color(80, 80, 80), 
+                Color.LightGray, new Color(63, 63, 63), Color.White, new Color(80, 80, 80), 
                 Color.RoyalBlue, Color.Blue, Color.DarkOrange, Color.Green);
             themeManager.AddTheme(test);
             themeManager.ChangeTheme("test");
@@ -408,8 +425,8 @@ namespace TerminalGame
                 IsActive = true,
                 IsVisible = true,
             };
-            networkMap.Hover = networkMapNodeHover;
-            networkMap.Click = networkMapNodeClick;
+            //networkMap.Hover = networkMapNodeHover;
+            //networkMap.Click = networkMapNodeClick;
 
             Console.WriteLine("Loading statusbar...");
             statusBar = new StatusBar(GraphicsDevice, 
@@ -465,9 +482,9 @@ namespace TerminalGame
 
             GameManager.GetInstance().IsGameRunning = true;
 
-            MediaPlayer.Stop();
+            //MediaPlayer.Stop();
             _stateMachine.Transition(GameState.GameRunning);
-            MediaPlayer.Play(bgm_game);
+            //MediaPlayer.Play(bgm_game);
         }
         
         /// <summary>
@@ -491,6 +508,7 @@ namespace TerminalGame
 
             KeyboardInput.Update();
 
+            ThemeManager.GetInstance().Update(gameTime);
             _stateMachine.UpdateState(gameTime);
         }
 

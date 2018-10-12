@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using TerminalGame.Utilities;
 
 namespace TerminalGame.States
@@ -14,7 +15,11 @@ namespace TerminalGame.States
     {
         public static MainMenuState Instance => new MainMenuState();
 
-        private MainMenuState() { }
+        private MainMenuState()
+        {
+            if(MediaPlayer.Queue.ActiveSong != MusicManager.GetInstance().Songs[1])
+                MediaPlayer.Play(MusicManager.GetInstance().Songs[1]);
+        }
 
         public override State Next(GameState state)
         {
