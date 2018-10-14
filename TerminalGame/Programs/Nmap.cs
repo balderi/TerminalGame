@@ -24,11 +24,11 @@ namespace TerminalGame.Programs
             // TODO: Make latency dependent on distance from player computer. Maybe make this a property of computers.
             int latency = _rnd.Next(10, 99);
             _terminal.BlockInput();
-            _player.PlayersComputer.FileSystem.ChangeDir("/");
-            _player.PlayersComputer.FileSystem.ChangeDir("bin");
+            //_player.PlayersComputer.FileSystem.ChangeDir("/");
+            //_player.PlayersComputer.FileSystem.ChangeDir("bin");
             if (_player.PlayersComputer.FileSystem.TryFindFile("nmap", false))
             {
-                _player.PlayersComputer.FileSystem.ChangeDir("/");
+                //_player.PlayersComputer.FileSystem.ChangeDir("/");
                 if (String.IsNullOrEmpty(ip))
                 {
                     _remoteComp = _player.ConnectedComputer;
@@ -88,7 +88,7 @@ namespace TerminalGame.Programs
             {
                 _terminal.Write("\nThe program \'nmap\' is currently not installed");
                 _terminal.UnblockInput();
-                _player.PlayersComputer.FileSystem.ChangeDir("/");
+                //_player.PlayersComputer.FileSystem.ChangeDir("/");
                 return 1;
             }
         }

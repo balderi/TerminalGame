@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerminalGame.UI.Themes;
 using TerminalGame.Utilities;
 
 namespace TerminalGame.Computers
@@ -34,12 +35,12 @@ namespace TerminalGame.Computers
             if(_computer.Tracer.IsActive)
             {
                 _traceProgress = "TRACE: " + _computer.Tracer.Counter + "%";
+                _lerp = (float)gameTime.TotalGameTime.TotalMilliseconds % 1000 / 1000;
             }
             else
             {
                 _traceProgress = "No Trace";
             }
-            _lerp = (float)gameTime.TotalGameTime.TotalMilliseconds % 1000 / 1000;
         }
 
         public void Draw(SpriteBatch spriteBatch, Rectangle container)
@@ -52,11 +53,11 @@ namespace TerminalGame.Computers
                 spriteBatch.DrawString(FontManager.GetFont(FontManager.FontSize.XLarge), _traceProgress, 
                     new Vector2(container.X + 11, 
                     container.Y + container.Height - FontManager.GetFont(FontManager.FontSize.XLarge).MeasureString("A").Y), 
-                    Color.Lerp(Color.Red, Color.White, _lerp));
+                    Color.Lerp(ThemeManager.GetInstance().CurrentTheme.WarningColor, ThemeManager.GetInstance().CurrentTheme.ModuleFontColor, _lerp));
                 spriteBatch.DrawString(FontManager.GetFont(FontManager.FontSize.XLarge), _traceProgress,
                     new Vector2(container.X + 10,
                     container.Y + container.Height - 1 - FontManager.GetFont(FontManager.FontSize.XLarge).MeasureString("A").Y),
-                    Color.Red);
+                    ThemeManager.GetInstance().CurrentTheme.WarningColor);
             }
         }
     }

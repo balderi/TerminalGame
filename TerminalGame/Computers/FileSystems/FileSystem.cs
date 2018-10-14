@@ -68,6 +68,16 @@ namespace TerminalGame.Computers.FileSystems
             {
                 foreach (File f in CurrentDir.Children)
                 {
+                    if(f.IsDirectory)
+                    {
+                        foreach(File fi in f.Children)
+                        {
+                            if (fi.Name == name)
+                            {
+                                return isDir ? fi.IsDirectory : !fi.IsDirectory;
+                            }
+                        }
+                    }
                     if (f.Name == name)
                     {
                         return isDir ? f.IsDirectory : !f.IsDirectory;

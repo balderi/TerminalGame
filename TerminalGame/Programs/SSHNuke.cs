@@ -18,8 +18,8 @@ namespace TerminalGame.Programs
         {
             _terminal.BlockInput();
             _connComp = _player.ConnectedComputer;
-            _player.PlayersComputer.FileSystem.ChangeDir("/");
-            _player.PlayersComputer.FileSystem.ChangeDir("bin");
+            //_player.PlayersComputer.FileSystem.ChangeDir("/");
+            //_player.PlayersComputer.FileSystem.ChangeDir("bin");
             if (_player.PlayersComputer.FileSystem.TryFindFile("sshnuke", false))
             {
                 if(_player.ConnectedComputer != _player.PlayersComputer)
@@ -30,15 +30,15 @@ namespace TerminalGame.Programs
                 _terminal.Write("\nConnecting to " + _player.ConnectedComputer.IP + ":ssh ");
                 _textToWrite = new string[]
                 {
-                ".",
-                ".",
-                ".",
-                " successful.",
-                "\nAttempting to exploit SSHv1 CRC32 ",
-                ".",
-                ".",
-                ".",
-                " successful."
+                    ".",
+                    ".",
+                    ".",
+                    " successful.",
+                    "\nAttempting to exploit SSHv1 CRC32 ",
+                    ".",
+                    ".",
+                    ".",
+                    " successful."
                 };
 
                 for(int i = 0; i<_textToWrite.Length; i++)
@@ -46,6 +46,7 @@ namespace TerminalGame.Programs
                     if(_connComp != _player.ConnectedComputer)
                     {
                         _terminal.Write("\nsshnuke: error: connection lost");
+                        _terminal.UnblockInput();
                         return 1;
                     }
                     if(i == 3)
@@ -73,14 +74,14 @@ namespace TerminalGame.Programs
                 //_player.ConnectedComputer.Connect();
                 _terminal.Write("\nSystem open: Access level <9>");
                 _terminal.UnblockInput();
-                _player.PlayersComputer.FileSystem.ChangeDir("/");
+                //_player.PlayersComputer.FileSystem.ChangeDir("/");
                 return 0;
             }
             else
             {
                 _terminal.Write("\nThe program \'sshnuke\' is currently not installed");
                 _terminal.UnblockInput();
-                _player.PlayersComputer.FileSystem.ChangeDir("/");
+                //_player.PlayersComputer.FileSystem.ChangeDir("/");
                 return 1;
             }
         }

@@ -28,7 +28,10 @@ namespace TerminalGame.Utilities
             else
                 TraceSpeed = traceSpeed;
 
-            _delay = (int)(1000 * TraceSpeed);
+            _delay = (int)(5000 * TraceSpeed);
+            if (_delay < 10)
+                _delay = 10;
+
             _timer = new System.Timers.Timer(_delay);
             _timer.Elapsed += Timer_tick;
         }
@@ -66,9 +69,16 @@ namespace TerminalGame.Utilities
         {
             while(Counter < 100 && IsActive)
             {
-                SoundManager.GetInstance().GetSound("traceWarning").Play();
+                try
+                {
+                    SoundManager.GetInstance().GetSound("traceWarning").Play();
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
                 ThemeManager.GetInstance().CurrentTheme.Flash();
-                Thread.Sleep((_delay / 10) * (110 - Counter));
+                Thread.Sleep(/*(_delay / 10) */ 50 * (110 - Counter));
             }
             StopTrace();
         }

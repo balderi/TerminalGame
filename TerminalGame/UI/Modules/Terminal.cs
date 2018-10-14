@@ -32,9 +32,6 @@ namespace TerminalGame.UI.Modules
         private InputType _inputType;
         
         public override SpriteFont Font { get; set; }
-        //public override Color BackgroundColor { get; set; }
-        //public override Color BorderColor { get; set; }
-        //public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
         public override bool IsVisible { get; set; }
         public override string Title { get; set; }
@@ -45,18 +42,6 @@ namespace TerminalGame.UI.Modules
             _terminalFont = terminalFont;
             Container = container;
             _updateInp = true;
-            //if (BackgroundColor == null)
-            //{
-            //    BackgroundColor = Color.LightPink;
-            //}
-            //if (BorderColor == null)
-            //{
-            //    BackgroundColor = Color.Chartreuse;
-            //}
-            //if (HeaderColor == null)
-            //{
-            //    BackgroundColor = Color.Red;
-            //}
             if (string.IsNullOrEmpty(Title))
             {
                 Title = "!!! UNNAMED WINDOW !!!";
@@ -231,7 +216,7 @@ namespace TerminalGame.UI.Modules
 
         public void BeginLogin()
         {
-            if(_inputType != InputType.login && _inputType != InputType.passwd)
+            if(_inputType == InputType.std)
                 _inputType = InputType.login;
         }
 
@@ -251,9 +236,9 @@ namespace TerminalGame.UI.Modules
         }
 
         /// <summary>
-        /// Disposes of current textbox and creates a brand new one with the proper dimensions.
+        /// Disposes of current <c>TextBox</c> and creates a brand new one with the proper dimensions.
         /// </summary>
-        /// <returns>A brand new textbox</returns>
+        /// <returns>A brand new <c>TextBox</c></returns>
         private TextBox TextBox()
         {
             if (_terminalInput == null)

@@ -24,11 +24,12 @@ namespace TerminalGame.UI.Themes
         public Color NetworkMapHomeSpinnerColor { get; private set; }
         public Color NetworkMapHoverSpinnerColor { get; private set; }
         public Color NetworkMapConnectedSpinnerColor { get; private set; }
+        public Color WarningColor { get; private set; }
 
         public Theme(string themeName, Color? statusBarBackgroundColor = null, Color? moduleBackgroundColor = null, 
             Color? moduleFontColor = null, Color? moduleHeaderBackgroundColor = null, Color? moduleHeaderFontColor = null, 
             Color? moduleOutlineColor = null, Color? networkMapNodeColor = null, Color? networkMapHomeSpinnerColor = null,
-            Color? networkMapHoverSpinnerColor = null, Color? networkMapConnectedSpinnerColor = null)
+            Color? networkMapHoverSpinnerColor = null, Color? networkMapConnectedSpinnerColor = null, Color? warningColor = null)
         {
             ThemeName = themeName;
             StatusBarBackgroundColor = statusBarBackgroundColor == null ? Color.DeepPink : (Color)statusBarBackgroundColor;
@@ -41,6 +42,7 @@ namespace TerminalGame.UI.Themes
             NetworkMapHomeSpinnerColor = networkMapHomeSpinnerColor == null ? Color.Red : (Color)networkMapHomeSpinnerColor;
             NetworkMapHoverSpinnerColor = networkMapHoverSpinnerColor == null ? Color.Firebrick : (Color)networkMapHoverSpinnerColor;
             NetworkMapConnectedSpinnerColor = networkMapConnectedSpinnerColor == null ? Color.Purple : (Color)networkMapConnectedSpinnerColor;
+            WarningColor = warningColor == null ? Color.White : (Color)warningColor;
             _isFlashing = false;
             _oldHeaderBG = ModuleHeaderBackgroundColor;
             _oldStatusBG = StatusBarBackgroundColor;
@@ -57,16 +59,21 @@ namespace TerminalGame.UI.Themes
         public void Update(GameTime gameTime)
         {
             if (!_isFlashing)
-                return;
-            if(_lerpAmount > 0.0f)
             {
-                ModuleHeaderBackgroundColor = Color.Lerp(_oldHeaderBG, Color.Red, _lerpAmount);
-                StatusBarBackgroundColor = Color.Lerp(_oldStatusBG, Color.Red, _lerpAmount);
-                NetworkMapNodeColor = Color.Lerp(_oldNodeColor, Color.Red, _lerpAmount);
-                ModuleOutlineColor = Color.Lerp(_oldOutlineColor, Color.Red, _lerpAmount);
+                return;
+            }
+
+            if (_lerpAmount > 0.0f)
+            {
+                //during flash
+                ModuleHeaderBackgroundColor = Color.Lerp(_oldHeaderBG, WarningColor, _lerpAmount);
+                StatusBarBackgroundColor = Color.Lerp(_oldStatusBG, WarningColor, _lerpAmount);
+                NetworkMapNodeColor = Color.Lerp(_oldNodeColor, WarningColor, _lerpAmount);
+                ModuleOutlineColor = Color.Lerp(_oldOutlineColor, WarningColor, _lerpAmount);
                 _lerpAmount -= 0.025f;
                 return;
             }
+            //after flash
             ModuleHeaderBackgroundColor = _oldHeaderBG;
             StatusBarBackgroundColor = _oldStatusBG;
             NetworkMapNodeColor = _oldNodeColor;

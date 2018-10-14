@@ -36,6 +36,11 @@ namespace TerminalGame.Utilities
             return _instance;
         }
 
+        /// <summary>
+        /// Set the graphics device manager.
+        /// </summary>
+        /// <param name="graphics">The <c>GraphicsDeviceManager</c></param>
+        /// <remarks>Must be set before any other method is called, as they depend on this to work.</remarks>
         public void SetGraphicsDeviceManager(GraphicsDeviceManager graphics)
         {
             if (_graphics == null)

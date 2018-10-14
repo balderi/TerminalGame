@@ -9,9 +9,6 @@ namespace TerminalGame.UI.Modules
     class TestModule : Module
     {
         public override SpriteFont Font { get; set; }
-        //public override Color BackgroundColor { get; set; }
-        //public override Color BorderColor { get; set; }
-        //public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
         public override bool IsVisible { get; set; }
         public override string Title { get; set; }
@@ -32,18 +29,7 @@ namespace TerminalGame.UI.Modules
             _click = click;
 
             _fnt = font;
-            //if(BackgroundColor == null)
-            //{
-            //    BackgroundColor = Color.LightPink;
-            //}
-            //if (BorderColor == null)
-            //{
-            //    BackgroundColor = Color.Chartreuse;
-            //}
-            //if (HeaderColor == null)
-            //{
-            //    BackgroundColor = Color.Red;
-            //}
+
             if (string.IsNullOrEmpty(Title))
             {
                 Title = "!!! UNNAMED WINDOW !!!";

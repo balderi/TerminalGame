@@ -77,7 +77,7 @@ namespace TerminalGame.Computers
                 fs.BuildBasicFileSystem();
                 FileSystem = fs;
             }
-            Tracer = new ActiveTracer((float)_random.Next(1,101)/100);
+            Tracer = new ActiveTracer((float)_random.NextDouble());
         }
 
         public void AbortTrace()

@@ -37,8 +37,6 @@ namespace TerminalGame
         OS.OS _os;
 
         private SpriteFont _font, _fontL, _fontXL, _menuFont, _fontS, _fontXS;
-        //private Song bgm_game, bgm_menu;
-        //private SoundEffect networkMapNodeHover, networkMapNodeClick;
         private readonly string GameTitle;
         private float musicVolume, /*audioVolume,*/ masterVolume;
 
@@ -48,8 +46,6 @@ namespace TerminalGame
         LoadingScene loadingScene;
         GameScene gameRunningScene;
         GameOverScene gameOverScene;
-
-        //RenderTarget2D renderTarget;
 
         Terminal terminal;
         NetworkMap networkMap;
@@ -105,22 +101,18 @@ namespace TerminalGame
 
             IsMouseVisible = true;
             GameManager.GetInstance().IsGameRunning = false;
-            GameManager.GetInstance().IsFullScreen = false;
-            GameManager.GetInstance().BloomEnabled = false;
+            GameManager.GetInstance().IsFullScreen = true;
+            GameManager.GetInstance().BloomEnabled = true;
             
             _random = new Random(DateTime.Now.Millisecond);
 
             masterVolume = 1.0f;
             musicVolume = 0.2f;
             //audioVolume = 1.0f;
-
-            //GameManager.GetInstance().ResolutionW = 1366;
-            //GameManager.GetInstance().ResolutionH = 768;
+            
             GameManager.GetInstance().ChangeResolution(1366, 768);
-
-            //_graphics.PreferredBackBufferHeight = 768;
-            //_graphics.PreferredBackBufferWidth = 1366;
-
+            //GameManager.GetInstance().ChangeResolution(GraphicsDevice.DisplayMode.Width, GraphicsDevice.DisplayMode.Height);
+            
             //Set game to fullscreen
             _graphics.HardwareModeSwitch = false;
             //_graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
@@ -129,14 +121,6 @@ namespace TerminalGame
             _graphics.ApplyChanges();
             Console.WriteLine("Resolution is now " + _graphics.PreferredBackBufferWidth + " x " + _graphics.PreferredBackBufferHeight);
             Drawing.SetBlankTexture(GraphicsDevice);
-
-            //renderTarget = new RenderTarget2D(
-            //    GraphicsDevice,
-            //    GraphicsDevice.PresentationParameters.BackBufferWidth,
-            //    GraphicsDevice.PresentationParameters.BackBufferHeight,
-            //    false,
-            //    GraphicsDevice.PresentationParameters.BackBufferFormat,
-            //    DepthFormat.Depth24);
 
             MediaPlayer.Volume = musicVolume * masterVolume; // 0.5f;
             MediaPlayer.IsRepeating = true;
@@ -165,8 +149,6 @@ namespace TerminalGame
             Console.WriteLine("Done");
             
             Console.Write("Loading music... ");
-            //bgm_game = Content.Load<Song>("Audio/Music/ambientbgm1_2");
-            //bgm_menu = Content.Load<Song>("Audio/Music/mainmenu");
             MusicManager.GetInstance().AddSong(Content.Load<Song>("Audio/Music/ambientbgm1_2"));
             MusicManager.GetInstance().AddSong(Content.Load<Song>("Audio/Music/mainmenu"));
             MusicManager.GetInstance().AddSong(Content.Load<Song>("Audio/Music/dynamicsTest0"));
@@ -182,9 +164,6 @@ namespace TerminalGame
                 Content.Load<SoundEffect>("Audio/Sounds/click1"));
             SoundManager.GetInstance().LoadSound("traceWarning", 
                 Content.Load<SoundEffect>("Audio/Sounds/trace_warn"));
-
-            //networkMapNodeHover = Content.Load<SoundEffect>("Audio/Sounds/interface4");
-            //networkMapNodeClick = Content.Load<SoundEffect>("Audio/Sounds/click1");
             Console.WriteLine("Done");
 
             FontManager.SetFonts(_fontXS, _fontS, _font, _fontL, _fontXL);
@@ -193,7 +172,6 @@ namespace TerminalGame
 
             Console.Write("Loading textures... ");
             bgR = new Rectangle(new Point(0, 0), new Point(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight));
-            //bg = Content.Load<Texture2D>("Textures/bg");
 
             backgrounds = new Texture2D[]
             {
@@ -268,7 +246,14 @@ namespace TerminalGame
         /// <param name="args"></param>
         protected override void OnExiting(object sender, EventArgs args)
         {
-            Player.GetInstance().ConnectedComputer.AbortTrace();
+            try
+            {
+                Player.GetInstance().ConnectedComputer.AbortTrace();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
             Console.WriteLine("Exiting...");
             base.OnExiting(sender, args);
         }
@@ -348,16 +333,14 @@ namespace TerminalGame
             var themeManager = UI.Themes.ThemeManager.GetInstance();
             Theme test = new Theme("test", new Color(51, 51, 55), Color.Black * 0.75f, 
                 Color.LightGray, new Color(63, 63, 63), Color.White, new Color(80, 80, 80), 
-                Color.RoyalBlue, Color.Blue, Color.DarkOrange, Color.Green);
+                Color.RoyalBlue, Color.Blue, Color.DarkOrange, Color.Green, Color.Red);
             themeManager.AddTheme(test);
             themeManager.ChangeTheme("test");
 
             FileSystem playerFS = new FileSystem();
             playerFS.BuildBasicFileSystem();
-            //playerFS.ChangeDir("bin");
             playerFS.AddFileToDir("bin", "sshnuke", "01110011011100110110100001101110011101010110101101100101001000000110000101101100011011000110111101110111011100110010000001111001011011110111010100100000011101000110111100100000011001110110000101101001011011100010000001110101011011100110000101110101011101000110100001101111011100100110100101111010011001010110010000100000011001010110111001110100011100100111100100100000011010010110111001110100011011110010000001110010011001010110110101101111011101000110010100100000011100110111100101110011011101000110010101101101011100110010000001100010011110010010000001100011011000010111010101110011011010010110111001100111001000000110000100100000011000100111010101100110011001100110010101110010001000000110111101110110011001010111001001100110011011000110111101110111001000000110100101101110001000000110000100100000011000110110100001110101011011100110101100100000011011110110011000100000011000110110111101100100011001010010000001100100011001010111001101101001011001110110111001100101011001000010000001110100011011110010000001100111011101010110000101110010011001000010000001100001011001110110000101101001011011100111001101110100001000000110001101110010011110010111000001110100011011110110011101110010011000010111000001101000011010010110001100100000011000010111010001110100011000010110001101101011011100110010000001101111011011100010000001010011010100110100100000100000011101100110010101110010011100110110100101101111011011100010000001101111011011100110010100101110", File.FileType.Binary);
             playerFS.AddFileToDir("bin", "nmap", "010011100110110101100001011100000010000001101001011100110010000001100001001000000110011001110010011001010110010100100000011000010110111001100100001000000110111101110000011001010110111000101101011100110110111101110101011100100110001101100101001000000111001101100101011000110111010101110010011010010111010001111001001000000111001101100011011000010110111001101110011001010111001000101100001000000110111101110010011010010110011101101001011011100110000101101100011011000111100100100000011101110111001001101001011101000111010001100101011011100010000001100010011110010010000001000111011011110111001001100100011011110110111000100000010011000111100101101111011011100010110000100000011101010111001101100101011001000010000001110100011011110010000001100100011010010111001101100011011011110111011001100101011100100010000001101000011011110111001101110100011100110010000001100001011011100110010000100000011100110110010101110010011101100110100101100011011001010111001100100000011011110110111000100000011000010010000001100011011011110110110101110000011101010111010001100101011100100010000001101110011001010111010001110111011011110111001001101011001011000010000001110100011010000111010101110011001000000110001001110101011010010110110001100100011010010110111001100111001000000110000100100000001000100110110101100001011100000010001000100000011011110110011000100000011101000110100001100101001000000110111001100101011101000111011101101111011100100110101100101110", File.FileType.Binary);
-            //playerFS.ChangeDir("/");
 
             Player.GetInstance().CreateNewPlayer("testPlayer", "P@ssw0rd");
 
@@ -392,19 +375,12 @@ namespace TerminalGame
             // Status bar is full screen width minus terminal width minus border/margin                                             //
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            Color moduleBorders = new Color(80, 80, 80);
-            Color moduleHeader = new Color(63, 63, 63);
-            Color statusBarBG = new Color(51, 51, 55);
-
             Console.WriteLine("Loading terminal...");
             terminal = new Terminal(GraphicsDevice,
                 new Rectangle(2, 2,
                 thirdWidth - 4, _graphics.PreferredBackBufferHeight - 4),
                 _font)
             {
-                //BackgroundColor = themeManager.CurrentTheme.ModuleBackgroundColor,
-                //BorderColor = themeManager.CurrentTheme.ModuleOutlineColor,
-                //HeaderColor = themeManager.CurrentTheme.ModuleHeaderBackgroundColor,
                 Title = "Terminal",
                 Font = _fontS,
                 IsActive = true,
@@ -417,16 +393,11 @@ namespace TerminalGame
                 _graphics.PreferredBackBufferWidth - terminal.Container.Width - 7, thirdHeight - 4), 
                 computer, _fontS, NetworkNodeSpinners)
             {
-                //BackgroundColor = themeManager.CurrentTheme.ModuleBackgroundColor,
-                //BorderColor = themeManager.CurrentTheme.ModuleOutlineColor,
-                //HeaderColor = themeManager.CurrentTheme.ModuleHeaderBackgroundColor,
                 Title = "Network Map",
                 Font = _fontS,
                 IsActive = true,
                 IsVisible = true,
             };
-            //networkMap.Hover = networkMapNodeHover;
-            //networkMap.Click = networkMapNodeClick;
 
             Console.WriteLine("Loading statusbar...");
             statusBar = new StatusBar(GraphicsDevice, 
@@ -434,9 +405,6 @@ namespace TerminalGame
                 _graphics.PreferredBackBufferWidth - terminal.Container.Width - 7, (int)_fontL.MeasureString("A").Y - 4), 
                 _fontXS)
             {
-                //BackgroundColor = themeManager.CurrentTheme.StatusBarBackgroundColor,
-                //BorderColor = themeManager.CurrentTheme.StatusBarBackgroundColor,
-                //HeaderColor = themeManager.CurrentTheme.StatusBarBackgroundColor,
                 Title = "Status Bar",
                 Font = _fontL,
                 IsActive = true,
@@ -449,9 +417,6 @@ namespace TerminalGame
                 tqWidth - terminal.Container.Width - 7, _graphics.PreferredBackBufferHeight - networkMap.Container.Height - statusBar.Container.Height - 10), 
                 _fontL, _font)
             {
-                //BackgroundColor = themeManager.CurrentTheme.ModuleBackgroundColor,
-                //BorderColor = themeManager.CurrentTheme.ModuleOutlineColor,
-                //HeaderColor = themeManager.CurrentTheme.ModuleHeaderBackgroundColor,
                 Title = "Remote System",
                 Font = _fontS,
                 IsActive = true,
@@ -464,9 +429,6 @@ namespace TerminalGame
                 _graphics.PreferredBackBufferWidth - remoteView.Container.X - remoteView.Container.Width - 5, _graphics.PreferredBackBufferHeight - networkMap.Container.Height - statusBar.Container.Height - 10), 
                 _font)
             {
-                //BackgroundColor = themeManager.CurrentTheme.ModuleBackgroundColor,
-                //BorderColor = themeManager.CurrentTheme.ModuleOutlineColor,
-                //HeaderColor = themeManager.CurrentTheme.ModuleHeaderBackgroundColor,
                 Title = "Friendly neighborhood notepad",
                 Font = _fontS,
                 IsActive = true,
@@ -481,10 +443,8 @@ namespace TerminalGame
             Console.WriteLine("Game started");
 
             GameManager.GetInstance().IsGameRunning = true;
-
-            //MediaPlayer.Stop();
+            
             _stateMachine.Transition(GameState.GameRunning);
-            //MediaPlayer.Play(bgm_game);
         }
         
         /// <summary>
