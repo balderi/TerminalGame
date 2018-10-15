@@ -85,7 +85,11 @@
     <Compile Include="Computers\FileSystems\FileSystem.cs" />
     <Compile Include="Computers\RemoteUI.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="IO\LoadGame.cs" />
+    <Compile Include="IO\Parsing\ComputerFromXml.cs" />
     <Compile Include="IO\Parsing\ComputerToXml.cs" />
+    <Compile Include="IO\Parsing\PlayerFromXml.cs" />
+    <Compile Include="IO\Parsing\PlayerToXml.cs" />
     <Compile Include="IO\SaveGame.cs" />
     <Compile Include="IO\Validation.cs" />
     <Compile Include="LoadingScreen.cs" />

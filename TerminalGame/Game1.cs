@@ -17,6 +17,7 @@ using TerminalGame.Computers.FileSystems;
 using TerminalGame.UI.Shaders;
 using TerminalGame.UI.Themes;
 using System.Xml;
+using TerminalGame.IO;
 
 namespace TerminalGame
 {
@@ -255,6 +256,7 @@ namespace TerminalGame
             {
                 Console.WriteLine(e.Message);
             }
+            SaveGame.Save();
             Console.WriteLine("Exiting...");
             base.OnExiting(sender, args);
         }
@@ -332,12 +334,6 @@ namespace TerminalGame
             Console.WriteLine("Setting up computers...");
 
             _os = OS.OS.GetInstance();
-            var themeManager = UI.Themes.ThemeManager.GetInstance();
-            Theme test = new Theme("test", new Color(51, 51, 55), Color.Black * 0.75f, 
-                Color.LightGray, new Color(63, 63, 63), Color.White, new Color(80, 80, 80), 
-                Color.RoyalBlue, Color.Blue, Color.DarkOrange, Color.Green, Color.Red);
-            themeManager.AddTheme(test);
-            themeManager.ChangeTheme("test");
 
             FileSystem playerFS = new FileSystem();
             playerFS.BuildBasicFileSystem();
@@ -350,13 +346,28 @@ namespace TerminalGame
             
             playerComp.SetSpeed(1.0f);
 
+            Computers.Computers.GetInstance().ComputerList.Clear();
+
+            //we add the player's computer first, to make sure it is the first computer on the list.
             Computers.Computers.GetInstance().ComputerList.Add(playerComp);
+            //then we add the rest
             Computers.Computers.GetInstance().DoComputers(100);
 
             playerComp.GetRoot();
             playerComp.Connect(true);
 
             Player.GetInstance().PlayersComputer = playerComp;
+            
+            loadingScene.LoadItem = "Loading themes...";
+
+            Console.WriteLine("Loading themes...");
+            var themeManager = ThemeManager.GetInstance();
+            Theme test = new Theme("test", new Color(51, 51, 55), Color.Black * 0.75f,
+                Color.LightGray, new Color(63, 63, 63), Color.White, new Color(80, 80, 80),
+                Color.RoyalBlue, Color.Blue, Color.DarkOrange, Color.Green, Color.Red);
+            themeManager.AddTheme(test);
+            themeManager.ChangeTheme("test");
+
 
             loadingScene.LoadItem = "Loading modules...";
             
@@ -451,15 +462,8 @@ namespace TerminalGame
             
             _stateMachine.Transition(GameState.GameRunning);
 
-            IO.SaveGame.CreateBlankSave();
-
-
-
-            foreach(Computer c in Computers.Computers.GetInstance().ComputerList)
-            {
-                IO.Parsing.ComputerToXml.Parse(c, GameManager.GetInstance().CurrentSave);
-            }
-            GameManager.GetInstance().CurrentSave.Save(GameManager.GetInstance().SavePath + "/" + GameManager.GetInstance().CurrentSaveName + ".tgs");
+            SaveGame.Save();
+            //LoadGame.Load();
         }
         
         /// <summary>

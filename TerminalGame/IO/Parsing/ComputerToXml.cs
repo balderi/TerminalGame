@@ -54,7 +54,7 @@ namespace TerminalGame.IO.Parsing
                     computer.FileSystem.ChangeDir(f.Name);
                     foreach (Computers.FileSystems.File sf in computer.FileSystem.CurrentDir.Children)
                     {
-                        if (f.IsDirectory)
+                        if (sf.IsDirectory)
                         {
                             XmlElement subdir = xDoc.CreateElement("dir");
                             subdir.SetAttribute("name", sf.Name);

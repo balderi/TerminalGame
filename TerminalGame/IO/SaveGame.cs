@@ -13,7 +13,7 @@ namespace TerminalGame.IO
     {
         public static void CreateBlankSave()
         {
-            string saveName = "save_" + DateTime.Now.ToShortDateString();
+            string saveName = Player.GetInstance().Name + "_save";
             GameManager.GetInstance().CurrentSaveName = saveName;
             XmlDocument saveGame = new XmlDocument();
             XmlNode dec = saveGame.CreateXmlDeclaration("1.0", "UTF-8", null);
@@ -21,25 +21,26 @@ namespace TerminalGame.IO
             XmlElement root = saveGame.CreateElement("TerminalGameSave");
             root.SetAttribute("version", GameManager.GetInstance().Version);
             root.SetAttribute("saveName", saveName);
-
-            XmlElement player = saveGame.CreateElement("Player");
-            player.SetAttribute("name", Player.GetInstance().Name);
-            player.SetAttribute("password", Player.GetInstance().Password);
-            player.SetAttribute("balance", Player.GetInstance().Balance.ToString());
-            root.AppendChild(player);
             saveGame.AppendChild(root);
+
             saveGame.Save(GameManager.GetInstance().SavePath + "/" + saveName + ".tgs");
             GameManager.GetInstance().CurrentSave = saveGame;
         }
 
         public static void Save()
         {
+            Console.WriteLine("Starting save...");
             CreateBlankSave();
+
+            Parsing.PlayerToXml.Parse(Player.GetInstance(), GameManager.GetInstance().CurrentSave);
+
             foreach(Computers.Computer c in Computers.Computers.GetInstance().ComputerList)
             {
                 Parsing.ComputerToXml.Parse(c, GameManager.GetInstance().CurrentSave);
             }
+
             GameManager.GetInstance().CurrentSave.Save(GameManager.GetInstance().SavePath + "/" + GameManager.GetInstance().CurrentSaveName + ".tgs");
+            Console.WriteLine("Done");
         }
     }
 }
