@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using TerminalGame.Utilities;
 
 namespace TerminalGame.IO
 {
@@ -11,8 +12,8 @@ namespace TerminalGame.IO
     {
         public static bool IsSaveGamesFolderValid()
         {
-            string basePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "/TerminalGame";
-            string savePath = basePath + "/Saves";
+            string basePath = GameManager.GetInstance().UserFilePath;
+            string savePath = GameManager.GetInstance().SavePath;
 
             Console.WriteLine("Validating required folders...");
             Console.WriteLine("Checking path {0}...", savePath);

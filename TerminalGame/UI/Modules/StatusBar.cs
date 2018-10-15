@@ -20,9 +20,7 @@ namespace TerminalGame.UI.Modules
 
         public StatusBar(GraphicsDevice graphics, Rectangle container, SpriteFont spriteFont) : base(graphics, container)
         {
-            _buildNumber = String.Format("Version {0}.{1}-alpha\n  Build {2}", System.Reflection.Assembly.GetEntryAssembly().GetName().Version.Major, 
-                System.Reflection.Assembly.GetEntryAssembly().GetName().Version.Minor, 
-                System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetExecutingAssembly().Location).ToString("yyyyMMdd"));
+            _buildNumber = String.Format("Version {0}\n  Build {1}", GameManager.GetInstance().Version, GameManager.GetInstance().BuildNumber);
 
             _playerDeets = "   Name: " + Player.GetInstance().Name + "\nBalance: $" + Player.GetInstance().Balance;
 

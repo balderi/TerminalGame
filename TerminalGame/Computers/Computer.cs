@@ -26,6 +26,7 @@ namespace TerminalGame.Computers
         public RemoteUI RemoteUI { get; private set; }
         public float MapX { get; set; }
         public float MapY { get; set; }
+        public float TraceTime { get; private set; }
         public ActiveTracer Tracer { get; private set; }
 
         public event EventHandler<ConnectEventArgs> Connected;
@@ -34,18 +35,19 @@ namespace TerminalGame.Computers
         private readonly int[] _defaultPorts = { 22, 25, 80, 443 };
         private Random _random;
 
-        public Computer(Type type, string ip, string name, string rootPassword)
+        public Computer(Type type, string ip, string name, string rootPassword, float traceTime)
         {
             ComputerType = type;
             IP = ip;
             Name = name;
             RootPassword = rootPassword;
+            TraceTime = traceTime;
             RemoteUI = CreateRemoteUI();
             LinkedComputers = new List<Computer>();
             Initialize();
         }
 
-        public Computer(Type type, string ip, string name, string rootPassword, RemoteUI remoteUI) : this(type, ip, name, rootPassword)
+        public Computer(Type type, string ip, string name, string rootPassword, float traceTime, RemoteUI remoteUI) : this(type, ip, name, rootPassword, traceTime)
         {
             ComputerType = type;
             IP = ip;
@@ -56,18 +58,19 @@ namespace TerminalGame.Computers
             Initialize();
         }
 
-        public Computer(Type type, string ip, string name, string rootPassword, FileSystem fileSystem) : this (type, ip, name, rootPassword)
+        public Computer(Type type, string ip, string name, string rootPassword, float traceTime, FileSystem fileSystem) : this (type, ip, name, rootPassword, traceTime)
         {
             FileSystem = fileSystem;
         }
 
-        public Computer(Type type, string ip, string name, string rootPassword, FileSystem fileSystem, int[] openPorts) : this(type, ip, name, rootPassword, fileSystem)
+        public Computer(Type type, string ip, string name, string rootPassword, float traceTime, FileSystem fileSystem, int[] openPorts) : this(type, ip, name, rootPassword, traceTime, fileSystem)
         {
             OpenPorts = BuildPorts(openPorts);
         }
 
         private void Initialize()
         {
+            IsShownOnMap = true;
             _random = new Random(DateTime.Now.Millisecond);
             if(OpenPorts == null)
                 OpenPorts = BuildPorts(_defaultPorts);
@@ -77,7 +80,7 @@ namespace TerminalGame.Computers
                 fs.BuildBasicFileSystem();
                 FileSystem = fs;
             }
-            Tracer = new ActiveTracer((float)_random.NextDouble());
+            Tracer = new ActiveTracer(TraceTime);
         }
 
         public void AbortTrace()
@@ -199,6 +202,31 @@ namespace TerminalGame.Computers
             {
                 retval.Add(port, Enum.IsDefined(typeof(KnownPorts), port) ? ((KnownPorts)port).ToString() : "Unknown");
             }
+            return retval;
+        }
+
+        public int[] GetPortsArray()
+        {
+            int length = OpenPorts.Count;
+            var retval = new int[length];
+            int i = 0;
+            foreach(KeyValuePair<int, string> port in OpenPorts)
+            {
+                retval[i++] = port.Key;
+            }
+            return retval;
+        }
+
+        public string GetPortsString()
+        {
+            string retval = "";
+            var ports = GetPortsArray();
+            int length = ports.Length;
+            for(int i = 0; i < length; i++)
+            {
+                retval += " " + ports[i];
+            }
+
             return retval;
         }
 

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Computers;
 using TerminalGame.UI.Themes;
+using TerminalGame.Utilities;
 
 namespace TerminalGame.UI
 {
@@ -48,10 +49,11 @@ namespace TerminalGame.UI
             Container = container;
             Position = Container.Location;
             InfoBox = infoBox;
+            InfoBox.Text = InfoBox.Text + "\n" + Computer.TraceTime;
             var holder = InfoBox.Container;
+            holder.Width = (int)FontManager.GetFont(FontManager.FontSize.Small).MeasureString(InfoBox.Text).Length() + 10;
             holder.Location = Position + new Point(Container.Width + 5, 0);
             InfoBox.Container = holder;
-            InfoBox.Text = Computer.Name + "\n" + Computer.IP;
             _nodeSpinners = nodeSpinners;
             _rotationCW = 0.0f;
 

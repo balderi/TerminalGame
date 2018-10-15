@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using TerminalGame.States;
 
 namespace TerminalGame.Utilities
@@ -21,10 +22,22 @@ namespace TerminalGame.Utilities
         public bool BloomEnabled { get; set; }
         public int ResolutionW { get; set; }
         public int ResolutionH { get; set; }
+        public string Version { get; private set; }
+        public string BuildNumber { get; private set; }
+        public string UserFilePath { get; private set; }
+        public string SavePath { get; private set; }
+        public XmlDocument CurrentSave { get; set; }
+        public string CurrentSaveName { get; set; }
 
         private GameManager()
         {
             _intensity = GameIntensity.Peaceful;
+            Version = System.Reflection.Assembly.GetEntryAssembly().GetName().Version.Major.ToString() + 
+                "." + System.Reflection.Assembly.GetEntryAssembly().GetName().Version.Minor.ToString() +
+                "a";
+            BuildNumber = System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetExecutingAssembly().Location).ToString("yyyyMMdd").ToString();
+            UserFilePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "/TerminalGame";
+            SavePath = UserFilePath + "/Saves";
         }
 
         public static GameManager GetInstance()

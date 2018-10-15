@@ -6,17 +6,17 @@ namespace TerminalGame.Utilities.Tests
     [TestClass()]
     public class CommandParserTests
     {
-        [TestInitialize]
-        public void Init()
-        {
-            Computer computer = new Computer(Computer.Type.Workstation, "1.1.1.1", "test", "test");
-            Player player = Player.GetInstance();
-            computer.GetRoot();
-            computer.Connect(true);
-            player.PlayersComputer = computer;
-            Computers.Computers.DoComputers(10);
-            Computers.Computers.ComputerList.Add(computer);
-        }
+        //[TestInitialize]
+        //public void Init()
+        //{
+        //    Computer computer = new Computer(Computer.Type.Workstation, "1.1.1.1", "test", "test");
+        //    Player player = Player.GetInstance();
+        //    computer.GetRoot();
+        //    computer.Connect(true);
+        //    player.PlayersComputer = computer;
+        //    Computers.Computers.DoComputers(10);
+        //    Computers.Computers.ComputerList.Add(computer);
+        //}
 
         //[TestMethod]
         //public void Echo() => Assert.AreEqual("\ntest", CommandParser.ParseCommand("echo \"test\""));

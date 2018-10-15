@@ -16,6 +16,7 @@ using System.Threading;
 using TerminalGame.Computers.FileSystems;
 using TerminalGame.UI.Shaders;
 using TerminalGame.UI.Themes;
+using System.Xml;
 
 namespace TerminalGame
 {
@@ -328,6 +329,7 @@ namespace TerminalGame
             Console.WriteLine("Starting new game...");
 
             loadingScene.LoadItem = "Generating computers...";
+            Console.WriteLine("Setting up computers...");
 
             _os = OS.OS.GetInstance();
             var themeManager = UI.Themes.ThemeManager.GetInstance();
@@ -344,13 +346,12 @@ namespace TerminalGame
 
             Player.GetInstance().CreateNewPlayer("testPlayer", "P@ssw0rd");
 
-            playerComp = new Computer(Computer.Type.Workstation, "127.0.0.1", "localhost", Player.GetInstance().Password, playerFS, new int[] { 10, 21, 22, 23, 25, 53, 67, 69, 80, 110, 123, 143, 443 });
+            playerComp = new Computer(Computer.Type.Workstation, "127.0.0.1", "localhost", Player.GetInstance().Password, 0.0f, playerFS, new int[] { 10, 21, 22, 23, 25, 53, 67, 69, 80, 110, 123, 143, 443 });
             
             playerComp.SetSpeed(1.0f);
 
-            Console.WriteLine("Setting up computers...");
-            Computers.Computers.DoComputers(50);
-            Computers.Computers.ComputerList.Add(playerComp);
+            Computers.Computers.GetInstance().ComputerList.Add(playerComp);
+            Computers.Computers.GetInstance().DoComputers(100);
 
             playerComp.GetRoot();
             playerComp.Connect(true);
@@ -435,8 +436,12 @@ namespace TerminalGame
                 IsVisible = true,
             };
 
+            loadingScene.LoadItem = "Building map...";
+
+            networkMap.GenerateMap();
+
             loadingScene.LoadItem = "Initializing...";
-            
+
             _os.Init(terminal, remoteView, networkMap, statusBar, notes);
 
             terminal.Init();
@@ -445,6 +450,16 @@ namespace TerminalGame
             GameManager.GetInstance().IsGameRunning = true;
             
             _stateMachine.Transition(GameState.GameRunning);
+
+            IO.SaveGame.CreateBlankSave();
+
+
+
+            foreach(Computer c in Computers.Computers.GetInstance().ComputerList)
+            {
+                IO.Parsing.ComputerToXml.Parse(c, GameManager.GetInstance().CurrentSave);
+            }
+            GameManager.GetInstance().CurrentSave.Save(GameManager.GetInstance().SavePath + "/" + GameManager.GetInstance().CurrentSaveName + ".tgs");
         }
         
         /// <summary>

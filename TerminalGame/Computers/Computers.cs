@@ -7,7 +7,7 @@ namespace TerminalGame.Computers
 {
     class Computers
     {
-        public static List<Computer> ComputerList;
+        public List<Computer> ComputerList { get; set; }
 
         private static Computers _instance;
         private static Random _rnd;
@@ -20,16 +20,23 @@ namespace TerminalGame.Computers
             return _instance;
         }
 
+        private Computers()
+        {
+
+            if(ComputerList == null)
+                ComputerList = new List<Computer>();
+        }
+
         /// <summary>
         /// Generates fixed and random computers and adds them to the computerList.
         /// </summary>
-        public static void DoComputers(int amount)
+        public void DoComputers(int amount)
         {
-            ComputerList = new List<Computer>();
-            Computer c1 = new Computer(Computer.Type.Workstation, "123.123.123.123", "TestComputer", "abc123");
-            Computer c2 = new Computer(Computer.Type.Server, "100.100.100.100", "TestServer", "abc123");
-            Computer c3 = new Computer(Computer.Type.Server, "1.12.123.123", "TestServer With A Pretty Long Name Just To Check Dat InfoBox", "abc123");
-            Computer c4 = new Computer(Computer.Type.Server, "111.111.111.111", "Intraware Technology Internal Services Machine", "abc123");
+            _rnd = new Random(DateTime.Now.Millisecond);
+            Computer c1 = new Computer(Computer.Type.Workstation, "123.123.123.123", "TestComputer", "abc123", 0.75f);
+            Computer c2 = new Computer(Computer.Type.Server, "100.100.100.100", "TestServer", "abc123", 0.05f);
+            Computer c3 = new Computer(Computer.Type.Server, "1.12.123.123", "TestServer With A Pretty Long Name Just To Check Dat InfoBox", "abc123", 0.5f);
+            Computer c4 = new Computer(Computer.Type.Server, "111.111.111.111", "Intraware Technology Internal Services Machine", "abc123", 0.25f);
             
             ComputerList.Add(c1);
             ComputerList.Add(c2);
@@ -42,7 +49,7 @@ namespace TerminalGame.Computers
 
             for (int i = 0; i < amount; i++)
             {
-                Computer c = new Computer(Computer.Type.Workstation, IPgen(), "Workstation" + i, Passwords.GeneratePassword());
+                Computer c = new Computer(Computer.Type.Workstation, IPgen(), "Workstation" + i, Passwords.GeneratePassword(), (float)Math.Round(_rnd.NextDouble(),2));
                 ComputerList.Add(c);
             }
         }
@@ -51,9 +58,8 @@ namespace TerminalGame.Computers
         /// Generate a random IP address.
         /// </summary>
         /// <returns></returns>
-        private static string IPgen()
+        private string IPgen()
         {
-            _rnd = new Random(DateTime.Now.Millisecond);
             string retval = "";
             for (int i = 0; i < 4; i++)
             {

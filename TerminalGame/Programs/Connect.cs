@@ -48,7 +48,7 @@ namespace TerminalGame.Programs
                     Thread.Sleep((int)(500 * _playerComp.Speed));
                 }
 
-                foreach (Computer c in Computers.Computers.ComputerList)
+                foreach (Computer c in Computers.Computers.GetInstance().ComputerList)
                 {
                     if (_ip == c.IP || _ip == c.Name)
                     {

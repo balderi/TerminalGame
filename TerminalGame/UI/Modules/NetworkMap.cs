@@ -22,9 +22,11 @@ namespace TerminalGame.UI.Modules
         private Random _rnd;
         private readonly SpriteFont _spriteFont;
         private Point _nodeSize;
-        private Rectangle _cont;
+        private Rectangle _cont, _container;
         private readonly GameWindow _gameWindow;
         private SoundEffect _hover, _click;
+        private readonly Texture2D _texture;
+        private readonly Dictionary<string, Texture2D> _nodeSpinners;
 
         /// <summary>
         /// Constructor for the NetworkMap module. Draws a map of computers on the net.
@@ -43,17 +45,31 @@ namespace TerminalGame.UI.Modules
             _nodes = new List<NetworkNode>();
             _hover = SoundManager.GetInstance().GetSound("networkNodeHover");
             _click = SoundManager.GetInstance().GetSound("networkNodeClick");
+            _graphics = graphics;
+            _container = container;
+            _texture = texture;
+            _nodeSpinners = nodeSpinners;
 
-            foreach (Computer c in Computers.Computers.ComputerList)
+            //for testing
+            //GenerateMap(container, texture, graphics, nodeSpinners);
+            
+            IsActive = true;
+        }
+
+        public void GenerateMap()
+        {
+            foreach (Computer c in Computers.Computers.GetInstance().ComputerList)
             {
                 // Prevent the nodes from overlapping on the map
                 // More elegant way of doing this?
                 int attempts = 0;
+                int x = 0;
+                int y = 0;
                 bool intersects = true;
                 while (intersects)
                 {
-                    int x = _rnd.Next(container.X + 15, container.X + container.Width - _nodeSize.Y - 10);
-                    int y = _rnd.Next(container.Y + 25, container.Y + container.Height - 50);
+                    x = _rnd.Next(_container.X + _nodeSize.X, _container.X + _container.Width - _nodeSize.Y);
+                    y = _rnd.Next(_container.Y + _nodeSize.X, _container.Y + _container.Height - 2 * _nodeSize.Y);
 
                     Point position = new Point(x, y);
                     _cont = new Rectangle(position, _nodeSize);
@@ -71,20 +87,27 @@ namespace TerminalGame.UI.Modules
                     {
                         intersects = false;
                     }
-                    if(++attempts > 29)
+                    if (++attempts > 29)
                     {
                         Console.WriteLine("Node for \"{0}\" intersects after {1} attempts -- ignore overlap and continue.", c.Name, attempts);
                         break;
                     }
                 }
-                NetworkNode n = new NetworkNode(texture, c, _cont, new PopUpBox(c.Name + "\n" + c.IP, new Point(_cont.X + _cont.Width + 10, _cont.Y - 5), _spriteFont, Color.White, Color.Black * 0.5f, Color.White, graphics), nodeSpinners);
+
+                //casts to float are NOT redundant!!!
+                c.MapX = (float)x / (float)_container.X;
+                c.MapY = (float)y / (float)_container.Y;
+
+                NetworkNode n = new NetworkNode(_texture, c, _cont, new PopUpBox(c.Name + " x:" + c.MapX + ", y:" + c.MapY + "\n" + c.IP, 
+                    new Point(_cont.X + _cont.Width + 10, _cont.Y - 5), _spriteFont, Color.White, Color.Black * 0.5f, Color.White, _graphics), 
+                    _nodeSpinners);
+
                 _nodes.Add(n);
                 n.Click += OnNodeClick;
                 n.Hover += OnNodeHover;
                 n.Enter += OnMouseEnter;
-                Thread.Sleep(5);
+                //Thread.Sleep(5);
             }
-            IsActive = true;
         }
 
         /// <summary>
@@ -127,17 +150,20 @@ namespace TerminalGame.UI.Modules
                 foreach (NetworkNode node in _nodes)
                 {
                     if (node.IsHovering)
+                    { 
                         node.Draw(spriteBatch);
-                }
-
-                // Makes sure that infoboxes are drawn on top, so other nodes don't obtruct them
-                foreach (NetworkNode node in _nodes)
-                {
-                    if (node.IsHovering)
-                    {
                         node.InfoBox.Draw(spriteBatch);
                     }
                 }
+
+                // Makes sure that infoboxes are drawn on top, so other nodes don't obtruct them
+                //foreach (NetworkNode node in _nodes)
+                //{
+                //    if (node.IsHovering)
+                //    {
+                //        node.InfoBox.Draw(spriteBatch);
+                //    }
+                //}
 
                 Drawing.DrawBorder(spriteBatch, Container, texture, 1, _themeManager.CurrentTheme.ModuleOutlineColor);
                 spriteBatch.Draw(texture, RenderHeader(), _themeManager.CurrentTheme.ModuleHeaderBackgroundColor);

@@ -289,7 +289,7 @@ namespace TerminalGame.UI.Modules
             Console.WriteLine("INIT: " + _linesToDraw + " LN");
             Clear();
             
-            foreach(Computer c in Computers.Computers.ComputerList)
+            foreach(Computer c in Computers.Computers.GetInstance().ComputerList)
             {
                 c.Connected += ConnectedComputer_Connected;
                 c.Disonnected += ConnectedComputer_Disonnected;
