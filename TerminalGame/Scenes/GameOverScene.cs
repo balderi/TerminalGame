@@ -12,7 +12,7 @@ using TerminalGame.Utilities;
 
 namespace TerminalGame.Scenes
 {
-    class GameOverScene : IScene
+    class GameOverScene : Scene
     {
         private SpriteFont _largeFont, _smallFont;
         private readonly string _title, _subTitle;
@@ -20,15 +20,13 @@ namespace TerminalGame.Scenes
         private GameWindow _gameWindow;
         private readonly GraphicsDevice _graphics;
         private bool _prevKbState, _newKbState;
-        private readonly StateMachine _stateMachine;
         private MainMenuButton backButton;
 
-        public GameOverScene(Vector2 screenCenter, GameWindow gameWindow, SpriteFont buttonFont, GraphicsDevice graphics, StateMachine stateMachine)
+        public GameOverScene(Vector2 screenCenter, GameWindow gameWindow, SpriteFont buttonFont, GraphicsDevice graphics) : base()
         {
             _screenCenter = screenCenter;
             _graphics = graphics;
             _gameWindow = gameWindow;
-            _stateMachine = stateMachine;
             _largeFont = FontManager.GetFont(FontManager.FontSize.Large);
             _smallFont = FontManager.GetFont(FontManager.FontSize.Small);
             _title = "End of the line";
@@ -44,7 +42,7 @@ namespace TerminalGame.Scenes
             backButton.Click += OnButtonClick;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Drawing.DrawBlankTexture(_graphics), _gameWindow.ClientBounds, Color.Black);
             spriteBatch.DrawString(_largeFont, _title, new Vector2(_screenCenter.X - _loadCenter.X, _screenCenter.Y - (int)(_largeFont.MeasureString("A").Y) - 5), Color.LightGray);
@@ -52,7 +50,7 @@ namespace TerminalGame.Scenes
             backButton.Draw(spriteBatch);
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             _loadCenter = new Vector2(_largeFont.MeasureString(_title).X / 2, _largeFont.MeasureString(_title).Y / 2);
             _itemCenter = new Vector2(_smallFont.MeasureString(_subTitle).X / 2, _smallFont.MeasureString(_subTitle).Y / 2);

@@ -12,25 +12,23 @@ using TerminalGame.Utilities;
 
 namespace TerminalGame.Scenes
 {
-    class SettingsScene : IScene
+    class SettingsScene : Scene
     {
         
         private readonly SpriteFont _font;
         private readonly GameWindow _gameWindow;
         private readonly GraphicsDevice _graphics;
         private bool _prevKbState, _newKbState;
-        private readonly StateMachine _stateMachine;
         private MainMenuButton _backButton, _applyButton;
         private Checkbox _fullScreenCheckBox, _bloomCheckBox;
         private List<Component> _components;
 
-        public SettingsScene(GameWindow gameWindow, SpriteFont buttonFont, SpriteFont font, GraphicsDevice graphics, StateMachine stateMachine)
+        public SettingsScene(GameWindow gameWindow, SpriteFont buttonFont, SpriteFont font, GraphicsDevice graphics) : base()
         {
             _components = new List<Component>();
             _font = font;
             _gameWindow = gameWindow;
             _graphics = graphics;
-            _stateMachine = stateMachine;
             _backButton = new MainMenuButton("< Back", 200, 50, buttonFont, _graphics)
             {
                 Position = new Vector2(50, _graphics.Viewport.Height - 50 - 50)
@@ -55,7 +53,7 @@ namespace TerminalGame.Scenes
             _components.Add(_bloomCheckBox);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Drawing.DrawBlankTexture(_graphics), _gameWindow.ClientBounds, Color.Black);
             Vector2 textMiddlePoint = _font.MeasureString("Settings") / 2;
@@ -71,7 +69,7 @@ namespace TerminalGame.Scenes
             }
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             foreach (Component comp in _components)
             {

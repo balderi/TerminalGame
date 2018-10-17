@@ -20,6 +20,8 @@ namespace TerminalGame.States
         {
             if (state == GameState.MainMenu)
                 return MainMenuState.Instance;
+            if (state == GameState.GameLoading)
+                return GameLoadingState.Instance;
             return this;
         }
 

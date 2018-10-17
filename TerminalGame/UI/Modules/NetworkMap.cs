@@ -106,7 +106,28 @@ namespace TerminalGame.UI.Modules
                 n.Click += OnNodeClick;
                 n.Hover += OnNodeHover;
                 n.Enter += OnMouseEnter;
-                //Thread.Sleep(5);
+                Thread.Sleep(5);
+            }
+        }
+
+        public void BuildLoadedMap()
+        {
+            foreach (Computer c in Computers.Computers.GetInstance().ComputerList)
+            {
+                int x = (int)(c.MapX * Container.X);
+                int y = (int)(c.MapY * Container.Y);
+
+                Point position = new Point(x, y);
+                _cont = new Rectangle(position, _nodeSize);
+
+                NetworkNode n = new NetworkNode(_texture, c, _cont, new PopUpBox(c.Name + " x:" + c.MapX + ", y:" + c.MapY + "\n" + c.IP,
+                    new Point(_cont.X + _cont.Width + 10, _cont.Y - 5), _spriteFont, Color.White, Color.Black * 0.5f, Color.White, _graphics),
+                    _nodeSpinners);
+
+                _nodes.Add(n);
+                n.Click += OnNodeClick;
+                n.Hover += OnNodeHover;
+                n.Enter += OnMouseEnter;
             }
         }
 

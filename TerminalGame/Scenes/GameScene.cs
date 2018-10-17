@@ -11,29 +11,27 @@ using TerminalGame.Utilities;
 
 namespace TerminalGame.Scenes
 {
-    class GameScene : IScene
+    class GameScene : Scene
     {
         public Texture2D Background { get; private set; }
         private Rectangle _bgRect;
         private Color _bgColor;
         private bool _prevKbState, _newKbState;
-        private readonly StateMachine _stateMachine;
 
-        public GameScene(Texture2D background, Rectangle bgRect, StateMachine stateMachine)
+        public GameScene(Texture2D background, Rectangle bgRect) : base()
         {
             _bgRect = bgRect;
             Background = background;
             _bgColor = Color.White;
-            _stateMachine = stateMachine;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Background, _bgRect, _bgColor);
             OS.OS.GetInstance().Draw(spriteBatch);
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             if (!GameManager.GetInstance().IsGameRunning)
                 _stateMachine.Transition(GameState.GameOver);

@@ -58,7 +58,7 @@ namespace TerminalGame.Computers
             Initialize();
         }
 
-        public Computer(Type type, string ip, string name, string rootPassword, float traceTime, FileSystem fileSystem) : this (type, ip, name, rootPassword, traceTime)
+        public Computer(Type type, string ip, string name, string rootPassword, float traceTime, FileSystem fileSystem) : this(type, ip, name, rootPassword, traceTime)
         {
             FileSystem = fileSystem;
         }

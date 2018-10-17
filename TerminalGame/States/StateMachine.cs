@@ -16,7 +16,7 @@ namespace TerminalGame.States
         GameOver,
     };
 
-    class StateMachine
+    public class StateMachine
     {
         public State CurrentState { get; private set; }
 

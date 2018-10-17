@@ -9,7 +9,7 @@ using TerminalGame.Utilities;
 
 namespace TerminalGame.Scenes
 {
-    class LoadingScene : IScene
+    class LoadingScene : Scene
     {
         public string LoadItem { get; set; }
 
@@ -19,7 +19,7 @@ namespace TerminalGame.Scenes
         private GameWindow _gameWindow;
         private readonly GraphicsDevice _graphics;
 
-        public LoadingScene(Vector2 screenCenter, GameWindow gameWindow, GraphicsDevice graphics)
+        public LoadingScene(Vector2 screenCenter, GameWindow gameWindow, GraphicsDevice graphics) : base()
         {
             _screenCenter = screenCenter;
             _graphics = graphics;
@@ -30,14 +30,14 @@ namespace TerminalGame.Scenes
             LoadItem = "";
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Drawing.DrawBlankTexture(_graphics), _gameWindow.ClientBounds, Color.Black);
             spriteBatch.DrawString(_largeFont, _loading, new Vector2(_screenCenter.X - _loadCenter.X, _screenCenter.Y - _loadCenter.Y), Color.LightGray);
             spriteBatch.DrawString(_smallFont, LoadItem, new Vector2((int)(_screenCenter.X - _itemCenter.X), (int)(_screenCenter.Y - _itemCenter.Y) + _largeFont.MeasureString(_loading).Y), Color.LightGray);
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             _loadCenter = new Vector2(_largeFont.MeasureString(_loading).X / 2, _largeFont.MeasureString(_loading).Y / 2);
             _itemCenter = new Vector2(_smallFont.MeasureString(LoadItem).X / 2, _smallFont.MeasureString(LoadItem).Y / 2);

@@ -28,9 +28,11 @@ namespace TerminalGame.Utilities
         public string SavePath { get; private set; }
         public XmlDocument CurrentSave { get; set; }
         public string CurrentSaveName { get; set; }
+        public StateMachine StateMachine { get; private set; }
 
         private GameManager()
         {
+            StateMachine = new StateMachine(MainMenuState.Instance);
             _intensity = GameIntensity.Peaceful;
             Version = System.Reflection.Assembly.GetEntryAssembly().GetName().Version.Major.ToString() + 
                 "." + System.Reflection.Assembly.GetEntryAssembly().GetName().Version.Minor.ToString() +

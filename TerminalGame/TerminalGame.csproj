@@ -168,6 +168,7 @@
     <Compile Include="Utilities\TextHandler\TextBox.cs" />
     <Compile Include="Utilities\TextHandler\TextRenderer.cs" />
     <Compile Include="Utilities\ActiveTracer.cs" />
+    <Compile Include="Utilities\WhatTheFuck.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

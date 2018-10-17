@@ -16,7 +16,7 @@ namespace TerminalGame.IO.Parsing
             Computer retval;
             
             FileSystem fs = new FileSystem();
-            RecursiveFsParse(fs, xNode.SelectSingleNode("filesystem"));
+            RecursiveFsParse(fs, xNode.SelectSingleNode("filesystem/dir"));
 
             var compAtts = ParseAtts(xNode.Attributes);
             var mappos = ParseAtts(xNode.SelectSingleNode("mapPosition").Attributes);
@@ -62,10 +62,10 @@ namespace TerminalGame.IO.Parsing
                 return;
             foreach(XmlNode cn in node.ChildNodes)
             {
-                if(cn.Prefix == "dir")
+                if(cn.Name == "dir")
                 {
-                    fs.AddDir(cn.Prefix);
-                    fs.ChangeDir(cn.Prefix);
+                    fs.AddDir(cn.Attributes[0].Value);
+                    fs.ChangeDir(cn.Attributes[0].Value);
                     RecursiveFsParse(fs, cn);
                     fs.ChangeDir("..");
                 }
@@ -77,7 +77,10 @@ namespace TerminalGame.IO.Parsing
                     {
                         deets[i] = atts[i].Value;
                     }
-                    fs.AddFile(deets[0], deets[1]);
+                    //if(deets.Length > 1)
+                        fs.AddFile(deets[0], deets[1]);
+                    //else
+                        //fs.AddFile(deets[0]);
                 }
             }
         }
