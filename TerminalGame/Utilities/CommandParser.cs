@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
+using TerminalGame.UI.Themes;
 
 namespace TerminalGame.Utilities
 {
+    // TODO: Make singleton rather than static class (maybe?)
+
     /// <summary>
     /// Command Parser
     /// </summary>
@@ -12,8 +14,8 @@ namespace TerminalGame.Utilities
         /// <summary>
         /// Parses commands
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// <param name="input">The command string to parse</param>
+        /// <returns>Deprecated: No longer returns anything (blank string)</returns>
         public static string ParseCommand(string input)
         {
             Player _player = Player.GetInstance();
@@ -35,12 +37,27 @@ namespace TerminalGame.Utilities
 
             switch (_command)
             {
+                case "theme":
+                    {
+                        if (_args[0].Length == 0)
+                            _terminal.Write("\n" + ThemeManager.GetInstance().CurrentTheme.ThemeName);
+                        else if (_args[0].ToLower() == "flash")
+                            ThemeManager.GetInstance().CurrentTheme.Flash();
+                        else
+                            ThemeManager.GetInstance().ChangeTheme(_args[0]);
+                        break;
+                    }
                 case "note":
                     {
                         if(_args.Length != 0 && input.Contains("\""))
                             Programs.Note.Execute(_args, input.Split('"')[1]);
                         else
                             Programs.Note.Execute(_args);
+                        break;
+                    }
+                case "login":
+                    {
+                        _terminal.BeginLogin();
                         break;
                     }
                 case "sshnuke":
@@ -59,12 +76,6 @@ namespace TerminalGame.Utilities
                     {
                         var task = Task.Factory.StartNew(() => Programs.Placeholder.Execute());
                         Console.WriteLine("Starting new task for reboot");
-                        break;
-                    }
-                case "exit":
-                    {
-                        var task = Task.Factory.StartNew(() => Programs.Placeholder.Execute());
-                        Console.WriteLine("Starting new task for exit");
                         break;
                     }
                 case "":
@@ -244,6 +255,13 @@ namespace TerminalGame.Utilities
                     {
                         Task task = Task.Factory.StartNew(() => Programs.Help.Execute());
                         Console.WriteLine("Starting new task for help");
+                        break;
+                    }
+                case "quit":
+                case "exit":
+                    {
+                        Task task = Task.Factory.StartNew(() => Programs.Placeholder.Execute());
+                        //_terminal.ForceQuit();
                         break;
                     }
                 default:

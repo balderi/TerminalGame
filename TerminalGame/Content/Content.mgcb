@@ -199,18 +199,6 @@
 /processorParam:Quality=Best
 /build:Audio/Music/ambientbgm1_2.ogg
 
-#begin Textures/bg2.jpg
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/bg2.jpg
-
 #begin Textures/bg3.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -246,4 +234,52 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:Shaders/Bloom.fx
+
+#begin Textures/bg2.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/bg2.jpg
+
+#begin Textures/nmapComputer-2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/nmapComputer-2.png
+
+#begin Audio/Music/dynamicsTest0.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Music/dynamicsTest0.ogg
+
+#begin Audio/Music/dynamicsTest1.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Music/dynamicsTest1.ogg
+
+#begin Audio/Music/dynamicsTest2.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Music/dynamicsTest2.ogg
+
+#begin Audio/Sounds/trace_warn.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sounds/trace_warn.wav
 

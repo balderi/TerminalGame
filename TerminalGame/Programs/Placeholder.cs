@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-
-namespace TerminalGame.Programs
+﻿namespace TerminalGame.Programs
 {
     class Placeholder
     {

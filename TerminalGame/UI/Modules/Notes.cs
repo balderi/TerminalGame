@@ -13,9 +13,6 @@ namespace TerminalGame.UI.Modules
         // TODO: Limit notes to length of window (or implement some kind of scrolling?)
 
         public override SpriteFont Font { get; set; }
-        public override Color BackgroundColor { get; set; }
-        public override Color BorderColor { get; set; }
-        public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
         public override bool IsVisible { get; set; }
         public override string Title { get; set; }
@@ -46,13 +43,8 @@ namespace TerminalGame.UI.Modules
 
         public bool AddNote(string text)
         {
-            if (!Notes.Contains(text))
-            {
-                Notes.Add(text);
-                return true;
-            }
-            else
-                return false;
+            Notes.Add(text);
+            return true;
         }
 
         public bool RemoveNote(int id)
@@ -76,20 +68,21 @@ namespace TerminalGame.UI.Modules
             if (IsVisible)
             {
                 Texture2D texture = Drawing.DrawBlankTexture(_graphics);
-                Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
-                spriteBatch.Draw(texture, Container, BackgroundColor);
-                spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
-                spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
-                spriteBatch.DrawString(_noteFont, _noteRender, new Vector2(Container.X + 10, Container.Y + Font.MeasureString("A").Y + 10), Color.White);
+                Drawing.DrawBorder(spriteBatch, Container, texture, 1, _themeManager.CurrentTheme.ModuleOutlineColor);
+                spriteBatch.Draw(texture, Container, _themeManager.CurrentTheme.ModuleBackgroundColor);
+                spriteBatch.Draw(texture, RenderHeader(), _themeManager.CurrentTheme.ModuleHeaderBackgroundColor);
+                spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), _themeManager.CurrentTheme.ModuleHeaderFontColor);
+                spriteBatch.DrawString(_noteFont, _noteRender, new Vector2(Container.X + 10, Container.Y + Font.MeasureString("A").Y + 10), _themeManager.CurrentTheme.ModuleFontColor);
             }
         }
 
         public override void Update(GameTime gameTime)
         {
             _noteRender = "";
+            int counter = 0;
             foreach(string s in Notes)
             {
-                _id = "<Note" + Notes.IndexOf(s) + ">";
+                _id = "<Note" + counter++ + ">";
                 _divider = _bar.Substring(0, 2) + _id + _bar.Substring(0, _bar.Length - _id.Length - 3);
                 _noteRender += String.Format("{0}\n{1}\n",_divider,s);
             }

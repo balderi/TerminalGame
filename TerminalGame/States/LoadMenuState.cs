@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using TerminalGame.Utilities;
 
 namespace TerminalGame.States
 {
@@ -20,6 +13,8 @@ namespace TerminalGame.States
         {
             if (state == GameState.MainMenu)
                 return MainMenuState.Instance;
+            if (state == GameState.GameLoading)
+                return GameLoadingState.Instance;
             return this;
         }
 

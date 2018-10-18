@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace TerminalGame.States
 {
@@ -13,9 +12,10 @@ namespace TerminalGame.States
         GameLoading,
         NewGame,
         GameRunning,
+        GameOver,
     };
 
-    class StateMachine
+    public class StateMachine
     {
         public State CurrentState { get; private set; }
 

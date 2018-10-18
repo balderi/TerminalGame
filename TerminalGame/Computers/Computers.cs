@@ -7,7 +7,7 @@ namespace TerminalGame.Computers
 {
     class Computers
     {
-        public static List<Computer> computerList;
+        public List<Computer> ComputerList { get; set; }
 
         private static Computers _instance;
         private static Random _rnd;
@@ -20,46 +20,60 @@ namespace TerminalGame.Computers
             return _instance;
         }
 
+        private Computers()
+        {
+
+            if(ComputerList == null)
+                ComputerList = new List<Computer>();
+        }
+
         /// <summary>
         /// Generates fixed and random computers and adds them to the computerList.
         /// </summary>
-        public static void DoComputers()
+        public void DoComputers(int amount)
         {
-            computerList = new List<Computer>();
-            Computer c1 = new Computer(Computer.Type.Workstation, "123.123.123.123", "TestComputer", "abc123");
-            Computer c2 = new Computer(Computer.Type.Server, "100.100.100.100", "TestServer", "abc123");
-            Computer c3 = new Computer(Computer.Type.Server, "1.12.123.123", "TestServer With A Pretty Long Name Just To Check Dat InfoBox", "abc123");
-            Computer c4 = new Computer(Computer.Type.Server, "111.111.111.111", "Intraware Technology Internal Services Machine", "abc123");
+            _rnd = new Random(DateTime.Now.Millisecond);
+            Computer c1 = new Computer(Computer.Type.Workstation, "123.123.123.123", "TestComputer", "abc123", 0.75f);
+            Computer c2 = new Computer(Computer.Type.Server, "100.100.100.100", "TestServer", "abc123", 0.05f);
+            Computer c3 = new Computer(Computer.Type.Server, "1.12.123.123", "TestServer With A Pretty Long Name Just To Check Dat InfoBox", "abc123", 0.5f);
+            Computer c4 = new Computer(Computer.Type.Server, "111.111.111.111", "Intraware Technology Internal Services Machine", "abc123", 0.25f);
             
-            computerList.Add(c1);
-            computerList.Add(c2);
-            computerList.Add(c3);
-            computerList.Add(c4);
+            ComputerList.Add(c1);
+            ComputerList.Add(c2);
+            ComputerList.Add(c3);
+            ComputerList.Add(c4);
 
             c1.Link(c2);
             c2.Link(c3);
             c3.Link(c4);
 
-            for (int i = 0; i < 25; i++)
+            for (int i = 0; i < amount; i++)
             {
-                Computer c = new Computer(Computer.Type.Workstation, IPgen(), "Workstation" + i, Passwords.GeneratePassword());
-                computerList.Add(c);
+                Computer c = new Computer(Computer.Type.Workstation, IPgen(), "Workstation" + i, Passwords.GeneratePassword(), (float)Math.Round(_rnd.NextDouble(),2));
+                ComputerList.Add(c);
             }
         }
         
+        public void LinkLoadedComputers()
+        {
+            foreach(Computer c in ComputerList)
+            {
+                c.LoadLinks();
+            }
+        }
+
         /// <summary>
         /// Generate a random IP address.
         /// </summary>
         /// <returns></returns>
-        private static string IPgen()
+        private string IPgen()
         {
-            _rnd = new Random(DateTime.Now.Millisecond);
             string retval = "";
             for (int i = 0; i < 4; i++)
             {
                 //Make sure each computer gets a different IP. Less than 5ms might work. More than 5ms might be needed.
                 Thread.Sleep(5);
-                retval += _rnd.Next(1, 254) + ".";
+                retval += _rnd.Next(1, 255) + ".";
             }
             return retval.TrimEnd('.');
         }

@@ -8,26 +8,29 @@ using TerminalGame.Computers;
 
 namespace TerminalGame.UI.Modules
 {
+    public enum InputType
+    {
+        std,
+        login,
+        passwd,
+    }
+
     class Terminal : Module
     {
-        // TODO: Fix multiple external writes to the same line acting as seperate line when removed (breaks terminal)
         // TODO: Add command queue for when input is blocked by running program (maybe, might be dumb)
-
+        
         private TextBox _terminalInput;
-        private Rectangle _connAdd, _inputViewport, _outputViewport;
+        private Rectangle _prompt, _inputViewport, _outputViewport;
         private int _linesToDraw, _currentIndex;
         private readonly int _maxlen;
-        private string _terminalOutput, _connectedAddress;
+        private string _terminalOutput, _terminalPrompt, _userName, _password;
         private List<string> _history, _output;
         private SpriteFont _terminalFont;
         private bool _isMultiLine, _isInputBlocked, _updateInp;
         private Computer _connectedComputer;
+        private InputType _inputType;
         
-        public bool IsTakingSpecialInput { get; set; }
         public override SpriteFont Font { get; set; }
-        public override Color BackgroundColor { get; set; }
-        public override Color BorderColor { get; set; }
-        public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
         public override bool IsVisible { get; set; }
         public override string Title { get; set; }
@@ -38,18 +41,6 @@ namespace TerminalGame.UI.Modules
             _terminalFont = terminalFont;
             Container = container;
             _updateInp = true;
-            if (BackgroundColor == null)
-            {
-                BackgroundColor = Color.LightPink;
-            }
-            if (BorderColor == null)
-            {
-                BackgroundColor = Color.Chartreuse;
-            }
-            if (HeaderColor == null)
-            {
-                BackgroundColor = Color.Red;
-            }
             if (string.IsNullOrEmpty(Title))
             {
                 Title = "!!! UNNAMED WINDOW !!!";
@@ -68,40 +59,90 @@ namespace TerminalGame.UI.Modules
         {
             if (!_isInputBlocked)
             {
-                Console.WriteLine("CMD: " + _terminalInput.Text.String);
-                _history.Insert(0, _terminalInput.Text.String);
-                string input;
-                if (_terminalInput.Text.String.Contains("§"))
+                switch(_inputType)
                 {
-                    string temp = _terminalInput.Text.String.Replace('§', '?');
-                    input = InputWrap("\n" + _connectedAddress + temp);
+                    case InputType.login:
+                        {
+                            Console.WriteLine(_terminalPrompt + _terminalInput.Text.String);
+                            if (!String.IsNullOrEmpty(_terminalInput.Text.String))
+                            {
+                                _history.Insert(0, _terminalInput.Text.String);
+                                _userName = _terminalInput.Text.String;
+                                _output.Add("\n" + _terminalPrompt + _userName);
+                                _currentIndex = 0;
+                                UpdateOutput();
+                                _terminalInput.Clear();
+                                _connectedComputer = Player.GetInstance().ConnectedComputer;
+                                _updateInp = true;
+                                _inputType = InputType.passwd;
+                            }
+                            else
+                            {
+                                Write("\nuser name cannot be blank.");
+                            }
+                            break;
+                        }
+                    case InputType.passwd:
+                        {
+                            Console.WriteLine(_terminalPrompt + _terminalInput.Text.String);
+                            _history.Insert(0,  _terminalInput.Text.String);
+                            _password = _terminalInput.Text.String;
+                            _output.Add("\n" + _terminalPrompt + _password);
+                            _currentIndex = 0;
+                            UpdateOutput();
+                            _terminalInput.Clear();
+                            _connectedComputer = Player.GetInstance().ConnectedComputer;
+                            _updateInp = true;
+                            _inputType = InputType.std;
+                            if(!Player.GetInstance().ConnectedComputer.Login(_userName, _password))
+                            {
+                                Write("\nIncorrect login information.");
+                            }
+                            else
+                            {
+                                Write("\nLogin successful..");
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            Console.WriteLine("CMD: " + _terminalInput.Text.String);
+                            _history.Insert(0, _terminalInput.Text.String);
+                            string input;
+                            if (_terminalInput.Text.String.Contains("§"))
+                            {
+                                string temp = _terminalInput.Text.String.Replace('§', '?');
+                                input = InputWrap("\n" + _terminalPrompt + temp);
+                            }
+                            else
+                                input = InputWrap("\n" + _terminalPrompt + _terminalInput.Text.String);
+
+                            string[] inp = input.Split('§');
+
+                            for (int i = 0; i < inp.Length; i++)
+                            {
+                                if (inp[i] != "\n")
+                                {
+                                    _output.Add(inp[i]);
+                                }
+                            }
+
+                            _currentIndex = 0;
+
+                            if (!string.IsNullOrEmpty(_terminalInput.Text.String) && !_terminalInput.Text.String.Contains("§"))
+                                CommandParser.ParseCommand(_terminalInput.Text.String);
+
+                            UpdateOutput();
+                            _terminalInput.Clear();
+
+                            if (_isMultiLine)
+                                UpdateOutput();
+
+                            _connectedComputer = Player.GetInstance().ConnectedComputer;
+                            _updateInp = true;
+                            break;
+                        }
                 }
-                else
-                    input = InputWrap("\n" + _connectedAddress + _terminalInput.Text.String);
-
-                string[] inp = input.Split('§');
-
-                for (int i = 0; i < inp.Length; i++)
-                {
-                    if (inp[i] != "\n")
-                    {
-                        _output.Add(inp[i]);
-                    }
-                }
-                
-                _currentIndex = 0;
-
-                if (!string.IsNullOrEmpty(_terminalInput.Text.String) && !_terminalInput.Text.String.Contains("§"))
-                    CommandParser.ParseCommand(_terminalInput.Text.String);
-                
-                UpdateOutput();
-                _terminalInput.Clear();
-
-                if (_isMultiLine)
-                    UpdateOutput();
-
-                _connectedComputer = Player.GetInstance().ConnectedComputer;
-                _updateInp = true;
             }
         }
 
@@ -172,6 +213,12 @@ namespace TerminalGame.UI.Modules
             }
         }
 
+        public void BeginLogin()
+        {
+            if(_inputType == InputType.std)
+                _inputType = InputType.login;
+        }
+
         /// <summary>
         /// Clear the terminal window
         /// </summary>
@@ -188,15 +235,15 @@ namespace TerminalGame.UI.Modules
         }
 
         /// <summary>
-        /// Disposes of current textbox and creates a brand new one with the proper dimensions.
+        /// Disposes of current <c>TextBox</c> and creates a brand new one with the proper dimensions.
         /// </summary>
-        /// <returns>A brand new textbox</returns>
+        /// <returns>A brand new <c>TextBox</c></returns>
         private TextBox TextBox()
         {
             if (_terminalInput == null)
             {
                 Console.WriteLine("*** CREATE TEXTBOX");
-                int maxChars = ((int)(Container.Width - _terminalFont.MeasureString(_connectedAddress).Length()) / (int)_terminalFont.MeasureString("_").Length()) + 200;
+                int maxChars = ((int)(Container.Width - _terminalFont.MeasureString(_terminalPrompt).Length()) / (int)_terminalFont.MeasureString("_").Length()) + 200;
                 TextBox retval = new TextBox(_inputViewport, maxChars, "", _graphics, _terminalFont, Color.LightGray, Color.DarkGreen, 30);
                 retval.Renderer.Color = Color.LightGray;
                 retval.Cursor.Selection = new Color(Color.PeachPuff, .4f);
@@ -222,15 +269,15 @@ namespace TerminalGame.UI.Modules
         public void Init()
         {
             _connectedComputer = Player.GetInstance().ConnectedComputer;
-            _connectedAddress = "root@127.0.0.1 > ";
+            _terminalPrompt = "root@127.0.0.1 > ";
             _terminalOutput = "";
-            IsTakingSpecialInput = false;
+            _inputType = InputType.std;
             _history = new List<string>();
             _history.Insert(0, "");
             _output = new List<string>();
-            _connAdd = new Rectangle(Container.X + 3, Container.Height - RenderHeader().Height, 
-                (int)(_terminalFont.MeasureString(_connectedAddress).X), (int)(_terminalFont.MeasureString(_connectedAddress).Y));
-            _inputViewport = new Rectangle(_connAdd.Width, _connAdd.Y, Container.Width - _connAdd.Width, (int)(_terminalFont.MeasureString("MEASURE ME").Y));
+            _prompt = new Rectangle(Container.X + 3, Container.Height - RenderHeader().Height, 
+                (int)(_terminalFont.MeasureString(_terminalPrompt).X), (int)(_terminalFont.MeasureString(_terminalPrompt).Y));
+            _inputViewport = new Rectangle(_prompt.Width, _prompt.Y, Container.Width - _prompt.Width, (int)(_terminalFont.MeasureString("MEASURE ME").Y));
 
             _terminalInput = TextBox();
 
@@ -238,10 +285,10 @@ namespace TerminalGame.UI.Modules
                 Container.Width, Container.Height - (_inputViewport.Height) - RenderHeader().Height);
             
             _linesToDraw = (int)(_outputViewport.Height / _terminalFont.MeasureString("MEASURE THIS").Y);
-            Console.WriteLine("INIT: 0x4C54443D" + _linesToDraw);
+            Console.WriteLine("INIT: " + _linesToDraw + " LN");
             Clear();
-
-            foreach(Computer c in Computers.Computers.computerList)
+            
+            foreach(Computer c in Computers.Computers.GetInstance().ComputerList)
             {
                 c.Connected += ConnectedComputer_Connected;
                 c.Disonnected += ConnectedComputer_Disonnected;
@@ -260,7 +307,7 @@ namespace TerminalGame.UI.Modules
             _connectedComputer = Player.GetInstance().ConnectedComputer;
             Console.WriteLine("*** CON_STR: " + e.ConnectionString.ToString() + ", IS_RT: " + e.IsRoot.ToString());
             UpdateOutput();
-            _connectedAddress = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
+            _terminalPrompt = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
             _updateInp = true;
         }
 
@@ -270,8 +317,47 @@ namespace TerminalGame.UI.Modules
             _connectedComputer = Player.GetInstance().ConnectedComputer;
             Console.WriteLine("*** CON_STR: " + e.ConnectionString.ToString() + ", IS_RT: " + e.IsRoot.ToString());
             UpdateOutput();
-            _connectedAddress = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
+            _terminalPrompt = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
             _updateInp = true;
+        }
+
+        public void ForceQuit()
+        {
+            Write("\n\nKernel panic - not syncing: Fatal exception in interrupt\n\n");
+            UpdateOutput();
+        }
+
+        private string TextWrap(string text)
+        {
+            _isMultiLine = false;
+            if (text.Length <= _maxlen || text.Contains("§"))
+                return text;
+
+            _isMultiLine = true;
+            for (int i = 0; i < (text.Length / _maxlen); i++)
+            {
+                text = text.Insert((i + 1) * _maxlen - 1, "§\n");
+            }
+            return text;
+        }
+
+        private string InputWrap(string text)
+        {
+            _isMultiLine = false;
+            if (text.Length <= _maxlen)
+                return text;
+
+            _isMultiLine = true;
+            for (int i = 0; i < (text.Length / _maxlen); i++)
+            {
+                text = text.Insert((i + 1) * _maxlen - 1, "§\n");
+            }
+            return text;
+        }
+
+        protected override Rectangle RenderHeader()
+        {
+            return new Rectangle(Container.X, Container.Y, Container.Width, (int)Font.MeasureString(Title).Y);
         }
 
         /// <summary>
@@ -281,19 +367,20 @@ namespace TerminalGame.UI.Modules
         private void UpdateInputSize()
         {
             string text = _terminalInput.Text.String;
-            int oldWidth = _connAdd.Width;
-            int newWidth = (int)(_terminalFont.MeasureString(_connectedAddress).X);
-            if(newWidth != oldWidth)
+            int oldWidth = _prompt.Width;
+            int newWidth = (int)(_terminalFont.MeasureString(_terminalPrompt).X);
+            if (newWidth != oldWidth)
             {
-                _connAdd.Width = newWidth;
-                _inputViewport.X = _connAdd.X + _connAdd.Width;
-                _inputViewport.Width = Container.Width - _connAdd.Width;
+                _prompt.Width = newWidth;
+                _inputViewport.X = _prompt.X + _prompt.Width;
+                _inputViewport.Width = Container.Width - _prompt.Width;
                 _terminalInput = TextBox();
                 _terminalInput.Text.String = text;
                 _terminalInput.Cursor.TextCursor = text.Length;
             }
         }
 
+        // TODO: BUG: Something breaks during enumeration sometimes.
         /// <summary>
         /// Writes new text to the terminal. Adds any entered commands to the history.
         /// </summary>
@@ -344,16 +431,40 @@ namespace TerminalGame.UI.Modules
             UnblockInput();
         }
 
+        private void UpdatePrompt()
+        {
+            switch (_inputType)
+            {
+                case InputType.login:
+                    {
+                        _terminalPrompt = "username: ";
+                        break;
+                    }
+                case InputType.passwd:
+                    {
+                        _terminalPrompt = "password: ";
+                        break;
+                    }
+                default:
+                    {
+                        _terminalPrompt = _connectedComputer.PlayerHasRoot ? "root" : "user";
+                        _terminalPrompt += "@" + _connectedComputer.IP + _connectedComputer.FileSystem.CurrentDir.PrintFullPath() + " > ";
+                        break;
+                    }
+            }
+        }
+
         public override void Update(GameTime gameTime)
         {
             float lerpAmount = (float)(gameTime.TotalGameTime.TotalMilliseconds % 500f / 500f);
             
             _terminalInput.Cursor.Color = Color.Lerp(Color.DarkGray, Color.LightGray, lerpAmount);
-            if (!IsTakingSpecialInput)
-            {
-                _connectedAddress = _connectedComputer.PlayerHasRoot ? "root" : "user";
-                _connectedAddress += "@" + _connectedComputer.IP + _connectedComputer.FileSystem.CurrentDir.PrintFullPath() + " > ";
-            }
+            //if (!_isTakingSpecialInput)
+            //{
+            //    _terminalPrompt = _connectedComputer.PlayerHasRoot ? "root" : "user";
+            //    _terminalPrompt += "@" + _connectedComputer.IP + _connectedComputer.FileSystem.CurrentDir.PrintFullPath() + " > ";
+            //}
+            UpdatePrompt();
 
             if (_updateInp)
             {
@@ -363,60 +474,22 @@ namespace TerminalGame.UI.Modules
             _terminalInput.Update();
         }
 
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (IsVisible)
             {
                 Texture2D texture = Drawing.DrawBlankTexture(_graphics);
-                spriteBatch.Draw(texture, Container, BackgroundColor);
-                spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
-                spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
-                Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
+                spriteBatch.Draw(texture, Container, _themeManager.CurrentTheme.ModuleBackgroundColor);
+                spriteBatch.Draw(texture, RenderHeader(), _themeManager.CurrentTheme.ModuleHeaderBackgroundColor);
+                spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), _themeManager.CurrentTheme.ModuleHeaderFontColor);
+                Drawing.DrawBorder(spriteBatch, Container, texture, 1, _themeManager.CurrentTheme.ModuleOutlineColor);
 
-                spriteBatch.DrawString(_terminalFont, _connectedAddress, new Vector2(_connAdd.X, _connAdd.Y), Color.LightGray);
-                spriteBatch.DrawString(_terminalFont, _terminalOutput, new Vector2(_outputViewport.X + 3 + TestClass.ShakeStuff(1), _outputViewport.Y + TestClass.ShakeStuff(1)), Color.Green);
-                spriteBatch.DrawString(_terminalFont, _terminalOutput, new Vector2(_outputViewport.X + 3, _outputViewport.Y), Color.LightGray);
+                spriteBatch.DrawString(_terminalFont, _terminalPrompt, new Vector2(_prompt.X, _prompt.Y), _themeManager.CurrentTheme.ModuleFontColor);
+                spriteBatch.DrawString(_terminalFont, _terminalOutput, new Vector2(_outputViewport.X + 3 + 1, _outputViewport.Y + 1), Color.Green);
+                spriteBatch.DrawString(_terminalFont, _terminalOutput, new Vector2(_outputViewport.X + 3, _outputViewport.Y), _themeManager.CurrentTheme.ModuleFontColor);
                 _terminalInput.Draw(spriteBatch);
             }
-        }
-
-        public void ForceQuit()
-        {
-            _output.Add("\n\nKernel panic - not syncing: Fatal exception in interrupt\n\n");
-            UpdateOutput();
-        }
-
-        private string TextWrap(string text)
-        {
-            _isMultiLine = false;
-            if (text.Length <= _maxlen || text.Contains("§"))
-                return text;
-
-            _isMultiLine = true;
-            for (int i = 0; i < (text.Length / _maxlen); i++)
-            {
-                text = text.Insert((i + 1) * _maxlen - 1, "§\n");
-            }
-            return text;
-        }
-
-        private string InputWrap(string text)
-        {
-            _isMultiLine = false;
-            if (text.Length <= _maxlen)
-                return text;
-
-            _isMultiLine = true;
-            for(int i = 0; i < (text.Length / _maxlen); i++)
-            {
-                 text = text.Insert((i + 1) * _maxlen - 1, "§\n");
-            }
-            return text;
-        }
-
-        protected override Rectangle RenderHeader()
-        {
-            return new Rectangle(Container.X, Container.Y, Container.Width, (int)Font.MeasureString(Title).Y);
         }
     }
 }

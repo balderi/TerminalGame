@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 using TerminalGame.Utilities;
 
 namespace TerminalGame.UI
@@ -28,15 +27,15 @@ namespace TerminalGame.UI
                 return new Rectangle((int)Position.X, (int)Position.Y, _width, _height);
             }
         }
-        public string Text { get; set; }
+        public string Value { get; set; }
 
-        public MainMenuButton(string Text, int Width, int Height, SpriteFont Font, GraphicsDevice GraphicsDevice)
+        public MainMenuButton(string text, int width, int height, SpriteFont font, GraphicsDevice graphicsDevice)
         {
-            _font = Font;
-            _text = Text;
-            _width = Width;
-            _height = Height;
-            _graphics = GraphicsDevice;
+            _font = font;
+            _text = text;
+            _width = width;
+            _height = height;
+            _graphics = graphicsDevice;
 
             _texture = Drawing.DrawBlankTexture(_graphics);
             FontColor = Color.Black;
@@ -93,7 +92,8 @@ namespace TerminalGame.UI
                 {
                     ButtonPressedEventArgs bp = new ButtonPressedEventArgs()
                     {
-                        Button = _text
+                        Text = _text,
+                        Value = Value
                     };
                     Click?.Invoke(bp);
                 }

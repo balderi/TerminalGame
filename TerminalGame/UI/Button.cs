@@ -60,20 +60,20 @@ namespace TerminalGame.UI
         /// <summary>
         /// Button constructor
         /// </summary>
-        /// <param name="Text">Button text</param>
-        /// <param name="Container">Specifies width/height of button</param>
-        /// <param name="Font">Font used to draw button text</param>
-        /// <param name="GraphicsDevice">GraphicsDevice used to render</param>
-        public Button(string Text, Rectangle Container, SpriteFont Font, GraphicsDevice GraphicsDevice)
+        /// <param name="text">Button text</param>
+        /// <param name="container">Specifies width/height of button</param>
+        /// <param name="font">Font used to draw button text</param>
+        /// <param name="graphicsDevice">GraphicsDevice used to render</param>
+        public Button(string text, Rectangle container, SpriteFont font, GraphicsDevice graphicsDevice)
         {
-            _text = Text;
-            _container = Container;
-            _font = Font;
+            _text = text;
+            _container = container;
+            _font = font;
             _fontColor = Color.Black;
             _backColor = Color.Gray;
             _hoverColor = Color.LightGray;
             _activeColor = Color.DarkGray;
-            _texture = Drawing.DrawBlankTexture(GraphicsDevice);
+            _texture = Drawing.DrawBlankTexture(graphicsDevice);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace TerminalGame.UI
                 {
                     ButtonPressedEventArgs bp = new ButtonPressedEventArgs()
                     {
-                        Button = _text
+                        Text = _text
                     };
                     Click?.Invoke(bp);
                 }
@@ -142,8 +142,13 @@ namespace TerminalGame.UI
     public class ButtonPressedEventArgs : EventArgs
     {
         /// <summary>
+        /// Button test
+        /// </summary>
+        public string Text { get; set; }
+
+        /// <summary>
         /// Button value
         /// </summary>
-        public string Button { get; set; }
+        public string Value { get; set; }
     }
 }

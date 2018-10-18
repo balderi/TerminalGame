@@ -9,10 +9,10 @@ namespace TerminalGame.Computers.FileSystems
         {
             Directory = 0,
             File,
+            Binary,
         }
 
         public List<File> Children { get; private set; }
-
         public bool IsDirectory { get; private set; }
         public int Size { get; private set; }
         public FileType Type { get; private set; }
@@ -52,10 +52,7 @@ namespace TerminalGame.Computers.FileSystems
             return retval;
         }
 
-        public void SetParent(File parent)
-        {
-            Parent = parent;
-        }
+        public void SetParent(File parent) => Parent = parent;
 
         public string Execute()
         {

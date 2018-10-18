@@ -19,20 +19,20 @@ namespace TerminalGame.Computers.FileSystems
 
         public void BuildBasicFileSystem()
         {
-            string[] baseDirs = { "bin", "usr", "home", "sys", "logs" };
+            string[] baseDirs = { "bin", "usr", "home", "sys", "log" };
             for (int i = 0; i < baseDirs.Length; i++)
             {
                 AddDir(baseDirs[i]);
             }
         }
 
-        private File FindRoot(File sourceDir)
-        {
-            return sourceDir.Parent.Parent != sourceDir.Parent ? FindRoot(sourceDir.Parent) : sourceDir.Parent;
-        }
+        private File FindRoot(File sourceDir) => sourceDir.Parent.Parent != sourceDir.Parent ? FindRoot(sourceDir.Parent) : sourceDir.Parent;
 
         public File FindFile(string name, bool isDir, bool fromRoot = false)
         {
+            if (name == ".")
+                return CurrentDir;
+
             if (name == "..")
                 return CurrentDir.Parent;
 
@@ -68,6 +68,16 @@ namespace TerminalGame.Computers.FileSystems
             {
                 foreach (File f in CurrentDir.Children)
                 {
+                    if(f.IsDirectory)
+                    {
+                        foreach(File fi in f.Children)
+                        {
+                            if (fi.Name == name)
+                            {
+                                return isDir ? fi.IsDirectory : !fi.IsDirectory;
+                            }
+                        }
+                    }
                     if (f.Name == name)
                     {
                         return isDir ? f.IsDirectory : !f.IsDirectory;
@@ -121,6 +131,41 @@ namespace TerminalGame.Computers.FileSystems
             //else
             //    throw new Exception(directoryName + " is not a directory.");
         }
+        public void AddFileToDir(string directoryName, string name, string contents = null, File.FileType fileType = File.FileType.File)
+        {
+            if (TryFindFile(directoryName, true))
+            {
+                File f = new File(name, contents);
+                f.SetParent(FindFile(directoryName, true));
+                FindFile(directoryName, true).Children.Add(f);
+            }
+            else if (TryFindFile(directoryName, true, true))
+            {
+                File f = new File(name, contents);
+                f.SetParent(FindFile(directoryName, true, true));
+                FindFile(directoryName, true, true).Children.Add(f);
+            }
+            //else
+            //    throw new Exception(directoryName + " is not a directory.");
+        }
+
+        public void AddFile(string directoryPath, string name, string contents = null)
+        {
+            string[] dirs = directoryPath.Split('\\');
+            string destinstaion = dirs[dirs.Length - 1];
+            bool isValid = true;
+
+            foreach(string dir in dirs)
+            {
+                isValid = isValid && TryFindFile(dir, true);
+            }
+            if(isValid)
+            {
+                File f = new File(name, contents);
+                f.SetParent(FindFile(destinstaion, true, true));
+                FindFile(destinstaion, true, true).Children.Add(f);
+            }
+        }
 
         public void RemoveFile(File file)
         {
@@ -141,10 +186,7 @@ namespace TerminalGame.Computers.FileSystems
             CurrentDir.Children.Add(f);
         }
 
-        public string ListFiles()
-        {
-            return ListFiles(CurrentDir);
-        }
+        public string ListFiles() => ListFiles(CurrentDir);
 
         private string ListFiles(File directory)
         {
@@ -154,10 +196,11 @@ namespace TerminalGame.Computers.FileSystems
             // i.e. The output can overlay the input field
             directory.Children.Sort();
             string retval = "";
+
+            retval += "\n    <DIR>    .§"; // current directory
             if (directory.Parent != CurrentDir)
             {
-                retval += "\n    <DIR>    .§";
-                retval += "\n    <DIR>    ..§";
+                retval += "\n    <DIR>    ..§"; // parent directory
             }
             
             foreach (File f in directory.Children)

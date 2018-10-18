@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using TerminalGame.Computers;
+using TerminalGame.Utilities;
 
 namespace TerminalGame.Programs
 {
@@ -47,18 +48,24 @@ namespace TerminalGame.Programs
                     Thread.Sleep((int)(500 * _playerComp.Speed));
                 }
 
-                foreach (Computer c in Computers.Computers.computerList)
+                foreach (Computer c in Computers.Computers.GetInstance().ComputerList)
                 {
                     if (_ip == c.IP || _ip == c.Name)
                     {
                         conn = true;
                         c.Connect(false);
                         _terminal.Write("\nConnection established");
+
+                        GameManager.GetInstance().SetIntensity(1);
                     }
                 }
 
                 if (!conn)
+                {
                     _terminal.Write("\nCould not connect to " + _ip);
+
+                    GameManager.GetInstance().ResetIntensity();
+                }
 
                 _os.NetworkMap.IsActive = true;
                 _terminal.UnblockInput();

@@ -12,22 +12,20 @@ namespace TerminalGame.UI.Modules
     class NetworkMap : Module
     {
         public override SpriteFont Font { get; set; }
-        public override Color BackgroundColor { get; set; }
-        public override Color BorderColor { get; set; }
-        public override Color HeaderColor { get; set; }
         public override bool IsActive { get; set; }
         public override bool IsVisible { get; set; }
         public override string Title { get; set; }
         public override Rectangle Container { get; set; }
-        public SoundEffect Hover { get; set; }
-        public SoundEffect Click { get; set; }
 
         private List<NetworkNode> _nodes;
         private Random _rnd;
         private readonly SpriteFont _spriteFont;
-        private Point _size;
-        private Rectangle _cont;
+        private Point _nodeSize;
+        private Rectangle _cont, _container;
         private readonly GameWindow _gameWindow;
+        private SoundEffect _hover, _click;
+        private readonly Texture2D _texture;
+        private readonly Dictionary<string, Texture2D> _nodeSpinners;
 
         /// <summary>
         /// Constructor for the NetworkMap module. Draws a map of computers on the net.
@@ -40,19 +38,40 @@ namespace TerminalGame.UI.Modules
         public NetworkMap(GameWindow gameWindow, GraphicsDevice graphics, Rectangle container, Texture2D texture, SpriteFont font, Dictionary<string, Texture2D> nodeSpinners) : base(graphics, container)
         {
             _gameWindow = gameWindow;
-            _size = new Point(32, 32);
+            _nodeSize = new Point(24);
             _spriteFont = font;
             _rnd = new Random(DateTime.Now.Millisecond);
             _nodes = new List<NetworkNode>();
-            foreach (Computer c in Computers.Computers.computerList)
+            _hover = SoundManager.GetInstance().GetSound("networkNodeHover");
+            _click = SoundManager.GetInstance().GetSound("networkNodeClick");
+            _graphics = graphics;
+            _container = container;
+            _texture = texture;
+            _nodeSpinners = nodeSpinners;
+
+            //for testing
+            //GenerateMap(container, texture, graphics, nodeSpinners);
+            
+            IsActive = true;
+        }
+
+        public void GenerateMap()
+        {
+            foreach (Computer c in Computers.Computers.GetInstance().ComputerList)
             {
                 // Prevent the nodes from overlapping on the map
                 // More elegant way of doing this?
+                int attempts = 0;
+                int x = 0;
+                int y = 0;
                 bool intersects = true;
                 while (intersects)
                 {
-                    Point position = new Point(_rnd.Next(container.X + 15, container.X + container.Width - _size.Y - 10), _rnd.Next(container.Y + 25, container.Y + container.Height - 50));
-                    _cont = new Rectangle(position, _size);
+                    x = _rnd.Next(_container.X + _nodeSize.X, _container.X + _container.Width - _nodeSize.Y);
+                    y = _rnd.Next(_container.Y + _nodeSize.X, _container.Y + _container.Height - 2 * _nodeSize.Y);
+
+                    Point position = new Point(x, y);
+                    _cont = new Rectangle(position, _nodeSize);
 
                     if (_nodes.Count > 0)
                     {
@@ -67,15 +86,48 @@ namespace TerminalGame.UI.Modules
                     {
                         intersects = false;
                     }
+                    if (++attempts > 29)
+                    {
+                        Console.WriteLine("Node for \"{0}\" intersects after {1} attempts -- ignore overlap and continue.", c.Name, attempts);
+                        break;
+                    }
                 }
-                NetworkNode n = new NetworkNode(texture, c, _cont, new PopUpBox(c.Name + "\n" + c.IP, new Point(_cont.X + _cont.Width + 10, _cont.Y - 5), _spriteFont, Color.White, Color.Black * 0.5f, Color.White, graphics), nodeSpinners);
+
+                //casts to float are NOT redundant!!!
+                c.MapX = (float)x / (float)_container.X;
+                c.MapY = (float)y / (float)_container.Y;
+
+                NetworkNode n = new NetworkNode(_texture, c, _cont, new PopUpBox(c.Name + " x:" + c.MapX + ", y:" + c.MapY + "\n" + c.IP, 
+                    new Point(_cont.X + _cont.Width + 10, _cont.Y - 5), _spriteFont, Color.White, Color.Black * 0.5f, Color.White, _graphics), 
+                    _nodeSpinners);
+
                 _nodes.Add(n);
                 n.Click += OnNodeClick;
                 n.Hover += OnNodeHover;
                 n.Enter += OnMouseEnter;
                 Thread.Sleep(5);
             }
-            IsActive = true;
+        }
+
+        public void BuildLoadedMap()
+        {
+            foreach (Computer c in Computers.Computers.GetInstance().ComputerList)
+            {
+                int x = (int)(c.MapX * Container.X);
+                int y = (int)(c.MapY * Container.Y);
+
+                Point position = new Point(x, y);
+                _cont = new Rectangle(position, _nodeSize);
+
+                NetworkNode n = new NetworkNode(_texture, c, _cont, new PopUpBox(c.Name + " x:" + c.MapX + ", y:" + c.MapY + "\n" + c.IP,
+                    new Point(_cont.X + _cont.Width + 10, _cont.Y - 5), _spriteFont, Color.White, Color.Black * 0.5f, Color.White, _graphics),
+                    _nodeSpinners);
+
+                _nodes.Add(n);
+                n.Click += OnNodeClick;
+                n.Hover += OnNodeHover;
+                n.Enter += OnMouseEnter;
+            }
         }
 
         /// <summary>
@@ -87,7 +139,7 @@ namespace TerminalGame.UI.Modules
             if (IsVisible)
             {
                 Texture2D texture = Drawing.DrawBlankTexture(_graphics);
-                spriteBatch.Draw(texture, Container, BackgroundColor);
+                spriteBatch.Draw(texture, Container, _themeManager.CurrentTheme.ModuleBackgroundColor);
 
                 foreach (NetworkNode node in _nodes)
                 {
@@ -118,21 +170,24 @@ namespace TerminalGame.UI.Modules
                 foreach (NetworkNode node in _nodes)
                 {
                     if (node.IsHovering)
+                    { 
                         node.Draw(spriteBatch);
-                }
-
-                // Makes sure that infoboxes are drawn on top, so other nodes don't obtruct them
-                foreach (NetworkNode node in _nodes)
-                {
-                    if (node.IsHovering)
-                    {
                         node.InfoBox.Draw(spriteBatch);
                     }
                 }
 
-                Drawing.DrawBorder(spriteBatch, Container, texture, 1, BorderColor);
-                spriteBatch.Draw(texture, RenderHeader(), HeaderColor);
-                spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), Color.White);
+                // Makes sure that infoboxes are drawn on top, so other nodes don't obtruct them
+                //foreach (NetworkNode node in _nodes)
+                //{
+                //    if (node.IsHovering)
+                //    {
+                //        node.InfoBox.Draw(spriteBatch);
+                //    }
+                //}
+
+                Drawing.DrawBorder(spriteBatch, Container, texture, 1, _themeManager.CurrentTheme.ModuleOutlineColor);
+                spriteBatch.Draw(texture, RenderHeader(), _themeManager.CurrentTheme.ModuleHeaderBackgroundColor);
+                spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), _themeManager.CurrentTheme.ModuleHeaderFontColor);
             }
         }
 
@@ -156,7 +211,7 @@ namespace TerminalGame.UI.Modules
         {
             try
             {
-                Hover.Play(0.25f, 1f, 0f);
+                _hover.Play(0.25f, 1f, 0f);
             }
             catch (Exception ex)
             {
@@ -167,11 +222,16 @@ namespace TerminalGame.UI.Modules
         private void OnNodeClick(NodeClickedEventArgs e)
         {
             if(IsActive)
-                CommandParser.ParseCommand("connect " + e.IP);
+            {
+                if (e.IP == Player.GetInstance().PlayersComputer.IP)
+                    CommandParser.ParseCommand("dc");
+                else
+                    CommandParser.ParseCommand("connect " + e.IP);
+            }
 
             try
             {
-                Click.Play(0.25f, 1f, 0f);
+                _click.Play(0.25f, 1f, 0f);
             }
             catch (Exception ex)
             {

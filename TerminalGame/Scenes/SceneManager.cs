@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TerminalGame.Scenes
+﻿namespace TerminalGame.Scenes
 {
     class SceneManager
     {
@@ -14,10 +8,11 @@ namespace TerminalGame.Scenes
             SettingsMenu,
             LoadMenu,
             Loading,
-            Game
+            GameRunning,
+            GameOver,
         }
 
-        private static IScene _menu, _settingsMenu, _loadMenu, _loading, _game;
+        private static IScene _menu, _settingsMenu, _loadMenu, _loading, _gameRunning, _gameOver;
 
         public static IScene GetScene(Scene scene)
         {
@@ -31,20 +26,23 @@ namespace TerminalGame.Scenes
                     return _loadMenu;
                 case Scene.Loading:
                     return _loading;
-                case Scene.Game:
-                    return _game;
+                case Scene.GameRunning:
+                    return _gameRunning;
+                case Scene.GameOver:
+                    return _gameOver;
                 default:
                     return _menu;
             }
         }
 
-        public static void SetScenes(IScene menu, IScene settingsMenu, IScene loadMenu, IScene loading, IScene game)
+        public static void SetScenes(IScene menu, IScene settingsMenu, IScene loadMenu, IScene loading, IScene gameRunning, IScene gameOver)
         {
             _menu = menu;
             _settingsMenu = settingsMenu;
             _loadMenu = loadMenu;
             _loading = loading;
-            _game = game;
+            _gameRunning = gameRunning;
+            _gameOver = gameOver;
         }
     }
 }

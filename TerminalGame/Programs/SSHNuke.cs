@@ -1,6 +1,6 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using TerminalGame.Computers;
+using TerminalGame.Utilities;
 
 namespace TerminalGame.Programs
 {
@@ -9,32 +9,45 @@ namespace TerminalGame.Programs
         private static Player _player = Player.GetInstance();
         private static OS.OS _os = OS.OS.GetInstance();
         private static Computer _playerComp = Player.GetInstance().PlayersComputer;
+        private static Computer _connComp;
         private static UI.Modules.Terminal _terminal = _os.Terminal;
         private static string[] _textToWrite;
 
         public static int Execute()
         {
             _terminal.BlockInput();
-            _player.PlayersComputer.FileSystem.ChangeDir("/");
-            _player.PlayersComputer.FileSystem.ChangeDir("bin");
+            _connComp = _player.ConnectedComputer;
+            //_player.PlayersComputer.FileSystem.ChangeDir("/");
+            //_player.PlayersComputer.FileSystem.ChangeDir("bin");
             if (_player.PlayersComputer.FileSystem.TryFindFile("sshnuke", false))
             {
+                if(_player.ConnectedComputer != _player.PlayersComputer)
+                    GameManager.GetInstance().UpIntensity();
+
+                _player.ConnectedComputer.DoOffensiveAction();
+
                 _terminal.Write("\nConnecting to " + _player.ConnectedComputer.IP + ":ssh ");
                 _textToWrite = new string[]
                 {
-                ".",
-                ".",
-                ".",
-                " successful.",
-                "\nAttempting to exploit SSHv1 CRC32 ",
-                ".",
-                ".",
-                ".",
-                " successful."
+                    ".",
+                    ".",
+                    ".",
+                    " successful.",
+                    "\nAttempting to exploit SSHv1 CRC32 ",
+                    ".",
+                    ".",
+                    ".",
+                    " successful."
                 };
 
                 for(int i = 0; i<_textToWrite.Length; i++)
                 {
+                    if(_connComp != _player.ConnectedComputer)
+                    {
+                        _terminal.Write("\nsshnuke: error: connection lost");
+                        _terminal.UnblockInput();
+                        return 1;
+                    }
                     if(i == 3)
                     {
                         if (!_player.ConnectedComputer.CheckPortOpen(22))
@@ -56,18 +69,18 @@ namespace TerminalGame.Programs
                 _terminal.Write("\nResetting root password to \"password\".");
                 Thread.Sleep(500);
                 _player.ConnectedComputer.ChangePassword("password");
-                _player.ConnectedComputer.GetRoot();
-                _player.ConnectedComputer.Connect();
+                //_player.ConnectedComputer.GetRoot();
+                //_player.ConnectedComputer.Connect();
                 _terminal.Write("\nSystem open: Access level <9>");
                 _terminal.UnblockInput();
-                _player.PlayersComputer.FileSystem.ChangeDir("/");
+                //_player.PlayersComputer.FileSystem.ChangeDir("/");
                 return 0;
             }
             else
             {
                 _terminal.Write("\nThe program \'sshnuke\' is currently not installed");
                 _terminal.UnblockInput();
-                _player.PlayersComputer.FileSystem.ChangeDir("/");
+                //_player.PlayersComputer.FileSystem.ChangeDir("/");
                 return 1;
             }
         }
