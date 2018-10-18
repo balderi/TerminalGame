@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -11,7 +9,6 @@ using TerminalGame.UI;
 using TerminalGame.Utilities;
 using System.IO;
 using System.Threading;
-using TerminalGame.IO;
 
 namespace TerminalGame.Scenes
 {
@@ -24,6 +21,7 @@ namespace TerminalGame.Scenes
         private bool _prevKbState, _newKbState;
         private MainMenuButton backButton;
         private List<MainMenuButton> _gameList;
+        private SpriteFont _loadButtonFont;
 
         public LoadGameScene(GameWindow gameWindow, SpriteFont buttonFont, SpriteFont font, GraphicsDevice graphics) : base()
         {
@@ -36,16 +34,33 @@ namespace TerminalGame.Scenes
             };
             backButton.Click += OnButtonClick;
 
-            SpriteFont loadButtonFont = FontManager.GetFont(FontManager.FontSize.Medium);
+            _loadButtonFont = FontManager.GetFont(FontManager.FontSize.Medium);
             _gameList = new List<MainMenuButton>();
+            RefreshButtons();
+        }
+
+        private void RefreshButtons()
+        {
+            _gameList.Clear();
             int games = 0;
             foreach (var f in Directory.GetFiles(GameManager.GetInstance().SavePath))
             {
-                MainMenuButton b = new MainMenuButton(f, (int)loadButtonFont.MeasureString(f).X + 20, 
-                    (int)loadButtonFont.MeasureString("A").Y + 20, loadButtonFont, _graphics);
+                string title = f.Split('\\').Last().Split('/').Last();
+                MainMenuButton b = new MainMenuButton(title, (int)_loadButtonFont.MeasureString("'MaximumPlayerAccountNameLength'").X + 20,
+                    (int)_loadButtonFont.MeasureString("A").Y + 20, _loadButtonFont, _graphics);
                 b.Position = new Vector2(50, games++ * (10 + b.Rectangle.Height) + 200);
+                b.Value = f;
                 b.Click += OnLoadClick;
                 _gameList.Add(b);
+
+                MainMenuButton d = new MainMenuButton(" X ", (int)_loadButtonFont.MeasureString("----").X + 20,
+                    (int)_loadButtonFont.MeasureString("A").Y + 20, _loadButtonFont, _graphics)
+                {
+                    Position = new Vector2(b.Position.X + b.Rectangle.Width + 10, b.Position.Y),
+                    Value = f
+                };
+                d.Click += OnDeleteClick;
+                _gameList.Add(d);
             }
         }
 
@@ -82,9 +97,17 @@ namespace TerminalGame.Scenes
             }
             _prevKbState = _newKbState;
 
-            foreach (var b in _gameList)
+            //yeah, I know... it works, though... ¯\_(ツ)_/¯
+            try
             {
-                b.Update();
+                foreach (var b in _gameList)
+                {
+                    b.Update();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
 
@@ -95,10 +118,16 @@ namespace TerminalGame.Scenes
 
         private void OnLoadClick(ButtonPressedEventArgs e)
         {
-            GameManager.GetInstance().CurrentSaveName = e.Text;
+            GameManager.GetInstance().CurrentSaveName = e.Value;
             GameManager.GetInstance().StateMachine.Transition(GameState.GameLoading);
             Thread _loadingThread = new Thread(new ThreadStart(WhatTheFuck.GetInstance().StartLoadGame));
             _loadingThread.Start();
+        }
+
+        private void OnDeleteClick(ButtonPressedEventArgs e)
+        {
+            File.Delete(e.Value);
+            RefreshButtons();
         }
     }
 }

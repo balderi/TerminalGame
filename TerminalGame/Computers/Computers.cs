@@ -54,6 +54,14 @@ namespace TerminalGame.Computers
             }
         }
         
+        public void LinkLoadedComputers()
+        {
+            foreach(Computer c in ComputerList)
+            {
+                c.LoadLinks();
+            }
+        }
+
         /// <summary>
         /// Generate a random IP address.
         /// </summary>

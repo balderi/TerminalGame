@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
 using TerminalGame.Utilities;
 using TerminalGame.Computers;
-using TerminalGame.UI.Themes;
 
 namespace TerminalGame.UI.Modules
 {

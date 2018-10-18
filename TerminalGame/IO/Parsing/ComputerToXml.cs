@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+﻿using System.Xml;
 using TerminalGame.Computers;
 
 namespace TerminalGame.IO.Parsing
@@ -39,6 +33,18 @@ namespace TerminalGame.IO.Parsing
             XmlElement misc = xDoc.CreateElement("misc");
             misc.SetAttribute("IsObjective", computer.IsMissionObjective.ToString());
             misc.SetAttribute("IsShownOnMap", computer.IsShownOnMap.ToString());
+
+            XmlElement links = xDoc.CreateElement("links");
+            if(computer.LinkedComputers.Count > 0)
+            {
+                string linkIndicies = "";
+                foreach(Computer c in computer.LinkedComputers)
+                {
+                    linkIndicies += " " + Computers.Computers.GetInstance().ComputerList.IndexOf(c);
+                }
+                links.InnerText = linkIndicies;
+            }
+            misc.AppendChild(links);
             comp.AppendChild(misc);
 
             XmlElement filesystem = xDoc.CreateElement("filesystem");

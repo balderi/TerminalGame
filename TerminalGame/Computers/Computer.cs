@@ -22,6 +22,7 @@ namespace TerminalGame.Computers
         public bool IsShownOnMap { get; private set; }
         public FileSystem FileSystem { get; private set; }
         public List<Computer> LinkedComputers { get; private set; }
+        public string LinksToLoad { get; set; }
         public Dictionary<int, string> OpenPorts { get; private set; }
         public RemoteUI RemoteUI { get; private set; }
         public float MapX { get; set; }
@@ -81,6 +82,18 @@ namespace TerminalGame.Computers
                 FileSystem = fs;
             }
             Tracer = new ActiveTracer(TraceTime);
+        }
+
+        public void LoadLinks()
+        {
+            if(!String.IsNullOrEmpty(LinksToLoad))
+            {
+                string[] temp = LinksToLoad.Trim().Split(' ');
+                foreach(string s in temp)
+                {
+                    Link(Computers.GetInstance().ComputerList[Convert.ToInt32(s)]);
+                }
+            }
         }
 
         public void AbortTrace()
@@ -228,19 +241,6 @@ namespace TerminalGame.Computers
             }
 
             return retval;
-        }
-
-        /// <summary>
-        /// Builds a default file system.
-        /// </summary>
-        public void BuildBasicFileSystem()
-        {
-            FileSystem = new FileSystem();
-            string[] baseDirs = { "bin", "usr", "home", "sys", "logs" };
-            for (int i = 0; i < baseDirs.Length; i++)
-            {
-                FileSystem.AddDir(baseDirs[i]);
-            }
         }
 
         private RemoteUI CreateRemoteUI()

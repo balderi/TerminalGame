@@ -1,11 +1,6 @@
-﻿using Microsoft.Xna.Framework.Audio;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Threading;
 using System.Timers;
-using System.Threading.Tasks;
 using TerminalGame.UI.Themes;
 
 namespace TerminalGame.Utilities

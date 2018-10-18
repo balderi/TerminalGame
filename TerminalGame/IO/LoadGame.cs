@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Xml;
+﻿using System.Xml;
 using TerminalGame.IO.Parsing;
-using TerminalGame.States;
-using TerminalGame.Utilities;
 
 namespace TerminalGame.IO
 {
@@ -24,6 +16,7 @@ namespace TerminalGame.IO
             {
                 Computers.Computers.GetInstance().ComputerList.Add(ComputerFromXml.Parse(n));
             }
+            Computers.Computers.GetInstance().LinkLoadedComputers();
         }
     }
 }

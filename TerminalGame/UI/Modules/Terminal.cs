@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using TerminalGame.Utilities;
 using TerminalGame.Utilities.TextHandler;
 using TerminalGame.Computers;
-using TerminalGame.UI.Themes;
 
 namespace TerminalGame.UI.Modules
 {

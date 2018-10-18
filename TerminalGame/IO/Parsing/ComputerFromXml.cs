@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using TerminalGame.Computers;
 using TerminalGame.Computers.FileSystems;
@@ -42,6 +38,13 @@ namespace TerminalGame.IO.Parsing
 
             retval.MapX = (float)Convert.ToDecimal(mappos[0]);
             retval.MapY = (float)Convert.ToDecimal(mappos[1]);
+
+            string links = xNode.SelectSingleNode("misc").SelectSingleNode("links").InnerText;
+
+            if(!String.IsNullOrEmpty(links))
+            {
+                retval.LinksToLoad = links;
+            }
 
             return retval;
         }

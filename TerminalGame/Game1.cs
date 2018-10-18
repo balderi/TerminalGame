@@ -5,18 +5,14 @@ using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Collections.Generic;
-using TerminalGame.UI.Modules;
 using TerminalGame.Utilities.TextHandler;
-using TerminalGame.Computers;
 using TerminalGame.States;
 using System.Reflection;
 using TerminalGame.Utilities;
 using TerminalGame.Scenes;
 using System.Threading;
-using TerminalGame.Computers.FileSystems;
 using TerminalGame.UI.Shaders;
 using TerminalGame.UI.Themes;
-using System.Xml;
 using TerminalGame.IO;
 
 namespace TerminalGame
@@ -35,8 +31,6 @@ namespace TerminalGame
 
         LoadingScreen _load;
 
-        //OS.OS _os;
-
         private SpriteFont _font, _fontL, _fontXL, _menuFont, _fontS, _fontXS;
         private readonly string GameTitle;
         private float musicVolume, /*audioVolume,*/ masterVolume;
@@ -47,14 +41,6 @@ namespace TerminalGame
         LoadingScene loadingScene;
         GameScene gameRunningScene;
         GameOverScene gameOverScene;
-
-        //Terminal terminal;
-        //NetworkMap networkMap;
-        //StatusBar statusBar;
-        //RemoteView remoteView;
-        //NotesModule notes;
-        
-        //Computer playerComp;
 
         Rectangle bgR;
         Texture2D bg, computer, spinner01, spinner02, spinner03, spinner04, spinner05, spinner06, spinner07, spinner08;
@@ -78,9 +64,6 @@ namespace TerminalGame
             IsFixedTimeStep = true;
             _graphics.SynchronizeWithVerticalRetrace = true;
             _graphics.GraphicsProfile = GraphicsProfile.HiDef;
-
-            //GameManager.GetInstance().SetGraphicsDeviceManager(_graphics);
-            //GameManager.GetInstance().IsGameRunning = false;
         }
 
         /// <summary>
@@ -94,34 +77,13 @@ namespace TerminalGame
             Console.WriteLine("Initializing...");
             KeyboardInput.Initialize(this, 500f, 20);
             Window.Title = GameTitle;
-
-            //if(!Validation.IsSaveGamesFolderValid())
-            //{
-            //    throw new Exception("Save game folder could not be validated.");
-            //}
-
             IsMouseVisible = true;
-            //GameManager.GetInstance().IsGameRunning = false;
-            //GameManager.GetInstance().IsFullScreen = true;
-            //GameManager.GetInstance().BloomEnabled = true;
             
             _random = new Random(DateTime.Now.Millisecond);
 
             masterVolume = 1.0f;
             musicVolume = 0.2f;
             //audioVolume = 1.0f;
-            
-            //GameManager.GetInstance().ChangeResolution(1366, 768);
-            ////GameManager.GetInstance().ChangeResolution(GraphicsDevice.DisplayMode.Width, GraphicsDevice.DisplayMode.Height);
-            
-            ////Set game to fullscreen
-            //_graphics.HardwareModeSwitch = false;
-            ////_graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
-            ////_graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
-            //_graphics.IsFullScreen = false;
-            //_graphics.ApplyChanges();
-            //Console.WriteLine("Resolution is now " + _graphics.PreferredBackBufferWidth + " x " + _graphics.PreferredBackBufferHeight);
-            //Drawing.SetBlankTexture(GraphicsDevice);
 
             MediaPlayer.Volume = musicVolume * masterVolume; // 0.5f;
             MediaPlayer.IsRepeating = true;
@@ -155,7 +117,6 @@ namespace TerminalGame
             MusicManager.GetInstance().AddSong(Content.Load<Song>("Audio/Music/dynamicsTest0"));
             MusicManager.GetInstance().AddSong(Content.Load<Song>("Audio/Music/dynamicsTest1"));
             MusicManager.GetInstance().AddSong(Content.Load<Song>("Audio/Music/dynamicsTest2"));
-            //MediaPlayer.Play(MusicManager.GetInstance().Songs[1]);
             Console.WriteLine("Done");
 
             Console.Write("Loading audio... ");
@@ -178,7 +139,7 @@ namespace TerminalGame
             GameManager.GetInstance().IsGameRunning = false;
 
             GameManager.GetInstance().IsGameRunning = false;
-            GameManager.GetInstance().IsFullScreen = true;
+            GameManager.GetInstance().IsFullScreen = false;
             GameManager.GetInstance().BloomEnabled = true;
 
             GameManager.GetInstance().ChangeResolution(1366, 768);
