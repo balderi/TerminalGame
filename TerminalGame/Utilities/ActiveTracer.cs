@@ -23,7 +23,7 @@ namespace TerminalGame.Utilities
             else
                 TraceSpeed = traceSpeed;
 
-            _delay = (int)(5000 * TraceSpeed);
+            _delay = (int)(2000 * TraceSpeed);
             if (_delay < 10)
                 _delay = 10;
 
