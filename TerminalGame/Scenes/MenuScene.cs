@@ -81,12 +81,14 @@ namespace TerminalGame.Scenes
 
         private void LoadGame_Click(ButtonPressedEventArgs e)
         {
-            ButtonClicked?.Invoke(e);
+            _stateMachine.Transition(GameState.LoadMenu);
+            //ButtonClicked?.Invoke(e);
         }
 
         private void NewGame_Click(ButtonPressedEventArgs e)
         {
-            ButtonClicked?.Invoke(e);
+            _stateMachine.Transition(GameState.NewGame);
+            //ButtonClicked?.Invoke(e);
         }
 
         public override void Update(GameTime gameTime)

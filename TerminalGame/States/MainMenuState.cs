@@ -21,8 +21,8 @@ namespace TerminalGame.States
             {
                 case GameState.GameRunning:
                     return GameRunningState.Instance;
-                case GameState.GameLoading:
-                    return GameLoadingState.Instance;
+                case GameState.NewGame:
+                    return NewGameState.Instance;
                 case GameState.SettingsMenu:
                     return SettingsMenuState.Instance;
                 case GameState.LoadMenu:

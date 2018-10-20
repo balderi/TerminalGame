@@ -14,7 +14,6 @@ namespace TerminalGame.Scenes
 {
     class LoadGameScene : Scene
     {
-
         private readonly SpriteFont _font;
         private readonly GameWindow _gameWindow;
         private readonly GraphicsDevice _graphics;

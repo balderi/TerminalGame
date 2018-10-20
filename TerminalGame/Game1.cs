@@ -41,6 +41,7 @@ namespace TerminalGame
         LoadingScene loadingScene;
         GameScene gameRunningScene;
         GameOverScene gameOverScene;
+        NewGameScene newGameScene;
 
         Rectangle bgR;
         Texture2D bg, computer, spinner01, spinner02, spinner03, spinner04, spinner05, spinner06, spinner07, spinner08;
@@ -208,9 +209,12 @@ namespace TerminalGame
             gameOverScene = new GameOverScene(new Vector2(_graphics.PreferredBackBufferWidth / 2, 
                 _graphics.PreferredBackBufferHeight / 2), Window, 
                 FontManager.GetFont(FontManager.FontSize.Large), GraphicsDevice);
+            newGameScene = new NewGameScene(Window, FontManager.GetFont(FontManager.FontSize.Large),
+                FontManager.GetFont(FontManager.FontSize.XLarge), GraphicsDevice);
+
 
             SceneManager.SetScenes(mainMenuScene, settingsMenuScene, loadGameMenuScene, 
-                loadingScene, gameRunningScene, gameOverScene);
+                loadingScene, gameRunningScene, gameOverScene, newGameScene);
             Console.WriteLine("Done");
             //Load our Bloomfilter!
             _bloomFilter = new BloomFilter();

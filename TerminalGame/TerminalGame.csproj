@@ -117,6 +117,7 @@
     <Compile Include="Scenes\LoadGameScene.cs" />
     <Compile Include="Scenes\LoadingScene.cs" />
     <Compile Include="Scenes\MenuScene.cs" />
+    <Compile Include="Scenes\NewGameScene.cs" />
     <Compile Include="Scenes\Scene.cs" />
     <Compile Include="Scenes\SceneManager.cs" />
     <Compile Include="Scenes\SettingsScene.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="States\GameOverState.cs" />
     <Compile Include="States\GameRunningState.cs" />
     <Compile Include="States\MainMenuState.cs" />
+    <Compile Include="States\NewGameState.cs" />
     <Compile Include="States\SettingsMenuState.cs" />
     <Compile Include="States\LoadMenuState.cs" />
     <Compile Include="States\State.cs" />

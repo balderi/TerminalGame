@@ -10,9 +10,10 @@
             Loading,
             GameRunning,
             GameOver,
+            NewGame,
         }
 
-        private static IScene _menu, _settingsMenu, _loadMenu, _loading, _gameRunning, _gameOver;
+        private static IScene _menu, _settingsMenu, _loadMenu, _loading, _gameRunning, _gameOver, _newGame;
 
         public static IScene GetScene(Scene scene)
         {
@@ -30,12 +31,14 @@
                     return _gameRunning;
                 case Scene.GameOver:
                     return _gameOver;
+                case Scene.NewGame:
+                    return _newGame;
                 default:
                     return _menu;
             }
         }
 
-        public static void SetScenes(IScene menu, IScene settingsMenu, IScene loadMenu, IScene loading, IScene gameRunning, IScene gameOver)
+        public static void SetScenes(IScene menu, IScene settingsMenu, IScene loadMenu, IScene loading, IScene gameRunning, IScene gameOver, IScene newGame)
         {
             _menu = menu;
             _settingsMenu = settingsMenu;
@@ -43,6 +46,7 @@
             _loading = loading;
             _gameRunning = gameRunning;
             _gameOver = gameOver;
+            _newGame = newGame;
         }
     }
 }

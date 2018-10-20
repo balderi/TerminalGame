@@ -13,7 +13,7 @@ namespace TerminalGame.Utilities
             string retval = "";
             for(int i = 0; i < length; i++)
             {
-                retval += _chars[i];
+                retval += _chars[_rnd.Next(0, _chars.Length)];
             }
             return retval;
         }
