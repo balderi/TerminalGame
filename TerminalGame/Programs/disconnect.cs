@@ -14,6 +14,7 @@ namespace TerminalGame.Programs
             {
                 GameManager.GetInstance().ResetIntensity();
                 _player.ConnectedComputer.GenerateLog(_player.PlayersComputer, "disconnected");
+                _player.ConnectedComputer.FileSystem.ChangeDir("/");
                 _player.ConnectedComputer.Disconnect(false);
                 _terminal.Write("\nDisconnected");
                 return;

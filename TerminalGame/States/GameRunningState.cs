@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using TerminalGame.IO;
 using TerminalGame.Utilities;
 
 namespace TerminalGame.States
@@ -17,6 +18,7 @@ namespace TerminalGame.States
 
         public override State Next(GameState state)
         {
+            SaveGame.Save();
             if (state == GameState.MainMenu)
                 return MainMenuState.Instance;
             else if (state == GameState.GameOver)

@@ -4,8 +4,6 @@ using TerminalGame.UI.Themes;
 
 namespace TerminalGame.Utilities
 {
-    // TODO: Make singleton rather than static class (maybe?)
-
     /// <summary>
     /// Command Parser
     /// </summary>

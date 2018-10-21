@@ -37,6 +37,7 @@ namespace TerminalGame.Computers
             Computer c2 = new Computer(Computer.Type.Server, "100.100.100.100", "TestServer", "abc123", 0.05f);
             Computer c3 = new Computer(Computer.Type.Server, "1.12.123.123", "TestServer With A Pretty Long Name Just To Check Dat InfoBox", "abc123", 0.5f);
             Computer c4 = new Computer(Computer.Type.Server, "111.111.111.111", "Intraware Technology Internal Services Machine", "abc123", 0.25f);
+            c4.SetAsObjective();
             
             ComputerList.Add(c1);
             ComputerList.Add(c2);

@@ -97,7 +97,7 @@ namespace TerminalGame.UI.Modules
                 c.MapX = (float)x / (float)_container.X;
                 c.MapY = (float)y / (float)_container.Y;
 
-                NetworkNode n = new NetworkNode(_texture, c, _cont, new PopUpBox(c.Name + " x:" + c.MapX + ", y:" + c.MapY + "\n" + c.IP, 
+                NetworkNode n = new NetworkNode(_texture, c, _cont, new PopUpBox(c.Name + "\n" + c.IP, 
                     new Point(_cont.X + _cont.Width + 10, _cont.Y - 5), _spriteFont, Color.White, Color.Black * 0.5f, Color.White, _graphics), 
                     _nodeSpinners);
 
@@ -119,7 +119,7 @@ namespace TerminalGame.UI.Modules
                 Point position = new Point(x, y);
                 _cont = new Rectangle(position, _nodeSize);
 
-                NetworkNode n = new NetworkNode(_texture, c, _cont, new PopUpBox(c.Name + " x:" + c.MapX + ", y:" + c.MapY + "\n" + c.IP,
+                NetworkNode n = new NetworkNode(_texture, c, _cont, new PopUpBox(c.Name + "\n" + c.IP,
                     new Point(_cont.X + _cont.Width + 10, _cont.Y - 5), _spriteFont, Color.White, Color.Black * 0.5f, Color.White, _graphics),
                     _nodeSpinners);
 
@@ -199,6 +199,7 @@ namespace TerminalGame.UI.Modules
         {
             foreach (NetworkNode node in _nodes)
             {
+                //check if infoBox is bleeding over the edge of the window; if it is, flip it to the other side of the node.
                 if (node.InfoBox.Container.X + node.InfoBox.Container.Width >= _gameWindow.ClientBounds.Width - 10)
                 {
                     node.InfoBox.ChangeLocation(new Point(node.Position.X - node.InfoBox.Container.Width - 10, node.Position.Y));

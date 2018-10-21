@@ -17,7 +17,7 @@ namespace TerminalGame.Programs
         {
             _terminal.BlockInput();
             _connComp = _player.ConnectedComputer;
-            //_player.PlayersComputer.FileSystem.ChangeDir("/");
+            _player.PlayersComputer.FileSystem.ChangeDir("/");
             //_player.PlayersComputer.FileSystem.ChangeDir("bin");
             if (_player.PlayersComputer.FileSystem.TryFindFile("sshnuke", false))
             {

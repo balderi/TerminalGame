@@ -114,6 +114,7 @@ namespace TerminalGame.Computers
             }
             else
             {
+                Player.GetInstance().ConnectedComputer.FileSystem.ChangeDir("/");
                 Player.GetInstance().ConnectedComputer.Disconnect(true);
                 Player.GetInstance().ConnectedComputer = this;
                 IsPlayerConnected = true;

@@ -3,13 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TerminalGame.States
 {
-    /// <summary>
-    /// Yeah... this all needs to be redone
-    /// </summary>
     public abstract class State
     {
-        // TODO: Create a State for each game state
-
         /// <summary>
         /// Go to next state via a key
         /// </summary>

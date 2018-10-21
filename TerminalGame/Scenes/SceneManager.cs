@@ -1,5 +1,6 @@
 ﻿namespace TerminalGame.Scenes
 {
+    //TODO: Rework this whole class - make a factory or something.
     class SceneManager
     {
         public enum Scene

@@ -18,12 +18,13 @@ namespace TerminalGame.UI.Themes
         public Color NetworkMapHomeSpinnerColor { get; private set; }
         public Color NetworkMapHoverSpinnerColor { get; private set; }
         public Color NetworkMapConnectedSpinnerColor { get; private set; }
+        public Color NetworkMapMissionSpinnerColor { get; private set; }
         public Color WarningColor { get; private set; }
 
         public Theme(string themeName, Color? statusBarBackgroundColor = null, Color? moduleBackgroundColor = null, 
             Color? moduleFontColor = null, Color? moduleHeaderBackgroundColor = null, Color? moduleHeaderFontColor = null, 
             Color? moduleOutlineColor = null, Color? networkMapNodeColor = null, Color? networkMapHomeSpinnerColor = null,
-            Color? networkMapHoverSpinnerColor = null, Color? networkMapConnectedSpinnerColor = null, Color? warningColor = null)
+            Color? networkMapHoverSpinnerColor = null, Color? networkMapConnectedSpinnerColor = null, Color? networkMapMissionSpinnerColor = null, Color? warningColor = null)
         {
             ThemeName = themeName;
             StatusBarBackgroundColor = statusBarBackgroundColor == null ? Color.DeepPink : (Color)statusBarBackgroundColor;
@@ -36,6 +37,7 @@ namespace TerminalGame.UI.Themes
             NetworkMapHomeSpinnerColor = networkMapHomeSpinnerColor == null ? Color.Red : (Color)networkMapHomeSpinnerColor;
             NetworkMapHoverSpinnerColor = networkMapHoverSpinnerColor == null ? Color.Firebrick : (Color)networkMapHoverSpinnerColor;
             NetworkMapConnectedSpinnerColor = networkMapConnectedSpinnerColor == null ? Color.Purple : (Color)networkMapConnectedSpinnerColor;
+            NetworkMapMissionSpinnerColor = networkMapMissionSpinnerColor == null ? Color.PaleGoldenrod : (Color)networkMapMissionSpinnerColor;
             WarningColor = warningColor == null ? Color.White : (Color)warningColor;
             _isFlashing = false;
             _oldHeaderBG = ModuleHeaderBackgroundColor;
