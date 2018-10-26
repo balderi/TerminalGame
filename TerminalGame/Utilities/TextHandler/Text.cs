@@ -5,21 +5,15 @@ using System;
 namespace TerminalGame.Utilities.TextHandler
 {
     /// <summary>
-    ///     Data structure responsible for keeping track of the characters.
+    /// Data structure responsible for keeping track of the characters.
     /// </summary>
     public class Text
     {
-        /// <summary>
-        /// String
-        /// </summary>
         public string String
         {
             get { return new string(_char).Substring(0, Length); }
             set { ResetText(value); }
         }
-        /// <summary>
-        /// Characters
-        /// </summary>
         public char[] Characters
         {
             get { return _char; }
@@ -27,9 +21,6 @@ namespace TerminalGame.Utilities.TextHandler
         }
 
         private int length;
-        /// <summary>
-        /// Length
-        /// </summary>
         public int Length
         {
             get { return length; }
@@ -43,23 +34,13 @@ namespace TerminalGame.Utilities.TextHandler
                 IsDirty = true;
             }
         }
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
+        
         public int MaxLength { get; }
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
+        
         public bool IsDirty { get; set; }
 
         private readonly char[] _char;
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
-        /// <param name="maxLength"></param>
+        
         public Text(int maxLength)
         {
             MaxLength = maxLength;
@@ -68,12 +49,7 @@ namespace TerminalGame.Utilities.TextHandler
 
             IsDirty = true;
         }
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
-        /// <param name="location"></param>
-        /// <param name="character"></param>
+        
         public void InsertCharacter(int location, char character)
         {
             ValidateEditRange(location, location);
@@ -95,13 +71,7 @@ namespace TerminalGame.Utilities.TextHandler
             Length++;
             IsDirty = true;
         }
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <param name="replacement"></param>
+        
         public void Replace(int start, int end, string replacement)
         {
             ValidateEditRange(start, end);
@@ -116,12 +86,7 @@ namespace TerminalGame.Utilities.TextHandler
 
             IsDirty = true;
         }
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
+        
         public void RemoveCharacters(int start, int end)
         {
             ValidateEditRange(start, end);

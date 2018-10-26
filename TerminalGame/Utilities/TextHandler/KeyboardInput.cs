@@ -30,72 +30,35 @@ namespace TerminalGame.Utilities.TextHandler
         /// </summary>
         public class CharacterEventArgs : EventArgs
         {
-            /// <summary>
-            /// OG author did not comment anything
-            /// </summary>
             public char Character { get; private set; }
-
-            /// <summary>
-            /// OG author did not comment anything
-            /// </summary>
-            /// <param name="character"></param>
+            
             public CharacterEventArgs(char character)
             {
                 Character = character;
             }
         }
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
+        
         public class KeyEventArgs : EventArgs
         {
-            /// <summary>
-            /// OG author did not comment anything
-            /// </summary>
             public Keys KeyCode { get; private set; }
-
-            /// <summary>
-            /// OG author did not comment anything
-            /// </summary>
+            
             public KeyEventArgs(Keys keyCode)
             {
                 KeyCode = keyCode;
             }
         }
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
+        
         public delegate void CharEnteredHandler(object sender, CharacterEventArgs e, KeyboardState ks);
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
+        
         public delegate void KeyEventHandler(object sender, KeyEventArgs e, KeyboardState ks);
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
+        
         public static readonly char[] SPECIAL_CHARACTERS = { '\a', '\b', '\n', '\r', '\f', '\t', '\v' };
 
         private static Game game;
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
+        
         public static event CharEnteredHandler CharPressed;
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
         public static event KeyEventHandler KeyPressed;
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
         public static event KeyEventHandler KeyDown;
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
         public static event KeyEventHandler KeyUp;
 
         private static KeyboardState prevKeyState;
@@ -106,14 +69,7 @@ namespace TerminalGame.Utilities.TextHandler
         private static int repsPerSec;
         private static DateTime lastRep = DateTime.Now;
         private static bool filterSpecialCharacters;
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
-        /// <param name="g"></param>
-        /// <param name="timeUntilRepInMilliseconds"></param>
-        /// <param name="repsPerSecond"></param>
-        /// <param name="filterSpecialCharactersFromCharPressed"></param>
+        
         public static void Initialize(Game g, float timeUntilRepInMilliseconds, int repsPerSecond,
             bool filterSpecialCharactersFromCharPressed = true)
         {
@@ -171,9 +127,6 @@ namespace TerminalGame.Utilities.TextHandler
             }
         }
 
-        /// <summary>
-        /// Update
-        /// </summary>
         public static void Update()
         {
             KeyboardState keyState = Keyboard.GetState();
@@ -235,10 +188,7 @@ namespace TerminalGame.Utilities.TextHandler
         {
             return prevKeyState.IsKeyDown(key) && keyState.IsKeyUp(key);
         }
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
+        
         public static void Dispose()
         {
             CharPressed = null;

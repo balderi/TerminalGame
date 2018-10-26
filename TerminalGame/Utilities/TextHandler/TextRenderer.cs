@@ -5,22 +5,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TerminalGame.Utilities.TextHandler
 {
-    /// <summary>
-    /// TextRenderer
-    /// </summary>
     public class TextRenderer
     {
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
         public Rectangle Area { get; set; }
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
         public SpriteFont Font { get; set; }
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
         public Color Color { get; set; }
 
         private readonly TextBox box;
@@ -39,10 +27,7 @@ namespace TerminalGame.Utilities.TextHandler
 
         // Row the character is on.
         private readonly byte[] row;
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
+        
         public void Dispose()
         {
             text?.Dispose();
@@ -53,11 +38,7 @@ namespace TerminalGame.Utilities.TextHandler
             batch?.Dispose();
             batch = null;
         }
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
-        /// <param name="box"></param>
+        
         public TextRenderer(TextBox box)
         {
             this.box = box;
@@ -68,10 +49,7 @@ namespace TerminalGame.Utilities.TextHandler
 
             row = new byte[this.box.Text.MaxLength];
         }
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
+        
         public void Update()
         {
             if (!box.Text.IsDirty)
@@ -82,11 +60,7 @@ namespace TerminalGame.Utilities.TextHandler
             MeasureCharacterWidths();
             text = RenderText();
         }
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
-        /// <param name="spriteBatch"></param>
+        
         public void Draw(SpriteBatch spriteBatch)
         {
             if (text != null)
@@ -94,12 +68,7 @@ namespace TerminalGame.Utilities.TextHandler
                 spriteBatch.Draw(text, Area, Color.White);
             }
         }
-
-        /// <summary>
-        /// OG author did not comment anything
-        /// </summary>
-        /// <param name="localLocation"></param>
-        /// <returns></returns>
+        
         public int CharAt(Point localLocation)
         {
             Rectangle charRectangle = new Rectangle(0, 0, 0, Font.LineSpacing);

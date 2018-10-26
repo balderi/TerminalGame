@@ -5,7 +5,7 @@ using TerminalGame.Utilities;
 
 namespace TerminalGame.Scenes
 {
-    abstract class Scene : IScene
+    public abstract class Scene : IScene
     {
         protected StateMachine _stateMachine;
         public Scene()

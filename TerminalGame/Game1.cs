@@ -225,7 +225,7 @@ namespace TerminalGame
             _bloomFilter.BloomThreshold = -0.1f;
             _bloomFilter.BloomStrengthMultiplier = 0.5f;
 
-            WhatTheFuck.GetInstance().SetupWTF(_graphics, Window, NetworkNodeSpinners, computer);
+            WhatTheFuck.GetInstance().SetupWTF(_graphics, Window, NetworkNodeSpinners, computer, ref loadingScene);
 
             Console.WriteLine("Done loading");
 

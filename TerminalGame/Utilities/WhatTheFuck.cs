@@ -24,7 +24,7 @@ namespace TerminalGame.Utilities
 
         Computer playerComp;
 
-        LoadingScene loadingScene;
+        LoadingScene _loadingScene;
         
         //Thread _loadingThread;
 
@@ -51,20 +51,20 @@ namespace TerminalGame.Utilities
         {
         }
 
-        public void SetupWTF(GraphicsDeviceManager graphics, GameWindow window, Dictionary<string, Texture2D> networkNodeSpinners, Texture2D computer)
+        public void SetupWTF(GraphicsDeviceManager graphics, GameWindow window, Dictionary<string, Texture2D> networkNodeSpinners, Texture2D computer, ref LoadingScene loadingScene)
         {
             _graphics = graphics;
             _window = window;
             NetworkNodeSpinners = networkNodeSpinners;
             this.computer = computer;
-            loadingScene = new LoadingScene(new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2), _window, _graphics.GraphicsDevice);
+            _loadingScene = loadingScene; // new LoadingScene(new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2), _window, _graphics.GraphicsDevice);
         }
 
         public void StartNewGame()
         {
             Console.WriteLine("Starting new game...");
 
-            loadingScene.LoadItem = "Generating computers...";
+            _loadingScene.LoadItem = "Generating computers...";
             Console.WriteLine("Setting up computers...");
 
             _os = OS.OS.GetInstance();
@@ -92,7 +92,7 @@ namespace TerminalGame.Utilities
 
             Player.GetInstance().PlayersComputer = playerComp;
 
-            loadingScene.LoadItem = "Loading themes...";
+            _loadingScene.LoadItem = "Loading themes...";
 
             Console.WriteLine("Loading themes...");
             var themeManager = ThemeManager.GetInstance();
@@ -104,11 +104,11 @@ namespace TerminalGame.Utilities
 
             DoModules();
 
-            loadingScene.LoadItem = "Building map...";
+            _loadingScene.LoadItem = "Building map...";
 
             networkMap.GenerateMap();
 
-            loadingScene.LoadItem = "Initializing...";
+            _loadingScene.LoadItem = "Initializing...";
 
             _os.Init(terminal, remoteView, networkMap, statusBar, notes);
 
@@ -126,7 +126,7 @@ namespace TerminalGame.Utilities
         {
             Console.WriteLine("Loading game...");
 
-            loadingScene.LoadItem = "Loading computers...";
+            _loadingScene.LoadItem = "Loading computers...";
             Console.WriteLine("Loading computers...");
 
             _os = OS.OS.GetInstance();
@@ -144,7 +144,7 @@ namespace TerminalGame.Utilities
 
             Player.GetInstance().PlayersComputer = playerComp;
 
-            loadingScene.LoadItem = "Loading themes...";
+            _loadingScene.LoadItem = "Loading themes...";
 
             Console.WriteLine("Loading themes...");
 
@@ -157,11 +157,11 @@ namespace TerminalGame.Utilities
 
             DoModules();
 
-            loadingScene.LoadItem = "Building map...";
+            _loadingScene.LoadItem = "Building map...";
 
             networkMap.BuildLoadedMap();
 
-            loadingScene.LoadItem = "Initializing...";
+            _loadingScene.LoadItem = "Initializing...";
 
             _os.Init(terminal, remoteView, networkMap, statusBar, notes);
 
@@ -177,7 +177,7 @@ namespace TerminalGame.Utilities
 
         public void DoModules()
         {
-            loadingScene.LoadItem = "Loading modules...";
+            _loadingScene.LoadItem = "Loading modules...";
 
             int thirdWidth = _graphics.PreferredBackBufferWidth / 3;
             int thirdHeight = _graphics.PreferredBackBufferHeight / 3;

@@ -11,7 +11,7 @@ namespace TerminalGame.Utilities.TextHandler
     public class Cursor
     {
         /// <summary>
-        /// THe color of the blinky terminal cursor
+        /// Color of the blinky terminal cursor
         /// </summary>
         public Color Color { get; set; }
 
@@ -19,10 +19,12 @@ namespace TerminalGame.Utilities.TextHandler
         /// Color of the selected text
         /// </summary>
         public Color Selection { get; set; }
+
         /// <summary>
         /// No idea what this is. Possibly the size of the cursor(?)
         /// </summary>
         public Rectangle Icon { get; set; }
+
         /// <summary>
         /// Whether the cursor is active
         /// </summary>
@@ -33,7 +35,7 @@ namespace TerminalGame.Utilities.TextHandler
         private int ticks;
 
         /// <summary>
-        ///     The current location of the cursor in the array
+        /// Current location of the cursor in the array
         /// </summary>
         public int TextCursor
         {
@@ -42,8 +44,8 @@ namespace TerminalGame.Utilities.TextHandler
         }
 
         /// <summary>
-        ///     All characters between SelectedChar and the TextCursor are selected
-        ///     when SelectedChar != null. Cannot be the same as the TextCursor value.
+        /// All characters between SelectedChar and the TextCursor are selected
+        /// when SelectedChar != null. Cannot be the same as the TextCursor value.
         /// </summary>
         public int? SelectedChar
         {
@@ -68,15 +70,7 @@ namespace TerminalGame.Utilities.TextHandler
 
         private int textCursor;
         private int? selectedChar;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="textBox"></param>
-        /// <param name="color"></param>
-        /// <param name="selection"></param>
-        /// <param name="icon"></param>
-        /// <param name="ticksPerBlink"></param>
+        
         public Cursor(TextBox textBox, Color color, Color selection, Rectangle icon, int ticksPerBlink)
         {
             this.textBox = textBox;
@@ -88,10 +82,7 @@ namespace TerminalGame.Utilities.TextHandler
             this.ticksPerBlink = ticksPerBlink;
             ticks = 0;
         }
-
-        /// <summary>
-        /// Update
-        /// </summary>
+        
         public void Update()
         {
             ticks++;
@@ -105,10 +96,6 @@ namespace TerminalGame.Utilities.TextHandler
             ticks = 0;
         }
 
-        /// <summary>
-        /// Draw
-        /// </summary>
-        /// <param name="spriteBatch">spriteBatch</param>
         public void Draw(SpriteBatch spriteBatch)
         {
             // Top left corner of the text area.

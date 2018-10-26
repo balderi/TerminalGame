@@ -231,7 +231,6 @@ namespace TerminalGame.UI.Modules
             }
             _output.RemoveAt(0); // Leave room for the next prepended newline
             UpdateOutput();
-            Console.WriteLine("TERMINAL CLEAR");
         }
 
         /// <summary>
@@ -242,7 +241,6 @@ namespace TerminalGame.UI.Modules
         {
             if (_terminalInput == null)
             {
-                Console.WriteLine("*** CREATE TEXTBOX");
                 int maxChars = ((int)(Container.Width - _terminalFont.MeasureString(_terminalPrompt).Length()) / (int)_terminalFont.MeasureString("_").Length()) + 200;
                 TextBox retval = new TextBox(_inputViewport, maxChars, "", _graphics, _terminalFont, Color.LightGray, Color.DarkGreen, 30);
                 retval.Renderer.Color = Color.LightGray;
@@ -256,7 +254,6 @@ namespace TerminalGame.UI.Modules
             }
             else
             {
-                Console.WriteLine("*** DISPOSE TEXTBOX");
                 _terminalInput?.Dispose();
                 _terminalInput = null;
                 return TextBox();

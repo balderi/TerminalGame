@@ -4,7 +4,7 @@ using TerminalGame.Utilities;
 
 namespace TerminalGame.Scenes
 {
-    class LoadingScene : Scene
+    public class LoadingScene : Scene
     {
         public string LoadItem { get; set; }
 
