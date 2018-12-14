@@ -272,14 +272,19 @@ namespace TerminalGame.UI.Modules
             _history = new List<string>();
             _history.Insert(0, "");
             _output = new List<string>();
-            _prompt = new Rectangle(Container.X + 3, Container.Height - RenderHeader().Height, 
-                (int)(_terminalFont.MeasureString(_terminalPrompt).X), (int)(_terminalFont.MeasureString(_terminalPrompt).Y));
-            _inputViewport = new Rectangle(_prompt.Width, _prompt.Y, Container.Width - _prompt.Width, (int)(_terminalFont.MeasureString("MEASURE ME").Y));
+            _prompt = new Rectangle(Container.X + 3, 
+                Container.Height - RenderHeader().Height, 
+                (int)(_terminalFont.MeasureString(_terminalPrompt).X), 
+                (int)(_terminalFont.MeasureString(_terminalPrompt).Y));
+            _inputViewport = new Rectangle(_prompt.Width, _prompt.Y, 
+                Container.Width - _prompt.Width, 
+                (int)(_terminalFont.MeasureString("MEASURE ME").Y));
 
             _terminalInput = TextBox();
 
-            _outputViewport = new Rectangle(Container.X, Container.Y + RenderHeader().Height + 2, 
-                Container.Width, Container.Height - (_inputViewport.Height) - RenderHeader().Height);
+            _outputViewport = new Rectangle(Container.X, 
+                Container.Y + RenderHeader().Height + 2, Container.Width, 
+                Container.Height - (_inputViewport.Height) - RenderHeader().Height);
             
             _linesToDraw = (int)(_outputViewport.Height / _terminalFont.MeasureString("MEASURE THIS").Y);
             Console.WriteLine("INIT: " + _linesToDraw + " LN");
@@ -302,9 +307,11 @@ namespace TerminalGame.UI.Modules
         {
             Console.WriteLine("*** DISCONNECTION EVENT FIRED");
             _connectedComputer = Player.GetInstance().ConnectedComputer;
-            Console.WriteLine("*** CON_STR: " + e.ConnectionString.ToString() + ", IS_RT: " + e.IsRoot.ToString());
+            Console.WriteLine("*** CON_STR: " + e.ConnectionString.ToString() + 
+                ", IS_RT: " + e.IsRoot.ToString());
             UpdateOutput();
-            _terminalPrompt = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
+            _terminalPrompt = e.IsRoot ? "root@" + e.ConnectionString + 
+                " > " : "user@" + e.ConnectionString + " > ";
             _updateInp = true;
         }
 
@@ -312,9 +319,11 @@ namespace TerminalGame.UI.Modules
         {
             Console.WriteLine("*** CONNECTION EVENT FIRED");
             _connectedComputer = Player.GetInstance().ConnectedComputer;
-            Console.WriteLine("*** CON_STR: " + e.ConnectionString.ToString() + ", IS_RT: " + e.IsRoot.ToString());
+            Console.WriteLine("*** CON_STR: " + e.ConnectionString.ToString() + 
+                ", IS_RT: " + e.IsRoot.ToString());
             UpdateOutput();
-            _terminalPrompt = e.IsRoot ? "root@" + e.ConnectionString + " > " : "user@" + e.ConnectionString + " > ";
+            _terminalPrompt = e.IsRoot ? "root@" + e.ConnectionString + 
+                " > " : "user@" + e.ConnectionString + " > ";
             _updateInp = true;
         }
 
@@ -354,7 +363,8 @@ namespace TerminalGame.UI.Modules
 
         protected override Rectangle RenderHeader()
         {
-            return new Rectangle(Container.X, Container.Y, Container.Width, (int)Font.MeasureString(Title).Y);
+            return new Rectangle(Container.X, Container.Y, Container.Width, 
+                (int)Font.MeasureString(Title).Y);
         }
 
         /// <summary>
@@ -445,7 +455,9 @@ namespace TerminalGame.UI.Modules
                 default:
                     {
                         _terminalPrompt = _connectedComputer.PlayerHasRoot ? "root" : "user";
-                        _terminalPrompt += "@" + _connectedComputer.IP + _connectedComputer.FileSystem.CurrentDir.PrintFullPath() + " > ";
+                        _terminalPrompt += "@" + _connectedComputer.IP + 
+                            _connectedComputer.FileSystem.CurrentDir.PrintFullPath() + 
+                            " > ";
                         break;
                     }
             }
@@ -455,12 +467,15 @@ namespace TerminalGame.UI.Modules
         {
             float lerpAmount = (float)(gameTime.TotalGameTime.TotalMilliseconds % 500f / 500f);
             
-            _terminalInput.Cursor.Color = Color.Lerp(Color.DarkGray, Color.LightGray, lerpAmount);
+            _terminalInput.Cursor.Color = Color.Lerp(Color.DarkGray, Color.LightGray, 
+                lerpAmount);
+
             //if (!_isTakingSpecialInput)
             //{
             //    _terminalPrompt = _connectedComputer.PlayerHasRoot ? "root" : "user";
             //    _terminalPrompt += "@" + _connectedComputer.IP + _connectedComputer.FileSystem.CurrentDir.PrintFullPath() + " > ";
             //}
+
             UpdatePrompt();
 
             if (_updateInp)
@@ -477,14 +492,32 @@ namespace TerminalGame.UI.Modules
             if (IsVisible)
             {
                 Texture2D texture = Drawing.DrawBlankTexture(_graphics);
-                spriteBatch.Draw(texture, Container, _themeManager.CurrentTheme.ModuleBackgroundColor);
-                spriteBatch.Draw(texture, RenderHeader(), _themeManager.CurrentTheme.ModuleHeaderBackgroundColor);
-                spriteBatch.DrawString(Font, Title, new Vector2(RenderHeader().X + 5, RenderHeader().Y), _themeManager.CurrentTheme.ModuleHeaderFontColor);
-                Drawing.DrawBorder(spriteBatch, Container, texture, 1, _themeManager.CurrentTheme.ModuleOutlineColor);
 
-                spriteBatch.DrawString(_terminalFont, _terminalPrompt, new Vector2(_prompt.X, _prompt.Y), _themeManager.CurrentTheme.ModuleFontColor);
-                spriteBatch.DrawString(_terminalFont, _terminalOutput, new Vector2(_outputViewport.X + 3 + 1, _outputViewport.Y + 1), Color.Green);
-                spriteBatch.DrawString(_terminalFont, _terminalOutput, new Vector2(_outputViewport.X + 3, _outputViewport.Y), _themeManager.CurrentTheme.ModuleFontColor);
+                spriteBatch.Draw(texture, Container, 
+                    _themeManager.CurrentTheme.ModuleBackgroundColor);
+
+                spriteBatch.Draw(texture, RenderHeader(), 
+                    _themeManager.CurrentTheme.ModuleHeaderBackgroundColor);
+
+                spriteBatch.DrawString(Font, Title, 
+                    new Vector2(RenderHeader().X + 5, RenderHeader().Y), 
+                    _themeManager.CurrentTheme.ModuleHeaderFontColor);
+
+                Drawing.DrawBorder(spriteBatch, Container, texture, 1, 
+                    _themeManager.CurrentTheme.ModuleOutlineColor);
+
+                spriteBatch.DrawString(_terminalFont, _terminalPrompt, 
+                    new Vector2(_prompt.X, _prompt.Y), 
+                    _themeManager.CurrentTheme.ModuleFontColor);
+
+                spriteBatch.DrawString(_terminalFont, _terminalOutput, 
+                    new Vector2(_outputViewport.X + 3 + 1, _outputViewport.Y + 1), 
+                    Color.Green);
+
+                spriteBatch.DrawString(_terminalFont, _terminalOutput, 
+                    new Vector2(_outputViewport.X + 3, _outputViewport.Y), 
+                    _themeManager.CurrentTheme.ModuleFontColor);
+
                 _terminalInput.Draw(spriteBatch);
             }
         }

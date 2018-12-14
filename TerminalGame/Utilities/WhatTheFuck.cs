@@ -51,7 +51,9 @@ namespace TerminalGame.Utilities
         {
         }
 
-        public void SetupWTF(GraphicsDeviceManager graphics, GameWindow window, Dictionary<string, Texture2D> networkNodeSpinners, Texture2D computer, ref LoadingScene loadingScene)
+        public void SetupWTF(GraphicsDeviceManager graphics, GameWindow window, 
+            Dictionary<string, Texture2D> networkNodeSpinners, Texture2D computer, 
+            ref LoadingScene loadingScene)
         {
             _graphics = graphics;
             _window = window;
@@ -76,7 +78,9 @@ namespace TerminalGame.Utilities
 
             //Player.GetInstance().CreateNewPlayer("testPlayer", "P@ssw0rd");
 
-            playerComp = new Computer(Computer.Type.Workstation, "127.0.0.1", "localhost", Player.GetInstance().Password, 0.0f, playerFS, new int[] { 10, 21, 22, 23, 25, 53, 67, 69, 80, 110, 123, 143, 443 });
+            playerComp = new Computer(Computer.Type.Workstation, "127.0.0.1", "localhost", 
+                Player.GetInstance().Password, 0.0f, playerFS, 
+                new int[] { 10, 21, 22, 23, 25, 53, 67, 69, 80, 110, 123, 143, 443 });
 
             playerComp.SetSpeed(1.0f);
 
@@ -98,7 +102,8 @@ namespace TerminalGame.Utilities
             var themeManager = ThemeManager.GetInstance();
             Theme test = new Theme("test", new Color(51, 51, 55), Color.Black * 0.75f,
                 Color.LightGray, new Color(63, 63, 63), Color.White, new Color(80, 80, 80),
-                Color.RoyalBlue, Color.Blue, Color.DarkOrange, Color.Green, Color.Gold, Color.Red);
+                Color.RoyalBlue, Color.Blue, Color.DarkOrange, Color.Green, Color.Gold, 
+                Color.Red);
             themeManager.AddTheme(test);
             themeManager.ChangeTheme("test");
 
@@ -151,7 +156,8 @@ namespace TerminalGame.Utilities
             var themeManager = ThemeManager.GetInstance();
             Theme test = new Theme("test", new Color(51, 51, 55), Color.Black * 0.75f,
                 Color.LightGray, new Color(63, 63, 63), Color.White, new Color(80, 80, 80),
-                Color.RoyalBlue, Color.Blue, Color.DarkOrange, Color.Green, Color.Gold, Color.Red);
+                Color.RoyalBlue, Color.Blue, Color.DarkOrange, Color.Green, Color.Gold, 
+                Color.Red);
             themeManager.AddTheme(test);
             themeManager.ChangeTheme("test");
 
@@ -209,9 +215,12 @@ namespace TerminalGame.Utilities
 
             Console.WriteLine("Loading networkmap...");
             networkMap = new NetworkMap(_window, _graphics.GraphicsDevice,
-                new Rectangle(terminal.Container.Width + 5, _graphics.PreferredBackBufferHeight - thirdHeight + 2,
-                _graphics.PreferredBackBufferWidth - terminal.Container.Width - 7, thirdHeight - 4),
-                computer, FontManager.GetFont(FontManager.FontSize.Small), NetworkNodeSpinners)
+                new Rectangle(terminal.Container.Width + 5, 
+                _graphics.PreferredBackBufferHeight - thirdHeight + 2,
+                _graphics.PreferredBackBufferWidth - terminal.Container.Width - 7, 
+                thirdHeight - 4),
+                computer, FontManager.GetFont(FontManager.FontSize.Small), 
+                NetworkNodeSpinners)
             {
                 Title = "Network Map",
                 Font = FontManager.GetFont(FontManager.FontSize.Small),
@@ -222,7 +231,8 @@ namespace TerminalGame.Utilities
             Console.WriteLine("Loading statusbar...");
             statusBar = new StatusBar(_graphics.GraphicsDevice,
                 new Rectangle(terminal.Container.Width + 5, 2,
-                _graphics.PreferredBackBufferWidth - terminal.Container.Width - 7, (int)FontManager.GetFont(FontManager.FontSize.Large).MeasureString("A").Y - 4),
+                _graphics.PreferredBackBufferWidth - terminal.Container.Width - 7, 
+                (int)FontManager.GetFont(FontManager.FontSize.Large).MeasureString("A").Y - 4),
                 FontManager.GetFont(FontManager.FontSize.XSmall))
             {
                 Title = "Status Bar",
@@ -235,7 +245,8 @@ namespace TerminalGame.Utilities
             remoteView = new RemoteView(_graphics.GraphicsDevice,
                 new Rectangle(terminal.Container.Width + 5, statusBar.Container.Height + 5,
                 tqWidth - terminal.Container.Width - 7, _graphics.PreferredBackBufferHeight - networkMap.Container.Height - statusBar.Container.Height - 10),
-                FontManager.GetFont(FontManager.FontSize.Large), FontManager.GetFont(FontManager.FontSize.Medium))
+                FontManager.GetFont(FontManager.FontSize.Large), 
+                FontManager.GetFont(FontManager.FontSize.Medium))
             {
                 Title = "Remote System",
                 Font = FontManager.GetFont(FontManager.FontSize.Small),
@@ -245,7 +256,8 @@ namespace TerminalGame.Utilities
 
             Console.WriteLine("Loading notes...");
             notes = new NotesModule(_graphics.GraphicsDevice,
-                new Rectangle(remoteView.Container.X + remoteView.Container.Width + 3, statusBar.Container.Height + 5,
+                new Rectangle(remoteView.Container.X + remoteView.Container.Width + 3, 
+                statusBar.Container.Height + 5,
                 _graphics.PreferredBackBufferWidth - remoteView.Container.X - remoteView.Container.Width - 5, _graphics.PreferredBackBufferHeight - networkMap.Container.Height - statusBar.Container.Height - 10),
                 FontManager.GetFont(FontManager.FontSize.Medium))
             {

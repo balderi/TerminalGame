@@ -59,6 +59,9 @@ namespace TerminalGame
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            _graphics.GraphicsProfile = GraphicsProfile.HiDef;
+            _graphics.PreparingDeviceSettings += Graphics_PreparingDeviceSettings;
+            _graphics.ApplyChanges();
             Version version = Assembly.GetEntryAssembly().GetName().Version;
             GameTitle = String.Format("TerminalGame v{0}.{1}a", version.Major, version.Minor);
 
@@ -230,6 +233,12 @@ namespace TerminalGame
             Console.WriteLine("Done loading");
 
             GameManager.GetInstance().StateMachine.Transition(GameState.MainMenu);
+        }
+
+        private void Graphics_PreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
+        {
+            _graphics.PreferMultiSampling = true;
+            e.GraphicsDeviceInformation.PresentationParameters.MultiSampleCount = 8;
         }
 
         /// <summary>
