@@ -1,44 +1,28 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 
 namespace TerminalGame.States
 {
-    /// <summary>
-    /// Yeah... this all needs to be redone
-    /// </summary>
-    public abstract class State
+    class State : IState
     {
-        // legacyTODO: Create a State for each game state
+        #region fields
+        #endregion
 
-        /// <summary>
-        /// Go to next state via a key
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns>Next state</returns>
-        public virtual State Next(GameState state)
+        #region properties
+        #endregion
+
+        public void Update(GameTime gameTime)
         {
-            return Next();
+            throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Go to next state
-        /// </summary>
-        /// <returns>Next state</returns>
-        public virtual State Next()
+        public void Draw(GameTime gameTime)
         {
-            return this;
+            throw new NotImplementedException();
         }
-
-        /// <summary>
-        /// Update
-        /// </summary>
-        /// <param name="gameTime">gameTime</param>
-        public abstract void Update(GameTime gameTime);
-
-        /// <summary>
-        /// Draw
-        /// </summary>
-        /// <param name="spriteBatch">spriteBatch</param>
-        public abstract void Draw(SpriteBatch spriteBatch);
     }
 }

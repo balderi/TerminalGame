@@ -1,43 +1,18 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace TerminalGame.States
 {
-    public enum GameState
+    class StateMachine
     {
-        MainMenu,
-        SettingsMenu,
-        LoadMenu,
-        SaveMenu,
-        GameLoading,
-        NewGame,
-        GameRunning,
-        GameOver,
-    };
+        #region fields
+        #endregion
 
-    public class StateMachine
-    {
-        public State CurrentState { get; private set; }
+        #region properties
+        #endregion
 
-        public StateMachine(State startState)
-        {
-            CurrentState = startState;
-        }
-
-        public StateMachine Transition(GameState state)
-        {
-            CurrentState = CurrentState.Next(state);
-            return this;
-        }
-
-        public void DrawState(SpriteBatch spriteBatch)
-        {
-            CurrentState.Draw(spriteBatch);
-        }
-
-        public void UpdateState(GameTime gameTime)
-        {
-            CurrentState.Update(gameTime);
-        }
     }
 }
