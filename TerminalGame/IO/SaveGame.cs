@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Xml;
-using TerminalGame.Utilities;
+using TerminalGame.Utils;
 
 namespace TerminalGame.IO
 {

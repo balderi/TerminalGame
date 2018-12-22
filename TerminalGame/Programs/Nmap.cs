@@ -17,7 +17,7 @@ namespace TerminalGame.Programs
         public static int Execute(string ip = null)
         {
             _rnd = new Random(DateTime.Now.Millisecond);
-            // TODO: Make latency dependent on distance from player computer. Maybe make this a property of computers.
+            // legacyTODO: Make latency dependent on distance from player computer. Maybe make this a property of computers.
             int latency = _rnd.Next(10, 99);
             _terminal.BlockInput();
             //_player.PlayersComputer.FileSystem.ChangeDir("/");

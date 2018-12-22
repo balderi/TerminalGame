@@ -8,7 +8,7 @@ namespace TerminalGame.States
     /// </summary>
     public abstract class State
     {
-        // TODO: Create a State for each game state
+        // legacyTODO: Create a State for each game state
 
         /// <summary>
         /// Go to next state via a key

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TerminalGame.Utilities;
+using TerminalGame.Utils;
 
 namespace TerminalGame.UI.Modules
 {

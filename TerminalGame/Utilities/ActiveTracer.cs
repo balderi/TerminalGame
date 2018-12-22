@@ -3,7 +3,7 @@ using System.Threading;
 using System.Timers;
 using TerminalGame.UI.Themes;
 
-namespace TerminalGame.Utilities
+namespace TerminalGame.Utils
 {
     class ActiveTracer
     {

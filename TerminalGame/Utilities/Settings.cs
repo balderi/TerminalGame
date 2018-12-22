@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace TerminalGame.Utilities
+namespace TerminalGame.Utils
 {
     class Settings
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace TerminalGame.Utilities
+namespace TerminalGame.Utils
 {
     // this is either the dumbest thing in the world or it's genious!
     /// <summary>

@@ -2,7 +2,7 @@
 using System;
 using TerminalGame.Computers.FileSystems;
 using System.Collections.Generic;
-using TerminalGame.Utilities;
+using TerminalGame.Utils;
 
 namespace TerminalGame.Computers
 {

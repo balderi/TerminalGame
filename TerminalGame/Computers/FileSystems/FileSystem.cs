@@ -113,7 +113,7 @@ namespace TerminalGame.Computers.FileSystems
             CurrentDir.Children.Add(f);
         }
 
-        // TODO: Add ability to take full paths as input, e.g. /bin/subfolder/file
+        // legacyTODO: Add ability to take full paths as input, e.g. /bin/subfolder/file
         public void AddFileToDir(string directoryName, string name, string contents = null)
         {
             if (TryFindFile(directoryName, true))
@@ -192,7 +192,7 @@ namespace TerminalGame.Computers.FileSystems
         {
             //Sorts alphabetically
 
-            // TODO: BUG: Something causes the terminal to skip removing the last line when text is giong off screen
+            // legacyTODO: BUG: Something causes the terminal to skip removing the last line when text is giong off screen
             // i.e. The output can overlay the input field
             directory.Children.Sort();
             string retval = "";

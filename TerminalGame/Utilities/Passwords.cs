@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TerminalGame.Utilities
+namespace TerminalGame.Utils
 {
     class Passwords
     {

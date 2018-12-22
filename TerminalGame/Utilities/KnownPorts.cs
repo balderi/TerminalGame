@@ -1,4 +1,4 @@
-﻿namespace TerminalGame.Utilities
+﻿namespace TerminalGame.Utils
 {
     /// <summary>
     /// List of known (named) ports.

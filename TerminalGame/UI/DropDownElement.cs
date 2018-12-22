@@ -19,7 +19,7 @@ namespace TerminalGame.UI
             ElementText = elementText;
             Container = container;
             _font = font;
-            _texture = Utilities.Drawing.DrawBlankTexture(graphics);
+            _texture = Utils.Drawing.DrawBlankTexture(graphics);
         }
 
         public void Update(GameTime gameTime)

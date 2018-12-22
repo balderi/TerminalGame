@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using TerminalGame.Utilities;
+using TerminalGame.Utils;
 
 namespace TerminalGame.Computers
 {

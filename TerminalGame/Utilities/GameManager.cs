@@ -5,7 +5,7 @@ using System;
 using System.Xml;
 using TerminalGame.States;
 
-namespace TerminalGame.Utilities
+namespace TerminalGame.Utils
 {
     public class GameManager
     {

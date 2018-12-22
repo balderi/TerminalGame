@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace TerminalGame.Utilities
+namespace TerminalGame.Utils
 {
     class Drawing
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace TerminalGame.Utilities.TextHandler
+namespace TerminalGame.Utils.TextHandler
 {
     /// <summary>
     ///     All printable characters are returned using the CharPressed event and captured using the Game.Window.TextInput

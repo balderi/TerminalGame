@@ -1,4 +1,4 @@
-﻿using TerminalGame.Utilities;
+﻿using TerminalGame.Utils;
 
 namespace TerminalGame.Programs
 {

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TerminalGame.Utilities
+namespace TerminalGame.Utils
 {
     class SoundManager
     {

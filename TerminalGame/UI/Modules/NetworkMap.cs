@@ -4,7 +4,7 @@ using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
-using TerminalGame.Utilities;
+using TerminalGame.Utils;
 using TerminalGame.Computers;
 
 namespace TerminalGame.UI.Modules

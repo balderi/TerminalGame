@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TerminalGame.States;
 using TerminalGame.UI;
-using TerminalGame.Utilities;
+using TerminalGame.Utils;
 using System.IO;
 using System.Threading;
 

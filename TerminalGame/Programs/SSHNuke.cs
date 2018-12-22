@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using TerminalGame.Computers;
-using TerminalGame.Utilities;
+using TerminalGame.Utils;
 
 namespace TerminalGame.Programs
 {

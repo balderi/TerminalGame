@@ -2,8 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using TerminalGame.Utilities;
-using TerminalGame.Utilities.TextHandler;
+using TerminalGame.Utils;
+using TerminalGame.Utils.TextHandler;
 using TerminalGame.Computers;
 
 namespace TerminalGame.UI.Modules
@@ -17,8 +17,8 @@ namespace TerminalGame.UI.Modules
 
     class Terminal : Module
     {
-        // TODO: Add command queue for when input is blocked by running program (maybe, might be dumb)
-        
+        // legacyTODO: Add command queue for when input is blocked by running program (maybe, might be dumb)
+
         private TextBox _terminalInput;
         private Rectangle _prompt, _inputViewport, _outputViewport;
         private int _linesToDraw, _currentIndex;
@@ -181,7 +181,7 @@ namespace TerminalGame.UI.Modules
         {
             if (!_isInputBlocked)
             {
-                // TODO: Make autocomplete work as intended
+                // legacyTODO: Make autocomplete work as intended
                 _terminalInput.Text.String = "Autocomplete command";
                 _terminalInput.Cursor.TextCursor = _terminalInput.Text.String.Length;
             }
@@ -380,7 +380,7 @@ namespace TerminalGame.UI.Modules
             }
         }
 
-        // TODO: BUG: Something breaks during enumeration sometimes.
+        // legacyTODO: BUG: Something breaks during enumeration sometimes.
         /// <summary>
         /// Writes new text to the terminal. Adds any entered commands to the history.
         /// </summary>

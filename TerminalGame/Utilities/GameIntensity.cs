@@ -1,4 +1,4 @@
-﻿namespace TerminalGame.Utilities
+﻿namespace TerminalGame.Utils
 {
     public enum GameIntensity
     {

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Computers;
 using TerminalGame.UI.Themes;
-using TerminalGame.Utilities;
+using TerminalGame.Utils;
 
 namespace TerminalGame.UI
 {

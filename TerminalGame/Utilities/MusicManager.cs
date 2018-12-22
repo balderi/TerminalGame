@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
 
-namespace TerminalGame.Utilities
+namespace TerminalGame.Utils
 {
     public class MusicManager
     {

@@ -2,7 +2,7 @@
 
 using System;
 
-namespace TerminalGame.Utilities.TextHandler
+namespace TerminalGame.Utils.TextHandler
 {
     /// <summary>
     ///     Data structure responsible for keeping track of the characters.

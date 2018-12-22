@@ -55,9 +55,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TerminalGame\TerminalGame.csproj">
+    <ProjectReference Include="..\TerminalGame\TerminalGame-legacy.csproj">
       <Project>{29504c71-6a8b-4d65-b616-9ebbadc2df22}</Project>
-      <Name>TerminalGame</Name>
+      <Name>TerminalGame-legacy</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

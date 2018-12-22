@@ -10,7 +10,7 @@ using TerminalGame.States;
 using TerminalGame.UI.Modules;
 using TerminalGame.UI.Themes;
 
-namespace TerminalGame.Utilities
+namespace TerminalGame.Utils
 {
     //Ah, fuck! I can't believe I've done this!
 

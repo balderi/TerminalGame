@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using TerminalGame.UI.Themes;
 
-namespace TerminalGame.Utilities
+namespace TerminalGame.Utils
 {
-    // TODO: Make singleton rather than static class (maybe?)
+    // legacyTODO: Make singleton rather than static class (maybe?)
 
     /// <summary>
     /// Command Parser

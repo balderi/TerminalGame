@@ -3,7 +3,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace TerminalGame.Utilities.TextHandler
+namespace TerminalGame.Utils.TextHandler
 {
     /// <summary>
     /// TextRenderer

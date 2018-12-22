@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace TerminalGame.Utilities.Tests
+namespace TerminalGame.Utils.Tests
 {
     [TestClass()]
     public class CommandParserTests

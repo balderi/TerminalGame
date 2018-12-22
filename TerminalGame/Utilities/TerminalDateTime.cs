@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 
-namespace TerminalGame.Utilities
+namespace TerminalGame.Utils
 {
     class TerminalDateTime
     {

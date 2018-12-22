@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TerminalGame.Utilities;
+using TerminalGame.Utils;
 
 namespace TerminalGame.UI.Modules
 {
     class NotesModule : Module
     {
-        // TODO: Word-wrapping on notes
+        // legacyTODO: Word-wrapping on notes
 
-        // TODO: Limit notes to length of window (or implement some kind of scrolling?)
+        // legacyTODO: Limit notes to length of window (or implement some kind of scrolling?)
 
         public override SpriteFont Font { get; set; }
         public override bool IsActive { get; set; }
