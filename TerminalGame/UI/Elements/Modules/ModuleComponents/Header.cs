@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TerminalGame.Utils;
 
-namespace TerminalGame.UI.Modules.ModuleComponents
+namespace TerminalGame.UI.Elements.Modules.ModuleComponents
 {
     public class Header
     {

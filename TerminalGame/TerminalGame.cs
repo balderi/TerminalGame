@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using TerminalGame.Utils;
-using TerminalGame.UI.Modules;
+using TerminalGame.UI.Elements.Modules;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Media;
 
@@ -18,7 +18,7 @@ namespace TerminalGame
         private SpriteBatch _spriteBatch;
 
         private List<Module> Modules;
-            
+        
         public TerminalGame()
         {
             _graphics = new GraphicsDeviceManager(this);
