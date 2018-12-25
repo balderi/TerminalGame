@@ -108,7 +108,6 @@ namespace TerminalGame.UI.Elements
         {
             if (Visible)
             {
-                _spriteBatch.Begin();
                 _spriteBatch.Draw(Utils.Globals.DummyTexture(GraphicsDevice), Rectangle,
                         Utils.Globals.ModuleBackgroundColor() * _opacity);
                 
@@ -116,7 +115,6 @@ namespace TerminalGame.UI.Elements
                     Utils.Globals.ModuleBorderColor() * _opacity);
 
                 base.Draw(gameTime);
-                _spriteBatch.End();
             }
         }
 

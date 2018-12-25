@@ -117,12 +117,12 @@ namespace TerminalGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.White);
-            _spriteBatch.Begin();
+            //_spriteBatch.Begin();
             foreach (Module m in Modules)
             {
                 m.Draw(gameTime);
             }
-            _spriteBatch.End();
+            //_spriteBatch.End();
             base.Draw(gameTime);
         }
     }

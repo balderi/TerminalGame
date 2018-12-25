@@ -51,13 +51,17 @@ namespace TerminalGame.UI.Elements.Modules
         {
             if(Enabled)
             {
+                base.Update(gameTime);
                 _header.Update(gameTime);
             }
         }
 
         public override void Draw(GameTime gameTime)
         {
+            _spriteBatch.Begin();
+            base.Draw(gameTime);
             _header.Draw(_spriteBatch, _opacity);
+            _spriteBatch.End();
         }
     }
 }
