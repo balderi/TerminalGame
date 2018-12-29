@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace TerminalGame.States
 {
-    class StateMachine
+    public class StateMachine
     {
         #region fields
         #endregion
 
         #region properties
+        public State CurrentState { get; private set; }
         #endregion
 
     }

@@ -49,19 +49,26 @@ namespace TerminalGame.UI.Elements.Modules
 
         public override void Update(GameTime gameTime)
         {
-            if(Enabled)
-            {
-                base.Update(gameTime);
-                _header.Update(gameTime);
-            }
+            if (!Enabled)
+                return;
+
+            base.Update(gameTime);
+            _header.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
+                               null, null, _rasterizerState);
+            if (!Visible)
+                return;
+
             base.Draw(gameTime);
+            Rectangle currentRect = _spriteBatch.GraphicsDevice.ScissorRectangle;
+            _spriteBatch.GraphicsDevice.ScissorRectangle = Rectangle;
             _header.Draw(_spriteBatch, _opacity);
             _spriteBatch.End();
+            _spriteBatch.GraphicsDevice.ScissorRectangle = currentRect;
         }
     }
 }
