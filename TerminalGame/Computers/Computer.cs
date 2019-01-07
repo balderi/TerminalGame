@@ -12,7 +12,7 @@ namespace TerminalGame.Computers
     public class Computer : IComputer
     {
         #region fields
-        private readonly int[] _defaultPorts = { 22, 25, 80, 443 };
+        private readonly int[] DEFAULT_PORTS = { 22, 25, 80, 443 };
         private bool _isInitialized;
         #endregion
 

@@ -10,7 +10,7 @@ namespace TerminalGame.States
 {
     public interface IState
     {
-        State GetNextState(string state);
+        bool TryGetNextState(string state, out State outState);
 
         void Update(GameTime gameTime);
 

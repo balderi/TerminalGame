@@ -10,26 +10,32 @@ using TerminalGame.UI.Elements.Modules.ModuleComponents;
 
 namespace TerminalGame.UI.Elements.Modules
 {
-    public class Module : UIElement
+    public partial class Module : UIElement
     {
         #region fields
         protected Header _header;
         protected SpriteFont _titleFont;
         protected string _title;
+        protected bool _hasHeader;
         #endregion
 
         #region properties
         #endregion
 
-        public Module(Game game, Point location, Point size, string title) : base(game, location, size)
+        public Module(Game game, Point location, Point size, string title, bool hasHeader = true) : base(game, location, size)
         {
             DrawOrderChanged += OnDrawOrderChanged;
             EnabledChanged += OnEnabledChanged;
             VisibleChanged += OnVisibleChanged;
             UpdateOrderChanged += OnUpdateOrderChanged;
             _title = title;
-            SpriteFont headerFont = Utils.FontManager.GetFont("FontXS");
-            _header = new Header(_title, headerFont, Rectangle.Width, (int)(headerFont.LineSpacing * 1.25), Rectangle.X, Rectangle.Y, GraphicsDevice);
+            _hasHeader = hasHeader;
+            if (_hasHeader)
+            {
+                SpriteFont headerFont = Utils.FontManager.GetFont("FontXS");
+                _header = new Header(_title, headerFont, Rectangle.Width,
+                                    (int)(headerFont.LineSpacing * 1.25), Rectangle.X, Rectangle.Y, GraphicsDevice);
+            }
         }
         
         public override void Initialize()
@@ -53,7 +59,8 @@ namespace TerminalGame.UI.Elements.Modules
                 return;
 
             base.Update(gameTime);
-            _header.Update(gameTime);
+            if (_hasHeader)
+                _header.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
@@ -66,7 +73,8 @@ namespace TerminalGame.UI.Elements.Modules
             base.Draw(gameTime);
             Rectangle currentRect = _spriteBatch.GraphicsDevice.ScissorRectangle;
             _spriteBatch.GraphicsDevice.ScissorRectangle = Rectangle;
-            _header.Draw(_spriteBatch, _opacity);
+            if (_hasHeader)
+                _header.Draw(_spriteBatch, _opacity);
             _spriteBatch.End();
             _spriteBatch.GraphicsDevice.ScissorRectangle = currentRect;
         }

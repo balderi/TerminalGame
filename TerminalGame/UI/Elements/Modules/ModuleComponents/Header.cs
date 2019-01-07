@@ -13,8 +13,8 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
     public class Header
     {
         #region fields
-        private readonly string _text;
-        private readonly GraphicsDevice _graphics;
+        private readonly string TEXT;
+        private readonly GraphicsDevice GRAPHICS;
         private SpriteFont _titleFont;
         private Vector2 _titlePos;
         private ThemeManager _themeManager;
@@ -37,9 +37,9 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
         public Header(string text, SpriteFont titleFont, int width, int height, int x, int y, GraphicsDevice graphicsDevice)
         {
             _themeManager = ThemeManager.GetInstance();
-            _text = text;
+            TEXT = text;
             Rectangle = new Rectangle(x, y, width, height);
-            _graphics = graphicsDevice;
+            GRAPHICS = graphicsDevice;
             _titleFont = titleFont;
             _titlePos = new Vector2(Rectangle.X + 5f, Rectangle.Y + (Rectangle.Height / 2) - (_titleFont.LineSpacing / 2));
         }
@@ -51,8 +51,8 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
 
         public void Draw(SpriteBatch spriteBatch, float opacity)
         {
-            spriteBatch.Draw(Globals.DummyTexture(_graphics), Rectangle, _themeManager.CurrentTheme.ModuleHeaderBackgroundColor * opacity);
-            spriteBatch.DrawString(_titleFont, _text, _titlePos , _themeManager.CurrentTheme.ModuleHeaderFontColor * opacity);
+            spriteBatch.Draw(Globals.DummyTexture(), Rectangle, _themeManager.CurrentTheme.ModuleHeaderBackgroundColor * opacity);
+            spriteBatch.DrawString(_titleFont, TEXT, _titlePos , _themeManager.CurrentTheme.ModuleHeaderFontColor * opacity);
         }
     }
 }

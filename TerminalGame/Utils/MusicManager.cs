@@ -30,14 +30,15 @@ namespace TerminalGame.Utils
             _musicChangeSpeed = 1.0f;
         }
 
-        public void Start(Song song)
+        public void Start(Song song, bool isRepeating = true)
         {
             _currentSong = song;
             MediaPlayer.Volume = 0;
+            MediaPlayer.IsRepeating = isRepeating;
             MediaPlayer.Play(_currentSong);
             _isFadingIn = true;
             _isPlaying = true;
-            _delta = 0.1f;
+            _delta = 0.01f;
         }
 
         public void ChangeSong(Song nextSong, float delta = 0.1f)

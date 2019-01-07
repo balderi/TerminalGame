@@ -11,21 +11,22 @@ using TerminalGame.UI.Themes;
 
 namespace TerminalGame.UI.Elements
 {
-    public class UIElement : DrawableGameComponent
+    public partial class UIElement : DrawableGameComponent
     {
         #region fields
         protected SpriteBatch _spriteBatch;
         protected float _opacity, _fadeTarget;
         protected bool _fadingUp, _fadingDown, _isHovering, _newMouseHoverState, _previousMouseHoverState;
         protected MouseState _previousMouseState, _currentMouseState;
-        protected readonly MouseEventArgs _hover, _click, _enter, _leave;
+        protected readonly MouseEventArgs HOVER, CLICK, ENTER, LEAVE;
         protected RasterizerState _rasterizerState;
         protected ContentManager Content;
-        private ThemeManager _themeManager;
+        protected ThemeManager _themeManager;
         #endregion
 
         #region properties
         public Rectangle Rectangle { get; private set; }
+        public bool MouseIsHovering { get => _isHovering; }
         #endregion
 
         #region events
@@ -46,15 +47,16 @@ namespace TerminalGame.UI.Elements
             _themeManager = ThemeManager.GetInstance();
             Rectangle = new Rectangle(location, size);
             _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
             _opacity = 0;
             _fadeTarget = 1;
             _fadingDown = false;
             _fadingUp = true;
 
-            _hover= new MouseEventArgs();
-            _enter = new MouseEventArgs();
-            _leave = new MouseEventArgs();
-            _click = new MouseEventArgs();
+            HOVER= new MouseEventArgs();
+            ENTER = new MouseEventArgs();
+            LEAVE = new MouseEventArgs();
+            CLICK = new MouseEventArgs();
 
             MouseHover += OnMouseHover;
             MouseEnter += OnMouseEnter;
@@ -65,7 +67,6 @@ namespace TerminalGame.UI.Elements
         public override void Initialize()
         {
             base.Initialize();
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
         protected override void LoadContent()
@@ -91,18 +92,20 @@ namespace TerminalGame.UI.Elements
             _previousMouseState = _currentMouseState;
             _currentMouseState = Mouse.GetState();
 
-            var mouseRectangle = new Rectangle(_currentMouseState.X, _currentMouseState.Y, 1, 1);
+            var mouseRectangle = new Rectangle(_currentMouseState.X, 
+                                               _currentMouseState.Y, 1, 1);
 
             _isHovering = false;
 
             if (mouseRectangle.Intersects(Rectangle))
             {
                 _isHovering = true;
-                MouseHover?.Invoke(_hover);
+                MouseHover?.Invoke(HOVER);
 
-                if (_currentMouseState.LeftButton == ButtonState.Released && _previousMouseState.LeftButton == ButtonState.Pressed)
+                if (_currentMouseState.LeftButton == ButtonState.Released && 
+                    _previousMouseState.LeftButton == ButtonState.Pressed)
                 {
-                    Click?.Invoke(_click);
+                    Click?.Invoke(CLICK);
                 }
             }
 
@@ -110,9 +113,9 @@ namespace TerminalGame.UI.Elements
             if (_newMouseHoverState != _previousMouseHoverState)
             {
                 if (_newMouseHoverState)
-                    MouseEnter?.Invoke(_enter);
+                    MouseEnter?.Invoke(ENTER);
                 else
-                    MouseLeave?.Invoke(_leave);
+                    MouseLeave?.Invoke(LEAVE);
             }
             _previousMouseHoverState = _newMouseHoverState;
         }
@@ -122,11 +125,11 @@ namespace TerminalGame.UI.Elements
             if (!Visible && !_fadingDown && !_fadingUp)
                 return;
 
-            _spriteBatch.Draw(Utils.Globals.DummyTexture(GraphicsDevice), Rectangle,
-                    _themeManager.CurrentTheme.ModuleBackgroundColor * _opacity);
+            _spriteBatch.Draw(Utils.Globals.DummyTexture(), Rectangle,
+                              _themeManager.CurrentTheme.ModuleBackgroundColor * _opacity);
                 
-            Utils.Globals.DrawOuterBorder(_spriteBatch, Rectangle, Utils.Globals.DummyTexture(GraphicsDevice), 1,
-                _themeManager.CurrentTheme.ModuleOutlineColor * _opacity);
+            Utils.Globals.DrawOuterBorder(_spriteBatch, Rectangle, Utils.Globals.DummyTexture(), 1,
+                                          _themeManager.CurrentTheme.ModuleOutlineColor * _opacity);
         }
 
         /// <summary>

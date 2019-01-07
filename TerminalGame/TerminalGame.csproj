@@ -70,7 +70,13 @@
     <Compile Include="Parsing\CommandToken.cs" />
     <Compile Include="Programs\IProgram.cs" />
     <Compile Include="Programs\Program.cs" />
+    <Compile Include="States\GameRunningState.cs" />
     <Compile Include="States\IState.cs" />
+    <Compile Include="States\Screens\GameRunningScreen.cs" />
+    <Compile Include="States\Screens\Screen.cs" />
+    <Compile Include="States\Screens\ScreenManager.cs" />
+    <Compile Include="States\Screens\SplashScreen.cs" />
+    <Compile Include="States\SplashState.cs" />
     <Compile Include="States\State.cs" />
     <Compile Include="States\StateMachine.cs" />
     <Compile Include="UI\Elements\UIElement.cs" />

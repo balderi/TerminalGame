@@ -6,6 +6,10 @@ using TerminalGame.Utils;
 using TerminalGame.UI.Elements.Modules;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Media;
+using TerminalGame.States;
+using TerminalGame.States.Screens;
+using System;
+using System.Reflection;
 
 namespace TerminalGame
 {
@@ -14,22 +18,25 @@ namespace TerminalGame
     /// </summary>
     public class TerminalGame : Game
     {
-        private readonly GraphicsDeviceManager _graphics;
+        private readonly GraphicsDeviceManager GRAPHICS;
         private SpriteBatch _spriteBatch;
-
-        private List<Module> _modules;
 
         private MusicManager _musicManager;
 
-        private Texture2D bg; //temp
+        private StateMachine stateMachine;
+
+        public readonly string GAME_TITLE;
+        public Version version;
 
         public TerminalGame()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            GRAPHICS = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            version = Assembly.GetEntryAssembly().GetName().Version;
+            GAME_TITLE = String.Format("TerminalGame v{0}.{1}a", version.Major, version.Minor);
             IsFixedTimeStep = true;
-            _graphics.SynchronizeWithVerticalRetrace = true;
-            _graphics.GraphicsProfile = GraphicsProfile.HiDef;
+            GRAPHICS.SynchronizeWithVerticalRetrace = true;
+            GRAPHICS.GraphicsProfile = GraphicsProfile.HiDef;
         }
 
         /// <summary>
@@ -41,47 +48,32 @@ namespace TerminalGame
         protected override void Initialize()
         {
             base.Initialize();
+
+            GRAPHICS.HardwareModeSwitch = false;
+            GRAPHICS.PreferredBackBufferHeight = 768;// (int)(GraphicsDevice.DisplayMode.Height * 0.8);
+            GRAPHICS.PreferredBackBufferWidth = 1366;// (int)(GraphicsDevice.DisplayMode.Width * 0.8);
+            GRAPHICS.IsFullScreen = false;
+            GRAPHICS.ApplyChanges();
+
+            Globals.GameHeight = GRAPHICS.PreferredBackBufferHeight;
+            Globals.GameWidth = GRAPHICS.PreferredBackBufferWidth;
             FontManager.InitializeFonts(Content);
 
             //TODO: Load this from file
             Globals.SetGlobalFontSize();
-
+            Globals.GenerateDummyTexture(GraphicsDevice);
             IsMouseVisible = true;
 
-            // for testing
-
-            _graphics.HardwareModeSwitch = false;
-            _graphics.PreferredBackBufferHeight = (int)(GraphicsDevice.DisplayMode.Height * 0.8);
-            _graphics.PreferredBackBufferWidth = (int)(GraphicsDevice.DisplayMode.Width * 0.8);
-            _graphics.IsFullScreen = false;
-            _graphics.ApplyChanges();
-
+            stateMachine = StateMachine.GetInstance();
+            stateMachine.Initialize(SplashState.GetInstance(), GRAPHICS, new SplashScreen(this), this);
+            
             UI.Themes.Theme test = new UI.Themes.Theme("test", new Color(51, 51, 55), Color.Black * 0.75f,
                 Color.LightGray, new Color(63, 63, 63), Color.White, new Color(80, 80, 80),
                 Color.RoyalBlue, Color.Blue, Color.DarkOrange, Color.Green, Color.Red);
 
             UI.Themes.ThemeManager.GetInstance().AddTheme(test);
             UI.Themes.ThemeManager.GetInstance().ChangeTheme("test");
-
-            Module terminal = new Module(this, new Point(2, 2), new Point(_graphics.PreferredBackBufferWidth / 3 - 4, _graphics.PreferredBackBufferHeight - 4), "Terminal v0.1");
-            Module networkMap = new Module(this, new Point(_graphics.PreferredBackBufferWidth / 3 + 1, _graphics.PreferredBackBufferHeight - _graphics.PreferredBackBufferHeight / 3 + 2), new Point(_graphics.PreferredBackBufferWidth - terminal.Rectangle.Width - 7, _graphics.PreferredBackBufferHeight / 3 - 4), "NetworkMap v0.1");
-            Module remoteView = new Module(this, new Point(terminal.Rectangle.Width + 5, 2), new Point((int)(_graphics.PreferredBackBufferWidth * 0.75) - terminal.Rectangle.Width - 7, _graphics.PreferredBackBufferHeight - networkMap.Rectangle.Height - 7), "RemoteView v0.1");
-            Module notePad = new Module(this, new Point(remoteView.Rectangle.X + remoteView.Rectangle.Width + 3, 2), new Point(_graphics.PreferredBackBufferWidth - remoteView.Rectangle.X - remoteView.Rectangle.Width - 5, _graphics.PreferredBackBufferHeight - networkMap.Rectangle.Height - 7), "Friendly Neighbourhood Notepad");
-
-            _modules = new List<Module>()
-            {
-                terminal,
-                networkMap,
-                remoteView,
-                notePad,
-            };
-            foreach (Module m in _modules)
-            {
-                m.Initialize();
-            }
-
-            // end for testing
-
+            
             System.Console.WriteLine("init done");
         }
 
@@ -94,8 +86,8 @@ namespace TerminalGame
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _musicManager = MusicManager.GetInstance();
-            _musicManager.Start(Content.Load<Song>("Audio/Music/ambientbgm1_2"));
-            bg = Content.Load<Texture2D>("Graphics/Textures/Backgrounds/bg");
+            //_musicManager.Start(Content.Load<Song>("Audio/Music/ambientbgm1_2"));
+            //bg = Content.Load<Texture2D>("Graphics/Textures/Backgrounds/bg");
             System.Console.WriteLine("load done");
         }
 
@@ -126,31 +118,51 @@ namespace TerminalGame
             if (Keyboard.GetState().IsKeyDown(Keys.F1))
             {
                 _musicManager.FadeOut();
-                foreach (Module m in _modules)
-                {
-                    m.FadeOut();
-                }
+                //foreach (Module m in _modules)
+                //{
+                //    m.FadeOut();
+                //}
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.F2))
             {
                 _musicManager.FadeIn();
-                foreach (Module m in _modules)
-                {
-                    m.FadeIn();
-                }
+                //foreach (Module m in _modules)
+                //{
+                //    m.FadeIn();
+                //}
             }
 
-            foreach (Module m in _modules)
+            if (Keyboard.GetState().IsKeyDown(Keys.F3))
             {
-                m.Update(gameTime);
+                //foreach (Module m in _modules)
+                //{
+                //    if(m.MouseIsHovering)
+                //        m.Dim();
+                //}
             }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.F4))
+            {
+                //foreach (Module m in _modules)
+                //{
+                //    if (m.MouseIsHovering)
+                //        m.UnDim();
+                //}
+            }
+
+            //foreach (Module m in _modules)
+            //{
+            //    m.Update(gameTime);
+            //}
 
             UI.Themes.ThemeManager.GetInstance().Update(gameTime);
 
             _musicManager.Update(gameTime);
 
             base.Update(gameTime);
+
+            stateMachine.Update(gameTime);
         }
 
         /// <summary>
@@ -159,17 +171,18 @@ namespace TerminalGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
+            GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend);
             base.Draw(gameTime);
-            _spriteBatch.Draw(bg, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
+            stateMachine.Draw(gameTime);
+            //_spriteBatch.Draw(bg, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
             _spriteBatch.End();
 
-            foreach (Module m in _modules)
-            {
-                m.Draw(gameTime);
-            }
+            //foreach (Module m in _modules)
+            //{
+            //    m.Draw(gameTime);
+            //}
         }
     }
 }

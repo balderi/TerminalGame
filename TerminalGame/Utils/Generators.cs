@@ -8,7 +8,7 @@ namespace TerminalGame.Utils
 {
     public static class Generators
     {
-        private static readonly string _chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        private static readonly string CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         private static Random _rnd;
 
         public static string GeneratePassword(int length = 8)
@@ -17,7 +17,7 @@ namespace TerminalGame.Utils
             string retval = "";
             for(int i = 0; i < length; i++)
             {
-                retval += _chars[_rnd.Next(0, _chars.Length)];
+                retval += CHARS[_rnd.Next(0, CHARS.Length)];
             }
             return retval;
         }

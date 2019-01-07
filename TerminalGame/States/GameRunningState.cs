@@ -1,0 +1,43 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using TerminalGame.States.Screens;
+using TerminalGame.Utils;
+
+namespace TerminalGame.States
+{
+    class GameRunningState : State
+    {
+        private static GameRunningState _instance;
+        public static GameRunningState GetInstance()
+        {
+            if (_instance == null)
+                _instance = new GameRunningState();
+            return _instance;
+        }
+
+        private GameRunningState()
+        {
+            _name = "gameRunning";
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+        }
+
+        protected override void OnStateChange(StateChangeEventArgs e)
+        {
+            base.OnStateChange(e);
+            Screen.SwitchOn();
+        }
+    }
+}
