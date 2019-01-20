@@ -28,12 +28,17 @@ namespace TerminalGame
         public readonly string GAME_TITLE;
         public Version version;
 
+        public string Title { get; private set; }
+        public string Version { get; private set; }
+
         public TerminalGame()
         {
             GRAPHICS = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             version = Assembly.GetEntryAssembly().GetName().Version;
             GAME_TITLE = String.Format("TerminalGame v{0}.{1}a", version.Major, version.Minor);
+            Title = "TerminalGame";
+            Version = String.Format("v{0}.{1}a", version.Major, version.Minor);
             IsFixedTimeStep = true;
             GRAPHICS.SynchronizeWithVerticalRetrace = true;
             GRAPHICS.GraphicsProfile = GraphicsProfile.HiDef;
@@ -58,6 +63,8 @@ namespace TerminalGame
             Globals.GameHeight = GRAPHICS.PreferredBackBufferHeight;
             Globals.GameWidth = GRAPHICS.PreferredBackBufferWidth;
             FontManager.InitializeFonts(Content);
+
+            Window.Title = GAME_TITLE;
 
             //TODO: Load this from file
             Globals.SetGlobalFontSize();
