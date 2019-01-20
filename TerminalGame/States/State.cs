@@ -67,6 +67,7 @@ namespace TerminalGame.States
 
         protected virtual void OnStateChange(StateChangeEventArgs e) { Console.WriteLine("StateChange: " + _name); }
 
+        // https://stackoverflow.com/questions/136975/has-an-event-handler-already-been-added/7065771 <3
         public bool IsStateChangeRegistered(Delegate prospectiveHandler)
         {
             if (StateChange != null)
