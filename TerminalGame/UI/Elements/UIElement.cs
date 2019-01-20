@@ -16,12 +16,13 @@ namespace TerminalGame.UI.Elements
         #region fields
         protected SpriteBatch _spriteBatch;
         protected float _opacity, _fadeTarget;
-        protected bool _fadingUp, _fadingDown, _isHovering, _newMouseHoverState, _previousMouseHoverState;
+        protected bool _fadingUp, _fadingDown, _isHovering, _newMouseHoverState, _previousMouseHoverState, _mouseDown;
         protected MouseState _previousMouseState, _currentMouseState;
         protected readonly MouseEventArgs HOVER, CLICK, ENTER, LEAVE;
         protected RasterizerState _rasterizerState;
         protected ContentManager Content;
         protected ThemeManager _themeManager;
+        protected Color _backgroundColor, _borderColor;
         #endregion
 
         #region properties
@@ -36,9 +37,9 @@ namespace TerminalGame.UI.Elements
         public delegate void MouseClickEventHandler(MouseEventArgs e);
 
         public event MouseHoverEventHandler MouseHover;
-        public event MouseClickEventHandler MouseEnter;
+        public event MouseLeaveEventHandler MouseEnter;
         public event MouseEnterEventHandler MouseLeave;
-        public event MouseLeaveEventHandler Click;
+        public event MouseClickEventHandler Click;
         #endregion
 
         public UIElement(Game game, Point location, Point size) : base(game)
@@ -53,7 +54,7 @@ namespace TerminalGame.UI.Elements
             _fadingDown = false;
             _fadingUp = true;
 
-            HOVER= new MouseEventArgs();
+            HOVER = new MouseEventArgs();
             ENTER = new MouseEventArgs();
             LEAVE = new MouseEventArgs();
             CLICK = new MouseEventArgs();
@@ -96,17 +97,19 @@ namespace TerminalGame.UI.Elements
                                                _currentMouseState.Y, 1, 1);
 
             _isHovering = false;
-
+            _mouseDown = false;
             if (mouseRectangle.Intersects(Rectangle))
             {
                 _isHovering = true;
                 MouseHover?.Invoke(HOVER);
 
-                if (_currentMouseState.LeftButton == ButtonState.Released && 
+                if (_currentMouseState.LeftButton == ButtonState.Released &&
                     _previousMouseState.LeftButton == ButtonState.Pressed)
                 {
                     Click?.Invoke(CLICK);
                 }
+                else if(_currentMouseState.LeftButton == ButtonState.Pressed)
+                    _mouseDown = true;
             }
 
             _newMouseHoverState = _isHovering;
@@ -274,7 +277,7 @@ namespace TerminalGame.UI.Elements
 
         protected virtual void OnMouseLeave(MouseEventArgs e) { }
 
-        protected virtual void OnClick(MouseEventArgs e) { ThemeManager.GetInstance().CurrentTheme.Flash(); }
+        protected virtual void OnClick(MouseEventArgs e) { }
     }
 
     /// <summary>

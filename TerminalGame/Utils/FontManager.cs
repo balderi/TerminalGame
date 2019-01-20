@@ -51,6 +51,11 @@ namespace TerminalGame.Utils
             };
         }
 
+        /// <summary>
+        /// Returns the given font, if it exists
+        /// </summary>
+        /// <param name="fontKey">"<c>FontM</c>" for medium font, "<c>FontXL</c>" for XL font, etc.</param>
+        /// <returns></returns>
         public static SpriteFont GetFont(string fontKey)
         {
             if (_fontList.Count < 1)

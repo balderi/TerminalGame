@@ -5,35 +5,29 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using TerminalGame.States.Screens;
-using System.Timers;
 
 namespace TerminalGame.States
 {
-    class SplashState : State
+    class MainMenuState : State
     {
-        private Timer _timer;
+        private static MainMenuState _instance;
 
-        public static SplashState GetInstance()
+        public static MainMenuState GetInstance()
         {
             if (_instance == null)
-                _instance = new SplashState();
+                _instance = new MainMenuState();
             return _instance;
         }
 
-        private static SplashState _instance;
-
-        private SplashState()
+        private MainMenuState()
         {
-            _timer = new Timer(2000);
-            _timer.Elapsed += Timer_Tick;
-            _name = "splash";
+            _name = "mainMenu";
         }
 
         public override void Initialize(GraphicsDeviceManager graphics, Screen screen, Game game)
         {
             base.Initialize(graphics, screen, game);
-            AddState("mainMenu", MainMenuState.GetInstance());
-            _timer.Start();
+            AddState("gameRunning", GameRunningState.GetInstance());
         }
 
         public override void Update(GameTime gameTime)
@@ -49,12 +43,7 @@ namespace TerminalGame.States
         protected override void OnStateChange(StateChangeEventArgs e)
         {
             base.OnStateChange(e);
-        }
-
-        private void Timer_Tick(object sender, ElapsedEventArgs e)
-        {
-            _timer.Stop();
-            StateMachine.GetInstance().ChangeState("mainMenu", new MainMenuScreen(_game));
+            Screen.SwitchOn();
         }
     }
 }
