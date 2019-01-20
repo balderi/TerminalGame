@@ -26,7 +26,11 @@ namespace TerminalGame.States
         public virtual void Initialize(GraphicsDeviceManager graphics, Screen screen, Game game)
         {
             _change = new StateChangeEventArgs();
-            StateChange += OnStateChange;
+
+            // Prevent the eventhandler from subscribing to the same event multiple times
+            if(!IsStateChangeRegistered(StateChange))
+                StateChange += OnStateChange;
+
             _availableStates = new Dictionary<string, State>();
             Screen = screen;
             Screen.Initialize(graphics);
@@ -62,6 +66,21 @@ namespace TerminalGame.States
         }
 
         protected virtual void OnStateChange(StateChangeEventArgs e) { Console.WriteLine("StateChange: " + _name); }
+
+        public bool IsStateChangeRegistered(Delegate prospectiveHandler)
+        {
+            if (StateChange != null)
+            {
+                foreach (Delegate existingHandler in StateChange.GetInvocationList())
+                {
+                    if (existingHandler == prospectiveHandler)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 
     public class StateChangeEventArgs : EventArgs

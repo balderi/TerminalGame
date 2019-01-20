@@ -78,6 +78,7 @@ namespace TerminalGame.States.Screens
         private void NewGame_Clicked(ButtonPressedEventArgs e)
         {
             Console.WriteLine("New Game clicked");
+            StateMachine.GetInstance().ChangeState("gameRunning", new GameRunningScreen(Game));
         }
 
         private void LoadGame_Clicked(ButtonPressedEventArgs e)
@@ -93,6 +94,7 @@ namespace TerminalGame.States.Screens
         private void Quit_Clicked(ButtonPressedEventArgs e)
         {
             Console.WriteLine("Quit clicked");
+            Game.Exit();
         }
     }
 }

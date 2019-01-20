@@ -17,7 +17,7 @@ namespace TerminalGame.States.Screens
     {
         private Texture2D _background;
         private Song bgm;
-
+        private KeyboardState _prevState, _newState;
 
         public GameRunningScreen(Game game) : base(game)
         {
@@ -59,6 +59,8 @@ namespace TerminalGame.States.Screens
 
         public override void Update(GameTime gameTime)
         {
+            _newState = Keyboard.GetState();
+
             if (Keyboard.GetState().IsKeyDown(Keys.F1))
             {
                 foreach (UIElement elem in _elements)
@@ -93,6 +95,12 @@ namespace TerminalGame.States.Screens
                 }
             }
 
+            if(_prevState.IsKeyDown(Keys.Escape) && _newState.IsKeyUp(Keys.Escape))
+            {
+                StateMachine.GetInstance().ChangeState("mainMenu", new MainMenuScreen(Game));
+            }
+
+            _prevState = _newState;
             base.Update(gameTime); // Handles updating all elements in _elements
         }
 

@@ -24,6 +24,12 @@ namespace TerminalGame.States
             _name = "gameRunning";
         }
 
+        public override void Initialize(GraphicsDeviceManager graphics, Screen screen, Game game)
+        {
+            base.Initialize(graphics, screen, game);
+            AddState("mainMenu", MainMenuState.GetInstance());
+        }
+
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
