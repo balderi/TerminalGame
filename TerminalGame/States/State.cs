@@ -23,6 +23,12 @@ namespace TerminalGame.States
         public Screen Screen { get; protected set; }
         #endregion
 
+        /// <summary>
+        /// Initialize the state.
+        /// </summary>
+        /// <param name="graphics"><c>GraphicsDeviceManager</c> for initializing the <c>Screen</c>.</param>
+        /// <param name="screen">The scrren to display in this state.</param>
+        /// <param name="game">The current game.</param>
         public virtual void Initialize(GraphicsDeviceManager graphics, Screen screen, Game game)
         {
             _change = new StateChangeEventArgs();
@@ -37,12 +43,23 @@ namespace TerminalGame.States
             _game = game;
             StateChange?.Invoke(new StateChangeEventArgs());
         }
-
+        
+        /// <summary>
+        /// Add a state to the list of available future states.
+        /// </summary>
+        /// <param name="name">Name of the state, fore reference.</param>
+        /// <param name="state">The actual state.</param>
         public void AddState(string name, State state)
         {
             _availableStates.Add(name, state);
         }
 
+        /// <summary>
+        /// Will try to fetch the named state from the list of available future states.
+        /// </summary>
+        /// <param name="state">Name of the state to get.</param>
+        /// <param name="outState">State return.</param>
+        /// <returns>Returns <c>true</c> if the state exists, <c>false</c> otherwise.</returns>
         public bool TryGetNextState(string state, out State outState)
         {
             if (_availableStates.TryGetValue(state, out State retval))
@@ -68,7 +85,7 @@ namespace TerminalGame.States
         protected virtual void OnStateChange(StateChangeEventArgs e) { Console.WriteLine("StateChange: " + _name); }
 
         // https://stackoverflow.com/questions/136975/has-an-event-handler-already-been-added/7065771 <3
-        public bool IsStateChangeRegistered(Delegate prospectiveHandler)
+        protected bool IsStateChangeRegistered(Delegate prospectiveHandler)
         {
             if (StateChange != null)
             {

@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-	<Features>IOperation</Features> 
+    <Features>IOperation</Features>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D7E65758-9116-40A8-BB5E-0B50313BAC5A}</ProjectGuid>
@@ -83,6 +83,7 @@
     <Compile Include="States\State.cs" />
     <Compile Include="States\StateMachine.cs" />
     <Compile Include="UI\Elements\Buttons\Button.cs" />
+    <Compile Include="UI\Elements\Modules\Terminal.cs" />
     <Compile Include="UI\Elements\UIElement.cs" />
     <Compile Include="UI\Elements\Modules\Module.cs" />
     <Compile Include="UI\Elements\Modules\ModuleComponents\Header.cs" />

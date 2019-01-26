@@ -36,9 +36,9 @@ namespace TerminalGame
             GRAPHICS = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             version = Assembly.GetEntryAssembly().GetName().Version;
-            GAME_TITLE = String.Format("TerminalGame v{0}.{1}a", version.Major, version.Minor);
-            Title = "TerminalGame";
+            Title = Assembly.GetEntryAssembly().GetName().Name;
             Version = String.Format("v{0}.{1}a", version.Major, version.Minor);
+            GAME_TITLE = String.Format("{0} v{1}.{2}a", Title, version.Major, version.Minor);
             IsFixedTimeStep = true;
             GRAPHICS.SynchronizeWithVerticalRetrace = true;
             GRAPHICS.GraphicsProfile = GraphicsProfile.HiDef;
@@ -93,8 +93,6 @@ namespace TerminalGame
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _musicManager = MusicManager.GetInstance();
-            //_musicManager.Start(Content.Load<Song>("Audio/Music/ambientbgm1_2"));
-            //bg = Content.Load<Texture2D>("Graphics/Textures/Backgrounds/bg");
             System.Console.WriteLine("load done");
         }
 
@@ -114,7 +112,7 @@ namespace TerminalGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.M))
+            if (Keyboard.GetState().IsKeyDown(Keys.M) && Keyboard.GetState().IsKeyDown(Keys.LeftControl))
             {
                 MediaPlayer.IsMuted = !MediaPlayer.IsMuted;
             }
@@ -122,43 +120,12 @@ namespace TerminalGame
             if (Keyboard.GetState().IsKeyDown(Keys.F1))
             {
                 _musicManager.FadeOut();
-                //foreach (Module m in _modules)
-                //{
-                //    m.FadeOut();
-                //}
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.F2))
             {
                 _musicManager.FadeIn();
-                //foreach (Module m in _modules)
-                //{
-                //    m.FadeIn();
-                //}
             }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.F3))
-            {
-                //foreach (Module m in _modules)
-                //{
-                //    if(m.MouseIsHovering)
-                //        m.Dim();
-                //}
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.F4))
-            {
-                //foreach (Module m in _modules)
-                //{
-                //    if (m.MouseIsHovering)
-                //        m.UnDim();
-                //}
-            }
-
-            //foreach (Module m in _modules)
-            //{
-            //    m.Update(gameTime);
-            //}
 
             UI.Themes.ThemeManager.GetInstance().Update(gameTime);
 
@@ -180,13 +147,7 @@ namespace TerminalGame
             _spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend);
             base.Draw(gameTime);
             stateMachine.Draw(gameTime);
-            //_spriteBatch.Draw(bg, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
             _spriteBatch.End();
-
-            //foreach (Module m in _modules)
-            //{
-            //    m.Draw(gameTime);
-            //}
         }
     }
 }

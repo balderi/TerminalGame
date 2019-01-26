@@ -19,7 +19,7 @@ namespace TerminalGame.UI.Elements.Buttons
 
         public Button(Game game, string text, Point location, Point size) : base(game, location, size)
         {
-            _borderColor = Color.White * _opacity;
+            BorderColor = Color.White * _opacity;
             TEXT = text;
             _font = Utils.FontManager.GetFont("FontL");
             _buttonPressed = new ButtonPressedEventArgs();
@@ -42,36 +42,36 @@ namespace TerminalGame.UI.Elements.Buttons
 
             if (_mouseDown)
             {
-                _backgroundColor = Color.Green * _opacity;
-                _borderColor = Color.LimeGreen * _opacity;
+                BackgroundColor = Color.Green * _opacity;
+                BorderColor = Color.LimeGreen * _opacity;
             }
             else if (_isHovering)
             {
-                _backgroundColor = Color.DarkGray * _opacity;
-                _borderColor = Color.Green * _opacity;
+                BackgroundColor = Color.DarkGray * _opacity;
+                BorderColor = Color.Green * _opacity;
             }
             else
             {
-                _backgroundColor = Color.Gray * _opacity;
-                _borderColor = Color.LimeGreen * _opacity;
+                BackgroundColor = Color.Gray * _opacity;
+                BorderColor = Color.LimeGreen * _opacity;
             }
 
             _spriteBatch.Begin();
             _spriteBatch.Draw(Utils.Globals.DummyTexture(), Rectangle,
-                              _backgroundColor * _opacity);
+                              BackgroundColor * _opacity);
 
             _spriteBatch.DrawString(_font, TEXT, new Vector2(Rectangle.Center.X - _font.MeasureString(TEXT).X / 2, Rectangle.Center.Y - _font.MeasureString(TEXT).Y / 2), Color.White * _opacity);
 
             Utils.Globals.DrawOuterBorder(_spriteBatch, Rectangle, Utils.Globals.DummyTexture(), 1,
-                                          _borderColor * _opacity);
+                                          BorderColor * _opacity);
             _spriteBatch.End();
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (_backgroundColor == null)
-                _backgroundColor = Color.DarkGray;
+            if (BackgroundColor == null)
+                BackgroundColor = Color.DarkGray;
         }
 
         protected override void OnClick(MouseEventArgs e)

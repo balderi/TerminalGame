@@ -98,11 +98,11 @@ namespace TerminalGame.States.Screens
             {
                 if (_binaryXpos > -10)
                 {
-                    _binaryXpos = 0 - (int)FontManager.GetFont("FontS").MeasureString(_binary).X + Game.Window.ClientBounds.Width;
+                    _binaryXpos = 0 - (int)FontManager.GetFont("FontS").MeasureString(_binary).X + Game.Window.ClientBounds.Width + 8;
                 }
                 else
                 {
-                    _binaryXpos += (int)FontManager.GetFont("FontS").MeasureString("A").X - 1;
+                    _binaryXpos += (int)FontManager.GetFont("FontS").MeasureString("A").X;
                 }
             }
         }

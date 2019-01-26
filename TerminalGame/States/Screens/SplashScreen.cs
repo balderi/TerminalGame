@@ -16,8 +16,8 @@ namespace TerminalGame.States.Screens
 
         public SplashScreen(Game game) : base(game)
         {
-            TITLE = "TerminalGame";
             var tg = game as TerminalGame;
+            TITLE = tg.Title;
             VER = String.Format("v{0}.{1}", tg.version.Major, tg.version.Minor);
             TITLE_FONT = FontManager.GetFont("FontXL");
             VER_FONT = FontManager.GetFont("FontM");

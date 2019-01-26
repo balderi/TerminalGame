@@ -22,7 +22,7 @@ namespace TerminalGame.UI.Elements.Modules
         #region properties
         #endregion
 
-        public Module(Game game, Point location, Point size, string title, bool hasHeader = true) : base(game, location, size)
+        public Module(Game game, Point location, Point size, string title, bool hasHeader = true, bool hasBorder = true) : base(game, location, size, hasBorder)
         {
             DrawOrderChanged += OnDrawOrderChanged;
             EnabledChanged += OnEnabledChanged;
@@ -73,10 +73,16 @@ namespace TerminalGame.UI.Elements.Modules
             base.Draw(gameTime);
             Rectangle currentRect = _spriteBatch.GraphicsDevice.ScissorRectangle;
             _spriteBatch.GraphicsDevice.ScissorRectangle = Rectangle;
+            ScissorDraw(gameTime);
             if (_hasHeader)
                 _header.Draw(_spriteBatch, _opacity);
             _spriteBatch.End();
             _spriteBatch.GraphicsDevice.ScissorRectangle = currentRect;
+        }
+
+        public virtual void ScissorDraw(GameTime gameTime)
+        {
+
         }
     }
 }

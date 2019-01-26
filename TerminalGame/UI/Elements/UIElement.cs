@@ -22,12 +22,14 @@ namespace TerminalGame.UI.Elements
         protected RasterizerState _rasterizerState;
         protected ContentManager Content;
         protected ThemeManager _themeManager;
-        protected Color _backgroundColor, _borderColor;
         #endregion
 
         #region properties
         public Rectangle Rectangle { get; private set; }
         public bool MouseIsHovering { get => _isHovering; }
+        public Color BackgroundColor { get; set; }
+        public Color BorderColor { get; set; }
+        public bool HasBorder { get; private set; }
         #endregion
 
         #region events
@@ -42,7 +44,7 @@ namespace TerminalGame.UI.Elements
         public event MouseClickEventHandler Click;
         #endregion
 
-        public UIElement(Game game, Point location, Point size) : base(game)
+        public UIElement(Game game, Point location, Point size, bool hasBorder = true) : base(game)
         {
             Content = Game.Content;
             _themeManager = ThemeManager.GetInstance();
@@ -53,6 +55,7 @@ namespace TerminalGame.UI.Elements
             _fadeTarget = 1;
             _fadingDown = false;
             _fadingUp = true;
+            HasBorder = hasBorder;
 
             HOVER = new MouseEventArgs();
             ENTER = new MouseEventArgs();
@@ -130,8 +133,9 @@ namespace TerminalGame.UI.Elements
 
             _spriteBatch.Draw(Utils.Globals.DummyTexture(), Rectangle,
                               _themeManager.CurrentTheme.ModuleBackgroundColor * _opacity);
-                
-            Utils.Globals.DrawOuterBorder(_spriteBatch, Rectangle, Utils.Globals.DummyTexture(), 1,
+            
+            if(HasBorder)
+                Utils.Globals.DrawOuterBorder(_spriteBatch, Rectangle, Utils.Globals.DummyTexture(), 1,
                                           _themeManager.CurrentTheme.ModuleOutlineColor * _opacity);
         }
 

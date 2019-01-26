@@ -26,14 +26,14 @@ namespace TerminalGame.States.Screens
 
         public override void Initialize(GraphicsDeviceManager graphics)
         {
-            Module terminal = new Module(Game, new Point(2, 2),
+            Terminal terminal = new Terminal(Game, new Point(2, 2),
                 new Point(Globals.GameWidth / 3 - 4, Globals.GameHeight - 4), "Terminal v0.1");
 
             Module networkMap = new Module(Game, new Point(Globals.GameWidth / 3 + 1, Globals.GameHeight - Globals.GameHeight / 3 + 2),
                 new Point(Globals.GameWidth - terminal.Rectangle.Width - 7, Globals.GameHeight / 3 - 4), "NetworkMap v0.1");
 
-            Module statusBar = new Module(Game, new Point(Globals.GameWidth / 3 + 1, 2),
-                new Point(Globals.GameWidth - terminal.Rectangle.Width - 7, 50), "status", false);
+            Module statusBar = new Module(Game, new Point(Globals.GameWidth / 3, 1),
+                new Point(Globals.GameWidth - terminal.Rectangle.Width - 5, 52), "status", false, false);
 
             Module remoteView = new Module(Game, new Point(terminal.Rectangle.Width + 5, statusBar.Rectangle.Height + 5),
                 new Point((int)(Globals.GameWidth * 0.75) - terminal.Rectangle.Width - 7, Globals.GameHeight - statusBar.Rectangle.Height - networkMap.Rectangle.Height - 10), "RemoteView v0.1");
@@ -46,6 +46,9 @@ namespace TerminalGame.States.Screens
             _elements.Add(statusBar);
             _elements.Add(remoteView);
             _elements.Add(notePad);
+
+            foreach (var m in _elements)
+                m.Initialize();
 
             base.Initialize();
         }
