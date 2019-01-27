@@ -69,6 +69,7 @@
     <Compile Include="Computers\Utils\ComputerType.cs" />
     <Compile Include="Parsing\CommandParser.cs" />
     <Compile Include="Parsing\CommandToken.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Programs\IProgram.cs" />
     <Compile Include="Programs\Program.cs" />
     <Compile Include="States\GameRunningState.cs" />

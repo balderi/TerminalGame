@@ -31,6 +31,7 @@ namespace TerminalGame
         public string Title { get; private set; }
         public string Version { get; private set; }
         public bool IsGameRunning { get; set; }
+        public Player Player { get; private set; }
         
         public TerminalGame()
         {
