@@ -9,7 +9,7 @@ using System.Timers;
 
 namespace TerminalGame.States
 {
-    class SplashState : State
+    class SplashState : State, IDisposable
     {
         private Timer _timer;
 
@@ -46,15 +46,20 @@ namespace TerminalGame.States
             base.Draw(gameTime);
         }
 
-        protected override void OnStateChange(StateChangeEventArgs e)
+        protected override void OnStateChange(object sender, StateChangeEventArgs e)
         {
-            base.OnStateChange(e);
+            base.OnStateChange(this, e);
         }
 
         private void Timer_Tick(object sender, ElapsedEventArgs e)
         {
             _timer.Stop();
             StateMachine.GetInstance().ChangeState("mainMenu", new MainMenuScreen(_game));
+        }
+
+        public void Dispose()
+        {
+            ((IDisposable)_timer).Dispose();
         }
     }
 }

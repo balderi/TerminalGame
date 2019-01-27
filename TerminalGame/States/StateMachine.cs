@@ -48,6 +48,7 @@ namespace TerminalGame.States
                 Console.WriteLine("Changing state to: " + state);
                 CurrentState = retval;
                 CurrentState.Initialize(_graphics, screen, _game);
+                return;
             }
             Console.WriteLine("Could not change state to: " + state);
         }

@@ -16,7 +16,7 @@ namespace TerminalGame.UI.Elements
         #region fields
         protected SpriteBatch _spriteBatch;
         protected float _opacity, _fadeTarget;
-        protected bool _fadingUp, _fadingDown, _isHovering, _newMouseHoverState, _previousMouseHoverState, _mouseDown;
+        protected bool _fadingUp, _fadingDown, _isHovering, _newMouseHoverState, _previousMouseHoverState, _mouseDown, _fadeIn;
         protected MouseState _previousMouseState, _currentMouseState;
         protected readonly MouseEventArgs HOVER, CLICK, ENTER, LEAVE;
         protected RasterizerState _rasterizerState;
@@ -29,14 +29,15 @@ namespace TerminalGame.UI.Elements
         public bool MouseIsHovering { get => _isHovering; }
         public Color BackgroundColor { get; set; }
         public Color BorderColor { get; set; }
+        public Color FontColor { get; set; }
         public bool HasBorder { get; private set; }
         #endregion
 
         #region events
-        public delegate void MouseHoverEventHandler(MouseEventArgs e);
-        public delegate void MouseEnterEventHandler(MouseEventArgs e);
-        public delegate void MouseLeaveEventHandler(MouseEventArgs e);
-        public delegate void MouseClickEventHandler(MouseEventArgs e);
+        public delegate void MouseHoverEventHandler(object sender, MouseEventArgs e);
+        public delegate void MouseEnterEventHandler(object sender, MouseEventArgs e);
+        public delegate void MouseLeaveEventHandler(object sender, MouseEventArgs e);
+        public delegate void MouseClickEventHandler(object sender, MouseEventArgs e);
 
         public event MouseHoverEventHandler MouseHover;
         public event MouseLeaveEventHandler MouseEnter;
@@ -44,17 +45,26 @@ namespace TerminalGame.UI.Elements
         public event MouseClickEventHandler Click;
         #endregion
 
-        public UIElement(Game game, Point location, Point size, bool hasBorder = true) : base(game)
+        public UIElement(Game game, Point location, Point size, bool hasBorder = true, bool fadeIn = true) : base(game)
         {
             Content = Game.Content;
             _themeManager = ThemeManager.GetInstance();
             Rectangle = new Rectangle(location, size);
             _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _opacity = 0;
+            _fadeIn = fadeIn;
             _fadeTarget = 1;
+            if (_fadeIn)
+            {
+                _opacity = 0;
+                _fadingUp = true;
+            }
+            else
+            {
+                _opacity = 1;
+                _fadingUp = false;
+            }
             _fadingDown = false;
-            _fadingUp = true;
             HasBorder = hasBorder;
 
             HOVER = new MouseEventArgs();
@@ -104,12 +114,12 @@ namespace TerminalGame.UI.Elements
             if (mouseRectangle.Intersects(Rectangle))
             {
                 _isHovering = true;
-                MouseHover?.Invoke(HOVER);
+                MouseHover?.Invoke(this, HOVER);
 
                 if (_currentMouseState.LeftButton == ButtonState.Released &&
                     _previousMouseState.LeftButton == ButtonState.Pressed)
                 {
-                    Click?.Invoke(CLICK);
+                    Click?.Invoke(this, CLICK);
                 }
                 else if(_currentMouseState.LeftButton == ButtonState.Pressed)
                     _mouseDown = true;
@@ -119,9 +129,9 @@ namespace TerminalGame.UI.Elements
             if (_newMouseHoverState != _previousMouseHoverState)
             {
                 if (_newMouseHoverState)
-                    MouseEnter?.Invoke(ENTER);
+                    MouseEnter?.Invoke(this, ENTER);
                 else
-                    MouseLeave?.Invoke(LEAVE);
+                    MouseLeave?.Invoke(this, LEAVE);
             }
             _previousMouseHoverState = _newMouseHoverState;
         }
@@ -244,6 +254,7 @@ namespace TerminalGame.UI.Elements
 
         protected override void Dispose(bool disposing)
         {
+            _spriteBatch.Dispose();
             base.Dispose(disposing);
         }
 
@@ -275,13 +286,13 @@ namespace TerminalGame.UI.Elements
                 FadeOut();
         }
 
-        protected virtual void OnMouseHover(MouseEventArgs e) { }
+        protected virtual void OnMouseHover(object sender, MouseEventArgs e) { }
 
-        protected virtual void OnMouseEnter(MouseEventArgs e) { }
+        protected virtual void OnMouseEnter(object sender, MouseEventArgs e) { }
 
-        protected virtual void OnMouseLeave(MouseEventArgs e) { }
+        protected virtual void OnMouseLeave(object sender, MouseEventArgs e) { }
 
-        protected virtual void OnClick(MouseEventArgs e) { }
+        protected virtual void OnClick(object sender, MouseEventArgs e) { }
     }
 
     /// <summary>

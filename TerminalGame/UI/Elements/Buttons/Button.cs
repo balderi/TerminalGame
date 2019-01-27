@@ -17,7 +17,7 @@ namespace TerminalGame.UI.Elements.Buttons
         public delegate void ButtonPressedEventHandler(ButtonPressedEventArgs e);
         public event ButtonPressedEventHandler ButtonPressed;
 
-        public Button(Game game, string text, Point location, Point size) : base(game, location, size)
+        public Button(Game game, string text, Point location, Point size, bool fadeIn = true) : base(game, location, size, fadeIn: fadeIn)
         {
             BorderColor = Color.White * _opacity;
             TEXT = text;
@@ -39,28 +39,37 @@ namespace TerminalGame.UI.Elements.Buttons
         {
             if (!Visible && !_fadingDown && !_fadingUp)
                 return;
-
-            if (_mouseDown)
+            if (Enabled)
             {
-                BackgroundColor = Color.Green * _opacity;
-                BorderColor = Color.LimeGreen * _opacity;
-            }
-            else if (_isHovering)
-            {
-                BackgroundColor = Color.DarkGray * _opacity;
-                BorderColor = Color.Green * _opacity;
+                FontColor = Color.White * _opacity;
+                if (_mouseDown)
+                {
+                    BackgroundColor = Color.Green * _opacity;
+                    BorderColor = Color.LimeGreen * _opacity;
+                }
+                else if (_isHovering)
+                {
+                    BackgroundColor = Color.DarkGray * _opacity;
+                    BorderColor = Color.Green * _opacity;
+                }
+                else
+                {
+                    BackgroundColor = Color.Gray * _opacity;
+                    BorderColor = Color.LimeGreen * _opacity;
+                }
             }
             else
             {
-                BackgroundColor = Color.Gray * _opacity;
-                BorderColor = Color.LimeGreen * _opacity;
+                FontColor = Color.LightGray * _opacity;
+                BackgroundColor = Color.DimGray * _opacity;
+                BorderColor = Color.DarkOliveGreen * _opacity;
             }
 
             _spriteBatch.Begin();
             _spriteBatch.Draw(Utils.Globals.DummyTexture(), Rectangle,
                               BackgroundColor * _opacity);
 
-            _spriteBatch.DrawString(_font, TEXT, new Vector2(Rectangle.Center.X - _font.MeasureString(TEXT).X / 2, Rectangle.Center.Y - _font.MeasureString(TEXT).Y / 2), Color.White * _opacity);
+            _spriteBatch.DrawString(_font, TEXT, new Vector2(Rectangle.Center.X - _font.MeasureString(TEXT).X / 2, Rectangle.Center.Y - _font.MeasureString(TEXT).Y / 2), FontColor);
 
             Utils.Globals.DrawOuterBorder(_spriteBatch, Rectangle, Utils.Globals.DummyTexture(), 1,
                                           BorderColor * _opacity);
@@ -74,25 +83,25 @@ namespace TerminalGame.UI.Elements.Buttons
                 BackgroundColor = Color.DarkGray;
         }
 
-        protected override void OnClick(MouseEventArgs e)
+        protected override void OnClick(object sender, MouseEventArgs e)
         {
-            base.OnClick(e);
+            base.OnClick(this, e);
             ButtonPressed?.Invoke(_buttonPressed);
         }
 
-        protected override void OnMouseEnter(MouseEventArgs e)
+        protected override void OnMouseEnter(object sender, MouseEventArgs e)
         {
-            base.OnMouseEnter(e);
+            base.OnMouseEnter(this, e);
         }
 
-        protected override void OnMouseHover(MouseEventArgs e)
+        protected override void OnMouseHover(object sender, MouseEventArgs e)
         {
-            base.OnMouseHover(e);
+            base.OnMouseHover(this, e);
         }
 
-        protected override void OnMouseLeave(MouseEventArgs e)
+        protected override void OnMouseLeave(object sender, MouseEventArgs e)
         {
-            base.OnMouseLeave(e);
+            base.OnMouseLeave(this, e);
         }
     }
 

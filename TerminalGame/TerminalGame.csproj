@@ -78,6 +78,7 @@
     <Compile Include="States\Screens\MainMenuScreen.cs" />
     <Compile Include="States\Screens\Screen.cs" />
     <Compile Include="States\Screens\ScreenManager.cs" />
+    <Compile Include="States\Screens\SettingsScreen.cs" />
     <Compile Include="States\Screens\SplashScreen.cs" />
     <Compile Include="States\SplashState.cs" />
     <Compile Include="States\State.cs" />
@@ -172,6 +173,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Config\Settings.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

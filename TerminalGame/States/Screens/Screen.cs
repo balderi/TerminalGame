@@ -17,9 +17,11 @@ namespace TerminalGame.States.Screens
         protected List<UIElement> _elements;
         protected SpriteBatch _spriteBatch;
         protected Rectangle _rectangle;
+        public new TerminalGame Game;
 
         public Screen(Game game) : base(game)
         {
+            Game = game as TerminalGame;
             _rectangle = new Rectangle(0, 0, Globals.GameWidth, Globals.GameHeight);
             _elements = new List<UIElement>();
             _spriteBatch = new SpriteBatch(Game.GraphicsDevice);

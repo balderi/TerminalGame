@@ -30,7 +30,8 @@ namespace TerminalGame
 
         public string Title { get; private set; }
         public string Version { get; private set; }
-
+        public bool IsGameRunning { get; set; }
+        
         public TerminalGame()
         {
             GRAPHICS = new GraphicsDeviceManager(this);
@@ -40,6 +41,7 @@ namespace TerminalGame
             Version = String.Format("v{0}.{1}a", version.Major, version.Minor);
             GAME_TITLE = String.Format("{0} v{1}.{2}a", Title, version.Major, version.Minor);
             IsFixedTimeStep = true;
+            IsGameRunning = false;
             GRAPHICS.SynchronizeWithVerticalRetrace = true;
             GRAPHICS.GraphicsProfile = GraphicsProfile.HiDef;
         }

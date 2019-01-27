@@ -40,10 +40,10 @@ namespace TerminalGame.States
             base.Update(gameTime);
         }
 
-        protected override void OnStateChange(StateChangeEventArgs e)
+        protected override void OnStateChange(object sender, StateChangeEventArgs e)
         {
-            base.OnStateChange(e);
-            Screen.SwitchOn();
+            base.OnStateChange(this, e);
+            CurrentScreen.SwitchOn();
         }
     }
 }
