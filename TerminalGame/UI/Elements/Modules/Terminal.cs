@@ -20,9 +20,10 @@ namespace TerminalGame.UI.Elements.Modules
         private Rectangle _terminalInputArea, _terminalOutputArea;
         private List<string> _history;
 
-        public Terminal(Game game, Point location, Point size, string title, bool hasHeader = true, bool hasBorder = true) : base(game, location, size, title, hasHeader, hasBorder)
+        public Terminal(Game game, Point location, Point size, string title, bool hasHeader = true, bool hasBorder = true) : 
+            base(game, location, size, title, hasHeader, hasBorder)
         {
-
+            //Nothing to do here
         }
 
         public override void Initialize()
@@ -38,11 +39,13 @@ namespace TerminalGame.UI.Elements.Modules
 
             int tbHeight = (int)_terminalFont.MeasureString("A").Y;
 
-            _terminalInputArea = new Rectangle(new Point(Rectangle.X + _promptWidth + 2, Rectangle.Y + Rectangle.Height - tbHeight), new Point(Rectangle.Width - _promptWidth, tbHeight));
-            _terminalOutputArea = new Rectangle(new Point(Rectangle.X + 2, Rectangle.Y + 2 + _header.Rectangle.Height), new Point(Rectangle.Width - 4, Rectangle.Height - 4 - tbHeight - _header.Rectangle.Height));
+            _terminalInputArea = new Rectangle(new Point(Rectangle.X + _promptWidth + 2, Rectangle.Y + Rectangle.Height - tbHeight), 
+                new Point(Rectangle.Width - _promptWidth, tbHeight));
+            _terminalOutputArea = new Rectangle(new Point(Rectangle.X + 2, Rectangle.Y + 2 + _header.Rectangle.Height), 
+                new Point(Rectangle.Width - 4, Rectangle.Height - 4 - tbHeight - _header.Rectangle.Height));
 
-            _textBox = new TextBox(_terminalInputArea, (int)(Rectangle.Width / _terminalFont.MeasureString("A").X) * 10, "", GraphicsDevice, _terminalFont, 
-                Color.White, Color.Gray, 30);
+            _textBox = new TextBox(_terminalInputArea, (int)(Rectangle.Width / _terminalFont.MeasureString("A").X) * 10, 
+                "", GraphicsDevice, _terminalFont, Color.White, Color.Gray, 30);
             _textBox.Renderer.Color = Color.White * _opacity;
             _textBox.Active = true;
             _textBox.EnterDown += Enter_Pressed;
@@ -50,7 +53,9 @@ namespace TerminalGame.UI.Elements.Modules
             base.Initialize();
 
             Console.WriteLine("Terminal initialized");
-            Console.WriteLine("Terminal max chars: " + ((int)((_terminalOutputArea.Width - _promptWidth) / _terminalFont.MeasureString("A").X)).ToString() + " (" + ((int)(_terminalOutputArea.Width / _terminalFont.MeasureString("A").X)).ToString() + ")");
+            Console.WriteLine("Terminal max chars: " + 
+                ((int)((_terminalOutputArea.Width - _promptWidth) / _terminalFont.MeasureString("A").X)).ToString() + 
+                " (" + ((int)(_terminalOutputArea.Width / _terminalFont.MeasureString("A").X)).ToString() + ")");
         }
 
         private void Enter_Pressed(object sender, KeyEventArgs e)
@@ -86,8 +91,12 @@ namespace TerminalGame.UI.Elements.Modules
         public override void ScissorDraw(GameTime gameTime)
         {
             string text = HistoryToString(_history);
-            _spriteBatch.DrawString(_terminalFont, text, new Vector2(_terminalOutputArea.X, _terminalOutputArea.Y + _terminalOutputArea.Height - _terminalFont.MeasureString(text).Y), Color.White * _opacity);
-            _spriteBatch.DrawString(_terminalFont, _promptText, new Vector2(Rectangle.X + 2, Rectangle.Y + Rectangle.Height - (int)_terminalFont.MeasureString("A").Y), Color.White * _opacity);
+            _spriteBatch.DrawString(_terminalFont, text, 
+                new Vector2(_terminalOutputArea.X, _terminalOutputArea.Y + _terminalOutputArea.Height - _terminalFont.MeasureString(text).Y), 
+                Color.White * _opacity);
+            _spriteBatch.DrawString(_terminalFont, _promptText, 
+                new Vector2(Rectangle.X + 2, Rectangle.Y + Rectangle.Height - (int)_terminalFont.MeasureString("A").Y), 
+                Color.White * _opacity);
             _textBox.Draw(_spriteBatch);
         }
 

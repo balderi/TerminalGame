@@ -67,6 +67,9 @@
     <Compile Include="Computers\IComputer.cs" />
     <Compile Include="Computers\Utils\AccessLevel.cs" />
     <Compile Include="Computers\Utils\ComputerType.cs" />
+    <Compile Include="Files\File.cs" />
+    <Compile Include="Files\FileType.cs" />
+    <Compile Include="Files\IFile.cs" />
     <Compile Include="Parsing\CommandParser.cs" />
     <Compile Include="Parsing\CommandToken.cs" />
     <Compile Include="Player.cs" />
@@ -165,7 +168,9 @@
     </None>
     <None Include="app.manifest" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Files\FileSystem\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>

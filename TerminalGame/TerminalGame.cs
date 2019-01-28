@@ -18,14 +18,14 @@ namespace TerminalGame
     /// </summary>
     public class TerminalGame : Game
     {
-        private readonly GraphicsDeviceManager GRAPHICS;
+        private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
         private MusicManager _musicManager;
 
         private StateMachine stateMachine;
 
-        public readonly string GAME_TITLE;
+        public readonly string TitleAndVersion;
         public Version version;
 
         public string Title { get; private set; }
@@ -35,16 +35,16 @@ namespace TerminalGame
         
         public TerminalGame()
         {
-            GRAPHICS = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             version = Assembly.GetEntryAssembly().GetName().Version;
             Title = Assembly.GetEntryAssembly().GetName().Name;
             Version = String.Format("v{0}.{1}a", version.Major, version.Minor);
-            GAME_TITLE = String.Format("{0} v{1}.{2}a", Title, version.Major, version.Minor);
+            TitleAndVersion = String.Format("{0} {1}", Title, Version);
             IsFixedTimeStep = true;
             IsGameRunning = false;
-            GRAPHICS.SynchronizeWithVerticalRetrace = true;
-            GRAPHICS.GraphicsProfile = GraphicsProfile.HiDef;
+            _graphics.SynchronizeWithVerticalRetrace = true;
+            _graphics.GraphicsProfile = GraphicsProfile.HiDef;
         }
 
         /// <summary>
@@ -57,17 +57,17 @@ namespace TerminalGame
         {
             base.Initialize();
 
-            GRAPHICS.HardwareModeSwitch = false;
-            GRAPHICS.PreferredBackBufferHeight = 768;// (int)(GraphicsDevice.DisplayMode.Height * 0.8);
-            GRAPHICS.PreferredBackBufferWidth = 1366;// (int)(GraphicsDevice.DisplayMode.Width * 0.8);
-            GRAPHICS.IsFullScreen = false;
-            GRAPHICS.ApplyChanges();
+            _graphics.HardwareModeSwitch = false;
+            _graphics.PreferredBackBufferHeight = 768;// (int)(GraphicsDevice.DisplayMode.Height * 0.8);
+            _graphics.PreferredBackBufferWidth = 1366;// (int)(GraphicsDevice.DisplayMode.Width * 0.8);
+            _graphics.IsFullScreen = false;
+            _graphics.ApplyChanges();
 
-            Globals.GameHeight = GRAPHICS.PreferredBackBufferHeight;
-            Globals.GameWidth = GRAPHICS.PreferredBackBufferWidth;
+            Globals.GameHeight = _graphics.PreferredBackBufferHeight;
+            Globals.GameWidth = _graphics.PreferredBackBufferWidth;
             FontManager.InitializeFonts(Content);
 
-            Window.Title = GAME_TITLE;
+            Window.Title = TitleAndVersion;
 
             //TODO: Load this from file
             Globals.SetGlobalFontSize();
@@ -75,7 +75,7 @@ namespace TerminalGame
             IsMouseVisible = true;
 
             stateMachine = StateMachine.GetInstance();
-            stateMachine.Initialize(SplashState.GetInstance(), GRAPHICS, new SplashScreen(this), this);
+            stateMachine.Initialize(SplashState.GetInstance(), _graphics, new SplashScreen(this), this);
             
             UI.Themes.Theme test = new UI.Themes.Theme("test", new Color(51, 51, 55), Color.Black * 0.75f,
                 Color.LightGray, new Color(63, 63, 63), Color.White, new Color(80, 80, 80),

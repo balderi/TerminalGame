@@ -17,7 +17,8 @@ namespace TerminalGame.UI.Elements.Buttons
         public delegate void ButtonPressedEventHandler(ButtonPressedEventArgs e);
         public event ButtonPressedEventHandler ButtonPressed;
 
-        public Button(Game game, string text, Point location, Point size, bool fadeIn = true) : base(game, location, size, fadeIn: fadeIn)
+        public Button(Game game, string text, Point location, Point size, bool fadeIn = true) : 
+            base(game, location, size, fadeIn: fadeIn)
         {
             BorderColor = Color.White * _opacity;
             TEXT = text;
@@ -69,7 +70,8 @@ namespace TerminalGame.UI.Elements.Buttons
             _spriteBatch.Draw(Utils.Globals.DummyTexture(), Rectangle,
                               BackgroundColor * _opacity);
 
-            _spriteBatch.DrawString(_font, TEXT, new Vector2(Rectangle.Center.X - _font.MeasureString(TEXT).X / 2, Rectangle.Center.Y - _font.MeasureString(TEXT).Y / 2), FontColor);
+            _spriteBatch.DrawString(_font, TEXT, new Vector2(Rectangle.Center.X - _font.MeasureString(TEXT).X / 2, 
+                Rectangle.Center.Y - _font.MeasureString(TEXT).Y / 2), FontColor);
 
             Utils.Globals.DrawOuterBorder(_spriteBatch, Rectangle, Utils.Globals.DummyTexture(), 1,
                                           BorderColor * _opacity);
