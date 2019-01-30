@@ -8,6 +8,7 @@ namespace TerminalGame.People
 {
     public enum AgeRange
     {
+        None = -1,
         Infant,     // <1
         Toddler,    // 1-3
         Kid,        // 3-9

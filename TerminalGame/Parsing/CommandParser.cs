@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace TerminalGame.Parsing
@@ -23,10 +24,31 @@ namespace TerminalGame.Parsing
             return new CommandToken { Command = cmd, Args = args };
         }
 
-        public void Parse(string command)
+        public CommandToken TokenizeTextArgs(string command)
         {
-            CommandToken token = Tokenize(command);
+            var cmd = command.Split(' ')[0];
+            string[] args = Regex.Split(command, "\"[a-zA-Z0-9 \\-_]+\"");
+            return new CommandToken { Command = cmd, Args = args };
+        }
 
+        public bool TryTokenize(string command, bool textArg, out CommandToken token)
+        {
+            if (textArg)
+            {
+                if(!command.Contains("\""))
+                {
+                    token = new CommandToken { Command = "error", Args = new string[0] };
+                    return false;
+                }
+                token = TokenizeTextArgs(command);
+                return true;
+            }
+            token = Tokenize(command);
+            return true;
+        }
+
+        public void Parse(CommandToken token)
+        { 
             switch (token.Command)
             {
                 case "echo":

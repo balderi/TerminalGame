@@ -10,6 +10,7 @@ using TerminalGame.States;
 using TerminalGame.Screens;
 using System;
 using System.Reflection;
+using TerminalGame.UI.Themes;
 
 namespace TerminalGame
 {
@@ -22,6 +23,7 @@ namespace TerminalGame
         private SpriteBatch _spriteBatch;
 
         private MusicManager _musicManager;
+        private ThemeManager _themeManager;
 
         private StateMachine stateMachine;
 
@@ -76,15 +78,17 @@ namespace TerminalGame
 
             stateMachine = StateMachine.GetInstance();
             stateMachine.Initialize(SplashState.GetInstance(), _graphics, new SplashScreen(this), this);
-            
-            UI.Themes.Theme test = new UI.Themes.Theme("test", new Color(51, 51, 55), Color.Black * 0.75f,
+
+            _themeManager = ThemeManager.GetInstance();
+
+            Theme test = new Theme("test", new Color(51, 51, 55), Color.Black * 0.75f,
                 Color.LightGray, new Color(63, 63, 63), Color.White, new Color(80, 80, 80),
                 Color.RoyalBlue, Color.Blue, Color.DarkOrange, Color.Green, Color.Red);
 
-            UI.Themes.ThemeManager.GetInstance().AddTheme(test);
-            UI.Themes.ThemeManager.GetInstance().ChangeTheme("test");
+            _themeManager.AddTheme(test);
+            _themeManager.ChangeTheme("test");
             
-            System.Console.WriteLine("init done");
+            Console.WriteLine("init done");
         }
 
         /// <summary>
@@ -96,7 +100,7 @@ namespace TerminalGame
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _musicManager = MusicManager.GetInstance();
-            System.Console.WriteLine("load done");
+            Console.WriteLine("load done");
         }
 
         /// <summary>
@@ -130,7 +134,7 @@ namespace TerminalGame
                 _musicManager.FadeIn();
             }
 
-            UI.Themes.ThemeManager.GetInstance().Update(gameTime);
+            _themeManager.Update(gameTime);
 
             _musicManager.Update(gameTime);
 

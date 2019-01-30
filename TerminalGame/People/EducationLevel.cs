@@ -8,6 +8,7 @@ namespace TerminalGame.People
 {
     public enum EducationLevel
     {
+        None = -1,
         Primary,
         Secondary,
         Tertiary,

@@ -8,6 +8,7 @@ namespace TerminalGame.People
 {
     public enum Gender
     {
+        None = -1,
         Male,
         Female,
     }
