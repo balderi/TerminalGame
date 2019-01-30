@@ -10,7 +10,7 @@ namespace TerminalGame.Files
     class File : IFile
     {
         private readonly Programs.Program _program;
-
+        
         public string Name { get; private set; }
         public string Contents { get; private set; }
         public int Size { get; private set; }

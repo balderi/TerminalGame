@@ -16,9 +16,9 @@ namespace TerminalGame.UI.Elements.Modules
         private TextBox _textBox;
         private SpriteFont _terminalFont;
         private string _promptText;
-        private int _promptWidth;
+        private int _promptWidth, _histIndex;
         private Rectangle _terminalInputArea, _terminalOutputArea;
-        private List<string> _history;
+        private List<string> _history, _output;
 
         public Terminal(Game game, Point location, Point size, string title, bool hasHeader = true, bool hasBorder = true) : 
             base(game, location, size, title, hasHeader, hasBorder)
@@ -33,6 +33,9 @@ namespace TerminalGame.UI.Elements.Modules
             _terminalFont = FontManager.GetFont("FontS");
 
             _history = new List<string>();
+            _output = new List<string>();
+
+            _histIndex = -1;
 
             _promptText = "root@localhost:/$ ";
             _promptWidth = (int)_terminalFont.MeasureString(_promptText).X;
@@ -49,18 +52,64 @@ namespace TerminalGame.UI.Elements.Modules
             _textBox.Renderer.Color = Color.White * _opacity;
             _textBox.Active = true;
             _textBox.EnterDown += Enter_Pressed;
+            _textBox.UpArrow += Up_Pressed;
+            _textBox.DnArrow += Down_Pressed;
+            _textBox.TabDown += Tab_Pressed;
 
             base.Initialize();
 
             Console.WriteLine("Terminal initialized");
+            WriteLine("Terminal initialized");
             Console.WriteLine("Terminal max chars: " + 
                 ((int)((_terminalOutputArea.Width - _promptWidth) / _terminalFont.MeasureString("A").X)).ToString() + 
                 " (" + ((int)(_terminalOutputArea.Width / _terminalFont.MeasureString("A").X)).ToString() + ")");
+
+            WriteLine("Terminal max chars: " +
+                ((int)((_terminalOutputArea.Width - _promptWidth) / _terminalFont.MeasureString("A").X)).ToString() +
+                " (" + ((int)(_terminalOutputArea.Width / _terminalFont.MeasureString("A").X)).ToString() + ")");
+        }
+
+        private void Tab_Pressed(object sender, KeyEventArgs e)
+        {
+            // TODO: Auto-finish commands/file names.
+        }
+
+        private void Down_Pressed(object sender, KeyEventArgs e)
+        {
+            if (--_histIndex < -1)
+            {
+                _histIndex = -1;
+                return;
+            }
+            if(_histIndex == -1)
+            {
+                _textBox.Text.RemoveCharacters(0, _textBox.Text.Length);
+                _textBox.Cursor.TextCursor = 0;
+                return;
+            }
+
+            _textBox.Text.String = _history[_histIndex];
+            _textBox.Cursor.TextCursor = _textBox.Text.String.Length;
+        }
+
+        private void Up_Pressed(object sender, KeyEventArgs e)
+        {
+            if (++_histIndex > _history.Count - 1)
+            {
+                _histIndex = _history.Count - 1;
+                return;
+            }
+            _textBox.Text.String = _history[_histIndex];
+            _textBox.Cursor.TextCursor = _textBox.Text.String.Length;
         }
 
         private void Enter_Pressed(object sender, KeyEventArgs e)
         {
+            _histIndex = -1;
+            _history.Reverse();
             _history.Add(_textBox.Text.String);
+            _history.Reverse();
+            WriteLine(_promptText + _textBox.Text.String);
             _textBox.Text.RemoveCharacters(0, _textBox.Text.Length);
             _textBox.Cursor.TextCursor = 0;
         }
@@ -80,17 +129,27 @@ namespace TerminalGame.UI.Elements.Modules
             _textBox.Update();
         }
 
+        public void Write(string text)
+        {
+            _output.Add(text);
+        }
+
+        public void WriteLine(string text)
+        {
+            _output.Add("\n" + text);
+        }
+
         private string HistoryToString(List<string> hist)
         {
             string retval = "";
             foreach (var l in hist)
-                retval += "\n" + _promptText + l;
+                retval += l;
             return retval;
         }
 
         public override void ScissorDraw(GameTime gameTime)
         {
-            string text = HistoryToString(_history);
+            string text = HistoryToString(_output);
             _spriteBatch.DrawString(_terminalFont, text, 
                 new Vector2(_terminalOutputArea.X, _terminalOutputArea.Y + _terminalOutputArea.Height - _terminalFont.MeasureString(text).Y), 
                 Color.White * _opacity);

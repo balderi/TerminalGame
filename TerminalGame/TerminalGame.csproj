@@ -72,6 +72,11 @@
     <Compile Include="Files\IFile.cs" />
     <Compile Include="Parsing\CommandParser.cs" />
     <Compile Include="Parsing\CommandToken.cs" />
+    <Compile Include="People\AgeRange.cs" />
+    <Compile Include="People\EducationLevel.cs" />
+    <Compile Include="People\Gender.cs" />
+    <Compile Include="People\Person.cs" />
+    <Compile Include="People\User.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Programs\IProgram.cs" />
     <Compile Include="Programs\Program.cs" />
