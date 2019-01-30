@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using TerminalGame.UI.Elements;
 using TerminalGame.Utils;
 
-namespace TerminalGame.States.Screens
+namespace TerminalGame.Screens
 {
     public partial class Screen : DrawableGameComponent
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
-namespace TerminalGame.States.Screens
+namespace TerminalGame.Screens
 {
     class SettingsScreen : Screen
     {

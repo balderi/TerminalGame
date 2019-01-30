@@ -7,7 +7,7 @@ using TerminalGame.UI.Elements.Modules;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Media;
 using TerminalGame.States;
-using TerminalGame.States.Screens;
+using TerminalGame.Screens;
 using System;
 using System.Reflection;
 

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Utils;
 
-namespace TerminalGame.States.Screens
+namespace TerminalGame.Screens
 {
     class SplashScreen : Screen
     {

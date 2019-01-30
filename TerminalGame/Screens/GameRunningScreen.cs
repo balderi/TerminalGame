@@ -7,11 +7,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using TerminalGame.States;
 using TerminalGame.UI.Elements;
 using TerminalGame.UI.Elements.Modules;
 using TerminalGame.Utils;
 
-namespace TerminalGame.States.Screens
+namespace TerminalGame.Screens
 {
     class GameRunningScreen : Screen
     {

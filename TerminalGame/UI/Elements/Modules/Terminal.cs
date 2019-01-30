@@ -129,11 +129,20 @@ namespace TerminalGame.UI.Elements.Modules
             _textBox.Update();
         }
 
+        /// <summary>
+        /// Writes the specified text to the terminal.
+        /// </summary>
+        /// <param name="text">The text to write.</param>
         public void Write(string text)
         {
             _output.Add(text);
         }
 
+        /// <summary>
+        /// Writes the specified text to the terminal with a prepended newline
+        /// NOTE: PRE-prended newline!
+        /// </summary>
+        /// <param name="text">The text to write.</param>
         public void WriteLine(string text)
         {
             _output.Add("\n" + text);

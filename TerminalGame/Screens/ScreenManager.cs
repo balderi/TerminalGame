@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TerminalGame.States.Screens
+namespace TerminalGame.Screens
 {
     public class ScreenManager
     {

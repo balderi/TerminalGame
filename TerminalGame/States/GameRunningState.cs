@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using TerminalGame.States.Screens;
+using TerminalGame.Screens;
 using TerminalGame.Utils;
 
 namespace TerminalGame.States
