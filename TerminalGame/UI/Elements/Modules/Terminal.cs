@@ -16,7 +16,7 @@ namespace TerminalGame.UI.Elements.Modules
         private TextBox _textBox;
         private SpriteFont _terminalFont;
         private string _promptText;
-        private int _promptWidth, _histIndex;
+        private int _promptWidth, _histIndex, _maxChars, _maxCharsP;
         private Rectangle _terminalInputArea, _terminalOutputArea;
         private List<string> _history, _output;
 
@@ -55,6 +55,9 @@ namespace TerminalGame.UI.Elements.Modules
             _textBox.UpArrow += Up_Pressed;
             _textBox.DnArrow += Down_Pressed;
             _textBox.TabDown += Tab_Pressed;
+
+            _maxChars = (int)(_terminalOutputArea.Width / _terminalFont.MeasureString("A").X);
+            _maxCharsP = (int)((_terminalOutputArea.Width - _promptWidth) / _terminalFont.MeasureString("A").X);
 
             base.Initialize();
 
@@ -109,9 +112,22 @@ namespace TerminalGame.UI.Elements.Modules
             _history.Reverse();
             _history.Add(_textBox.Text.String);
             _history.Reverse();
-            WriteLine(_promptText + _textBox.Text.String);
+            WriteLine(WordWrap(_promptText + _textBox.Text.String));
             _textBox.Text.RemoveCharacters(0, _textBox.Text.Length);
             _textBox.Cursor.TextCursor = 0;
+        }
+
+        private string WordWrap(string text)
+        {
+            if (text.Length < _maxCharsP)
+                return text;
+            string holder = text;
+            List<string> temp = new List<string>();
+            for(int i = 0; i < Math.Ceiling((decimal)(text.Length) / _maxChars); i++)
+            {
+                temp.Add(holder.Substring(i * _maxChars, Math.Min(holder.Length - (i * _maxChars), _maxChars)));
+            }
+            return String.Join("\n", temp);
         }
 
         protected override void LoadContent()

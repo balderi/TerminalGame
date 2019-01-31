@@ -28,7 +28,6 @@ namespace TerminalGame.Screens
 
         public override void Initialize(GraphicsDeviceManager graphics)
         {
-            // TODO: Make sure Terminal is always 80 chars wide
             Terminal terminal = new Terminal(Game, new Point(2, 2),
                 new Point(Globals.GameWidth / 3 - 4, Globals.GameHeight - 4), "Terminal v0.1");
 
@@ -37,8 +36,7 @@ namespace TerminalGame.Screens
 
             StatusBar statusBar = new StatusBar(Game, new Point(Globals.GameWidth / 3, 1),
                 new Point(Globals.GameWidth - terminal.Rectangle.Width - 5, 52), "status", false, false);
-
-            // TODO: Make sure RemoteView is always in 4:3 aspect ratio (not including header)
+            
             Module remoteView = new Module(Game, new Point(terminal.Rectangle.Width + 5, statusBar.Rectangle.Height + 3),
                 new Point((int)(Globals.GameWidth * 0.75) - terminal.Rectangle.Width - 7, Globals.GameHeight - statusBar.Rectangle.Height - networkMap.Rectangle.Height - 8), "RemoteView v0.1");
 
