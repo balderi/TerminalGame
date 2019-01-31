@@ -92,7 +92,10 @@
     <Compile Include="States\SplashState.cs" />
     <Compile Include="States\State.cs" />
     <Compile Include="States\StateMachine.cs" />
+    <Compile Include="Time\GameClock.cs" />
+    <Compile Include="Time\GameSpeed.cs" />
     <Compile Include="UI\Elements\Buttons\Button.cs" />
+    <Compile Include="UI\Elements\Modules\StatusBar.cs" />
     <Compile Include="UI\Elements\Modules\Terminal.cs" />
     <Compile Include="UI\Elements\UIElement.cs" />
     <Compile Include="UI\Elements\Modules\Module.cs" />
@@ -175,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Files\FileSystem\" />
+    <Folder Include="People\Generator\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

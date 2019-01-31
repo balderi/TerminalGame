@@ -11,6 +11,7 @@ using TerminalGame.Screens;
 using System;
 using System.Reflection;
 using TerminalGame.UI.Themes;
+using TerminalGame.Time;
 
 namespace TerminalGame
 {
@@ -34,6 +35,7 @@ namespace TerminalGame
         public string Version { get; private set; }
         public bool IsGameRunning { get; set; }
         public Player Player { get; private set; }
+        public GameSpeed CurrentGameSpeed { get; set; }
         
         public TerminalGame()
         {
@@ -58,6 +60,8 @@ namespace TerminalGame
         protected override void Initialize()
         {
             base.Initialize();
+
+            CurrentGameSpeed = GameSpeed.Paused;
 
             _graphics.HardwareModeSwitch = false;
             _graphics.PreferredBackBufferHeight = 768;// (int)(GraphicsDevice.DisplayMode.Height * 0.8);
@@ -87,7 +91,9 @@ namespace TerminalGame
 
             _themeManager.AddTheme(test);
             _themeManager.ChangeTheme("test");
-            
+
+            GameClock.Initialize();
+           
             Console.WriteLine("init done");
         }
 
