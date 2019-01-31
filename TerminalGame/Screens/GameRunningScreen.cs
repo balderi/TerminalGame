@@ -29,7 +29,6 @@ namespace TerminalGame.Screens
         public override void Initialize(GraphicsDeviceManager graphics)
         {
             // TODO: Make sure Terminal is always 80 chars wide
-            // TODO: Make Terminal accessible from outside (for writing to it, etc.)
             Terminal terminal = new Terminal(Game, new Point(2, 2),
                 new Point(Globals.GameWidth / 3 - 4, Globals.GameHeight - 4), "Terminal v0.1");
 
@@ -56,6 +55,7 @@ namespace TerminalGame.Screens
                 m.Initialize();
 
             Game.CurrentGameSpeed = GameSpeed.Single;
+            Game.Terminal = terminal;
 
             base.Initialize();
         }
@@ -118,9 +118,6 @@ namespace TerminalGame.Screens
 
         public override void Draw(GameTime gameTime)
         {
-            if (_background == null)
-                // TODO: Figure out why Draw() gets called before LoadContent() - this is a workaround.
-                return;
             _spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend);
             _spriteBatch.Draw(_background, _rectangle, Color.White);
             base.Draw(gameTime); // Handles drawing all elements in _elements

@@ -11,7 +11,7 @@ using static TerminalGame.Utils.TextHandler.KeyboardInput;
 
 namespace TerminalGame.UI.Elements.Modules
 {
-    class Terminal : Module
+    public class Terminal : Module
     {
         private TextBox _textBox;
         private SpriteFont _terminalFont;

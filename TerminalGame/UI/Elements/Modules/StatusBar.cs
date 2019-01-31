@@ -31,6 +31,7 @@ namespace TerminalGame.UI.Elements.Modules
             _dateWidth = _titleFont.MeasureString(GameClock.GameTime.ToShortDateString()).X;
             _timeWidth = _titleFont.MeasureString(GameClock.GameTime.ToShortTimeString()).X;
 
+            // TODO: Make a SplitButton to replace this.
             _pause    = new Button(Game, "||", new Point(Rectangle.X + 10 + (int)_dateWidth, Rectangle.Y + 5), new Point(35));
             _realTime = new Button(Game, "RT", new Point(Rectangle.X + 10 + (int)_dateWidth + 40, Rectangle.Y + 5), new Point(35));
             _single   = new Button(Game, ">", new Point(Rectangle.X + 10 + (int)_dateWidth + 80, Rectangle.Y + 5), new Point(35));

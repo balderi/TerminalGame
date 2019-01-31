@@ -36,6 +36,7 @@ namespace TerminalGame
         public bool IsGameRunning { get; set; }
         public Player Player { get; private set; }
         public GameSpeed CurrentGameSpeed { get; set; }
+        public Terminal Terminal { get; set; }
         
         public TerminalGame()
         {
