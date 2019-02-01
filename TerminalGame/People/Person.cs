@@ -8,21 +8,31 @@ namespace TerminalGame.People
 {
     class Person
     {
+        private Random rnd;
+
         public string Name { get; protected set; }
         public DateTime DOB { get; protected set; }
         public int Age { get; protected set; }
         public Gender Gender { get; protected set; }
         public EducationLevel Education { get; protected set; }
         public AgeRange AgeRange { get; protected set; }
-        public string Email { get; protected set; }
-        public int Phone { get; protected set; }
+        public string Email { get; protected set; } // TODO: Email provider.
+        public int Phone { get; protected set; } // Ehhh, maybe not?
 
         /// <summary>
         /// Generate a random person.
         /// </summary>
         public Person()
         {
-            // TODO: Generate person.
+            rnd = new Random(DateTime.Now.Millisecond);
+            Gender = (Gender)rnd.Next(0, 2);
+            AgeRange = (AgeRange)rnd.Next(0, 8);
+            Age = Generator.Person.GenerateAge(AgeRange);
+            DOB = Generator.Person.GenerateDOB(Age);
+            Name = Generator.Person.GenerateName(Gender);
+
+            Email = "";
+            Phone = 0;
         }
 
         /// <summary>
@@ -31,7 +41,15 @@ namespace TerminalGame.People
         /// <param name="ageRange">The general age range the person should be in.</param>
         public Person(AgeRange ageRange)
         {
-            // TODO: Generate person.
+            rnd = new Random(DateTime.Now.Millisecond);
+            Gender = (Gender)rnd.Next(0, 2);
+            AgeRange = ageRange;
+            Age = Generator.Person.GenerateAge(AgeRange);
+            DOB = Generator.Person.GenerateDOB(Age);
+            Name = Generator.Person.GenerateName(Gender);
+
+            Email = "";
+            Phone = 0;
         }
 
         /// <summary>
@@ -47,9 +65,11 @@ namespace TerminalGame.People
             DOB = dob;
             Gender = gender;
             Education = education;
+            Age = Generator.Person.GenerateAge(dob);
+            AgeRange = Generator.Person.GenerateAgeRange(Age);
 
-            // TODO: Calculate age.
-            // TODO: Calculate age range.
+            Email = "";
+            Phone = 0;
         }
     }
 }

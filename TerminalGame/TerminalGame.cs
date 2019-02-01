@@ -12,6 +12,7 @@ using System;
 using System.Reflection;
 using TerminalGame.UI.Themes;
 using TerminalGame.Time;
+using System.IO;
 
 namespace TerminalGame
 {
@@ -37,7 +38,7 @@ namespace TerminalGame
         public Player Player { get; private set; }
         public GameSpeed CurrentGameSpeed { get; set; }
         public Terminal Terminal { get; set; }
-        
+
         public TerminalGame()
         {
             _graphics = new GraphicsDeviceManager(this);

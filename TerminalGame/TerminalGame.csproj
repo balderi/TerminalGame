@@ -75,6 +75,7 @@
     <Compile Include="People\AgeRange.cs" />
     <Compile Include="People\EducationLevel.cs" />
     <Compile Include="People\Gender.cs" />
+    <Compile Include="People\Generator\Person.cs" />
     <Compile Include="People\Person.cs" />
     <Compile Include="People\User.cs" />
     <Compile Include="Player.cs" />
@@ -178,7 +179,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Files\FileSystem\" />
-    <Folder Include="People\Generator\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -190,6 +190,15 @@
   <ItemGroup>
     <Content Include="Config\Settings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Data\Names\femaleNames.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Data\Names\lastNames.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Data\Names\maleNames.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.png" />
   </ItemGroup>
