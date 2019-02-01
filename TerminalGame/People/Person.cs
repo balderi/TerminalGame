@@ -8,7 +8,7 @@ namespace TerminalGame.People
 {
     class Person
     {
-        private Random rnd;
+        protected Random _rnd;
 
         public string Name { get; protected set; }
         public DateTime DOB { get; protected set; }
@@ -24,9 +24,9 @@ namespace TerminalGame.People
         /// </summary>
         public Person()
         {
-            rnd = new Random(DateTime.Now.Millisecond);
-            Gender = (Gender)rnd.Next(0, 2);
-            AgeRange = (AgeRange)rnd.Next(0, 8);
+            _rnd = new Random(DateTime.Now.Millisecond);
+            Gender = (Gender)_rnd.Next(0, 2);
+            AgeRange = (AgeRange)_rnd.Next(0, 8);
             Age = Generator.Person.GenerateAge(AgeRange);
             DOB = Generator.Person.GenerateDOB(Age);
             Name = Generator.Person.GenerateName(Gender);
@@ -41,8 +41,8 @@ namespace TerminalGame.People
         /// <param name="ageRange">The general age range the person should be in.</param>
         public Person(AgeRange ageRange)
         {
-            rnd = new Random(DateTime.Now.Millisecond);
-            Gender = (Gender)rnd.Next(0, 2);
+            _rnd = new Random(DateTime.Now.Millisecond);
+            Gender = (Gender)_rnd.Next(0, 2);
             AgeRange = ageRange;
             Age = Generator.Person.GenerateAge(AgeRange);
             DOB = Generator.Person.GenerateDOB(Age);

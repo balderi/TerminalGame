@@ -16,7 +16,7 @@ namespace TerminalGame.People
         /// <summary>
         /// Generate a random user.
         /// </summary>
-        public User()
+        public User() : base()
         {
             // TODO: Generate user.
         }

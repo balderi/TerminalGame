@@ -42,6 +42,8 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\$(MonoGamePlatform)\$(Platform)\$(Configuration)\</OutputPath>
@@ -76,6 +78,7 @@
     <Compile Include="People\EducationLevel.cs" />
     <Compile Include="People\Gender.cs" />
     <Compile Include="People\Generator\Person.cs" />
+    <Compile Include="People\Generator\User.cs" />
     <Compile Include="People\Person.cs" />
     <Compile Include="People\User.cs" />
     <Compile Include="Player.cs" />

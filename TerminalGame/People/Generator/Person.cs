@@ -10,18 +10,18 @@ namespace TerminalGame.People.Generator
 {
     public static class Person
     {
-        private static Random rnd = new Random(DateTime.Now.Millisecond);
+        private static Random _rnd = new Random(DateTime.Now.Millisecond);
         
         public static EducationLevel GenerateEducationLevel(int age)
         {
             if (age < 5)
                 return EducationLevel.None;
             if (age < 15)
-                return (EducationLevel)rnd.Next(0, 2);
+                return (EducationLevel)_rnd.Next(0, 2);
             if (age < 18)
-                return (EducationLevel)rnd.Next(0, 3);
+                return (EducationLevel)_rnd.Next(0, 3);
             if (age >= 18)
-                return (EducationLevel)rnd.Next(0, 4);
+                return (EducationLevel)_rnd.Next(0, 4);
 
             // Impossible!
             return EducationLevel.None;
@@ -34,15 +34,15 @@ namespace TerminalGame.People.Generator
             if(gender == Gender.Female)
             {
                 string[] names = File.ReadAllLines("Content/Data/Names/femaleNames.txt");
-                retval += names[rnd.Next(0, names.Length)];
+                retval += names[_rnd.Next(0, names.Length)];
             }
             else
             {
                 string[] names = File.ReadAllLines("Content/Data/Names/maleNames.txt");
-                retval += names[rnd.Next(0, names.Length)];
+                retval += names[_rnd.Next(0, names.Length)];
             }
             retval += " ";
-            retval += last[rnd.Next(0, last.Length)];
+            retval += last[_rnd.Next(0, last.Length)];
             return retval;
         }
 
@@ -50,7 +50,7 @@ namespace TerminalGame.People.Generator
         {
             DateTime retval = GameClock.GameTime.Date;
             retval = retval.AddYears(-age);
-            retval = retval.AddDays(rnd.Next(0, 365));
+            retval = retval.AddDays(_rnd.Next(0, 365));
             return retval;
         }
 
@@ -95,35 +95,35 @@ namespace TerminalGame.People.Generator
             {
                 case AgeRange.Infant:
                     {
-                        return GameClock.GameTime.Year - (GameClock.GameTime.Year - rnd.Next(0, 2));
+                        return GameClock.GameTime.Year - (GameClock.GameTime.Year - _rnd.Next(0, 2));
                     }
                 case AgeRange.Toddler:
                     {
-                        return GameClock.GameTime.Year - (GameClock.GameTime.Year - rnd.Next(1, 4));
+                        return GameClock.GameTime.Year - (GameClock.GameTime.Year - _rnd.Next(1, 4));
                     }
                 case AgeRange.Kid:
                     {
-                        return GameClock.GameTime.Year - (GameClock.GameTime.Year - rnd.Next(3, 9));
+                        return GameClock.GameTime.Year - (GameClock.GameTime.Year - _rnd.Next(3, 9));
                     }
                 case AgeRange.Preteen:
                     {
-                        return GameClock.GameTime.Year - (GameClock.GameTime.Year - rnd.Next(9, 13));
+                        return GameClock.GameTime.Year - (GameClock.GameTime.Year - _rnd.Next(9, 13));
                     }
                 case AgeRange.Teen:
                     {
-                        return GameClock.GameTime.Year - (GameClock.GameTime.Year - rnd.Next(13, 20));
+                        return GameClock.GameTime.Year - (GameClock.GameTime.Year - _rnd.Next(13, 20));
                     }
                 case AgeRange.Adult:
                     {
-                        return GameClock.GameTime.Year - (GameClock.GameTime.Year - rnd.Next(20, 45));
+                        return GameClock.GameTime.Year - (GameClock.GameTime.Year - _rnd.Next(20, 45));
                     }
                 case AgeRange.MiddleAged:
                     {
-                        return GameClock.GameTime.Year - (GameClock.GameTime.Year - rnd.Next(45, 65));
+                        return GameClock.GameTime.Year - (GameClock.GameTime.Year - _rnd.Next(45, 65));
                     }
                 case AgeRange.Senior:
                     {
-                        return GameClock.GameTime.Year - (GameClock.GameTime.Year - rnd.Next(65, 101));
+                        return GameClock.GameTime.Year - (GameClock.GameTime.Year - _rnd.Next(65, 101));
                     }
                 default:
                     return -1;
