@@ -49,7 +49,7 @@ namespace TerminalGame.People.Generator
         public static DateTime GenerateDOB(int age)
         {
             DateTime retval = GameClock.GameTime.Date;
-            retval = retval.AddYears(-age);
+            retval = retval.AddYears(-(age + 1));
             retval = retval.AddDays(_rnd.Next(0, 365));
             return retval;
         }
@@ -86,7 +86,8 @@ namespace TerminalGame.People.Generator
 
         public static int GenerateAge(DateTime dob)
         {
-            return (int)GameClock.GameTime.Date.Subtract(dob.Date).TotalDays / 365;
+            // (Now - DOB) / 10000 (to remove the last four digits (month/day))
+            return (int.Parse(GameClock.GameTime.Date.ToString("yyyyMMdd")) - int.Parse(dob.ToString("yyyyMMdd"))) / 10000;
         }
 
         public static int GenerateAge(AgeRange ageRange)

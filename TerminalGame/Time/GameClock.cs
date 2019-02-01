@@ -13,12 +13,18 @@ namespace TerminalGame.Time
         private const double SINGLE    = 0.016;     // 1 min
         private const double DOUBLE    = 0.528;     // 33 min
         private const double TRIPLE    = 5.280;     // 333 min
+        
+        private static DayChangeEventArgs _dayChange;
+
+        public delegate void DayChangeEventHandler(DayChangeEventArgs e);
+        public static event DayChangeEventHandler DayChange;
 
         public static DateTime GameTime;
 
         public static void Initialize()
         {
             GameTime = DateTime.Parse("2000-01-01T00:00:00.0000000Z");
+            _dayChange = new DayChangeEventArgs();
         }
 
         public static void Load(string dateString)
@@ -28,6 +34,7 @@ namespace TerminalGame.Time
 
         public static void Tick(GameSpeed gameSpeed)
         {
+            int _currentDay = GameTime.Day;
             switch(gameSpeed)
             {
                 case GameSpeed.Paused:
@@ -60,6 +67,13 @@ namespace TerminalGame.Time
                         break;
                     }
             }
+            if (_currentDay != GameTime.Day)
+                DayChange?.Invoke(_dayChange);
         }
+    }
+
+    public class DayChangeEventArgs : EventArgs
+    {
+
     }
 }

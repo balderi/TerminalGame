@@ -26,7 +26,7 @@ namespace TerminalGame.People
         {
             _rnd = new Random(DateTime.Now.Millisecond);
             Gender = (Gender)_rnd.Next(0, 2);
-            AgeRange = (AgeRange)_rnd.Next(0, 8);
+            AgeRange = (AgeRange)_rnd.Next(4, 8);
             Age = Generator.Person.GenerateAge(AgeRange);
             DOB = Generator.Person.GenerateDOB(Age);
             Name = Generator.Person.GenerateName(Gender);
@@ -70,6 +70,19 @@ namespace TerminalGame.People
 
             Email = "";
             Phone = 0;
+        }
+
+        public int GetCurrentAge() => Generator.Person.GenerateAge(DOB);
+        public AgeRange GetCurrentAgeRange() => Generator.Person.GenerateAgeRange(DOB);
+
+        public override string ToString()
+        {
+            return "--------------------\n"
+                + Name + "\n"
+                + Gender.ToString() + ", " + GetCurrentAge().ToString() + "(" + GetCurrentAgeRange().ToString() + ")\n"
+                + DOB.ToShortDateString() + "\n"
+                + Education.ToString() + "\n"
+                + "--------------------\n";
         }
     }
 }

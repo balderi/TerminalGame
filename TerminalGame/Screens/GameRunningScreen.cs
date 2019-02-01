@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using TerminalGame.People;
 using TerminalGame.States;
 using TerminalGame.Time;
 using TerminalGame.UI.Elements;
@@ -20,6 +21,7 @@ namespace TerminalGame.Screens
         private Texture2D _background;
         private Song bgm;
         private KeyboardState _prevState, _newState;
+        private List<Person> people;
 
         public GameRunningScreen(Game game) : base(game)
         {
@@ -54,6 +56,18 @@ namespace TerminalGame.Screens
 
             Game.CurrentGameSpeed = GameSpeed.Single;
             Game.Terminal = terminal;
+
+            GameClock.DayChange += DayChange;
+
+            people = new List<Person>
+            {
+                //for (int i = 0; i < 1000; i++)
+                //{
+                //    people.Add(new Person());
+                //}
+
+                new Person("Test Guy", DateTime.Parse("1987-01-05"), Gender.Male, EducationLevel.Primary)
+            };
 
             base.Initialize();
         }
@@ -141,6 +155,15 @@ namespace TerminalGame.Screens
         {
             base.SwitchOn();
             MusicManager.GetInstance().Start(bgm);
+            foreach(Person p in people)
+                Console.WriteLine(p.ToString());
+        }
+
+        private void DayChange(DayChangeEventArgs e)
+        {
+            Console.WriteLine(GameClock.GameTime.ToShortDateString());
+            foreach (Person p in people)
+                Console.WriteLine(p.ToString());
         }
     }
 }
