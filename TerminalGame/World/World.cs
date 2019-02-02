@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -47,7 +48,7 @@ namespace TerminalGame.World
         /// </summary>
         public void CreateWorld()
         {
-            DateTime begin = DateTime.Now;
+            DateTime beginC = DateTime.Now;
             _rnd = new Random(DateTime.Now.Millisecond);
             Computers = new List<Computer>();
             People = new List<Person>();
@@ -57,8 +58,20 @@ namespace TerminalGame.World
             {
                 Computers.Add(new Computer("Workstation" + i));
             }
-            TimeSpan donzo = DateTime.Now.Subtract(begin);
-            Console.WriteLine("Generated {0} computers in {1} seconds.", Computers.Count, (donzo.TotalSeconds).ToString("N4"));
+            Console.WriteLine("Generated {0} computers in {1} seconds.", Computers.Count, (DateTime.Now.Subtract(beginC).TotalSeconds).ToString("N4"));
+            
+            DateTime beginP = DateTime.Now;
+            //for (int i = 0; i < 1000; i++)
+            //    People.Add(new Person());
+            Parallel.For(0, 5, index =>
+            {
+                for (int i = 0; i < 200; i++)
+                {
+                    People.Add(new Person());
+                }
+                Console.WriteLine(index);
+            });
+            Console.WriteLine("Generated {0} people in {1} seconds.", People.Count, (DateTime.Now.Subtract(beginP).TotalSeconds).ToString("N4"));
         }
 
         /// <summary>
