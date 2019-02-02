@@ -30,7 +30,7 @@ namespace TerminalGame.UI.Elements.Modules
             _rnd = new Random(DateTime.Now.Millisecond);
             _world = World.World.GetInstance();
             _networkNodes = new List<NetworkNode>();
-            GenerateMapNoOverlap(10);
+            GenerateMapNoOverlap(30);
             foreach (NetworkNode n in _networkNodes)
                 n.Initialize();
         }
@@ -54,11 +54,14 @@ namespace TerminalGame.UI.Elements.Modules
         {
             base.Update(gameTime);
             foreach (NetworkNode n in _networkNodes)
+            {
                 n.Update(gameTime);
+            }
         }
 
         public void GenerateMapNoOverlap(int maxAttempts)
         {
+            DateTime begin = DateTime.Now;
             foreach (Computer c in _world.Computers)
             {
                 Rectangle _cont;
@@ -70,8 +73,8 @@ namespace TerminalGame.UI.Elements.Modules
                 bool intersects = true;
                 while (intersects)
                 {
-                    x = _rnd.Next(Rectangle.X + _nodeSize.X, Rectangle.X + Rectangle.Width - _nodeSize.X);
-                    y = _rnd.Next(Rectangle.Y + _nodeSize.Y, Rectangle.Y + Rectangle.Height - 2 * _nodeSize.Y);
+                    x = _rnd.Next(Rectangle.X + (_nodeSize.X / 2), Rectangle.X + Rectangle.Width - _nodeSize.X);
+                    y = _rnd.Next(Rectangle.Y + _nodeSize.Y, Rectangle.Y + Rectangle.Height - _nodeSize.Y);
 
                     Point position = new Point(x, y);
                     _cont = new Rectangle(position, _nodeSize);
@@ -89,7 +92,7 @@ namespace TerminalGame.UI.Elements.Modules
                     {
                         intersects = false;
                     }
-                    if (++attempts > maxAttempts)
+                    if (++attempts > maxAttempts - 1)
                     {
                         Console.WriteLine("Node for \"{0}\" intersects after {1} attempts -- ignore overlap and continue.", c.Name, attempts);
                         break;
@@ -106,6 +109,8 @@ namespace TerminalGame.UI.Elements.Modules
                 n.MouseHover += Node_Hover;
                 n.MouseEnter += Node_Enter;
             }
+            TimeSpan donzo = DateTime.Now.Subtract(begin);
+            Console.WriteLine("Generated {0} nodes in {1} seconds.", _networkNodes.Count, (donzo.TotalSeconds).ToString("N4"));
         }
 
         private void Node_Click(object sender, MouseEventArgs e)

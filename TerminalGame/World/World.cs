@@ -47,15 +47,18 @@ namespace TerminalGame.World
         /// </summary>
         public void CreateWorld()
         {
+            DateTime begin = DateTime.Now;
             _rnd = new Random(DateTime.Now.Millisecond);
             Computers = new List<Computer>();
             People = new List<Person>();
             Companies = new List<Company>();
 
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 100; i++)
             {
                 Computers.Add(new Computer("Workstation" + i));
             }
+            TimeSpan donzo = DateTime.Now.Subtract(begin);
+            Console.WriteLine("Generated {0} computers in {1} seconds.", Computers.Count, (donzo.TotalSeconds).ToString("N4"));
         }
 
         /// <summary>
