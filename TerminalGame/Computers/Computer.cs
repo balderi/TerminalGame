@@ -25,7 +25,9 @@ namespace TerminalGame.Computers
         public bool IsMissionObjective { get; private set; }
         public bool IsShownOnMap { get; private set; }
         public Dictionary<int, string> OpenPorts { get; private set; }
-        public Vector2 Coordinates { get; private set; }
+        public Vector2 Coordinates { get; private set; } // Possibly redundant
+        public float MapX { get; set; }
+        public float MapY { get; set; }
         public AccessLevel AccessLevel { get; private set; }
         public ComputerType ComputerType { get; private set; }
         #endregion

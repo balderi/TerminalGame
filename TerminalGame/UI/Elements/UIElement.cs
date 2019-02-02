@@ -16,9 +16,9 @@ namespace TerminalGame.UI.Elements
         #region fields
         protected SpriteBatch _spriteBatch;
         protected float _opacity, _fadeTarget;
-        protected bool _fadingUp, _fadingDown, _isHovering, _newMouseHoverState, _previousMouseHoverState, _mouseDown, _fadeIn;
+        protected bool _fadingUp, _fadingDown, _isHovering, _newMouseHoverState, _previousMouseHoverState, _mouseLeftDown, _mouseRightDown, _fadeIn;
         protected MouseState _previousMouseState, _currentMouseState;
-        protected readonly MouseEventArgs HOVER, CLICK, ENTER, LEAVE;
+        protected readonly MouseEventArgs _hover, _leftClick, _rightClick, _enter, _leave, _leftDn, _leftUp, _rightDn, _rightUp;
         protected RasterizerState _rasterizerState;
         protected ContentManager Content;
         protected ThemeManager _themeManager;
@@ -39,11 +39,17 @@ namespace TerminalGame.UI.Elements
         public delegate void MouseEnterEventHandler(object sender, MouseEventArgs e);
         public delegate void MouseLeaveEventHandler(object sender, MouseEventArgs e);
         public delegate void MouseClickEventHandler(object sender, MouseEventArgs e);
+        public delegate void MouseEventHandler(object sender, MouseEventArgs e);
 
         public event MouseHoverEventHandler MouseHover;
         public event MouseLeaveEventHandler MouseEnter;
         public event MouseEnterEventHandler MouseLeave;
-        public event MouseClickEventHandler Click;
+        public event MouseClickEventHandler LeftClick;
+        public event MouseClickEventHandler RightClick;
+        public event MouseEventHandler LeftButtonDown;
+        public event MouseEventHandler LeftButtonUp;
+        public event MouseEventHandler RightButtonDown;
+        public event MouseEventHandler RightButtonUp;
         #endregion
 
         public UIElement(Game game, Point location, Point size, bool hasBorder = true, bool fadeIn = true) : base(game)
@@ -69,15 +75,24 @@ namespace TerminalGame.UI.Elements
             _fadingDown = false;
             HasBorder = hasBorder;
 
-            HOVER = new MouseEventArgs();
-            ENTER = new MouseEventArgs();
-            LEAVE = new MouseEventArgs();
-            CLICK = new MouseEventArgs();
+            _hover = new MouseEventArgs();
+            _enter = new MouseEventArgs();
+            _leave = new MouseEventArgs();
+            _leftClick = new MouseEventArgs();
+            _rightClick = new MouseEventArgs();
+            _leftDn = new MouseEventArgs();
+            _leftUp = new MouseEventArgs();
+            _rightDn = new MouseEventArgs();
+            _rightUp = new MouseEventArgs();
 
             MouseHover += OnMouseHover;
             MouseEnter += OnMouseEnter;
             MouseLeave += OnMouseLeave;
-            Click += OnClick;
+            LeftClick += OnClick;
+            LeftButtonDown += OnLeftButtonDown;
+            LeftButtonUp += OnLeftButtonUp;
+            RightButtonDown += OnRightButtonDown;
+            RightButtonUp += OnRightButtonUp;
         }
 
         public override void Initialize()
@@ -114,28 +129,44 @@ namespace TerminalGame.UI.Elements
                                                 _currentMouseState.Y, 1, 1);
 
             _isHovering = false;
-            _mouseDown = false;
+            _mouseLeftDown = false;
             if (mouseRectangle.Intersects(Rectangle))
             {
                 _isHovering = true;
-                MouseHover?.Invoke(this, HOVER);
+                MouseHover?.Invoke(this, _hover);
 
-                if (_currentMouseState.LeftButton     == ButtonState.Released &&
-                    _previousMouseState.LeftButton    == ButtonState.Pressed)
+                if (_currentMouseState.LeftButton == ButtonState.Released &&
+                    _previousMouseState.LeftButton == ButtonState.Pressed)
                 {
-                    Click?.Invoke(this, CLICK);
+                    LeftClick?.Invoke(this, _leftClick);
+                    LeftButtonUp?.Invoke(this, _leftUp);
                 }
-                else if(_currentMouseState.LeftButton == ButtonState.Pressed)
-                    _mouseDown = true;
+                else if (_currentMouseState.LeftButton == ButtonState.Pressed)
+                {
+                    _mouseLeftDown = true;
+                    LeftButtonDown?.Invoke(this, _leftDn);
+                }
+
+                if (_currentMouseState.RightButton == ButtonState.Released &&
+                    _previousMouseState.RightButton == ButtonState.Pressed)
+                {
+                    RightClick?.Invoke(this, _leftClick);
+                    RightButtonUp?.Invoke(this, _rightUp);
+                }
+                else if (_currentMouseState.RightButton == ButtonState.Pressed)
+                {
+                    _mouseRightDown = true;
+                    RightButtonDown?.Invoke(this, _rightDn);
+                }
             }
 
             _newMouseHoverState = _isHovering;
             if (_newMouseHoverState != _previousMouseHoverState)
             {
                 if (_newMouseHoverState)
-                    MouseEnter?.Invoke(this, ENTER);
+                    MouseEnter?.Invoke(this, _enter);
                 else
-                    MouseLeave?.Invoke(this, LEAVE);
+                    MouseLeave?.Invoke(this, _leave);
             }
             _previousMouseHoverState = _newMouseHoverState;
         }
@@ -297,6 +328,10 @@ namespace TerminalGame.UI.Elements
         protected virtual void OnMouseLeave(object sender, MouseEventArgs e) { }
 
         protected virtual void OnClick(object sender, MouseEventArgs e) { }
+        protected virtual void OnLeftButtonDown(object sender, MouseEventArgs e) { }
+        protected virtual void OnLeftButtonUp(object sender, MouseEventArgs e) { }
+        protected virtual void OnRightButtonDown(object sender, MouseEventArgs e) { }
+        protected virtual void OnRightButtonUp(object sender, MouseEventArgs e) { }
     }
 
     /// <summary>

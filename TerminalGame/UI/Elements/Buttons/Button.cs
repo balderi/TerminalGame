@@ -43,7 +43,7 @@ namespace TerminalGame.UI.Elements.Buttons
             if (Enabled)
             {
                 FontColor = Color.White * _opacity;
-                if (_mouseDown)
+                if (_mouseLeftDown)
                 {
                     BackgroundColor = Color.Green * _opacity;
                     BorderColor = Color.LimeGreen * _opacity;

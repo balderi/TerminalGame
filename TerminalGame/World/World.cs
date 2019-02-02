@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,8 @@ namespace TerminalGame.World
 {
     class World
     {
+        private Random _rnd;
+
         /// <summary>
         /// A list of all computers in the world.
         /// </summary>
@@ -37,7 +40,6 @@ namespace TerminalGame.World
 
         private World()
         {
-
         }
 
         /// <summary>
@@ -45,7 +47,15 @@ namespace TerminalGame.World
         /// </summary>
         public void CreateWorld()
         {
+            _rnd = new Random(DateTime.Now.Millisecond);
+            Computers = new List<Computer>();
+            People = new List<Person>();
+            Companies = new List<Company>();
 
+            for (int i = 0; i < 50; i++)
+            {
+                Computers.Add(new Computer("Workstation" + i));
+            }
         }
 
         /// <summary>

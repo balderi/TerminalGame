@@ -29,11 +29,13 @@ namespace TerminalGame.Screens
 
         public override void Initialize(GraphicsDeviceManager graphics)
         {
+            World.World.GetInstance().CreateWorld();
+
             Terminal terminal = new Terminal(Game, new Point(2, 2),
                 new Point(Globals.GameWidth / 3 - 4, Globals.GameHeight - 4), "Terminal v0.1");
 
-            Module networkMap = new Module(Game, new Point(Globals.GameWidth / 3 + 1, Globals.GameHeight - Globals.GameHeight / 3 + 2),
-                new Point(Globals.GameWidth - terminal.Rectangle.Width - 7, Globals.GameHeight / 3 - 4), "NetworkMap v0.1");
+            NetworkMap networkMap = new NetworkMap(Game, new Point(Globals.GameWidth / 3 + 1, Globals.GameHeight - Globals.GameHeight / 3 + 2),
+                new Point(Globals.GameWidth - terminal.Rectangle.Width - 7, Globals.GameHeight / 3 - 4), "NetworkMap v0.1", 24);
 
             StatusBar statusBar = new StatusBar(Game, new Point(Globals.GameWidth / 3, 1),
                 new Point(Globals.GameWidth - terminal.Rectangle.Width - 5, 52), "status", false, false);
