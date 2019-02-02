@@ -65,6 +65,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Companies\Company.cs" />
+    <Compile Include="Companies\Generator\Company.cs" />
     <Compile Include="Computers\Computer.cs" />
     <Compile Include="Computers\IComputer.cs" />
     <Compile Include="Computers\Utils\AccessLevel.cs" />

@@ -8,31 +8,31 @@ namespace TerminalGame.People
 {
     class Person
     {
-        protected Random _rnd;
+        protected Random        _rnd;
 
-        public string Name { get; protected set; }
-        public DateTime DOB { get; protected set; }
-        public int Age { get; protected set; }
-        public Gender Gender { get; protected set; }
-        public EducationLevel Education { get; protected set; }
-        public AgeRange AgeRange { get; protected set; }
-        public string Email { get; protected set; } // TODO: Email provider.
-        public int Phone { get; protected set; } // Ehhh, maybe not?
+        public string           Name        { get; protected set; }
+        public DateTime         DOB         { get; protected set; }
+        public int              Age         { get; protected set; }
+        public Gender           Gender      { get; protected set; }
+        public EducationLevel   Education   { get; protected set; }
+        public AgeRange         AgeRange    { get; protected set; }
+        public string           Email       { get; protected set; } // TODO: Email provider.
+        public int              Phone       { get; protected set; } // Ehhh, maybe not?
 
         /// <summary>
         /// Generate a random person.
         /// </summary>
         public Person()
         {
-            _rnd = new Random(DateTime.Now.Millisecond);
-            Gender = (Gender)_rnd.Next(0, 2);
-            AgeRange = (AgeRange)_rnd.Next(4, 8);
-            Age = Generator.Person.GenerateAge(AgeRange);
-            DOB = Generator.Person.GenerateDOB(Age);
-            Name = Generator.Person.GenerateName(Gender);
+            _rnd        = new Random(DateTime.Now.Millisecond);
+            Gender      = (Gender)_rnd.Next(0, 2);
+            AgeRange    = (AgeRange)_rnd.Next(4, 8);
+            Age         = Generator.Person.GenerateAge(AgeRange);
+            DOB         = Generator.Person.GenerateDOB(Age);
+            Name        = Generator.Person.GenerateName(Gender);
 
-            Email = "";
-            Phone = 0;
+            Email       = "";
+            Phone       = 0;
         }
 
         /// <summary>
@@ -41,15 +41,15 @@ namespace TerminalGame.People
         /// <param name="ageRange">The general age range the person should be in.</param>
         public Person(AgeRange ageRange)
         {
-            _rnd = new Random(DateTime.Now.Millisecond);
-            Gender = (Gender)_rnd.Next(0, 2);
-            AgeRange = ageRange;
-            Age = Generator.Person.GenerateAge(AgeRange);
-            DOB = Generator.Person.GenerateDOB(Age);
-            Name = Generator.Person.GenerateName(Gender);
+            _rnd        = new Random(DateTime.Now.Millisecond);
+            Gender      = (Gender)_rnd.Next(0, 2);
+            AgeRange    = ageRange;
+            Age         = Generator.Person.GenerateAge(AgeRange);
+            DOB         = Generator.Person.GenerateDOB(Age);
+            Name        = Generator.Person.GenerateName(Gender);
 
-            Email = "";
-            Phone = 0;
+            Email       = "";
+            Phone       = 0;
         }
 
         /// <summary>
@@ -61,15 +61,15 @@ namespace TerminalGame.People
         /// <param name="education">Person's level of education.</param>
         public Person(string name, DateTime dob, Gender gender, EducationLevel education)
         {
-            Name = name;
-            DOB = dob;
-            Gender = gender;
-            Education = education;
-            Age = Generator.Person.GenerateAge(dob);
-            AgeRange = Generator.Person.GenerateAgeRange(Age);
+            Name        = name;
+            DOB         = dob;
+            Gender      = gender;
+            Education   = education;
+            Age         = Generator.Person.GenerateAge(dob);
+            AgeRange    = Generator.Person.GenerateAgeRange(Age);
 
-            Email = "";
-            Phone = 0;
+            Email       = "";
+            Phone       = 0;
         }
 
         public int GetCurrentAge() => Generator.Person.GenerateAge(DOB);

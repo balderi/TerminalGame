@@ -9,9 +9,9 @@ namespace TerminalGame.People
 {
     class User : Person
     {
-        public string Username { get; protected set; }
-        public string Password { get; protected set; }
-        public AccessLevel AccessLevel { get; protected set; }
+        public string       Username        { get; protected set; }
+        public string       Password        { get; protected set; }
+        public AccessLevel  AccessLevel     { get; protected set; }
 
         /// <summary>
         /// Generate a random user.
@@ -39,10 +39,10 @@ namespace TerminalGame.People
         /// <param name="education">User's level of education.</param>
         public User(string name, DateTime dob, Gender gender, EducationLevel education) : base(name, dob, gender, education)
         {
-            Name = name;
-            DOB = dob;
-            Gender = gender;
-            Education = education;
+            Name        = name;
+            DOB         = dob;
+            Gender      = gender;
+            Education   = education;
 
             // TODO: Calculate age.
             // TODO: Calculate age range.
