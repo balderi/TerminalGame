@@ -166,10 +166,7 @@ namespace TerminalGame.UI.Elements.Modules
 
         private string HistoryToString(List<string> hist)
         {
-            string retval = "";
-            foreach (var l in hist)
-                retval += l;
-            return retval;
+            return String.Join("", hist);
         }
 
         public override void ScissorDraw(GameTime gameTime)

@@ -122,6 +122,7 @@
     <Compile Include="Utils\TextHandler\Text.cs" />
     <Compile Include="Utils\TextHandler\TextBox.cs" />
     <Compile Include="Utils\TextHandler\TextRenderer.cs" />
+    <Compile Include="World\World.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

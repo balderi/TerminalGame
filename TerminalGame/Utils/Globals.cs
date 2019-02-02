@@ -54,14 +54,5 @@ namespace TerminalGame.Utils
             spriteBatch.Draw(texture, new Rectangle(rectangle.Left, rectangle.Top - borderWidth, rectangle.Width, borderWidth), borderColor); // Top
             spriteBatch.Draw(texture, new Rectangle(rectangle.Left, rectangle.Bottom - borderWidth, rectangle.Width, borderWidth), borderColor); // Bottom
         }
-
-        #region Module Colors
-
-        public static Color ModuleBackgroundColor() => Color.Black * 0.75f;
-        public static Color ModuleBorderColor() => Color.Gray;
-        public static Color ModuleHeaderBackgroundColor() => Color.DarkGray;
-        public static Color ModuleFontColor() => Color.White;
-
-        #endregion
     }
 }
