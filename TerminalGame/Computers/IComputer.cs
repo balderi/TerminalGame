@@ -9,7 +9,7 @@ namespace TerminalGame.Computers
 {
     public interface IComputer
     {
-        void Connect();
+        bool Connect();
         void Disconnect();
         void Update(GameTime gameTime);
     }

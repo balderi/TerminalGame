@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TerminalGame.Programs;
 
 namespace TerminalGame.Parsing
 {
-    public class CommandParser
+    public static class CommandParser
     {
-        public CommandToken Tokenize(string command)
+        public static CommandToken Tokenize(string command)
         {
             var splitCmd = command.Split(' ');
             var cmd = splitCmd[0];
@@ -24,14 +25,14 @@ namespace TerminalGame.Parsing
             return new CommandToken { Command = cmd, Args = args };
         }
 
-        public CommandToken TokenizeTextArgs(string command)
+        public static CommandToken TokenizeTextArgs(string command)
         {
             var cmd = command.Split(' ')[0];
             string[] args = Regex.Split(command, "\"[a-zA-Z0-9 \\-_]+\"");
             return new CommandToken { Command = cmd, Args = args };
         }
 
-        public bool TryTokenize(string command, bool textArg, out CommandToken token)
+        public static bool TryTokenize(string command, bool textArg, out CommandToken token)
         {
             if (textArg)
             {
@@ -47,7 +48,7 @@ namespace TerminalGame.Parsing
             return true;
         }
 
-        public void Parse(CommandToken token)
+        public static void Parse(CommandToken token, TerminalGame game)
         { 
             switch (token.Command)
             {
@@ -109,6 +110,7 @@ namespace TerminalGame.Parsing
                     }
                 case "connect":
                     {
+                        Connect.GetInstance().Init(game, null, token.Args);
                         break;
                     }
                 case "rm":
@@ -142,6 +144,7 @@ namespace TerminalGame.Parsing
                     }
                 default:
                     {
+                        game.Terminal.WriteLine(token.Command + " is not a recognized command");
                         break;
                     }
             }

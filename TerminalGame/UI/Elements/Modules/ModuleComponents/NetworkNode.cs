@@ -74,6 +74,7 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
         protected override void OnClick(object sender, MouseEventArgs e)
         {
             base.OnClick(sender, e);
+            Game.Terminal.RunCommand("connect " + _computer.IP);
         }
 
         protected override void OnMouseEnter(object sender, MouseEventArgs e)

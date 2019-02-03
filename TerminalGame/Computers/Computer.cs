@@ -24,6 +24,7 @@ namespace TerminalGame.Computers
         public bool PlayerHasRoot { get; private set; }
         public bool IsMissionObjective { get; private set; }
         public bool IsShownOnMap { get; private set; }
+        public bool IsOnline { get; private set; }
         public Dictionary<int, string> OpenPorts { get; private set; }
         public Vector2 Coordinates { get; private set; } // Possibly redundant
         public float MapX { get; set; }
@@ -65,9 +66,12 @@ namespace TerminalGame.Computers
         /// <summary>
         /// Connect the player to this computer
         /// </summary>
-        public void Connect()
+        /// <returns><c>true</c> if connection sucessful. <c>false</c> otherwise.</returns>
+        public bool Connect()
         {
-
+            if (IsOnline)
+                return true;
+            return false;
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TerminalGame.Parsing;
 using TerminalGame.Utils;
 using TerminalGame.Utils.TextHandler;
 using static TerminalGame.Utils.TextHandler.KeyboardInput;
@@ -113,6 +114,7 @@ namespace TerminalGame.UI.Elements.Modules
             _history.Add(_textBox.Text.String);
             _history.Reverse();
             WriteLine(WordWrap(_promptText + _textBox.Text.String));
+            RunCommand(_textBox.Text.String);
             _textBox.Text.RemoveCharacters(0, _textBox.Text.Length);
             _textBox.Cursor.TextCursor = 0;
         }
@@ -162,6 +164,33 @@ namespace TerminalGame.UI.Elements.Modules
         public void WriteLine(string text)
         {
             _output.Add("\n" + text);
+        }
+
+        /// <summary>
+        /// Pass a command to the terminal. It will be interpreted as if the user typed it,
+        /// but will not add it to the terminal's command history, nor print it in the
+        /// terminal's output.
+        /// </summary>
+        /// <param name="command">The command (and args) to be evaluated.</param>
+        public void RunCommand(string command)
+        {
+            if (CommandParser.TryTokenize(command, false, out CommandToken token))
+                CommandParser.Parse(token, Game);
+        }
+
+        /// <summary>
+        /// Pass a command to the terminal. It will be interpreted as if the user typed it,
+        /// and will also add it to the terminal's command history, and print it in the
+        /// terminal's output.
+        /// </summary>
+        /// <param name="command">The command (and args) to be evaluated.</param>
+        public void RunAndPrintCommand(string command)
+        {
+            _history.Reverse();
+            _history.Add(_textBox.Text.String);
+            _history.Reverse();
+            WriteLine(WordWrap(_promptText + command));
+            RunCommand(command);
         }
 
         private string HistoryToString(List<string> hist)

@@ -60,18 +60,18 @@ namespace TerminalGame.World
             }
             Console.WriteLine("Generated {0} computers in {1} seconds.", Computers.Count, (DateTime.Now.Subtract(beginC).TotalSeconds).ToString("N4"));
             
-            DateTime beginP = DateTime.Now;
-            //for (int i = 0; i < 1000; i++)
-            //    People.Add(new Person());
-            Parallel.For(0, 5, index =>
-            {
-                for (int i = 0; i < 200; i++)
-                {
-                    People.Add(new Person());
-                }
-                Console.WriteLine(index);
-            });
-            Console.WriteLine("Generated {0} people in {1} seconds.", People.Count, (DateTime.Now.Subtract(beginP).TotalSeconds).ToString("N4"));
+            //DateTime beginP = DateTime.Now;
+            ////for (int i = 0; i < 1000; i++)
+            ////    People.Add(new Person());
+            //Parallel.For(0, 5, index =>
+            //{
+            //    for (int i = 0; i < 200; i++)
+            //    {
+            //        People.Add(new Person());
+            //    }
+            //    Console.WriteLine(index);
+            //});
+            //Console.WriteLine("Generated {0} people in {1} seconds.", People.Count, (DateTime.Now.Subtract(beginP).TotalSeconds).ToString("N4"));
         }
 
         /// <summary>

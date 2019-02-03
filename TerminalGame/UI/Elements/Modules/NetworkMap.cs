@@ -17,7 +17,6 @@ namespace TerminalGame.UI.Elements.Modules
         private Texture2D _nodeTexture;
         private Random _rnd;
         private Point _nodeSize;
-        private Color _nodeColor;
 
         public NetworkMap(Game game, Point location, Point size, string title, int nodeSize, bool hasHeader = true, bool hasBorder = true) : base(game, location, size, title, hasHeader, hasBorder)
         {
@@ -65,12 +64,12 @@ namespace TerminalGame.UI.Elements.Modules
             foreach (Computer c in _world.Computers)
             {
                 Rectangle _cont;
-                // Prevent the nodes from overlapping on the map
-                // More elegant way of doing this?
                 int attempts = 0;
                 int x = 0;
                 int y = 0;
                 bool intersects = true;
+                // Prevent the nodes from overlapping on the map
+                // More elegant way of doing this?
                 while (intersects)
                 {
                     x = _rnd.Next(Rectangle.X + (_nodeSize.X / 2), Rectangle.X + Rectangle.Width - _nodeSize.X);

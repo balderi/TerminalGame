@@ -8,8 +8,6 @@ namespace TerminalGame.Programs
 {
     public interface IProgram
     {
-        void Run();
-
         void Kill();
     }
 }
