@@ -29,7 +29,13 @@ namespace TerminalGame.Screens
 
         public override void Initialize(GraphicsDeviceManager graphics)
         {
+            Game.Player = Player.GetInstance();
+
+            Game.Player.CreateNewPlayer("testPlayer", "abc123");
+
             World.World.GetInstance().CreateWorld();
+
+            Game.Player.ConnectedComp = Game.Player.PlayerComp;
 
             Terminal terminal = new Terminal(Game, new Point(2, 2),
                 new Point(Globals.GameWidth / 3 - 4, Globals.GameHeight - 4), "Terminal v0.1");
@@ -121,8 +127,9 @@ namespace TerminalGame.Screens
         {
             _spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend);
             _spriteBatch.Draw(_background, _rectangle, Color.White);
-            base.Draw(gameTime); // Handles drawing all elements in _elements
             _spriteBatch.End();
+
+            base.Draw(gameTime); // Handles drawing all elements in _elements
         }
 
         protected override void OnEnabledChanged(object sender, EventArgs args)

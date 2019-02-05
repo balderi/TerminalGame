@@ -17,6 +17,11 @@ namespace TerminalGame.UI.Elements.Modules
         private Texture2D _nodeTexture;
         private Random _rnd;
         private Point _nodeSize;
+        private Dictionary<string, Texture2D> _networkNodeSpinners;
+
+        public NetworkNode PlayerCompNode { get; set; }
+        public NetworkNode HoverNode { get; set; }
+        public NetworkNode ConnectedNode { get; set; }
 
         public NetworkMap(Game game, Point location, Point size, string title, int nodeSize, bool hasHeader = true, bool hasBorder = true) : base(game, location, size, title, hasHeader, hasBorder)
         {
@@ -26,6 +31,29 @@ namespace TerminalGame.UI.Elements.Modules
         public override void Initialize()
         {
             base.Initialize();
+
+            // Various markers for the networkmap
+            Texture2D spinner01 = Content.Load<Texture2D>("Graphics/Textures/spinner01");
+            Texture2D spinner02 = Content.Load<Texture2D>("Graphics/Textures/spinner02");
+            Texture2D spinner03 = Content.Load<Texture2D>("Graphics/Textures/spinner03");
+            Texture2D spinner04 = Content.Load<Texture2D>("Graphics/Textures/spinner04");
+            Texture2D spinner05 = Content.Load<Texture2D>("Graphics/Textures/spinner05");
+            Texture2D spinner06 = Content.Load<Texture2D>("Graphics/Textures/spinner06");
+            Texture2D spinner07 = Content.Load<Texture2D>("Graphics/Textures/spinner07");
+            Texture2D spinner08 = Content.Load<Texture2D>("Graphics/Textures/spinner08");
+
+            _networkNodeSpinners = new Dictionary<string, Texture2D>()
+            {
+                { "ConnectedSpinner", spinner01 },
+                { "PlayerSpinner", spinner02 },
+                { "03", spinner03 },
+                { "MissionSpinner", spinner04 },
+                { "05", spinner05 },
+                { "06", spinner06 },
+                { "07", spinner07 },
+                { "HoverSpinner", spinner08 },
+            };
+
             _rnd = new Random(DateTime.Now.Millisecond);
             _world = World.World.GetInstance();
             _networkNodes = new List<NetworkNode>();
@@ -44,8 +72,13 @@ namespace TerminalGame.UI.Elements.Modules
         {
             foreach (NetworkNode n in _networkNodes)
             {
-                n.Draw(gameTime);
+                if(n != PlayerCompNode && n != HoverNode && n != ConnectedNode)
+                    n.Draw(gameTime);
             }
+            PlayerCompNode.Draw(gameTime);
+            ConnectedNode.Draw(gameTime);
+            if(HoverNode != null)
+                HoverNode.Draw(gameTime);
             base.ScissorDraw(gameTime);
         }
 
@@ -102,7 +135,7 @@ namespace TerminalGame.UI.Elements.Modules
                 c.MapX = (float)x / (float)Rectangle.X;
                 c.MapY = (float)y / (float)Rectangle.Y;
 
-                NetworkNode n = new NetworkNode(Game, new Point(x, y), _nodeSize, c, _nodeTexture, false);
+                NetworkNode n = new NetworkNode(Game, this, new Point(x, y), _nodeSize, c, _nodeTexture, _networkNodeSpinners, false);
                 _networkNodes.Add(n);
                 n.LeftClick += Node_Click;
                 n.MouseHover += Node_Hover;
@@ -125,6 +158,11 @@ namespace TerminalGame.UI.Elements.Modules
         private void Node_Enter(object sender, MouseEventArgs e)
         {
 
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
         }
     }
 }

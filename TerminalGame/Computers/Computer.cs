@@ -50,7 +50,7 @@ namespace TerminalGame.Computers
             _isInitialized = false;
         }
         
-        private void Init()
+        public void Init()
         {
             if(!_isInitialized)
             {
@@ -58,6 +58,7 @@ namespace TerminalGame.Computers
                 PlayerHasRoot = false;
                 IsMissionObjective = false;
                 IsShownOnMap = true;
+                IsOnline = true;
 
                 _isInitialized = true;
             }
@@ -70,7 +71,12 @@ namespace TerminalGame.Computers
         public bool Connect()
         {
             if (IsOnline)
+            {
+                Player.GetInstance().ConnectedComp.Disconnect();
+                Player.GetInstance().ConnectedComp = this;
                 return true;
+            }
+
             return false;
         }
 
@@ -79,7 +85,7 @@ namespace TerminalGame.Computers
         /// </summary>
         public void Disconnect()
         {
-
+            Player.GetInstance().ConnectedComp = Player.GetInstance().PlayerComp;
         }
 
         /// <summary>

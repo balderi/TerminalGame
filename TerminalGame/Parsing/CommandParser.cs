@@ -49,7 +49,8 @@ namespace TerminalGame.Parsing
         }
 
         public static void Parse(CommandToken token, TerminalGame game)
-        { 
+        {
+            Console.WriteLine("Command: {0}", token.Command);
             switch (token.Command)
             {
                 case "echo":

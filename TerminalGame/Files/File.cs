@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 namespace TerminalGame.Files
 {
     class File : IFile
-    {
-        private readonly Programs.Program _program;
-        
+    {        
         public string Name { get; private set; }
         public string Contents { get; private set; }
         public int Size { get; private set; }
@@ -37,14 +35,6 @@ namespace TerminalGame.Files
 
         public File(string name, string contents, FileType fileType, int size) : this(name, contents, fileType)
         {
-            Size = size;
-        }
-
-        public File(string name, Programs.Program program, int size)
-        {
-            Name = name;
-            Contents = "10101010101"; // TODO: Make a generator to generate random binary. Possibly some random easter eggs?
-            FileType = FileType.Binary;
             Size = size;
         }
 

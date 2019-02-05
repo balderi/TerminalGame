@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerminalGame.Computers;
 
 namespace TerminalGame
 {
@@ -11,8 +12,19 @@ namespace TerminalGame
         public string Name { get; private set; }
         public string Password { get; private set; }
         public int Balance { get; private set; }
+        public Computer PlayerComp { get; set; }
+        public Computer ConnectedComp { get; set; }
 
-        public Player()
+        private static Player _instance;
+
+        public static Player GetInstance()
+        {
+            if (_instance == null)
+                _instance = new Player();
+            return _instance;
+        }
+
+        private Player()
         {
 
         }

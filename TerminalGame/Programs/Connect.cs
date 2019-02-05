@@ -30,11 +30,23 @@ namespace TerminalGame.Programs
 
         protected override void Run()
         {
-            Console.WriteLine("Attempting connection to host with IP {0}", _args[0]);
             _isKill = false;
-            if (_args.Length != 1)
+            if (_args.Length < 1)
             {
                 Game.Terminal.WriteLine("usage: connect [IP]");
+                Kill();
+                return;
+            }
+            Console.WriteLine("Attempting connection to host with IP {0}", _args[0]);
+            if(_args[0] == Player.GetInstance().ConnectedComp.IP)
+            {
+                Game.Terminal.WriteLine("You are already connected to this host");
+                Kill();
+                return;
+            }
+            if (_args.Length > 1)
+            {
+                Game.Terminal.WriteLine("Too many arguments: connect");
                 Kill();
                 return;
             }

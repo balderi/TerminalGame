@@ -54,12 +54,21 @@ namespace TerminalGame.World
             People = new List<Person>();
             Companies = new List<Company>();
 
-            for (int i = 0; i < 100; i++)
+            Computer PlayerComp = new Computer("localhost", "127.0.0.1", Player.GetInstance().Password);
+
+            Player.GetInstance().PlayerComp = PlayerComp;
+
+            Computers.Add(PlayerComp);
+
+            for (int i = 0; i < 200; i++)
             {
                 Computers.Add(new Computer("Workstation" + i));
             }
             Console.WriteLine("Generated {0} computers in {1} seconds.", Computers.Count, (DateTime.Now.Subtract(beginC).TotalSeconds).ToString("N4"));
-            
+
+            foreach (Computer c in Computers)
+                c.Init();
+
             //DateTime beginP = DateTime.Now;
             ////for (int i = 0; i < 1000; i++)
             ////    People.Add(new Person());

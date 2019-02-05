@@ -35,7 +35,7 @@ namespace TerminalGame
         public string Title { get; private set; }
         public string Version { get; private set; }
         public bool IsGameRunning { get; set; }
-        public Player Player { get; private set; }
+        public Player Player { get; set; }
         public GameSpeed CurrentGameSpeed { get; set; }
         public Terminal Terminal { get; set; }
 
@@ -159,10 +159,10 @@ namespace TerminalGame
         {
             GraphicsDevice.Clear(Color.Black);
 
-            _spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend);
+            //_spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend);
             base.Draw(gameTime);
             stateMachine.Draw(gameTime);
-            _spriteBatch.End();
+            //_spriteBatch.End();
         }
     }
 }

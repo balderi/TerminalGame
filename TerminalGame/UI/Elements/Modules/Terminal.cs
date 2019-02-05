@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TerminalGame.Computers;
 using TerminalGame.Parsing;
 using TerminalGame.Utils;
 using TerminalGame.Utils.TextHandler;
@@ -20,6 +21,7 @@ namespace TerminalGame.UI.Elements.Modules
         private int _promptWidth, _histIndex, _maxChars, _maxCharsP;
         private Rectangle _terminalInputArea, _terminalOutputArea;
         private List<string> _history, _output;
+        private Computer _computer;
 
         public Terminal(Game game, Point location, Point size, string title, bool hasHeader = true, bool hasBorder = true) : 
             base(game, location, size, title, hasHeader, hasBorder)
@@ -31,6 +33,8 @@ namespace TerminalGame.UI.Elements.Modules
         {
             KeyboardInput.Initialize(Game, 500f, 20);
 
+            _computer = Player.GetInstance().ConnectedComp;
+
             _terminalFont = FontManager.GetFont("FontS");
 
             _history = new List<string>();
@@ -38,7 +42,7 @@ namespace TerminalGame.UI.Elements.Modules
 
             _histIndex = -1;
 
-            _promptText = "root@localhost:/$ ";
+            _promptText = _computer.AccessLevel.ToString().ToLower() + "@" + _computer.IP + ":/$ ";
             _promptWidth = (int)_terminalFont.MeasureString(_promptText).X;
 
             int tbHeight = (int)_terminalFont.MeasureString("A").Y;
@@ -117,6 +121,7 @@ namespace TerminalGame.UI.Elements.Modules
             RunCommand(_textBox.Text.String);
             _textBox.Text.RemoveCharacters(0, _textBox.Text.Length);
             _textBox.Cursor.TextCursor = 0;
+            UpdateTextBox();
         }
 
         private string WordWrap(string text)
@@ -140,11 +145,34 @@ namespace TerminalGame.UI.Elements.Modules
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            Computer computer = Player.GetInstance().ConnectedComp;
+            if(_computer != computer)
+                UpdateTextBox();
             KeyboardInput.Update();
             _textBox.Renderer.Color = Color.White * _opacity;
             _textBox.Cursor.Color = Color.White * _opacity;
             _textBox.Cursor.Selection = Color.Gray * _opacity;
             _textBox.Update();
+        }
+
+        private void UpdateTextBox()
+        {
+            _textBox.Dispose();
+            _textBox = null;
+            _computer = Player.GetInstance().ConnectedComp;
+            _promptText = _computer.AccessLevel.ToString().ToLower() + "@" + _computer.IP + ":/$ ";
+            _promptWidth = (int)_terminalFont.MeasureString(_promptText).X;
+            int tbHeight = (int)_terminalFont.MeasureString("A").Y;
+            _terminalInputArea = new Rectangle(new Point(Rectangle.X + _promptWidth + 2, Rectangle.Y + Rectangle.Height - tbHeight),
+                 new Point(Rectangle.Width - _promptWidth, tbHeight));
+            _textBox = new TextBox(_terminalInputArea, (int)(Rectangle.Width / _terminalFont.MeasureString("A").X) * 10,
+                "", GraphicsDevice, _terminalFont, Color.White, Color.Gray, 30);
+            _textBox.Renderer.Color = Color.White * _opacity;
+            _textBox.Active = true;
+            _textBox.EnterDown += Enter_Pressed;
+            _textBox.UpArrow += Up_Pressed;
+            _textBox.DnArrow += Down_Pressed;
+            _textBox.TabDown += Tab_Pressed;
         }
 
         /// <summary>
@@ -175,7 +203,10 @@ namespace TerminalGame.UI.Elements.Modules
         public void RunCommand(string command)
         {
             if (CommandParser.TryTokenize(command, false, out CommandToken token))
+            {
                 CommandParser.Parse(token, Game);
+                UpdateTextBox();
+            }
         }
 
         /// <summary>
@@ -218,6 +249,11 @@ namespace TerminalGame.UI.Elements.Modules
         protected override void OnVisibleChanged(object sender, EventArgs args)
         {
             base.OnVisibleChanged(sender, args);
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
         }
     }
 }

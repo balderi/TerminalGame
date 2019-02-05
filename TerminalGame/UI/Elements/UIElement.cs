@@ -23,6 +23,7 @@ namespace TerminalGame.UI.Elements
         protected ContentManager Content;
         protected ThemeManager _themeManager;
         protected new TerminalGame Game;
+        protected Rectangle _selectionRect;
         #endregion
 
         #region properties
@@ -58,6 +59,7 @@ namespace TerminalGame.UI.Elements
             Content = Game.Content;
             _themeManager = ThemeManager.GetInstance();
             Rectangle = new Rectangle(location, size);
+            _selectionRect = Rectangle;
             _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _fadeIn = fadeIn;
@@ -130,7 +132,7 @@ namespace TerminalGame.UI.Elements
 
             _isHovering = false;
             _mouseLeftDown = false;
-            if (mouseRectangle.Intersects(Rectangle))
+            if (mouseRectangle.Intersects(_selectionRect))
             {
                 _isHovering = true;
                 MouseHover?.Invoke(this, _hover);
