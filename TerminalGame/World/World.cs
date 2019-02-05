@@ -67,8 +67,10 @@ namespace TerminalGame.World
             Console.WriteLine("Generated {0} computers in {1} seconds.", Computers.Count, (DateTime.Now.Subtract(beginC).TotalSeconds).ToString("N4"));
 
             foreach (Computer c in Computers)
+            {
                 c.Init();
-
+            }
+            
             //DateTime beginP = DateTime.Now;
             ////for (int i = 0; i < 1000; i++)
             ////    People.Add(new Person());

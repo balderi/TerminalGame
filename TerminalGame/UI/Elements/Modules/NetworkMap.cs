@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -57,7 +58,7 @@ namespace TerminalGame.UI.Elements.Modules
             _rnd = new Random(DateTime.Now.Millisecond);
             _world = World.World.GetInstance();
             _networkNodes = new List<NetworkNode>();
-            GenerateMapNoOverlap(30);
+            GenerateMapNoOverlap(10);
             foreach (NetworkNode n in _networkNodes)
                 n.Initialize();
         }
