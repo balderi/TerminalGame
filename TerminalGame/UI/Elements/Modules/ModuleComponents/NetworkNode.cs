@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TerminalGame.Computers;
+using TerminalGame.Utils;
 
 namespace TerminalGame.UI.Elements.Modules.ModuleComponents
 {
@@ -22,14 +23,21 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
         
         public Computer Computer { get; private set; }
         public bool IsHovering { get; private set; }
+        public NodeInfoBox InfoBox { get; private set; }
 
-        public NetworkNode(Game game, NetworkMap map, Point location, Point size, Computer computer, Texture2D texture, Dictionary<string, Texture2D> spinners, bool hasBorder = true, bool fadeIn = true) : base(game, location, size, hasBorder, fadeIn)
+        public NetworkNode(Game game, NetworkMap map, Point location, Point size, Computer computer, Texture2D texture, 
+            Dictionary<string, Texture2D> spinners, bool hasBorder = true, bool fadeIn = true) : 
+            base(game, location, size, hasBorder, fadeIn)
         {
             Computer = computer;
             _texture = texture;
             _networkNodeSpinners = spinners;
             _nMap = map;
-            _selectionRect = new Rectangle(new Point(Rectangle.Location.X + 4, Rectangle.Location.Y + 4), new Point(Rectangle.Width - 8, Rectangle.Height - 8));
+            _selectionRect = new Rectangle(new Point(Rectangle.Location.X + 4, Rectangle.Location.Y + 4), 
+                new Point(Rectangle.Width - 8, Rectangle.Height - 8));
+            InfoBox = new NodeInfoBox(Game, new Point(Rectangle.X + Rectangle.Width + 20, Rectangle.Y), 
+                new Point((int)FontManager.GetFont("FontXS").MeasureString(Computer.ToString()).X + 10, 
+                FontManager.GetFont("FontS").LineSpacing * 3), Computer.ToString(), true, false);
         }
 
         public override void Initialize()
@@ -44,6 +52,8 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
             _spinnerS = new Point((int)(Rectangle.Width * 1.25));
             _spinnerN = new Point((int)(Rectangle.Width * 1.72));
             _spinnerL = new Point((int)(Rectangle.Width * 2.12));
+
+            InfoBox.Initialize();
         }
 
         public override void Update(GameTime gameTime)
@@ -77,7 +87,10 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
             }
 
             if (IsHovering == true && _nMap.HoverNode == null)
+            {
                 _nMap.HoverNode = this;
+                InfoBox.Update(gameTime);
+            }
 
             base.Update(gameTime);
         }
@@ -108,6 +121,7 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
             if (_isHovering && _nMap.HoverNode == this)
             {
                 _spriteBatch.Draw(hoverSpinner, new Rectangle(new Point(Rectangle.Location.X + (Rectangle.Width / 2), Rectangle.Location.Y + (Rectangle.Height / 2)), _spinnerL), null, _hoverSpinnerColor, _rotationCW, new Vector2(hoverSpinner.Width / 2, hoverSpinner.Height / 2), SpriteEffects.None, 0);
+                InfoBox.Draw(gameTime);
             }
             _spriteBatch.Draw(_texture, Rectangle, _currentColor);
             _spriteBatch.End();

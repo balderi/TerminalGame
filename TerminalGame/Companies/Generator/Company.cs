@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerminalGame.Computers;
+using TerminalGame.Computers.Utils;
 
 namespace TerminalGame.Companies.Generator
 {
@@ -13,6 +15,40 @@ namespace TerminalGame.Companies.Generator
         private static readonly string[] suffix = new string[] { ", Inc.", " Corp.", " Corporation", " Incorporated", ", Ltd.", " Company", " Co.", " LLC", " Intl.", " International" };
 
         private static Random _rnd;
+
+        public static Computer GenerateComputer(string companyName, ComputerType type)
+        {
+            string fullType = "";
+            switch(type)
+            {
+                case ComputerType.Laptop:
+                    {
+                        fullType = "Mobile Workstation";
+                        break;
+                    }
+                case ComputerType.Mainframe:
+                    {
+                        fullType = "Central Mainframe";
+                        break;
+                    }
+                case ComputerType.Server:
+                    {
+                        fullType = "Public Accses Server";
+                        break;
+                    }
+                case ComputerType.Workstation:
+                    {
+                        fullType = "Internal Workstation " + _rnd.Next(1, 101);
+                        break;
+                    }
+                default:
+                    {
+                        fullType = type.ToString();
+                        break;
+                    }
+            }
+            return new Computer(companyName + "§¤§" + fullType, new int[] { 21, 22, 67, 80, 110, 443, 27015 }, type);
+        }
 
         public static string GenerateName()
         {

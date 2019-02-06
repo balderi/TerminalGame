@@ -103,6 +103,7 @@
     <Compile Include="Time\GameSpeed.cs" />
     <Compile Include="UI\Elements\Buttons\Button.cs" />
     <Compile Include="UI\Elements\Modules\ModuleComponents\NetworkNode.cs" />
+    <Compile Include="UI\Elements\Modules\ModuleComponents\NodeInfoBox.cs" />
     <Compile Include="UI\Elements\Modules\NetworkMap.cs" />
     <Compile Include="UI\Elements\Modules\StatusBar.cs" />
     <Compile Include="UI\Elements\Modules\Terminal.cs" />

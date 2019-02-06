@@ -84,5 +84,10 @@ namespace TerminalGame.People
                 + Education.ToString() + "\n"
                 + "--------------------\n";
         }
+
+        public void Tick()
+        {
+
+        }
     }
 }

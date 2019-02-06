@@ -93,7 +93,7 @@ namespace TerminalGame.Programs
                         }
                         if(c.Connect())
                         {
-                            Console.WriteLine("Connection established to {0}", c.IP);
+                            Console.WriteLine("Connection established to {1}@{0}", c.IP, c.GetPublicName());
                             Game.Terminal.WriteLine(_connection[4]);
                             Kill();
                             _timer.Stop();

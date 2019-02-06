@@ -27,12 +27,12 @@ namespace TerminalGame.UI.Elements
         #endregion
 
         #region properties
-        public Rectangle Rectangle { get; private set; }
+        public Rectangle Rectangle { get; protected set; }
         public bool MouseIsHovering { get => _isHovering; }
         public Color BackgroundColor { get; set; }
         public Color BorderColor { get; set; }
         public Color FontColor { get; set; }
-        public bool HasBorder { get; private set; }
+        public bool HasBorder { get; protected set; }
         #endregion
 
         #region events

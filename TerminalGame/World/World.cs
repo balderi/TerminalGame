@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TerminalGame.Companies;
 using TerminalGame.Computers;
+using TerminalGame.Computers.Utils;
 using TerminalGame.People;
 
 namespace TerminalGame.World
@@ -54,29 +55,39 @@ namespace TerminalGame.World
             People = new List<Person>();
             Companies = new List<Company>();
 
-            Computer PlayerComp = new Computer("localhost", "127.0.0.1", Player.GetInstance().Password);
+            Computer PlayerComp = new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation,  "127.0.0.1", Player.GetInstance().Password);
 
             Player.GetInstance().PlayerComp = PlayerComp;
 
             Computers.Add(PlayerComp);
 
-            for (int i = 0; i < 200; i++)
+            //for (int i = 0; i < 200; i++)
+            //{
+            //    Computers.Add(new Computer("Workstation" + i));
+            //}
+            //Console.WriteLine("Generated {0} computers in {1} seconds.", Computers.Count, (DateTime.Now.Subtract(beginC).TotalSeconds).ToString("N4"));
+
+            for(int i = 0; i < 100; i++)
             {
-                Computers.Add(new Computer("Workstation" + i));
+                Companies.Add(new Company());
             }
-            Console.WriteLine("Generated {0} computers in {1} seconds.", Computers.Count, (DateTime.Now.Subtract(beginC).TotalSeconds).ToString("N4"));
+
+            foreach (Company c in Companies)
+            {
+                Computers.AddRange(c.GetComputers);
+            }
 
             foreach (Computer c in Computers)
             {
                 c.Init();
             }
-            
+
             //DateTime beginP = DateTime.Now;
             ////for (int i = 0; i < 1000; i++)
             ////    People.Add(new Person());
             //Parallel.For(0, 5, index =>
             //{
-            //    for (int i = 0; i < 200; i++)
+            //    for (int i = 0; i < 2000; i++)
             //    {
             //        People.Add(new Person());
             //    }
@@ -90,7 +101,12 @@ namespace TerminalGame.World
         /// </summary>
         public void Tick()
         {
-
+            foreach (var c in Computers)
+                c.Tick();
+            foreach (var p in People)
+                p.Tick();
+            foreach (var c in Companies)
+                c.Tick();
         }
 
         /// <summary>

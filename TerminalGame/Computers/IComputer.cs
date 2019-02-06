@@ -11,6 +11,6 @@ namespace TerminalGame.Computers
     {
         bool Connect();
         void Disconnect();
-        void Update(GameTime gameTime);
+        void Tick();
     }
 }

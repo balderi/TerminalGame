@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Computers;
 using TerminalGame.UI.Elements.Modules.ModuleComponents;
+using TerminalGame.Utils;
 
 namespace TerminalGame.UI.Elements.Modules
 {
@@ -60,7 +61,7 @@ namespace TerminalGame.UI.Elements.Modules
             _rnd = new Random(DateTime.Now.Millisecond);
             _world = World.World.GetInstance();
             _networkNodes = new List<NetworkNode>();
-            GenerateMapNoOverlap(10);
+            GenerateMapNoOverlap(1000);
             foreach (NetworkNode n in _networkNodes)
                 n.Initialize();
         }
@@ -100,8 +101,15 @@ namespace TerminalGame.UI.Elements.Modules
             if (oldNode != HoverNode)
             {
                 float wat = (1f - (float)(_rnd.NextDouble()) / 100);
-                Console.WriteLine(wat);
                 _nodeHoverSound.Play(1f, wat, 0f);
+            }
+            if (HoverNode.InfoBox.Rectangle.X + HoverNode.InfoBox.Rectangle.Width >= Game.Window.ClientBounds.Width - 10)
+            {
+                HoverNode.InfoBox.ChangeLocation(new Point(HoverNode.Rectangle.Location.X - HoverNode.InfoBox.Rectangle.Width - 20, HoverNode.Rectangle.Location.Y));
+            }
+            while(HoverNode.InfoBox.Rectangle.Y + HoverNode.InfoBox.Rectangle.Height > Rectangle.Y + Rectangle.Height - 2)
+            {
+                HoverNode.InfoBox.ChangeLocation(new Point(HoverNode.InfoBox.Rectangle.X, HoverNode.InfoBox.Rectangle.Y - 1));
             }
         }
 
@@ -110,7 +118,7 @@ namespace TerminalGame.UI.Elements.Modules
             DateTime begin = DateTime.Now;
             foreach (Computer c in _world.Computers)
             {
-                Rectangle _cont;
+                Rectangle tempRect;
                 int attempts = 0;
                 int x = 0;
                 int y = 0;
@@ -123,15 +131,24 @@ namespace TerminalGame.UI.Elements.Modules
                     y = _rnd.Next(Rectangle.Y + _nodeSize.Y, Rectangle.Y + Rectangle.Height - _nodeSize.Y);
 
                     Point position = new Point(x, y);
-                    _cont = new Rectangle(position, _nodeSize);
+                    tempRect = new Rectangle(position, _nodeSize);
+
+                    int dist = 0;
 
                     if (_networkNodes.Count > 0)
                     {
                         intersects = false;
                         foreach (NetworkNode node in _networkNodes)
                         {
-                            if (_cont.Intersects(node.Rectangle))
+                            if (Math.Abs(tempRect.Center.X - node.Rectangle.Center.X) < 18 &&
+                                Math.Abs(tempRect.Center.Y - node.Rectangle.Center.Y) < 18)
+                            {
                                 intersects = true;
+                                dist = Math.Abs(tempRect.Center.X - node.Rectangle.Center.X);
+                                break;
+                            }
+                            //if (tempRect.Intersects(node.Rectangle))
+                            //    intersects = true;
                         }
                     }
                     else
@@ -140,7 +157,7 @@ namespace TerminalGame.UI.Elements.Modules
                     }
                     if (++attempts > maxAttempts - 1)
                     {
-                        Console.WriteLine("Node for \"{0}\" intersects after {1} attempts -- ignore overlap and continue.", c.Name, attempts);
+                        Console.WriteLine("Node for \"{0}\" intersects after {1} attempts; dist: {2} -- ignore overlap and continue.", c.GetPublicName(), attempts, dist);
                         break;
                     }
                 }

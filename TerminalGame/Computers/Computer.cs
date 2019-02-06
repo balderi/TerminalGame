@@ -14,9 +14,14 @@ namespace TerminalGame.Computers
         #region fields
         private readonly int[] _defaultPorts = { 22, 25, 80, 443 };
         private bool _isInitialized;
+        private string _publicName;
         #endregion
 
         #region properties
+        /// <summary>
+        /// Returns computer name with split-identifier.
+        /// To get the proper name, use the <c>GetPublicName</c> method instead.
+        /// </summary>
         public string Name { get; private set; }
         public string IP { get; private set; }
         public string RootPassword { get; private set; }
@@ -50,6 +55,12 @@ namespace TerminalGame.Computers
             _isInitialized = false;
         }
         
+        public Computer (string name, int[] ports, ComputerType type, string ip = "", string rootPassword = "") : this(name, ip, rootPassword)
+        {
+            OpenPorts = BuildPorts(ports);
+            ComputerType = type;
+        }
+
         public void Init()
         {
             if(!_isInitialized)
@@ -59,9 +70,18 @@ namespace TerminalGame.Computers
                 IsMissionObjective = false;
                 IsShownOnMap = true;
                 IsOnline = true;
+                if(Name.Contains("§¤§"))
+                    _publicName = Name.Replace("§¤§", "\n");
+                else
+                    _publicName = Name + "\n" + ComputerType.ToString();
 
                 _isInitialized = true;
             }
+        }
+
+        public string GetPublicName()
+        {
+            return _publicName;
         }
 
         /// <summary>
@@ -161,7 +181,12 @@ namespace TerminalGame.Computers
             return retval;
         }
 
-        public void Update(GameTime gameTime)
+        public override string ToString()
+        {
+            return _publicName + "\n" + IP;
+        }
+
+        public void Tick()
         {
 
         }
