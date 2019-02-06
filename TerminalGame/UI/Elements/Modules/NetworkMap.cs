@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Computers;
 using TerminalGame.UI.Elements.Modules.ModuleComponents;
@@ -19,6 +20,7 @@ namespace TerminalGame.UI.Elements.Modules
         private Random _rnd;
         private Point _nodeSize;
         private Dictionary<string, Texture2D> _networkNodeSpinners;
+        private SoundEffect _nodeHoverSound, _nodeClickSound;
 
         public NetworkNode PlayerCompNode { get; set; }
         public NetworkNode HoverNode { get; set; }
@@ -66,6 +68,8 @@ namespace TerminalGame.UI.Elements.Modules
         protected override void LoadContent()
         {
             _nodeTexture = Content.Load<Texture2D>("Graphics/Textures/nmapComputer-2");
+            _nodeClickSound = Content.Load<SoundEffect>("Audio/Sounds/click1");
+            _nodeHoverSound = Content.Load<SoundEffect>("Audio/Sounds/hover1");
             base.LoadContent();
         }
 
@@ -85,10 +89,19 @@ namespace TerminalGame.UI.Elements.Modules
 
         public override void Update(GameTime gameTime)
         {
+            NetworkNode oldNode = HoverNode;
             base.Update(gameTime);
             foreach (NetworkNode n in _networkNodes)
             {
                 n.Update(gameTime);
+            }
+            if (HoverNode == null)
+                return;
+            if (oldNode != HoverNode)
+            {
+                float wat = (1f - (float)(_rnd.NextDouble()) / 100);
+                Console.WriteLine(wat);
+                _nodeHoverSound.Play(1f, wat, 0f);
             }
         }
 
@@ -148,7 +161,8 @@ namespace TerminalGame.UI.Elements.Modules
 
         private void Node_Click(object sender, MouseEventArgs e)
         {
-
+            float wat = (1f - (float)(_rnd.NextDouble()) / 50);
+            _nodeClickSound.Play(1f, wat, 0f);
         }
 
         private void Node_Hover(object sender, MouseEventArgs e)

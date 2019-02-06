@@ -25,6 +25,18 @@
 /processorParam:Quality=Best
 /build:Audio/Music/mainmenu.ogg
 
+#begin Audio/Sounds/click1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sounds/click1.wav
+
+#begin Audio/Sounds/hover1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sounds/hover1.wav
+
 #begin Fonts/fontllarge.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
