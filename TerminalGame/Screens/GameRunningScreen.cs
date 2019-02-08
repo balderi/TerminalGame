@@ -46,7 +46,7 @@ namespace TerminalGame.Screens
             StatusBar statusBar = new StatusBar(Game, new Point(Globals.GameWidth / 3, 1),
                 new Point(Globals.GameWidth - terminal.Rectangle.Width - 5, 52), "status", false, false);
             
-            Module remoteView = new Module(Game, new Point(terminal.Rectangle.Width + 5, statusBar.Rectangle.Height + 3),
+            RemoteView remoteView = new RemoteView(Game, new Point(terminal.Rectangle.Width + 5, statusBar.Rectangle.Height + 3),
                 new Point((int)(Globals.GameWidth * 0.75) - terminal.Rectangle.Width - 7, Globals.GameHeight - statusBar.Rectangle.Height - networkMap.Rectangle.Height - 8), "RemoteView v0.1");
 
             Module notePad = new Module(Game, new Point(remoteView.Rectangle.X + remoteView.Rectangle.Width + 3, statusBar.Rectangle.Height + 3),

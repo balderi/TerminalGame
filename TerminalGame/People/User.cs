@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerminalGame.People.Utils;
 using TerminalGame.Computers.Utils;
 
 namespace TerminalGame.People
 {
-    class User : Person
+    public class User : Person
     {
         public string       Username        { get; protected set; }
         public string       Password        { get; protected set; }

@@ -378,8 +378,6 @@ Asquin
 Assaad
 Asselin
 Assenza
-Assistance
-Associates
 Astalos
 Astle
 Astley
@@ -2823,7 +2821,7 @@ DeStefani
 DeWitte
 DeYoung
 DeZoete
-De_Koning
+De Koning
 Deagle
 Deak
 Deakin
@@ -3127,7 +3125,6 @@ Doble
 Dobransky
 Docherty
 Dockendorff
-Documentation-Grp
 Doczy
 Doda
 Dodd
@@ -3550,7 +3547,6 @@ Emmons
 Emmott
 Emond
 Emory
-EmployeeClub
 Emrick
 Emro
 Encomenderos
@@ -3680,9 +3676,6 @@ Exner
 Eyers
 Ezekiel
 Ezzat
-FASTONE
-FISOPN
-FWPtools
 Fab
 Fabijanic
 Fabris
@@ -4079,7 +4072,7 @@ Frodsham
 Froehlich
 Froncek
 Frondozo
-Fronsee_Jr
+Fronsee Jr.
 Fross
 Frosst
 Froud
@@ -5081,8 +5074,6 @@ Heller
 Hellyer
 Helms
 Helmy
-Helpb
-Helpline
 Helseth
 Helstab
 Helton
@@ -5413,8 +5404,6 @@ Hosking
 Hoskins
 Hosneld
 Hosseini
-Hotline
-Hotlist
 Hotson
 Houde
 Houghton
@@ -8961,7 +8950,7 @@ OPS
 OPSPLNG
 OTTAWA
 OTTCO
-O_Kelly
+O Kelly
 Oakley
 Oaks
 Oam
@@ -11265,7 +11254,6 @@ Skerlak
 Skerry
 Skeuse
 Skiba
-Skiclub
 Skillen
 Skillman
 Skinner
@@ -11501,7 +11489,7 @@ St.Louis
 St.Pierre
 St.Vil
 StJohn
-St_James
+St James
 Staats
 Stability
 Stacey

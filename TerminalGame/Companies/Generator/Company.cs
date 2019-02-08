@@ -16,7 +16,7 @@ namespace TerminalGame.Companies.Generator
 
         private static Random _rnd;
 
-        public static Computer GenerateComputer(string companyName, ComputerType type)
+        public static Computer GenerateComputer(Companies.Company company, ComputerType type)
         {
             string fullType = "";
             switch(type)
@@ -47,7 +47,7 @@ namespace TerminalGame.Companies.Generator
                         break;
                     }
             }
-            return new Computer(companyName + "§¤§" + fullType, new int[] { 21, 22, 67, 80, 110, 443, 27015 }, type);
+            return new Computer(company.Name + "§¤§" + fullType, new int[] { 21, 22, 67, 80, 110, 443, 27015 }, type, company);
         }
 
         public static string GenerateName()

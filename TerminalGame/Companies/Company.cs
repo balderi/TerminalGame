@@ -9,7 +9,7 @@ using TerminalGame.People;
 
 namespace TerminalGame.Companies
 {
-    class Company
+    public class Company
     {
         private Random          _rnd;
 
@@ -25,14 +25,14 @@ namespace TerminalGame.Companies
         {
             _rnd = new Random(DateTime.Now.Millisecond);
             Name = Generator.Company.GenerateName();
-            Owner = new Person();
-            Admin = new User();
+            Owner = new Person(People.Utils.AgeRange.MiddleAged);
+            Admin = new User(People.Utils.AgeRange.Adult);
             NumberOfShares = _rnd.Next();
             SharePrice = _rnd.Next();
             CompanyValue = _rnd.Next();
             GetComputers = new List<Computer>
             {
-                Generator.Company.GenerateComputer(Name, ComputerType.Server),
+                Generator.Company.GenerateComputer(this, ComputerType.Server),
             };
         }
 

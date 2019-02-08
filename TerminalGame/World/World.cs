@@ -44,6 +44,23 @@ namespace TerminalGame.World
         {
         }
 
+        private bool CheckName(string name)
+        {
+            foreach(Company c in Companies)
+            {
+                if (c.Name == name)
+                    return true;
+            }
+            return false;
+        }
+
+        static IEnumerable<string> SortByLength(IEnumerable<string> e)
+        {
+            // Use LINQ to sort the array received and return a copy.
+            var sorted = e.OrderByDescending(s => s).ThenBy(r => r.Length);
+            return sorted.Reverse();
+        }
+
         /// <summary>
         /// Generate a new, random world.
         /// </summary>
@@ -55,7 +72,7 @@ namespace TerminalGame.World
             People = new List<Person>();
             Companies = new List<Company>();
 
-            Computer PlayerComp = new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation,  "127.0.0.1", Player.GetInstance().Password);
+            Computer PlayerComp = new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation, "127.0.0.1", Player.GetInstance().Password);
 
             Player.GetInstance().PlayerComp = PlayerComp;
 
@@ -66,22 +83,35 @@ namespace TerminalGame.World
             //    Computers.Add(new Computer("Workstation" + i));
             //}
             //Console.WriteLine("Generated {0} computers in {1} seconds.", Computers.Count, (DateTime.Now.Subtract(beginC).TotalSeconds).ToString("N4"));
-
-            for(int i = 0; i < 100; i++)
+            DateTime beginCompanies = DateTime.Now;
+            for (int i = 0; i < 100; i++)
             {
-                Companies.Add(new Company());
+                Company comp = new Company();
+
+                while (CheckName(comp.Name))
+                    comp = new Company();
+                
+                Companies.Add(comp);
             }
+            Console.WriteLine("Generated {0} companies in {1} seconds.", Companies.Count, (DateTime.Now.Subtract(beginCompanies).TotalSeconds).ToString("N4"));
+
+            List<string> names = new List<string>();
 
             foreach (Company c in Companies)
             {
                 Computers.AddRange(c.GetComputers);
+                names.Add(c.Name);
             }
+
+            List<string> test = SortByLength(names.AsEnumerable()).ToList();
+
+            foreach(string s in test)
+                Console.WriteLine(s);
 
             foreach (Computer c in Computers)
             {
                 c.Init();
             }
-
             //DateTime beginP = DateTime.Now;
             ////for (int i = 0; i < 1000; i++)
             ////    People.Add(new Person());

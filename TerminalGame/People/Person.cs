@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerminalGame.People.Utils;
 
 namespace TerminalGame.People
 {
-    class Person
+    public class Person
     {
         protected Random        _rnd;
 
@@ -28,6 +29,7 @@ namespace TerminalGame.People
             Gender      = (Gender)_rnd.Next(0, 2);
             AgeRange    = (AgeRange)_rnd.Next(4, 8);
             Age         = Generator.Person.GenerateAge(AgeRange);
+            Education   = Generator.Person.GenerateEducationLevel(Age);
             DOB         = Generator.Person.GenerateDOB(Age);
             Name        = Generator.Person.GenerateName(Gender);
 
@@ -45,6 +47,7 @@ namespace TerminalGame.People
             Gender      = (Gender)_rnd.Next(0, 2);
             AgeRange    = ageRange;
             Age         = Generator.Person.GenerateAge(AgeRange);
+            Education   = Generator.Person.GenerateEducationLevel(Age);
             DOB         = Generator.Person.GenerateDOB(Age);
             Name        = Generator.Person.GenerateName(Gender);
 
@@ -77,12 +80,10 @@ namespace TerminalGame.People
 
         public override string ToString()
         {
-            return "--------------------\n"
-                + Name + "\n"
-                + Gender.ToString() + ", " + GetCurrentAge().ToString() + "(" + GetCurrentAgeRange().ToString() + ")\n"
+            return Name + "\n"
+                + Gender.ToString() + ", " + GetCurrentAge().ToString() + "\n"
                 + DOB.ToShortDateString() + "\n"
-                + Education.ToString() + "\n"
-                + "--------------------\n";
+                + Education.ToString();
         }
 
         public void Tick()

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TerminalGame.People
+namespace TerminalGame.People.Utils
 {
     public enum EducationLevel
     {

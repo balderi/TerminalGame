@@ -5,23 +5,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TerminalGame.Time;
+using TerminalGame.People.Utils;
 
 namespace TerminalGame.People.Generator
 {
     public static class Person
     {
         private static Random _rnd = new Random(DateTime.Now.Millisecond);
-        
+        private static List<string> last = File.ReadLines("Content/Data/Names/lastNames.txt").ToList();
+        private static List<string> fNames = File.ReadLines("Content/Data/Names/femaleNames.txt").ToList();
+        private static List<string> mNames = File.ReadLines("Content/Data/Names/maleNames.txt").ToList();
+
         public static EducationLevel GenerateEducationLevel(int age)
         {
             if (age < 5)
                 return EducationLevel.None;
             if (age < 15)
-                return (EducationLevel)_rnd.Next(0, 2);
+                return (EducationLevel)_rnd.Next(-1, 1);
             if (age < 18)
-                return (EducationLevel)_rnd.Next(0, 3);
+                return (EducationLevel)_rnd.Next(0, 2);
             if (age >= 18)
-                return (EducationLevel)_rnd.Next(0, 4);
+                return (EducationLevel)_rnd.Next(0, 3);
 
             // Impossible!
             return EducationLevel.None;
@@ -30,19 +34,17 @@ namespace TerminalGame.People.Generator
         public static string GenerateName(Gender gender)
         {
             string retval = "";
-            string[] last = File.ReadAllLines("Content/Data/Names/lastNames.txt");
             if(gender == Gender.Female)
             {
-                string[] names = File.ReadAllLines("Content/Data/Names/femaleNames.txt");
-                retval += names[_rnd.Next(0, names.Length)];
+                
+                retval += fNames[_rnd.Next(0, fNames.Count)];
             }
             else
             {
-                string[] names = File.ReadAllLines("Content/Data/Names/maleNames.txt");
-                retval += names[_rnd.Next(0, names.Length)];
+                retval += mNames[_rnd.Next(0, mNames.Count)];
             }
             retval += " ";
-            retval += last[_rnd.Next(0, last.Length)];
+            retval += last[_rnd.Next(0, last.Count)];
             return retval;
         }
 

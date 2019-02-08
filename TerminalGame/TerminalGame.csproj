@@ -76,9 +76,9 @@
     <Compile Include="Files\IFile.cs" />
     <Compile Include="Parsing\CommandParser.cs" />
     <Compile Include="Parsing\CommandToken.cs" />
-    <Compile Include="People\AgeRange.cs" />
-    <Compile Include="People\EducationLevel.cs" />
-    <Compile Include="People\Gender.cs" />
+    <Compile Include="People\Utils\AgeRange.cs" />
+    <Compile Include="People\Utils\EducationLevel.cs" />
+    <Compile Include="People\Utils\Gender.cs" />
     <Compile Include="People\Generator\Person.cs" />
     <Compile Include="People\Generator\User.cs" />
     <Compile Include="People\Person.cs" />
@@ -105,6 +105,7 @@
     <Compile Include="UI\Elements\Modules\ModuleComponents\NetworkNode.cs" />
     <Compile Include="UI\Elements\Modules\ModuleComponents\NodeInfoBox.cs" />
     <Compile Include="UI\Elements\Modules\NetworkMap.cs" />
+    <Compile Include="UI\Elements\Modules\RemoteView.cs" />
     <Compile Include="UI\Elements\Modules\StatusBar.cs" />
     <Compile Include="UI\Elements\Modules\Terminal.cs" />
     <Compile Include="UI\Elements\UIElement.cs" />
