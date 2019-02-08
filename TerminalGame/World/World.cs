@@ -131,12 +131,12 @@ namespace TerminalGame.World
         /// </summary>
         public void Tick()
         {
-            foreach (var c in Computers)
-                c.Tick();
-            foreach (var p in People)
-                p.Tick();
-            foreach (var c in Companies)
-                c.Tick();
+            foreach (var computer in Computers)
+                computer.Tick();
+            foreach (var person in People)
+                person.Tick();
+            foreach (var company in Companies)
+                company.Tick();
         }
 
         /// <summary>

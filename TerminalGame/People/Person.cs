@@ -28,10 +28,10 @@ namespace TerminalGame.People
             _rnd        = new Random(DateTime.Now.Millisecond);
             Gender      = (Gender)_rnd.Next(0, 2);
             AgeRange    = (AgeRange)_rnd.Next(4, 8);
-            Age         = Generator.Person.GenerateAge(AgeRange);
-            Education   = Generator.Person.GenerateEducationLevel(Age);
-            DOB         = Generator.Person.GenerateDOB(Age);
-            Name        = Generator.Person.GenerateName(Gender);
+            Age         = Generator.PersonGenerator.GenerateAge(AgeRange);
+            Education   = Generator.PersonGenerator.GenerateEducationLevel(Age);
+            DOB         = Generator.PersonGenerator.GenerateDOB(Age);
+            Name        = Generator.PersonGenerator.GenerateName(Gender);
 
             Email       = "";
             Phone       = 0;
@@ -46,10 +46,10 @@ namespace TerminalGame.People
             _rnd        = new Random(DateTime.Now.Millisecond);
             Gender      = (Gender)_rnd.Next(0, 2);
             AgeRange    = ageRange;
-            Age         = Generator.Person.GenerateAge(AgeRange);
-            Education   = Generator.Person.GenerateEducationLevel(Age);
-            DOB         = Generator.Person.GenerateDOB(Age);
-            Name        = Generator.Person.GenerateName(Gender);
+            Age         = Generator.PersonGenerator.GenerateAge(AgeRange);
+            Education   = Generator.PersonGenerator.GenerateEducationLevel(Age);
+            DOB         = Generator.PersonGenerator.GenerateDOB(Age);
+            Name        = Generator.PersonGenerator.GenerateName(Gender);
 
             Email       = "";
             Phone       = 0;
@@ -68,15 +68,15 @@ namespace TerminalGame.People
             DOB         = dob;
             Gender      = gender;
             Education   = education;
-            Age         = Generator.Person.GenerateAge(dob);
-            AgeRange    = Generator.Person.GenerateAgeRange(Age);
+            Age         = Generator.PersonGenerator.GenerateAge(dob);
+            AgeRange    = Generator.PersonGenerator.GenerateAgeRange(Age);
 
             Email       = "";
             Phone       = 0;
         }
 
-        public int GetCurrentAge() => Generator.Person.GenerateAge(DOB);
-        public AgeRange GetCurrentAgeRange() => Generator.Person.GenerateAgeRange(DOB);
+        public int GetCurrentAge() => Generator.PersonGenerator.GenerateAge(DOB);
+        public AgeRange GetCurrentAgeRange() => Generator.PersonGenerator.GenerateAgeRange(DOB);
 
         public override string ToString()
         {

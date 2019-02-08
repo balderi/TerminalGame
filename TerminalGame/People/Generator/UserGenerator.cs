@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TerminalGame.People.Generator
 {
-    public static class User
+    public static class UserGenerator
     {
         private static Random _rnd = new Random(DateTime.Now.Millisecond);
 

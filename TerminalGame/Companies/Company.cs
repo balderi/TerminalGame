@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TerminalGame.Computers;
 using TerminalGame.Computers.Utils;
 using TerminalGame.People;
+using TerminalGame.People.Utils;
 
 namespace TerminalGame.Companies
 {
@@ -24,15 +25,15 @@ namespace TerminalGame.Companies
         public Company()
         {
             _rnd = new Random(DateTime.Now.Millisecond);
-            Name = Generator.Company.GenerateName();
-            Owner = new Person(People.Utils.AgeRange.MiddleAged);
-            Admin = new User(People.Utils.AgeRange.Adult);
+            Name = Generator.CompanyGenerator.GenerateName();
+            Owner = new Person(AgeRange.MiddleAged);
+            Admin = new User(AgeRange.Adult);
             NumberOfShares = _rnd.Next();
             SharePrice = _rnd.Next();
             CompanyValue = _rnd.Next();
             GetComputers = new List<Computer>
             {
-                Generator.Company.GenerateComputer(this, ComputerType.Server),
+                Generator.CompanyGenerator.GenerateComputer(this, ComputerType.Server),
             };
         }
 

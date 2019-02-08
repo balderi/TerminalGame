@@ -9,7 +9,7 @@ using TerminalGame.People.Utils;
 
 namespace TerminalGame.People.Generator
 {
-    public static class Person
+    public static class PersonGenerator
     {
         private static Random _rnd = new Random(DateTime.Now.Millisecond);
         private static List<string> last = File.ReadLines("Content/Data/Names/lastNames.txt").ToList();

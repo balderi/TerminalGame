@@ -8,7 +8,7 @@ using TerminalGame.Computers.Utils;
 
 namespace TerminalGame.Companies.Generator
 {
-    public static class Company
+    public static class CompanyGenerator
     {
         private static readonly string[] aName = new string[] { "Advanced", "Air", "Aero", "Applied", "Auto", "Bank", "Best", "City", "Chem", "Com", "Commercial", "Compu", "Cyber", "Dyn", "Dyna", "Dyno", "East", "Eastern", "Energy", "Equity", "Excellent", "Excellency", "Express", "Gen", "General", "Green", "Health", "Home", "Ini", "Initial", "International", "Key", "Max", "Mac", "Med", "Medical", "Micro", "National", "North", "Northern", "Office", "Omni", "Pharma", "Poly", "Quantum", "Regional", "Safe", "Sci", "South", "Southern", "Super", "Synthetic", "Synth", "West", "Western" };
         private static readonly string[] bName = new string[] { " Shipping", " Logistics", " Renovation", "Consult", " Consulting", " Construction", " Estates", " Power", " Electric", " Services", " Computer Services", " Technologies", " Tech", " Technology", " Energy", "field", "Field", "dyne", "Dyne", "tyne", "Tyne", " Energy", " Pharmaceuticals", " Pharma", "Pharm", " Financial", " Devices", " International", " Industial Technologies", "land", "vox", "Vox", "tel", "Tel", "Nation", "net", "Net", " Group", " Products", "Zone", " Homes", " Software", "Soft", "point", " Point", " Worldwide", "vision", "Vision", "Star", "ware", " Brands", "Air", " Air", " Airlines", " Airways", "Auto", " Auto", " Foods", " Healthcare" };
@@ -16,7 +16,7 @@ namespace TerminalGame.Companies.Generator
 
         private static Random _rnd;
 
-        public static Computer GenerateComputer(Companies.Company company, ComputerType type)
+        public static Computer GenerateComputer(Company company, ComputerType type)
         {
             string fullType = "";
             switch(type)
