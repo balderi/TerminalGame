@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Time;
 using TerminalGame.UI.Elements.Buttons;
 using TerminalGame.Utils;
@@ -15,6 +16,8 @@ namespace TerminalGame.UI.Elements.Modules
         private double _dateWidth, _timeWidth;
         private Button _pause, _realTime, _single, _double, _triple;
         private List<Button> _buttons;
+        private string _connectionInfo, _buildNumber, _playerDeets;
+        private SpriteFont _playerDetailFont;
 
         public StatusBar(Game game, Point location, Point size, string title, bool hasHeader = true, bool hasBorder = true) : base(game, location, size, title, hasHeader, hasBorder)
         {
@@ -24,8 +27,14 @@ namespace TerminalGame.UI.Elements.Modules
         public override void Initialize()
         {
             base.Initialize();
+            _buildNumber = String.Format("Version {0}\n  Build {1}", Game.Version, Game.BuildNumber);
+
+            _playerDeets = "   Name: " + Player.GetInstance().Name + "\nBalance: $" + Player.GetInstance().Balance;
+            
+            _connectionInfo = "";
             BackgroundColor = _themeManager.CurrentTheme.ModuleHeaderBackgroundColor;
             _titleFont = FontManager.GetFont("FontM");
+            _playerDetailFont = FontManager.GetFont("FontXS");
             FontColor = _themeManager.CurrentTheme.ModuleFontColor;
             
             _dateWidth = _titleFont.MeasureString(GameClock.GameTime.ToShortDateString()).X;
@@ -63,6 +72,14 @@ namespace TerminalGame.UI.Elements.Modules
             _spriteBatch.DrawString(_titleFont, GameClock.GameTime.ToShortTimeString(), new Vector2(Rectangle.X + 5, Rectangle.Y + 25), FontColor * _opacity);
             foreach (var b in _buttons)
                 b.Draw(gameTime);
+            _spriteBatch.DrawString(_playerDetailFont, _connectionInfo, new Vector2(_buttons[4].Rectangle.X + _buttons[4].Rectangle.Width + 10,
+                    5), _themeManager.CurrentTheme.ModuleHeaderFontColor);
+            _spriteBatch.DrawString(_playerDetailFont, _buildNumber,
+                new Vector2(Rectangle.Right - _playerDetailFont.MeasureString(_buildNumber).Length() - 5, 5),
+                _themeManager.CurrentTheme.ModuleHeaderFontColor);
+            _spriteBatch.DrawString(_playerDetailFont, _playerDeets,
+                new Vector2(Rectangle.Right - _playerDetailFont.MeasureString(_buildNumber).Length() - 5 - _playerDetailFont.MeasureString(_playerDeets).Length() - 20, 5),
+                _themeManager.CurrentTheme.ModuleHeaderFontColor);
         }
 
         public override void Update(GameTime gameTime)
@@ -70,6 +87,7 @@ namespace TerminalGame.UI.Elements.Modules
             base.Update(gameTime);
             foreach (var b in _buttons)
                 b.Update(gameTime);
+            _connectionInfo = Player.GetInstance().ConnectedComp.GetPublicName() + "\n" + Player.GetInstance().ConnectedComp.IP;
         }
 
         protected override void LoadContent()
