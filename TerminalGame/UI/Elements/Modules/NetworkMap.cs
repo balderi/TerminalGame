@@ -61,7 +61,7 @@ namespace TerminalGame.UI.Elements.Modules
             _rnd = new Random(DateTime.Now.Millisecond);
             _world = World.World.GetInstance();
             _networkNodes = new List<NetworkNode>();
-            GenerateMapNoOverlap(1000);
+            GenerateMapNoOverlap(30);
             foreach (NetworkNode n in _networkNodes)
                 n.Initialize();
         }

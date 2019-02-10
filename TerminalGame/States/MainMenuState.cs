@@ -27,7 +27,7 @@ namespace TerminalGame.States
         public override void Initialize(GraphicsDeviceManager graphics, Screen screen, Game game)
         {
             base.Initialize(graphics, screen, game);
-            AddState("gameRunning", GameRunningState.GetInstance());
+            AddState("gameLoading", GameLoadingState.GetInstance());
         }
 
         public override void Update(GameTime gameTime)

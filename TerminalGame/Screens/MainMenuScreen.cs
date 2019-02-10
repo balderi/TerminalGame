@@ -125,7 +125,7 @@ namespace TerminalGame.Screens
         private void NewGame_Clicked(ButtonPressedEventArgs e)
         {
             Console.WriteLine("New Game clicked");
-            StateMachine.GetInstance().ChangeState("gameRunning", new GameRunningScreen(Game));
+            StateMachine.GetInstance().ChangeState("gameLoading", new GameLoadingScreen(Game));
         }
 
         private void LoadGame_Clicked(ButtonPressedEventArgs e)

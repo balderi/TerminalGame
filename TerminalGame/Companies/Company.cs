@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TerminalGame.Computers;
 using TerminalGame.Computers.Utils;
@@ -14,9 +15,13 @@ namespace TerminalGame.Companies
     {
         private Random          _rnd;
 
+        // TODO: Both owner and admin should be user. Or rework person to have passwords or something.
+
+        // TODO: Company size (int or enum?) determining number of employees, shares, whatevs.
+
         public string           Name            { get; private set; }
         public Person           Owner           { get; private set; }
-        public User             Admin           { get; private set; }
+        public Person           Admin           { get; private set; }
         public int              NumberOfShares  { get; private set; }
         public int              SharePrice      { get; private set; }
         public int              CompanyValue    { get; private set; }
@@ -27,10 +32,10 @@ namespace TerminalGame.Companies
             _rnd = new Random(DateTime.Now.Millisecond);
             Name = Generator.CompanyGenerator.GenerateName();
             Owner = new Person(AgeRange.MiddleAged);
-            Admin = new User(AgeRange.Adult);
             NumberOfShares = _rnd.Next();
             SharePrice = _rnd.Next();
             CompanyValue = _rnd.Next();
+            Admin = new Person(AgeRange.Adult);
             GetComputers = new List<Computer>
             {
                 Generator.CompanyGenerator.GenerateComputer(this, ComputerType.Server),

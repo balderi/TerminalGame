@@ -29,12 +29,6 @@ namespace TerminalGame.Screens
 
         public override void Initialize(GraphicsDeviceManager graphics)
         {
-            Game.Player = Player.GetInstance();
-
-            Game.Player.CreateNewPlayer("testPlayer", "abc123");
-
-            World.World.GetInstance().CreateWorld();
-
             Game.Player.ConnectedComp = Game.Player.PlayerComp;
 
             Terminal terminal = new Terminal(Game, new Point(2, 2),
