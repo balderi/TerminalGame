@@ -25,8 +25,6 @@ namespace TerminalGame.Files
 
         public File(string name, string contents, FileType fileType)
         {
-            if (fileType == FileType.Binary)
-                throw new ArgumentException("Binary files need to be instantiated with a program.");
             Name = name;
             Contents = contents;
             FileType = fileType;
@@ -74,6 +72,13 @@ namespace TerminalGame.Files
             return Contents;
         }
 
+        /// <summary>
+        /// Allows files to be sorted alphabetically.
+        /// </summary>
+        /// <param name="other">File to compare to.</param>
+        /// <returns>Less than zero if this FIle precedes <c>other</c> in the sort order.
+        /// Zero if this instance occurs in the same position in the sort order as <c>other</c>.
+        /// Greater than zero if this instance follows <c>other</c> in the sort order.</returns>
         public int CompareTo(File other)
         {
             if (other == null)
@@ -81,7 +86,7 @@ namespace TerminalGame.Files
             if (other is File otherFile)
                 return Name.CompareTo(otherFile.Name);
             else
-                throw new ArgumentException("Object is not a File");
+                throw new ArgumentException("Object is not a File"); //impossible!
         }
     }
 }
