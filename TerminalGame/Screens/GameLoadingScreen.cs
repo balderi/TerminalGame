@@ -60,6 +60,7 @@ namespace TerminalGame.Screens
         public override void SwitchOn()
         {
             base.SwitchOn();
+            MusicManager.GetInstance().FadeOut();
         }
 
         public override void Update(GameTime gameTime)
