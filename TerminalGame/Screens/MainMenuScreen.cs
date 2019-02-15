@@ -19,6 +19,8 @@ namespace TerminalGame.Screens
         private readonly string _gameTitle, _binary, _version;
         private int _binaryXpos;
         private SpriteFont _titleFont, _versionFont;
+        private Texture2D _smoke;
+        private Rectangle _smokeRect1, _smokeRect2;
 
         public MainMenuScreen(Game game) : base(game)
         {
@@ -52,6 +54,9 @@ namespace TerminalGame.Screens
 
             _titleFont = FontManager.GetFont("FontXL");
             _versionFont = FontManager.GetFont("FontM");
+
+            _smokeRect1 = new Rectangle(0, 0, Globals.GameWidth * 2, (int)(Globals.GameHeight * 1.25f));
+            _smokeRect2 = new Rectangle(-Globals.GameWidth, (int)(Globals.GameHeight * 0.1), Globals.GameWidth * 2, (int)(Globals.GameHeight * 1.25f));
         }
 
         public override void Initialize()
@@ -63,6 +68,7 @@ namespace TerminalGame.Screens
         {
             base.LoadContent();
             bgm = Content.Load<Song>("Audio/Music/mainmenu");
+            _smoke = Content.Load<Texture2D>("Graphics/Textures/Backgrounds/smoke");
         }
 
         public override void Initialize(GraphicsDeviceManager graphics)
@@ -78,8 +84,15 @@ namespace TerminalGame.Screens
 
         public override void Draw(GameTime gameTime)
         {
+            if (_smoke == null)
+                return;
+
             _spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend);
+
             base.Draw(gameTime);
+
+            _spriteBatch.Draw(_smoke, _smokeRect1, Color.White * 0.1f);
+            _spriteBatch.Draw(_smoke, _smokeRect2, Color.White * 0.2f);
 
             _spriteBatch.DrawString(FontManager.GetFont("FontS"), _binary, 
                 new Vector2(_binaryXpos, Game.Window.ClientBounds.Height - FontManager.GetFont("FontS").MeasureString("A").Y), Color.Green * 0.25f);
@@ -101,6 +114,14 @@ namespace TerminalGame.Screens
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            if (_smokeRect1.Location.X > -Globals.GameWidth)
+                _smokeRect1.Offset(-2, 0);
+            else
+                _smokeRect1.Offset(Globals.GameWidth, 0);
+            if (_smokeRect2.Location.X < 0)
+                _smokeRect2.Offset(1, 0);
+            else
+                _smokeRect2.Offset(-Globals.GameWidth, 0);
             foreach (var b in BUTTONS)
                 b.Update(gameTime);
 

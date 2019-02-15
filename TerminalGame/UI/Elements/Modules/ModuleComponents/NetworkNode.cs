@@ -13,7 +13,6 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
     class NetworkNode : UIElement
     {
         private readonly Texture2D _texture;
-        private Color _nodeColor;
         private readonly Dictionary<string, Texture2D> _networkNodeSpinners;
         //private Texture2D _spinner;
         private Color _currentColor, _connectedSpinnerColor, _playerSpinnerColor, _hoverSpinnerColor;
@@ -43,7 +42,6 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
         public override void Initialize()
         {
             base.Initialize();
-            _nodeColor = Color.White * _opacity; // TODO: Part of theme
             BackgroundColor = Color.Transparent;
 
             if (Computer == Player.GetInstance().PlayerComp)

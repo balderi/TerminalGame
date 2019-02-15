@@ -13,12 +13,13 @@ namespace TerminalGame.Files
         public string Contents { get; private set; }
         public int Size { get; private set; }
         public FileType FileType { get; private set; }
+        public File Parent { get; private set; }
         public List<File> Children { get; private set; }
 
         public File(string name)
         {
             Name = name;
-            Contents = "";
+            Contents = "dir";
             FileType = FileType.Directory;
             Size = -1;
         }
