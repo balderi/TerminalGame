@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Media;
+using System;
+using System.Collections.Generic;
 
 namespace TerminalGame.Utils
 {
@@ -10,6 +12,8 @@ namespace TerminalGame.Utils
         private bool _isFadingOut, _isFadingIn, _isPlaying;
 
         private static MusicManager _instance;
+
+        private Dictionary<string, Song> _songs;
 
         public static MusicManager GetInstance()
         {
@@ -23,27 +27,41 @@ namespace TerminalGame.Utils
             _isFadingOut = false;
             _isFadingIn = false;
             _musicChangeSpeed = 1.0f;
+            _songs = new Dictionary<string, Song>();
         }
 
-        public void Start(Song song, bool isRepeating = true)
+        public void AddSong(string key, Song song)
         {
-            _currentSong = song;
-            MediaPlayer.Volume = 0;
-            MediaPlayer.IsRepeating = isRepeating;
-            MediaPlayer.Play(_currentSong);
-            _isFadingIn = true;
-            _isPlaying = true;
-            _delta = 0.01f;
+            _songs.Add(key, song);
         }
 
-        public void ChangeSong(Song nextSong, float delta = 0.1f)
+        public void Start(string song, bool isRepeating = true)
         {
-            if (_currentSong == nextSong)
-                return;
+            if (_songs.TryGetValue(song, out _currentSong))
+            {
+                MediaPlayer.Volume = 0;
+                MediaPlayer.IsRepeating = isRepeating;
+                MediaPlayer.Play(_currentSong);
+                _isFadingIn = true;
+                _isPlaying = true;
+                _delta = 0.01f;
+            }
+            else
+                throw new ArgumentException(song + " does not exist on songs");
+        }
 
-            _nextSong = nextSong;
-            _delta = delta;
-            FadeOut(delta);
+        public void ChangeSong(string nextSong, float delta = 0.1f)
+        {
+            if (_songs.TryGetValue(nextSong, out _nextSong))
+            {
+                if (_currentSong == _nextSong)
+                    return;
+                
+                _delta = delta;
+                FadeOut(delta);
+            }
+            else
+                throw new ArgumentException(nextSong + " does not exist on songs");
         }
 
         public void SetMusicChangeSpeed(float musicChangeSpeed)

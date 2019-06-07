@@ -14,7 +14,6 @@ namespace TerminalGame.Screens
     class GameRunningScreen : Screen
     {
         private Texture2D _background;
-        private Song bgm;
         private KeyboardState _prevState, _newState;
 
         public GameRunningScreen(Game game) : base(game)
@@ -59,7 +58,6 @@ namespace TerminalGame.Screens
         protected override void LoadContent()
         {
             _background = Content.Load<Texture2D>("Graphics/Textures/Backgrounds/bg");
-            bgm = Content.Load<Song>("Audio/Music/ambientbgm1_2");
             base.LoadContent();
         }
 
@@ -139,7 +137,7 @@ namespace TerminalGame.Screens
         public override void SwitchOn()
         {
             base.SwitchOn();
-            MusicManager.GetInstance().Start(bgm);
+            MusicManager.GetInstance().Start("gameBgm");
         }
     }
 }

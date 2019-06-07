@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using TerminalGame.Programs;
+using TerminalGame.Utils;
 
 namespace TerminalGame.Parsing
 {
@@ -114,11 +115,13 @@ namespace TerminalGame.Parsing
                 case "disconnect":
                 case "dc":
                     {
+                        MusicManager.GetInstance().ChangeSong("gameBgm", 0.025f);
                         Disconnect.GetInstance().Init(game, null, token.Args);
                         break;
                     }
                 case "connect":
                     {
+                        MusicManager.GetInstance().ChangeSong("hackLoop", 0.025f);
                         Connect.GetInstance().Init(game, null, token.Args);
                         break;
                     }

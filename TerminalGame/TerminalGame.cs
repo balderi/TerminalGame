@@ -112,6 +112,9 @@ namespace TerminalGame
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _musicManager = MusicManager.GetInstance();
+            _musicManager.AddSong("mainMenuBgm", Content.Load<Song>("Audio/Music/mainmenu"));
+            _musicManager.AddSong("gameBgm", Content.Load<Song>("Audio/Music/ambientbgm1_2"));
+            _musicManager.AddSong("hackLoop", Content.Load<Song>("Audio/Music/hackloop1"));
             Console.WriteLine("load done");
         }
 

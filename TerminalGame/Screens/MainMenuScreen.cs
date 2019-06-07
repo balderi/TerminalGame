@@ -12,7 +12,6 @@ namespace TerminalGame.Screens
     class MainMenuScreen : Screen
     {
         private readonly List<Button> BUTTONS;
-        private Song bgm;
         private readonly string _gameTitle, _binary, _version;
         private int _binaryXpos;
         private SpriteFont _titleFont, _versionFont;
@@ -64,7 +63,6 @@ namespace TerminalGame.Screens
         protected override void LoadContent()
         {
             base.LoadContent();
-            bgm = Content.Load<Song>("Audio/Music/mainmenu");
             _smoke = Content.Load<Texture2D>("Graphics/Textures/Backgrounds/smoke");
         }
 
@@ -76,7 +74,7 @@ namespace TerminalGame.Screens
         public override void SwitchOn()
         {
             base.SwitchOn();
-            MusicManager.GetInstance().Start(bgm);
+            MusicManager.GetInstance().Start("mainMenuBgm");
         }
 
         public override void Draw(GameTime gameTime)

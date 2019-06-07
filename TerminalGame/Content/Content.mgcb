@@ -19,6 +19,12 @@
 /processorParam:Quality=Best
 /build:Audio/Music/ambientbgm1_2.ogg
 
+#begin Audio/Music/hackloop1.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Music/hackloop1.ogg
+
 #begin Audio/Music/mainmenu.ogg
 /importer:OggImporter
 /processor:SongProcessor
