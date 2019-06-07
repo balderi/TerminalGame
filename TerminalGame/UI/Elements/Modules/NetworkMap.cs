@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Computers;
 using TerminalGame.UI.Elements.Modules.ModuleComponents;
-using TerminalGame.Utils;
 
 namespace TerminalGame.UI.Elements.Modules
 {

@@ -1,10 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Audio;
 using TerminalGame.Utils;
 using TerminalGame.UI.Elements.Modules;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework.Media;
 using TerminalGame.States;
 using TerminalGame.Screens;
@@ -26,6 +24,8 @@ namespace TerminalGame
 
         private MusicManager _musicManager;
         private ThemeManager _themeManager;
+
+        private KeyboardState _oldState;
 
         private StateMachine stateMachine;
 
@@ -66,6 +66,8 @@ namespace TerminalGame
             base.Initialize();
 
             CurrentGameSpeed = GameSpeed.Paused;
+
+            _oldState = Keyboard.GetState();
 
             _graphics.HardwareModeSwitch = false;
             _graphics.PreferredBackBufferHeight = 768;// (int)(GraphicsDevice.DisplayMode.Height * 0.8);
@@ -129,28 +131,26 @@ namespace TerminalGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.M) && Keyboard.GetState().IsKeyDown(Keys.LeftControl))
+            if (_oldState.IsKeyDown(Keys.M) && Keyboard.GetState().IsKeyUp(Keys.M) && Keyboard.GetState().IsKeyDown(Keys.LeftControl))
             {
                 MediaPlayer.IsMuted = !MediaPlayer.IsMuted;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.F1))
+            if (_oldState.IsKeyDown(Keys.F1) && Keyboard.GetState().IsKeyUp(Keys.F1))
             {
                 _musicManager.FadeOut();
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.F2))
+            if (_oldState.IsKeyDown(Keys.F2) && Keyboard.GetState().IsKeyUp(Keys.F2))
             {
                 _musicManager.FadeIn();
             }
 
             _themeManager.Update(gameTime);
-
             _musicManager.Update(gameTime);
-
-            base.Update(gameTime);
-
             stateMachine.Update(gameTime);
+
+            _oldState = Keyboard.GetState();
         }
 
         /// <summary>
@@ -160,11 +160,8 @@ namespace TerminalGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
-            //_spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend);
-            base.Draw(gameTime);
+            
             stateMachine.Draw(gameTime);
-            //_spriteBatch.End();
         }
     }
 }

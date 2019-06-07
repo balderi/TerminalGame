@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Computers;
@@ -117,7 +114,7 @@ namespace TerminalGame.UI.Elements.Modules
             _history.Reverse();
             _history.Add(_textBox.Text.String);
             _history.Reverse();
-            WriteLine(WordWrap(_promptText + _textBox.Text.String));
+            WriteLine(_promptText + _textBox.Text.String);
             RunCommand(_textBox.Text.String);
             _textBox.Text.RemoveCharacters(0, _textBox.Text.Length);
             _textBox.Cursor.TextCursor = 0;
@@ -134,7 +131,7 @@ namespace TerminalGame.UI.Elements.Modules
             {
                 temp.Add(holder.Substring(i * _maxChars, Math.Min(holder.Length - (i * _maxChars), _maxChars)));
             }
-            return String.Join("\n", temp);
+            return string.Join("\n", temp);
         }
 
         protected override void LoadContent()
@@ -181,7 +178,7 @@ namespace TerminalGame.UI.Elements.Modules
         /// <param name="text">The text to write.</param>
         public void Write(string text)
         {
-            _output.Add(text);
+            _output.Add(WordWrap(text));
         }
 
         /// <summary>
@@ -191,7 +188,7 @@ namespace TerminalGame.UI.Elements.Modules
         /// <param name="text">The text to write.</param>
         public void WriteLine(string text)
         {
-            _output.Add("\n" + text);
+            _output.Add("\n" + WordWrap(text));
         }
 
         /// <summary>
@@ -202,7 +199,7 @@ namespace TerminalGame.UI.Elements.Modules
         /// <param name="command">The command (and args) to be evaluated.</param>
         public void RunCommand(string command)
         {
-            if (CommandParser.TryTokenize(command, false, out CommandToken token))
+            if (CommandParser.TryTokenize(command, command.Contains("\""), out CommandToken token))
             {
                 CommandParser.Parse(token, Game);
                 UpdateTextBox();

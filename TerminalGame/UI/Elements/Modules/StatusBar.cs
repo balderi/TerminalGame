@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Time;
@@ -68,8 +65,8 @@ namespace TerminalGame.UI.Elements.Modules
 
         public override void ScissorDraw(GameTime gameTime)
         {
-            _spriteBatch.DrawString(_titleFont, GameClock.GameTime.ToShortDateString(), new Vector2(Rectangle.X + 5, Rectangle.Y + 5), FontColor * _opacity);
-            _spriteBatch.DrawString(_titleFont, GameClock.GameTime.ToShortTimeString(), new Vector2(Rectangle.X + 5, Rectangle.Y + 25), FontColor * _opacity);
+            _spriteBatch.DrawString(_titleFont, GameClock.GameTime.ToString("yyyy/MM/dd"), new Vector2(Rectangle.X + 5, Rectangle.Y + 5), FontColor * _opacity);
+            _spriteBatch.DrawString(_titleFont, GameClock.GameTime.ToString("HH:mm"), new Vector2(Rectangle.X + 5, Rectangle.Y + 25), FontColor * _opacity);
             foreach (var b in _buttons)
                 b.Draw(gameTime);
             _spriteBatch.DrawString(_playerDetailFont, _connectionInfo, new Vector2(_buttons[4].Rectangle.X + _buttons[4].Rectangle.Width + 10,

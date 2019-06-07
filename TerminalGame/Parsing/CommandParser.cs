@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using TerminalGame.Programs;
 
 namespace TerminalGame.Parsing
@@ -27,8 +23,14 @@ namespace TerminalGame.Parsing
 
         public static CommandToken TokenizeTextArgs(string command)
         {
+            Console.WriteLine("TOKEN - command: " + command);
             var cmd = command.Split(' ')[0];
-            string[] args = Regex.Split(command, "\"[a-zA-Z0-9 \\-_]+\"");
+            Console.WriteLine("TOKEN - cmd: " + cmd);
+            string[] args = new string[] { Regex.Match(command.Replace(cmd + " ", ""), "\"[^\"]+\"").Value.Replace("\"", "") };
+            Console.WriteLine("TOKEN - cmd replace: " + command.Replace(cmd + " ", ""));
+            Console.WriteLine("TOKEN - args: " + args.Length);
+            foreach(var a in args)
+                Console.WriteLine("TOKEN - arg: " + a);
             return new CommandToken { Command = cmd, Args = args };
         }
 
@@ -53,8 +55,13 @@ namespace TerminalGame.Parsing
             Console.WriteLine("Command: {0}", token.Command);
             switch (token.Command)
             {
+                case "":
+                    {
+                        break;
+                    }
                 case "echo":
                     {
+                        game.Terminal.WriteLine(token.Args[0]);
                         break;
                     }
                 case "sudo":
@@ -107,6 +114,7 @@ namespace TerminalGame.Parsing
                 case "disconnect":
                 case "dc":
                     {
+                        Disconnect.GetInstance().Init(game, null, token.Args);
                         break;
                     }
                 case "connect":

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using TerminalGame.Utils;
 using TerminalGame.Computers.Utils;
@@ -44,12 +41,12 @@ namespace TerminalGame.Computers
         {
             Name = name;
 
-            if (String.IsNullOrWhiteSpace(ip))
+            if (string.IsNullOrWhiteSpace(ip))
                 IP = Generators.GenerateIP();
             else
                 IP = ip;
 
-            if (String.IsNullOrWhiteSpace(rootPassword))
+            if (string.IsNullOrWhiteSpace(rootPassword))
                 RootPassword = Generators.GeneratePassword();
             else
                 RootPassword = rootPassword;
@@ -197,7 +194,19 @@ namespace TerminalGame.Computers
 
         public void Tick()
         {
+            // TODO: update computer if necessary
+        }
 
+        public static Computer Load()
+        {
+            var c = new Computer("temp", "0.0.0.0", "temp"); // TEMP
+            c.Init(); // TEMP
+            return c; // TEMP
+        }
+
+        public void Save(string fileName)
+        {
+            // TODO: save computer
         }
     }
 }

@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Timers;
 using TerminalGame.Computers;
 
 namespace TerminalGame.Programs
@@ -37,16 +32,16 @@ namespace TerminalGame.Programs
                 Kill();
                 return;
             }
+            if (_args.Length > 1)
+            {
+                Game.Terminal.WriteLine("Too many arguments: connect");
+                Kill();
+                return;
+            }
             Console.WriteLine("Attempting connection to host with IP {0}", _args[0]);
             if(_args[0] == Player.GetInstance().ConnectedComp.IP)
             {
                 Game.Terminal.WriteLine("You are already connected to this host");
-                Kill();
-                return;
-            }
-            if (_args.Length > 1)
-            {
-                Game.Terminal.WriteLine("Too many arguments: connect");
                 Kill();
                 return;
             }
@@ -56,7 +51,9 @@ namespace TerminalGame.Programs
                 Kill();
                 return;
             }
-            _connection = new string[] { "Connecting to " + _args[0], ".", ".", ".", "Connected to " + _args[0], "Error: no response from host", "Error: Host does not exist", "You are already connected to this host" };
+            _connection = new string[] { "Connecting to " + _args[0], ".", ".", ".",
+                "Connected to " + _args[0], "Error: no response from host", "Error: Host does not exist",
+                "You are already connected to this host" };
             _timer.AutoReset = true;
             _timer.Interval = 250;
             _timer.Enabled = true;

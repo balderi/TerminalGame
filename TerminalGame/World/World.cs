@@ -1,10 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Concurrent;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TerminalGame.Companies;
 using TerminalGame.Computers;
 using TerminalGame.Computers.Utils;
@@ -143,9 +139,9 @@ namespace TerminalGame.World
         /// Load a previously saved world from file.
         /// </summary>
         /// <param name="fileName">Path to the save file.</param>
-        public void Load(string fileName)
+        public static World Load(string fileName)
         {
-
+            return new World(); // TEMP
         }
 
         /// <summary>

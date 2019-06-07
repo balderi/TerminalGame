@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TerminalGame.Files
 {
@@ -26,6 +22,9 @@ namespace TerminalGame.Files
 
         public File(string name, string contents, FileType fileType)
         {
+            if (fileType == FileType.Directory)
+                throw new ArgumentException("Directory file type cannot have contents.");
+            
             Name = name;
             Contents = contents;
             FileType = fileType;
@@ -70,6 +69,11 @@ namespace TerminalGame.Files
 
         public override string ToString()
         {
+            if(FileType == FileType.Directory)
+            {
+                // TODO: List files
+                return "This is directory.";
+            }
             return Contents;
         }
 
@@ -88,6 +92,30 @@ namespace TerminalGame.Files
                 return Name.CompareTo(otherFile.Name);
             else
                 throw new ArgumentException("Object is not a File"); //impossible!
+        }
+
+        public override bool Equals(object obj)
+        {
+            var file = obj as File;
+            return file != null &&
+                   Name == file.Name &&
+                   Contents == file.Contents &&
+                   Size == file.Size &&
+                   FileType == file.FileType &&
+                   EqualityComparer<File>.Default.Equals(Parent, file.Parent) &&
+                   EqualityComparer<List<File>>.Default.Equals(Children, file.Children);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 1411017911;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Contents);
+            hashCode = hashCode * -1521134295 + Size.GetHashCode();
+            hashCode = hashCode * -1521134295 + FileType.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<File>.Default.GetHashCode(Parent);
+            hashCode = hashCode * -1521134295 + EqualityComparer<List<File>>.Default.GetHashCode(Children);
+            return hashCode;
         }
     }
 }
