@@ -125,11 +125,15 @@ namespace TerminalGame.UI.Elements.Modules
         {
             if (text.Length < _maxCharsP)
                 return text;
-            string holder = text;
             List<string> temp = new List<string>();
-            for(int i = 0; i < Math.Ceiling((decimal)(text.Length) / _maxChars); i++)
+
+            string[] holder = text.Split('\n');
+            foreach (var line in holder)
             {
-                temp.Add(holder.Substring(i * _maxChars, Math.Min(holder.Length - (i * _maxChars), _maxChars)));
+                for (int i = 0; i < Math.Ceiling((decimal)(line.Length) / _maxChars); i++)
+                {
+                    temp.Add(line.Substring(i * _maxChars, Math.Min(line.Length - (i * _maxChars), _maxChars)));
+                }
             }
             return string.Join("\n", temp);
         }
