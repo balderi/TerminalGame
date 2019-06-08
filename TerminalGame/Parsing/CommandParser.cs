@@ -80,6 +80,7 @@ namespace TerminalGame.Parsing
                 case "ifconfig":
                 case "ipconfig":
                     {
+                        Ifconfig.GetInstance().Init(game, null, token.Args);
                         break;
                     }
                 case "pwd":
