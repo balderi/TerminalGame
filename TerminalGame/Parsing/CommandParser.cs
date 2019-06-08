@@ -24,14 +24,8 @@ namespace TerminalGame.Parsing
 
         public static CommandToken TokenizeTextArgs(string command)
         {
-            Console.WriteLine("TOKEN - command: " + command);
             var cmd = command.Split(' ')[0];
-            Console.WriteLine("TOKEN - cmd: " + cmd);
             string[] args = new string[] { Regex.Match(command.Replace(cmd + " ", ""), "\"[^\"]+\"").Value.Replace("\"", "") };
-            Console.WriteLine("TOKEN - cmd replace: " + command.Replace(cmd + " ", ""));
-            Console.WriteLine("TOKEN - args: " + args.Length);
-            foreach(var a in args)
-                Console.WriteLine("TOKEN - arg: " + a);
             return new CommandToken { Command = cmd, Args = args };
         }
 

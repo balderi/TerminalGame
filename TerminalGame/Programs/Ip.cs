@@ -68,8 +68,6 @@ namespace TerminalGame.Programs
                         return;
                     }
             }
-
-            Kill();
         }
 
         protected override void Timer_Tick(object sender, EventArgs e)

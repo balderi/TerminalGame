@@ -227,7 +227,7 @@ namespace TerminalGame.UI.Elements.Modules
 
         private string HistoryToString(List<string> hist)
         {
-            return String.Join("", hist);
+            return string.Join("", hist);
         }
 
         public override void ScissorDraw(GameTime gameTime)
