@@ -85,6 +85,7 @@
     <Compile Include="People\User.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Programs\Connect.cs" />
+    <Compile Include="Programs\Ip.cs" />
     <Compile Include="Programs\Ifconfig.cs" />
     <Compile Include="Programs\Disconnect.cs" />
     <Compile Include="Programs\IProgram.cs" />

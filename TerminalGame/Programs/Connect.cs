@@ -28,7 +28,7 @@ namespace TerminalGame.Programs
             _isKill = false;
             if (_args.Length < 1)
             {
-                Game.Terminal.WriteLine("usage: connect [IP]");
+                Game.Terminal.WriteLine("Usage: connect [ IP ]");
                 Kill();
                 return;
             }

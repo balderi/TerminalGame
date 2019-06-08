@@ -75,6 +75,7 @@ namespace TerminalGame.Parsing
                     }
                 case "ip":
                     {
+                        Ip.GetInstance().Init(game, null, token.Args);
                         break;
                     }
                 case "ifconfig":
