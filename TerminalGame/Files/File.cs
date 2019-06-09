@@ -83,6 +83,14 @@ namespace TerminalGame.Files
                 throw new InvalidOperationException(Name + " is not a directory.");
         }
 
+        public string GetFullPath()
+        {
+            string retval = "";
+            if (Parent != null)
+                retval += Parent.GetFullPath() + "/" + Name;
+            return retval;
+        }
+
         /// <summary>
         /// Returns the contents of the file.
         /// </summary>
@@ -115,6 +123,19 @@ namespace TerminalGame.Files
                 return retval;
             }
             return Name;
+        }
+
+        public File GetChild(string name)
+        {
+            if(FileType == FileType.Directory)
+            {
+                bool findFile(File f)
+                {
+                    return f.Name == name;
+                }
+                return Children.Find(findFile);
+            }
+            throw new InvalidOperationException("Cannot get child of file.");
         }
 
         /// <summary>

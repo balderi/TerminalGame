@@ -20,7 +20,6 @@ namespace TerminalGame
     public class TerminalGame : Game
     {
         private readonly GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
 
         private MusicManager _musicManager;
         private ThemeManager _themeManager;
@@ -46,8 +45,8 @@ namespace TerminalGame
             Content.RootDirectory = "Content";
             version = Assembly.GetEntryAssembly().GetName().Version;
             Title = Assembly.GetEntryAssembly().GetName().Name;
-            Version = String.Format("v{0}.{1}a", version.Major, version.Minor);
-            TitleAndVersion = String.Format("{0} {1}", Title, Version);
+            Version = string.Format("v{0}.{1}a", version.Major, version.Minor);
+            TitleAndVersion = string.Format("{0} {1}", Title, Version);
             BuildNumber = File.GetLastWriteTime(Assembly.GetExecutingAssembly().Location).ToString("yyyyMMdd").ToString();
             IsFixedTimeStep = true;
             IsGameRunning = false;
@@ -97,8 +96,6 @@ namespace TerminalGame
 
             _themeManager.AddTheme(test);
             _themeManager.ChangeTheme("test");
-
-            GameClock.Initialize();
            
             Console.WriteLine("init done");
         }
@@ -109,8 +106,6 @@ namespace TerminalGame
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
             _musicManager = MusicManager.GetInstance();
             _musicManager.AddSong("mainMenuBgm", Content.Load<Song>("Audio/Music/mainmenu"));
             _musicManager.AddSong("gameBgm", Content.Load<Song>("Audio/Music/ambientbgm1_2"));
@@ -125,6 +120,12 @@ namespace TerminalGame
         protected override void UnloadContent()
         {
 
+        }
+
+        public void StartNewGame()
+        {
+            Console.WriteLine("Starting new game...");
+            IsGameRunning = true;
         }
 
         /// <summary>

@@ -7,18 +7,18 @@ using TerminalGame.Files;
 
 namespace TerminalGame.Programs
 {
-    class Cat : Program
+    class Cd : Program
     {
-        private static Cat _instance;
+        private static Cd _instance;
 
-        public static Cat GetInstance()
+        public static Cd GetInstance()
         {
             if (_instance == null)
-                _instance = new Cat();
+                _instance = new Cd();
             return _instance;
         }
 
-        private Cat()
+        private Cd()
         {
 
         }
@@ -28,17 +28,26 @@ namespace TerminalGame.Programs
             _isKill = false;
             if (_args.Length > 1)
             {
-                Game.Terminal.WriteLine("Too many arguments: cat");
+                Game.Terminal.WriteLine("Too many arguments: cd");
+                Kill();
+                return;
+            }
+            if(_args[0] == "..")
+            {
+                Player.GetInstance().ConnectedComp.FileSystem.ChangeCurrentDir(Player.GetInstance().ConnectedComp.FileSystem.CurrentDir.Parent);
                 Kill();
                 return;
             }
             if(Player.GetInstance().ConnectedComp.FileSystem.TryFindFile(_args[0], out File f))
             {
-                Game.Terminal.WriteLine(f.ToString());
+                if (f.FileType == FileType.Directory)
+                    Player.GetInstance().ConnectedComp.FileSystem.ChangeCurrentDir(f);
+                else
+                    Game.Terminal.WriteLine($"cd: {_args[0]}: Not a directory");
             }
             else
             {
-                Game.Terminal.WriteLine($"cat: {_args[0]}: no such file or directory");
+                Game.Terminal.WriteLine($"cd: {_args[0]}: no such file or directory");
             }
             Kill();
         }

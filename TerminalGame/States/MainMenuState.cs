@@ -23,6 +23,7 @@ namespace TerminalGame.States
         {
             base.Initialize(graphics, screen, game);
             AddState("gameLoading", GameLoadingState.GetInstance());
+            AddState("gameRunning", GameRunningState.GetInstance());
         }
 
         public override void Update(GameTime gameTime)

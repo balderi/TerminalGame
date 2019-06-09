@@ -8,12 +8,13 @@ using TerminalGame.Files;
 using TerminalGame.Files.FileSystem;
 using TerminalGame.People;
 using TerminalGame.People.Utils;
+using TerminalGame.Time;
 
 namespace TerminalGame.World
 {
     class World
     {
-        private Random _rnd;
+        //private Random _rnd;
 
         /// <summary>
         /// A list of all computers in the world.
@@ -65,8 +66,8 @@ namespace TerminalGame.World
         /// </summary>
         public void CreateWorld()
         {
-            DateTime beginC = DateTime.Now;
-            _rnd = new Random(DateTime.Now.Millisecond);
+            GameClock.Initialize();
+            //_rnd = new Random(DateTime.Now.Millisecond);
             Computers = new List<Computer>();
             People = new List<Person>();
             Companies = new List<Company>();

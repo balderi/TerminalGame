@@ -17,7 +17,7 @@ namespace TerminalGame.Companies.Generator
 
         public static Computer GenerateComputer(Company company, ComputerType type)
         {
-            string fullType = "";
+            string fullType;
             switch(type)
             {
                 case ComputerType.Laptop:

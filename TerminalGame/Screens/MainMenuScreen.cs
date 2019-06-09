@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using TerminalGame.States;
 using TerminalGame.UI.Elements.Buttons;
@@ -12,36 +13,38 @@ namespace TerminalGame.Screens
     class MainMenuScreen : Screen
     {
         private readonly List<Button> BUTTONS;
+        private readonly Button _continueGame, _newGame, _loadGame, _settings, _quit;
         private readonly string _gameTitle, _binary, _version;
         private int _binaryXpos;
-        private SpriteFont _titleFont, _versionFont;
+        private readonly SpriteFont _titleFont, _versionFont;
         private Texture2D _smoke;
         private Rectangle _smokeRect1, _smokeRect2;
+        private KeyboardState _prevState, _newState;
 
         public MainMenuScreen(Game game) : base(game)
         {
-            Button continueGame = new Button(game, "Continue", new Point(100, 200), new Point(400, 50), !Game.IsGameRunning);
-            Button newGame = new Button(game, "New Game", new Point(100, 275), new Point(400, 50), !Game.IsGameRunning);
-            Button loadGame = new Button(game, "Load Game", new Point(100, 350), new Point(400, 50), !Game.IsGameRunning);
-            Button settings = new Button(game, "Settings", new Point(100, 425), new Point(400, 50), !Game.IsGameRunning);
-            Button quit = new Button(game, "Quit", new Point(100, 500), new Point(400, 50), !Game.IsGameRunning);
+            _continueGame = new Button(game, "Continue", new Point(100, 200), new Point(400, 50), !Game.IsGameRunning);
+            _newGame = new Button(game, "New Game", new Point(100, 275), new Point(400, 50), !Game.IsGameRunning);
+            _loadGame = new Button(game, "Load Game", new Point(100, 350), new Point(400, 50), !Game.IsGameRunning);
+            _settings = new Button(game, "Settings", new Point(100, 425), new Point(400, 50), !Game.IsGameRunning);
+            _quit = new Button(game, "Quit", new Point(100, 500), new Point(400, 50), !Game.IsGameRunning);
 
-            continueGame.ButtonPressed += ContinueGame_Clicked;
-            newGame.ButtonPressed += NewGame_Clicked;
-            loadGame.ButtonPressed += LoadGame_Clicked;
-            settings.ButtonPressed += Settings_Clicked;
-            quit.ButtonPressed += Quit_Clicked;
+            _continueGame.ButtonPressed += ContinueGame_Clicked;
+            _newGame.ButtonPressed += NewGame_Clicked;
+            _loadGame.ButtonPressed += LoadGame_Clicked;
+            _settings.ButtonPressed += Settings_Clicked;
+            _quit.ButtonPressed += Quit_Clicked;
 
             BUTTONS = new List<Button>
             {
-                continueGame,
-                newGame,
-                loadGame,
-                settings,
-                quit
+                _continueGame,
+                _newGame,
+                _loadGame,
+                _settings,
+                _quit
             };
 
-            continueGame.Enabled = false;
+            _continueGame.Enabled = false;
 
             _gameTitle = Game.Title;
             _version = Game.Version;
@@ -108,7 +111,9 @@ namespace TerminalGame.Screens
 
         public override void Update(GameTime gameTime)
         {
+            _newState = Keyboard.GetState();
             base.Update(gameTime);
+
             if (_smokeRect1.Location.X > -Globals.GameWidth)
                 _smokeRect1.Offset(-2, 0);
             else
@@ -131,6 +136,13 @@ namespace TerminalGame.Screens
                     _binaryXpos += (int)FontManager.GetFont("FontS").MeasureString("A").X;
                 }
             }
+
+            if (_prevState.IsKeyDown(Keys.Escape) && _newState.IsKeyUp(Keys.Escape))
+            {
+                if(Game.IsGameRunning)
+                    StateMachine.GetInstance().ChangeState("gameRunning", new GameRunningScreen(Game));
+            }
+            _prevState = _newState;
         }
 
         private void ContinueGame_Clicked(ButtonPressedEventArgs e)
@@ -141,6 +153,7 @@ namespace TerminalGame.Screens
         private void NewGame_Clicked(ButtonPressedEventArgs e)
         {
             Console.WriteLine("New Game clicked");
+            Game.StartNewGame();
             StateMachine.GetInstance().ChangeState("gameLoading", new GameLoadingScreen(Game));
         }
 

@@ -149,6 +149,7 @@ namespace TerminalGame.Parsing
                     }
                 case "cd":
                     {
+                        Cd.GetInstance().Init(game, null, token.Args);
                         break;
                     }
                 case "test":

@@ -39,7 +39,7 @@ namespace TerminalGame.UI.Elements.Modules
 
             _histIndex = -1;
 
-            _promptText = _computer.AccessLevel.ToString().ToLower() + "@" + _computer.IP + ":/$ ";
+            _promptText = BuildPrompt();
             _promptWidth = (int)_terminalFont.MeasureString(_promptText).X;
 
             int tbHeight = (int)_terminalFont.MeasureString("A").Y;
@@ -72,6 +72,14 @@ namespace TerminalGame.UI.Elements.Modules
             WriteLine("Terminal max chars: " +
                 ((int)((_terminalOutputArea.Width - _promptWidth) / _terminalFont.MeasureString("A").X)).ToString() +
                 " (" + ((int)(_terminalOutputArea.Width / _terminalFont.MeasureString("A").X)).ToString() + ")");
+        }
+
+        private string BuildPrompt()
+        {
+            string retval = _computer.AccessLevel.ToString().ToLower() + "@" + _computer.IP + ":";
+            string path = _computer.FileSystem.CurrentDir.GetFullPath();
+            retval += path == "" ? "/" : path;
+            return retval += "$ ";
         }
 
         private void Tab_Pressed(object sender, KeyEventArgs e)
@@ -118,6 +126,7 @@ namespace TerminalGame.UI.Elements.Modules
             RunCommand(_textBox.Text.String);
             _textBox.Text.RemoveCharacters(0, _textBox.Text.Length);
             _textBox.Cursor.TextCursor = 0;
+            _promptText = BuildPrompt();
             UpdateTextBox();
         }
 
@@ -161,7 +170,7 @@ namespace TerminalGame.UI.Elements.Modules
             _textBox.Dispose();
             _textBox = null;
             _computer = Player.GetInstance().ConnectedComp;
-            _promptText = _computer.AccessLevel.ToString().ToLower() + "@" + _computer.IP + ":/$ ";
+            _promptText = BuildPrompt();
             _promptWidth = (int)_terminalFont.MeasureString(_promptText).X;
             int tbHeight = (int)_terminalFont.MeasureString("A").Y;
             _terminalInputArea = new Rectangle(new Point(Rectangle.X + _promptWidth + 2, Rectangle.Y + Rectangle.Height - tbHeight),

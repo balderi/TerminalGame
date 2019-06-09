@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Time;
@@ -10,7 +11,7 @@ namespace TerminalGame.UI.Elements.Modules
 {
     class StatusBar : Module
     {
-        private double _dateWidth, _timeWidth;
+        private double _dateWidth;
         private Button _pause, _realTime, _single, _double, _triple;
         private List<Button> _buttons;
         private string _connectionInfo, _buildNumber, _playerDeets;
@@ -35,7 +36,6 @@ namespace TerminalGame.UI.Elements.Modules
             FontColor = _themeManager.CurrentTheme.ModuleFontColor;
             
             _dateWidth = _titleFont.MeasureString(GameClock.GameTime.ToShortDateString()).X;
-            _timeWidth = _titleFont.MeasureString(GameClock.GameTime.ToShortTimeString()).X;
 
             // TODO: Make a SplitButton to replace this.
             _pause    = new Button(Game, "||", new Point(Rectangle.X + 10 + (int)_dateWidth, Rectangle.Y + 5), new Point(35));
