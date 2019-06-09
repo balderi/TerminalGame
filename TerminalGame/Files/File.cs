@@ -57,7 +57,10 @@ namespace TerminalGame.Files
                 if (Children.Contains(file))
                     throw new ArgumentException(file.Name + " already exists.");
                 else
+                {
                     Children.Add(file);
+                    file.Parent = this;
+                }
             }
             else
                 throw new InvalidOperationException(Name + " is not a directory.");
@@ -81,17 +84,30 @@ namespace TerminalGame.Files
         }
 
         /// <summary>
-        /// Returns the contents of the file, or a list of children if directory.
+        /// Returns the contents of the file.
         /// </summary>
-        /// <returns>File contents or list of children as string.</returns>
+        /// <returns>File contents as string.</returns>
         public override string ToString()
         {
             if(FileType == FileType.Directory)
             {
-                string retval = ".\n..";
-                if(Children.Count > 0)
+                return Name + " is a directory.";
+            }
+            return Contents;
+        }
+
+        /// <summary>
+        /// Returns a list of children, or file name if file.
+        /// </summary>
+        /// <returns>List of children or file name as string.</returns>
+        public string ListChildren()
+        {
+            if (FileType == FileType.Directory)
+            {
+                string retval = Parent == null ? "." : ".\n..";
+                if (Children.Count > 0)
                 {
-                    foreach(var c in Children)
+                    foreach (var c in Children)
                     {
                         retval += "\n" + c.Name;
                     }

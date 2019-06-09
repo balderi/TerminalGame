@@ -138,6 +138,7 @@ namespace TerminalGame.Parsing
                     }
                 case "cat":
                     {
+                        Cat.GetInstance().Init(game, null, token.Args);
                         break;
                     }
                 case "ls":
@@ -148,6 +149,13 @@ namespace TerminalGame.Parsing
                     }
                 case "cd":
                     {
+                        break;
+                    }
+                case "test":
+                    {
+                        if(Player.GetInstance().PlayerComp.FileSystem.TryFindFilePath("testFile", out string path))
+                            game.Terminal.WriteLine(path);
+                        else game.Terminal.WriteLine("nope");
                         break;
                     }
                 default:

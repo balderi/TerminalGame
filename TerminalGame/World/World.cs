@@ -75,7 +75,7 @@ namespace TerminalGame.World
             testSubDir.AddFile(testFile);
             File testDir = new File("test");
             testDir.AddFile(testSubDir);
-            File testRoot = new File("root");
+            File testRoot = new File("");
             testRoot.AddFile(testDir);
             File testFile2 = new File("testFile2", "test 2", FileType.Text);
             testRoot.AddFile(testFile2);

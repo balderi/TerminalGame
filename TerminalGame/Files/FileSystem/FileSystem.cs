@@ -21,11 +21,14 @@ namespace TerminalGame.Files.FileSystem
             else throw new ArgumentException("Root file has to be a directory.");
         }
 
-        public bool TryFindFile(string name, out List<File> result)
+        public bool TryFindFile(string name, out File result)
         {
-            List<File> retval = new List<File>();
-            result = retval;
-            return true;
+            bool findFile(File f)
+            {
+                return f.Name == name;
+            }
+            result = CurrentDir.Children.Find(findFile);
+            return result != null;
         }
 
         public bool TryFindFilePath(string name, out string path)
@@ -43,7 +46,7 @@ namespace TerminalGame.Files.FileSystem
                     {
                         if (getPath(f, out string tempPath))
                         {
-                            pPath += "\\" + tempPath;
+                            pPath += file.Name + "/" + tempPath;
                             return true;
                         }
                     }

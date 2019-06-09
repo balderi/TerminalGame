@@ -1,6 +1,7 @@
 ﻿using System;
 using TerminalGame.Computers;
 using TerminalGame.Computers.Utils;
+using TerminalGame.Files.FileSystem;
 
 namespace TerminalGame.Companies.Generator
 {
@@ -11,6 +12,8 @@ namespace TerminalGame.Companies.Generator
         private static readonly string[] suffix = new string[] { ", Inc.", " Corp.", " Corporation", " Incorporated", ", Ltd.", " Company", " Co.", " LLC", " Intl.", " International" };
 
         private static Random _rnd;
+
+        public static FileSystem GenerateFileSystem { get; private set; }
 
         public static Computer GenerateComputer(Company company, ComputerType type)
         {
@@ -43,7 +46,8 @@ namespace TerminalGame.Companies.Generator
                         break;
                     }
             }
-            return new Computer(company.Name + "§¤§" + fullType, new int[] { 21, 22, 67, 80, 110, 443, 27015 }, type, company);
+            FileSystem gfs = Files.FileSystem.Generator.FileSystemGenerator.GenerateDefaultFilesystem();
+            return new Computer(company.Name + "§¤§" + fullType, new int[] { 21, 22, 67, 80, 110, 443, 27015 }, type, company, fileSystem: gfs);
         }
 
         public static string GenerateName()
