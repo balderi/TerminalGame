@@ -7,6 +7,7 @@ using TerminalGame.Computers.Utils;
 using TerminalGame.Files;
 using TerminalGame.Files.FileSystem;
 using TerminalGame.People;
+using TerminalGame.People.Utils;
 
 namespace TerminalGame.World
 {
@@ -81,7 +82,9 @@ namespace TerminalGame.World
             testRoot.AddFile(testFile2);
             FileSystem pfs = new FileSystem(testRoot);
 
-            Computer PlayerComp = new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation, "127.0.0.1", Player.GetInstance().Password, pfs);
+            Company pc = new Company("Unknown", new Person("Unknown", DateTime.Parse("1970-01-01"), (Gender)(-1), (EducationLevel)(-1)), new User("Unknown", DateTime.Parse("1970-01-01"), (Gender)(-1), (EducationLevel)(-1)), 0, 0); ;
+
+            Computer PlayerComp = new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation, pc, "127.0.0.1", Player.GetInstance().Password, pfs); //new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation, "127.0.0.1", Player.GetInstance().Password, pfs);
 
             Player.GetInstance().PlayerComp = PlayerComp;
 

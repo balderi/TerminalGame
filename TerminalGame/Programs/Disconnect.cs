@@ -42,7 +42,7 @@ namespace TerminalGame.Programs
             Player.GetInstance().PlayerComp.Connect();
             Game.Terminal.WriteLine("Disconnected");
             Kill();
-            MusicManager.GetInstance().ChangeSong("gameBgm", 0.01f);
+            MusicManager.GetInstance().ChangeSong("gameBgm", 0.5f);
         }
 
         protected override void Timer_Tick(object sender, EventArgs e)
