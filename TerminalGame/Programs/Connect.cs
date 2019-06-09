@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using TerminalGame.Computers;
+using TerminalGame.Utils;
 
 namespace TerminalGame.Programs
 {
@@ -8,6 +9,7 @@ namespace TerminalGame.Programs
     {
         private string[] _connection;
         private int _counter;
+        private bool _success;
 
         private static Connect _instance;
 
@@ -23,8 +25,22 @@ namespace TerminalGame.Programs
             
         }
 
+        public override void Kill()
+        {
+            if (_success)
+            {
+                if (!MusicManager.GetInstance().IsSongPlaying("hackLoop"))
+                   MusicManager.GetInstance().ChangeSong("hackLoop", 0.1f);
+            }
+            else
+                MusicManager.GetInstance().FadeIn(0.01f);
+
+            base.Kill();
+        }
+
         protected override void Run()
         {
+            _success = false;
             _isKill = false;
             if (_args.Length < 1)
             {
@@ -38,6 +54,8 @@ namespace TerminalGame.Programs
                 Kill();
                 return;
             }
+            if(!MusicManager.GetInstance().IsSongPlaying("hackLoop"))
+                MusicManager.GetInstance().FadeOut(0.005f);
             Console.WriteLine("Attempting connection to host with IP {0}", _args[0]);
             if(_args[0] == Player.GetInstance().ConnectedComp.IP)
             {
@@ -91,6 +109,7 @@ namespace TerminalGame.Programs
                         if(c.Connect())
                         {
                             Console.WriteLine("Connection established to {1}@{0}", c.IP, c.GetPublicName());
+                            _success = true;
                             Game.Terminal.WriteLine(_connection[4]);
                             Kill();
                             _timer.Stop();

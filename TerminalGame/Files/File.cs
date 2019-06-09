@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TerminalGame.Files
 {
-    class File : IFile
+    public class File : IFile
     {        
         public string Name { get; private set; }
         public string Contents { get; private set; }
@@ -18,13 +18,14 @@ namespace TerminalGame.Files
             Contents = "dir";
             FileType = FileType.Directory;
             Size = -1;
+            Children = new List<File>();
         }
 
         public File(string name, string contents, FileType fileType)
         {
             if (fileType == FileType.Directory)
                 throw new ArgumentException("Directory file type cannot have contents.");
-            
+
             Name = name;
             Contents = contents;
             FileType = fileType;
@@ -36,11 +37,19 @@ namespace TerminalGame.Files
             Size = size;
         }
 
+        /// <summary>
+        /// Rename the file.
+        /// </summary>
+        /// <param name="name">New file name.</param>
         public void Rename(string name)
         {
             Name = name;
         }
 
+        /// <summary>
+        /// Add a file to the list of children.
+        /// </summary>
+        /// <param name="file">File to add.</param>
         public void AddFile(File file)
         {
             if (FileType == FileType.Directory)
@@ -54,6 +63,10 @@ namespace TerminalGame.Files
                 throw new InvalidOperationException(Name + " is not a directory.");
         }
 
+        /// <summary>
+        /// Remove a file from the list of children.
+        /// </summary>
+        /// <param name="file">File to remove.</param>
         public void RemoveFile(File file)
         {
             if (FileType == FileType.Directory)
@@ -67,14 +80,25 @@ namespace TerminalGame.Files
                 throw new InvalidOperationException(Name + " is not a directory.");
         }
 
+        /// <summary>
+        /// Returns the contents of the file, or a list of children if directory.
+        /// </summary>
+        /// <returns>File contents or list of children as string.</returns>
         public override string ToString()
         {
             if(FileType == FileType.Directory)
             {
-                // TODO: List files
-                return "This is directory.";
+                string retval = ".\n..";
+                if(Children.Count > 0)
+                {
+                    foreach(var c in Children)
+                    {
+                        retval += "\n" + c.Name;
+                    }
+                }
+                return retval;
             }
-            return Contents;
+            return Name;
         }
 
         /// <summary>
@@ -92,6 +116,16 @@ namespace TerminalGame.Files
                 return Name.CompareTo(otherFile.Name);
             else
                 throw new ArgumentException("Object is not a File"); //impossible!
+        }
+
+        public bool FileNameExists(string name)
+        {
+            foreach(File f in Children)
+            {
+                if (f.Name == name)
+                    return true;
+            }
+            return false;
         }
 
         public override bool Equals(object obj)

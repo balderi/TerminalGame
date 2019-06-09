@@ -35,6 +35,13 @@ namespace TerminalGame.Utils
             _songs.Add(key, song);
         }
 
+        public bool IsSongPlaying(string name)
+        {
+            if(_songs.TryGetValue(name, out Song song))
+                return _currentSong == song;
+            return false;
+        }
+
         public void Start(string song, bool isRepeating = true)
         {
             if (_songs.TryGetValue(song, out _currentSong))
@@ -47,7 +54,7 @@ namespace TerminalGame.Utils
                 _delta = 0.01f;
             }
             else
-                throw new ArgumentException(song + " does not exist on songs");
+                throw new ArgumentException(song + " does not exist in songs");
         }
 
         public void ChangeSong(string nextSong, float delta = 0.1f)

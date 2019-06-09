@@ -72,6 +72,7 @@
     <Compile Include="Computers\Utils\AccessLevel.cs" />
     <Compile Include="Computers\Utils\ComputerType.cs" />
     <Compile Include="Files\File.cs" />
+    <Compile Include="Files\FileSystem\FileSystem.cs" />
     <Compile Include="Files\FileType.cs" />
     <Compile Include="Files\IFile.cs" />
     <Compile Include="Parsing\CommandParser.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Programs\Ifconfig.cs" />
     <Compile Include="Programs\Disconnect.cs" />
     <Compile Include="Programs\IProgram.cs" />
+    <Compile Include="Programs\Ls.cs" />
     <Compile Include="Programs\Program.cs" />
     <Compile Include="Screens\GameLoadingScreen.cs" />
     <Compile Include="States\GameRunningState.cs" />
@@ -193,9 +195,7 @@
     </None>
     <None Include="app.manifest" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Files\FileSystem\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>

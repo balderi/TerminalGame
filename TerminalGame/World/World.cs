@@ -4,6 +4,8 @@ using System.Linq;
 using TerminalGame.Companies;
 using TerminalGame.Computers;
 using TerminalGame.Computers.Utils;
+using TerminalGame.Files;
+using TerminalGame.Files.FileSystem;
 using TerminalGame.People;
 
 namespace TerminalGame.World
@@ -68,7 +70,18 @@ namespace TerminalGame.World
             People = new List<Person>();
             Companies = new List<Company>();
 
-            Computer PlayerComp = new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation, "127.0.0.1", Player.GetInstance().Password);
+            File testFile = new File("testFile", "this is a test", FileType.Text);
+            File testSubDir = new File("test2");
+            testSubDir.AddFile(testFile);
+            File testDir = new File("test");
+            testDir.AddFile(testSubDir);
+            File testRoot = new File("root");
+            testRoot.AddFile(testDir);
+            File testFile2 = new File("testFile2", "test 2", FileType.Text);
+            testRoot.AddFile(testFile2);
+            FileSystem pfs = new FileSystem(testRoot);
+
+            Computer PlayerComp = new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation, "127.0.0.1", Player.GetInstance().Password, pfs);
 
             Player.GetInstance().PlayerComp = PlayerComp;
 

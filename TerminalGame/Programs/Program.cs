@@ -20,7 +20,7 @@ namespace TerminalGame.Programs
 
         protected abstract void Run();
 
-        public void Kill()
+        public virtual void Kill()
         {
             _isKill = true;
             _opString = null;

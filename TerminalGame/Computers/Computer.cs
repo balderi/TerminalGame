@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using TerminalGame.Utils;
 using TerminalGame.Computers.Utils;
 using TerminalGame.Companies;
+using TerminalGame.Files.FileSystem;
 
 namespace TerminalGame.Computers
 {
@@ -35,9 +36,10 @@ namespace TerminalGame.Computers
         public AccessLevel AccessLevel { get; private set; }
         public ComputerType ComputerType { get; private set; }
         public Company Owner { get; private set; }
+        public FileSystem FileSystem { get; private set; }
         #endregion
 
-        public Computer(string name, string ip = "", string rootPassword = "")
+        public Computer(string name, string ip = "", string rootPassword = "", FileSystem fileSystem = null)
         {
             Name = name;
 
@@ -50,17 +52,19 @@ namespace TerminalGame.Computers
                 RootPassword = Generators.GeneratePassword();
             else
                 RootPassword = rootPassword;
-            
+
+            FileSystem = fileSystem;
+
             _isInitialized = false;
         }
 
-        public Computer(string name, int[] ports, ComputerType type, string ip = "", string rootPassword = "") : this(name, ip, rootPassword)
+        public Computer(string name, int[] ports, ComputerType type, string ip = "", string rootPassword = "", FileSystem fileSystem = null) : this(name, ip, rootPassword, fileSystem)
         {
             OpenPorts = BuildPorts(ports);
             ComputerType = type;
         }
 
-        public Computer (string name, int[] ports, ComputerType type, Company owner, string ip = "", string rootPassword = "") : this(name, ip, rootPassword)
+        public Computer (string name, int[] ports, ComputerType type, Company owner, string ip = "", string rootPassword = "", FileSystem fileSystem = null) : this(name, ip, rootPassword, fileSystem)
         {
             OpenPorts = BuildPorts(ports);
             ComputerType = type;

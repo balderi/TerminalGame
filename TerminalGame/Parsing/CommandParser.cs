@@ -61,6 +61,7 @@ namespace TerminalGame.Parsing
                     }
                 case "sudo":
                     {
+                        game.Terminal.WriteLine("user is not in the sudoers file.  This incidient will be reported.");
                         break;
                     }
                 case "man":
@@ -111,13 +112,11 @@ namespace TerminalGame.Parsing
                 case "disconnect":
                 case "dc":
                     {
-                        MusicManager.GetInstance().ChangeSong("gameBgm", 0.025f);
                         Disconnect.GetInstance().Init(game, null, token.Args);
                         break;
                     }
                 case "connect":
                     {
-                        MusicManager.GetInstance().ChangeSong("hackLoop", 0.025f);
                         Connect.GetInstance().Init(game, null, token.Args);
                         break;
                     }
@@ -144,6 +143,7 @@ namespace TerminalGame.Parsing
                 case "ls":
                 case "dir":
                     {
+                        Ls.GetInstance().Init(game, null, token.Args);
                         break;
                     }
                 case "cd":

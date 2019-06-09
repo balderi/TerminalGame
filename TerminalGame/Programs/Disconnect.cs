@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TerminalGame.Utils;
 
 namespace TerminalGame.Programs
 {
@@ -41,6 +42,7 @@ namespace TerminalGame.Programs
             Player.GetInstance().PlayerComp.Connect();
             Game.Terminal.WriteLine("Disconnected");
             Kill();
+            MusicManager.GetInstance().ChangeSong("gameBgm", 0.01f);
         }
 
         protected override void Timer_Tick(object sender, EventArgs e)

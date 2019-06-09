@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace TerminalGame.Programs
 {
-    class Ifconfig : Program
+    class Ls : Program
     {
-        private static Ifconfig _instance;
+        private static Ls _instance;
 
-        public static Ifconfig GetInstance()
+        public static Ls GetInstance()
         {
             if (_instance == null)
-                _instance = new Ifconfig();
+                _instance = new Ls();
             return _instance;
         }
 
-        private Ifconfig()
+        private Ls()
         {
 
         }
@@ -25,13 +25,7 @@ namespace TerminalGame.Programs
         protected override void Run()
         {
             _isKill = false;
-            if (_args.Length > 1)
-            {
-                Game.Terminal.WriteLine("Too many arguments: ifconfig");
-                Kill();
-                return;
-            }
-            Game.Terminal.WriteLine(Player.GetInstance().ConnectedComp.IP);
+            Game.Terminal.WriteLine(Player.GetInstance().ConnectedComp.FileSystem.CurrentDir.ToString());
             Kill();
         }
 

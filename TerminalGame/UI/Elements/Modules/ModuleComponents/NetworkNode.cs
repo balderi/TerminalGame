@@ -132,7 +132,10 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
             base.OnClick(sender, e);
             if (_nMap.HoverNode != this)
                 return;
-            Game.Terminal.RunCommand("connect " + Computer.IP);
+            if (Computer == Player.GetInstance().PlayerComp)
+                Game.Terminal.RunCommand("disconnect");
+            else
+                Game.Terminal.RunCommand("connect " + Computer.IP);
         }
 
         protected override void OnMouseEnter(object sender, MouseEventArgs e)
