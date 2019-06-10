@@ -10,9 +10,9 @@ namespace TerminalGame.People.Generator
     public static class PersonGenerator
     {
         private static Random _rnd = new Random(DateTime.Now.Millisecond);
-        private static List<string> last = File.ReadLines("Content/Data/Names/lastNames.txt").ToList();
-        private static List<string> fNames = File.ReadLines("Content/Data/Names/femaleNames.txt").ToList();
-        private static List<string> mNames = File.ReadLines("Content/Data/Names/maleNames.txt").ToList();
+        private static List<string> _last = File.ReadLines("Content/Data/Names/lastNames.txt").ToList();
+        private static List<string> _fNames = File.ReadLines("Content/Data/Names/femaleNames.txt").ToList();
+        private static List<string> _mNames = File.ReadLines("Content/Data/Names/maleNames.txt").ToList();
 
         public static EducationLevel GenerateEducationLevel(int age)
         {
@@ -25,7 +25,6 @@ namespace TerminalGame.People.Generator
             if (age >= 18)
                 return (EducationLevel)_rnd.Next(0, 3);
 
-            // Impossible!
             return EducationLevel.None;
         }
 
@@ -35,14 +34,14 @@ namespace TerminalGame.People.Generator
             if(gender == Gender.Female)
             {
                 
-                retval += fNames[_rnd.Next(0, fNames.Count)];
+                retval += _fNames[_rnd.Next(0, _fNames.Count)];
             }
             else
             {
-                retval += mNames[_rnd.Next(0, mNames.Count)];
+                retval += _mNames[_rnd.Next(0, _mNames.Count)];
             }
             retval += " ";
-            retval += last[_rnd.Next(0, last.Count)];
+            retval += _last[_rnd.Next(0, _last.Count)];
             return retval;
         }
 
@@ -80,7 +79,6 @@ namespace TerminalGame.People.Generator
             if (age > 65)
                 return AgeRange.Senior;
 
-            // Impossible!
             return AgeRange.None;
         }
 

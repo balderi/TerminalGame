@@ -144,10 +144,10 @@ namespace TerminalGame.World
         /// </summary>
         public void Tick()
         {
-            foreach (var computer in Computers)
-                computer.Tick();
             foreach (var person in People)
                 person.Tick();
+            foreach (var computer in Computers)
+                computer.Tick();
             foreach (var company in Companies)
                 company.Tick();
         }
