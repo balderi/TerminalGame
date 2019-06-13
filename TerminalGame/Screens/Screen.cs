@@ -52,7 +52,6 @@ namespace TerminalGame.Screens
 
         /// <summary>
         /// Should be called when this screen is switched to.
-        /// Will handle starting the correct music, etc.
         /// </summary>
         public virtual void SwitchOn()
         {

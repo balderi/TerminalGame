@@ -39,6 +39,8 @@ namespace TerminalGame.UI.Elements.Modules
 
             _histIndex = -1;
 
+            _history.Add("");
+
             _promptText = BuildPrompt();
             _promptWidth = (int)_terminalFont.MeasureString(_promptText).X;
 
@@ -119,9 +121,12 @@ namespace TerminalGame.UI.Elements.Modules
         private void Enter_Pressed(object sender, KeyEventArgs e)
         {
             _histIndex = -1;
-            _history.Reverse();
-            _history.Add(_textBox.Text.String);
-            _history.Reverse();
+            if (_history[0] != _textBox.Text.String)
+            {
+                _history.Reverse();
+                _history.Add(_textBox.Text.String);
+                _history.Reverse();
+            }
             WriteLine(_promptText + _textBox.Text.String);
             RunCommand(_textBox.Text.String);
             _textBox.Text.RemoveCharacters(0, _textBox.Text.Length);
