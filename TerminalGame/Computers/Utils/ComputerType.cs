@@ -6,5 +6,6 @@
         Server,
         Mainframe,
         Laptop,
+        Smartphone,
     }
 }
