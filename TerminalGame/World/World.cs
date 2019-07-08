@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
 using TerminalGame.Companies;
 using TerminalGame.Computers;
 using TerminalGame.Computers.Utils;
@@ -12,7 +14,7 @@ using TerminalGame.Time;
 
 namespace TerminalGame.World
 {
-    class World
+    public class World
     {
         //private Random _rnd;
 
@@ -29,7 +31,7 @@ namespace TerminalGame.World
         /// <summary>
         /// A list of all companies in the world.
         /// </summary>
-        public List<Company> Companies { get; private set; }
+        public List<Company> CompanyList { get; private set; }
 
         private static World _instance;
 
@@ -46,7 +48,7 @@ namespace TerminalGame.World
 
         private bool CheckName(string name)
         {
-            foreach(Company c in Companies)
+            foreach(Company c in CompanyList)
             {
                 if (c.Name == name)
                     return true;
@@ -70,20 +72,20 @@ namespace TerminalGame.World
             //_rnd = new Random(DateTime.Now.Millisecond);
             Computers = new List<Computer>();
             People = new List<Person>();
-            Companies = new List<Company>();
+            CompanyList = new List<Company>();
 
-            File testFile = new File("testFile", "this is a test", FileType.Text);
-            File testSubDir = new File("test2");
+            Files.File testFile = new Files.File("testFile", "this is a test", FileType.Text);
+            Files.File testSubDir = new Files.File("test2");
             testSubDir.AddFile(testFile);
-            File testDir = new File("test");
+            Files.File testDir = new Files.File("test");
             testDir.AddFile(testSubDir);
-            File testRoot = new File("");
+            Files.File testRoot = new Files.File("");
             testRoot.AddFile(testDir);
-            File testFile2 = new File("testFile2", "test 2", FileType.Text);
+            Files.File testFile2 = new Files.File("testFile2", "test 2", FileType.Text);
             testRoot.AddFile(testFile2);
             FileSystem pfs = new FileSystem(testRoot);
 
-            Company pc = new Company("Unknown", new Person("Unknown", DateTime.Parse("1970-01-01"), (Gender)(-1), (EducationLevel)(-1)), new User("Unknown", DateTime.Parse("1970-01-01"), (Gender)(-1), (EducationLevel)(-1)), 0, 0); ;
+            Company pc = new Company("Unknown", new Person("Unknown", DateTime.Parse("1970-01-01"), (Gender)(-1), (EducationLevel)(-1)), new Person("Unknown", DateTime.Parse("1970-01-01"), (Gender)(-1), (EducationLevel)(-1)), 0, 0); ;
 
             Computer PlayerComp = new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation, pc, "127.0.0.1", Player.GetInstance().Password, pfs); //new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation, "127.0.0.1", Player.GetInstance().Password, pfs);
 
@@ -97,20 +99,23 @@ namespace TerminalGame.World
             //}
             //Console.WriteLine("Generated {0} computers in {1} seconds.", Computers.Count, (DateTime.Now.Subtract(beginC).TotalSeconds).ToString("N4"));
             DateTime beginCompanies = DateTime.Now;
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 500; i++)
             {
                 Company comp = new Company();
-
+                int whoops = 0;
                 while (CheckName(comp.Name))
-                    comp = new Company();
-                
-                Companies.Add(comp);
+                {
+                    comp.Name = Companies.Generator.CompanyGenerator.GenerateName();
+                    whoops++;
+                }
+                Console.WriteLine(comp.Name + " whoopses: " + whoops.ToString());
+                CompanyList.Add(comp);
             }
-            Console.WriteLine("Generated {0} companies in {1} seconds.", Companies.Count, (DateTime.Now.Subtract(beginCompanies).TotalSeconds).ToString("N4"));
+            Console.WriteLine("Generated {0} companies in {1} seconds.", CompanyList.Count, (DateTime.Now.Subtract(beginCompanies).TotalSeconds).ToString("N4"));
 
             List<string> names = new List<string>();
 
-            foreach (Company c in Companies)
+            foreach (Company c in CompanyList)
             {
                 Computers.AddRange(c.GetComputers);
                 names.Add(c.Name);
@@ -148,8 +153,23 @@ namespace TerminalGame.World
                 person.Tick();
             foreach (var computer in Computers)
                 computer.Tick();
-            foreach (var company in Companies)
+            foreach (var company in CompanyList)
                 company.Tick();
+        }
+
+        /// <summary>
+        /// Fixes relationship between companies, computers and files
+        /// which are stripped when saving, to prevent circular dependencies
+        /// </summary>
+        public void FixWorld()
+        {
+            if(CompanyList.Count > 0)
+            {
+                foreach(Company c in CompanyList)
+                {
+                    c.FixComputers();
+                }
+            }
         }
 
         /// <summary>
@@ -158,7 +178,11 @@ namespace TerminalGame.World
         /// <param name="fileName">Path to the save file.</param>
         public static World Load(string fileName)
         {
-            return new World(); // TEMP
+            TextReader reader = new StreamReader(fileName);
+            XmlSerializer serializer = new XmlSerializer(typeof(World));
+            World w = (World)serializer.Deserialize(reader);
+            w.FixWorld();
+            return w;
         }
 
         /// <summary>
@@ -167,7 +191,9 @@ namespace TerminalGame.World
         /// <param name="fileName">Path to the save file.</param>
         public void Save(string fileName)
         {
-
+            TextWriter writer = new StreamWriter(fileName);
+            XmlSerializer serializer = new XmlSerializer(typeof(World));
+            serializer.Serialize(writer, this);
         }
     }
 }

@@ -159,6 +159,11 @@ namespace TerminalGame.Parsing
                         else game.Terminal.WriteLine("nope");
                         break;
                     }
+                case "save":
+                    {
+                        World.World.GetInstance().Save("testSave.xml");
+                        break;
+                    }
                 default:
                     {
                         game.Terminal.WriteLine(token.Command + " is not a recognized command");

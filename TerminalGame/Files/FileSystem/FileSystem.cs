@@ -8,8 +8,13 @@ namespace TerminalGame.Files.FileSystem
 {
     public class FileSystem
     {
-        public File RootDir { get; private set; }
-        public File CurrentDir { get; private set; }
+        public File RootDir { get; set; }
+        public File CurrentDir { get; set; }
+
+        public FileSystem()
+        {
+
+        }
 
         public FileSystem(File root)
         {

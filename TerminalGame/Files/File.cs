@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace TerminalGame.Files
 {
     public class File : IFile
     {        
-        public string Name { get; private set; }
-        public string Contents { get; private set; }
-        public int Size { get; private set; }
-        public FileType FileType { get; private set; }
-        public File Parent { get; private set; }
-        public List<File> Children { get; private set; }
+        public string       Name        { get; set; }
+        public string       Contents    { get; set; }
+        public int          Size        { get; set; }
+        public FileType     FileType    { get; set; }
+        [XmlIgnore]
+        public File         Parent      { get; set; }
+        public List<File>   Children    { get; set; }
+
+        public File()
+        {
+
+        }
 
         public File(string name)
         {
@@ -163,6 +171,22 @@ namespace TerminalGame.Files
                     return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Fixes relationship between files and parents
+        /// which are stripped when saving, to prevent circular dependencies
+        /// </summary>
+        public void FixFile()
+        {
+            if(Children.Count > 0)
+            {
+                foreach(File f in Children)
+                {
+                    f.Parent = this;
+                    f.FixFile();
+                }
+            }
         }
 
         public override bool Equals(object obj)

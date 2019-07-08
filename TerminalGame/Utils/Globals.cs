@@ -11,6 +11,10 @@ namespace TerminalGame.Utils
         public static int GameWidth;
         public static int GameHeight;
 
+        public static float MasterVolume;
+        public static float SoundVolume;
+        public static float MusicVolume;
+
         public static void SetGlobalFontSize(FontManager.GlobalFontSize fontSize = FontManager.GlobalFontSize.normal)
         {
             GlobalFontSize = fontSize;

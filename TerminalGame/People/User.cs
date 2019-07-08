@@ -1,19 +1,20 @@
 ﻿using System;
 using TerminalGame.People.Utils;
 using TerminalGame.Computers.Utils;
+using System.Xml.Serialization;
 
 namespace TerminalGame.People
 {
     public class User : Person
     {
-        public string       Username        { get; protected set; }
-        public string       Password        { get; protected set; }
-        public AccessLevel  AccessLevel     { get; protected set; }
+        public string       Username        { get; set; }
+        public string       Password        { get; set; }
+        public AccessLevel  AccessLevel     { get; set; }
 
         /// <summary>
         /// Generate a random user.
         /// </summary>
-        public User() : base()
+        public User()
         {
             // TODO: Generate user.
         }

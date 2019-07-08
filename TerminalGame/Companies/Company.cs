@@ -15,13 +15,13 @@ namespace TerminalGame.Companies
 
         // TODO: Company size (int or enum?) determining number of employees, shares, whatevs.
 
-        public string           Name            { get; private set; }
-        public Person           Owner           { get; private set; }
-        public Person           Admin           { get; private set; }
-        public int              NumberOfShares  { get; private set; }
-        public int              SharePrice      { get; private set; }
-        public int              CompanyValue    { get; private set; }
-        public List<Computer>   GetComputers    { get; private set; }
+        public string           Name            { get; set; }
+        public Person           Owner           { get; set; }
+        public Person           Admin           { get; set; }
+        public int              NumberOfShares  { get; set; }
+        public int              SharePrice      { get; set; }
+        public int              CompanyValue    { get; set; }
+        public List<Computer>   GetComputers    { get; set; }
 
         public Company()
         {
@@ -49,7 +49,7 @@ namespace TerminalGame.Companies
             SharePrice      = sharePrice;
         }
 
-        public Company(string name, Person owner, User admin, int numShares, int sharePrice) : this(name, numShares, sharePrice)
+        public Company(string name, Person owner, Person admin, int numShares, int sharePrice) : this(name, numShares, sharePrice)
         {
             Owner           = owner;
             Admin           = admin;
@@ -58,6 +58,22 @@ namespace TerminalGame.Companies
         public void Tick()
         {
 
+        }
+
+        /// <summary>
+        /// Fixes relationship between companies and computers
+        /// which are stripped when saving, to prevent circular dependencies
+        /// </summary>
+        public void FixComputers()
+        {
+            if(GetComputers.Count > 0)
+            {
+                foreach(Computer c in GetComputers)
+                {
+                    c.Owner = this;
+                    c.FileSystem.RootDir.FixFile();
+                }
+            }
         }
     }
 }

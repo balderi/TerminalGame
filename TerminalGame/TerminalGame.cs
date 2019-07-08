@@ -38,6 +38,7 @@ namespace TerminalGame
         public Player Player { get; set; }
         public GameSpeed CurrentGameSpeed { get; set; }
         public Terminal Terminal { get; set; }
+        //public static object Companies { get; internal set; }
 
         public TerminalGame()
         {
@@ -69,8 +70,8 @@ namespace TerminalGame
             _oldState = Keyboard.GetState();
 
             _graphics.HardwareModeSwitch = false;
-            _graphics.PreferredBackBufferHeight = 768;// (int)(GraphicsDevice.DisplayMode.Height * 0.8);
-            _graphics.PreferredBackBufferWidth = 1366;// (int)(GraphicsDevice.DisplayMode.Width * 0.8);
+            _graphics.PreferredBackBufferHeight = 1080;// (int)(GraphicsDevice.DisplayMode.Height * 0.8);
+            _graphics.PreferredBackBufferWidth = 1920;// (int)(GraphicsDevice.DisplayMode.Width * 0.8);
             _graphics.IsFullScreen = false;
             _graphics.ApplyChanges();
 
@@ -84,6 +85,10 @@ namespace TerminalGame
             Globals.SetGlobalFontSize();
             Globals.GenerateDummyTexture(GraphicsDevice);
             IsMouseVisible = true;
+            Globals.MasterVolume = 0.5f;
+            Globals.SoundVolume = 0.5f;
+            Globals.MusicVolume = 0.5f;
+
 
             stateMachine = StateMachine.GetInstance();
             stateMachine.Initialize(SplashState.GetInstance(), _graphics, new SplashScreen(this), this);
@@ -98,6 +103,8 @@ namespace TerminalGame
             _themeManager.ChangeTheme("test");
            
             Console.WriteLine("init done");
+
+            Console.WriteLine(Companies.Generator.CompanyGenerator.Legths);
         }
 
         /// <summary>

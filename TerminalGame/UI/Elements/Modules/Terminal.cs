@@ -170,6 +170,9 @@ namespace TerminalGame.UI.Elements.Modules
             _textBox.Update();
         }
 
+        /// <summary>
+        /// Creates a new textbox, and disposes of the old one.
+        /// </summary>
         private void UpdateTextBox()
         {
             _textBox.Dispose();
@@ -222,6 +225,8 @@ namespace TerminalGame.UI.Elements.Modules
                 CommandParser.Parse(token, Game);
                 UpdateTextBox();
             }
+            else
+                Console.WriteLine("invalid command \"command\"!");
         }
 
         /// <summary>

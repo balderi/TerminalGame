@@ -125,9 +125,9 @@ namespace TerminalGame.Utils
             {
                 float volume = MediaPlayer.Volume;
                 volume += _delta * _musicChangeSpeed;
-                if (volume > 1.0f)
+                if (volume > (Globals.MusicVolume * Globals.MasterVolume))
                 {
-                    volume = 1.0f;
+                    volume = (Globals.MusicVolume * Globals.MasterVolume);
                     _isFadingIn = false;
                 }
                 MediaPlayer.Volume = volume;

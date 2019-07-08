@@ -7,14 +7,14 @@ namespace TerminalGame.People
     {
         protected Random        _rnd;
 
-        public string           Name        { get; protected set; }
-        public DateTime         DOB         { get; protected set; }
-        public int              Age         { get; protected set; }
-        public Gender           Gender      { get; protected set; }
-        public EducationLevel   Education   { get; protected set; }
-        public AgeRange         AgeRange    { get; protected set; }
-        public string           Email       { get; protected set; } // TODO: Email provider.
-        public int              Phone       { get; protected set; } // Ehhh, maybe not?
+        public string           Name        { get; set; }
+        public DateTime         DOB         { get; set; }
+        public int              Age         { get; set; }
+        public Gender           Gender      { get; set; }
+        public EducationLevel   Education   { get; set; }
+        public AgeRange         AgeRange    { get; set; }
+        public string           Email       { get; set; } // TODO: Email provider.
+        public int              Phone       { get; set; } // Ehhh, maybe not?
 
         /// <summary>
         /// Generate a random person.
