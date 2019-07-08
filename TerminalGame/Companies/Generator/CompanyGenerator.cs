@@ -15,7 +15,7 @@ namespace TerminalGame.Companies.Generator
 
         public static FileSystem GenerateFileSystem { get; private set; }
 
-        public static string Legths = $"{aName.Length}, {bName.Length}, {suffix.Length}";
+        public static string Lengths = $"{aName.Length}, {bName.Length}, {suffix.Length}";
 
         public static Computer GenerateComputer(Company company, ComputerType type)
         {

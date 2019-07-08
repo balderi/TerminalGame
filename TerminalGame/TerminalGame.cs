@@ -104,7 +104,7 @@ namespace TerminalGame
            
             Console.WriteLine("init done");
 
-            Console.WriteLine(Companies.Generator.CompanyGenerator.Legths);
+            Console.WriteLine(Companies.Generator.CompanyGenerator.Lengths);
         }
 
         /// <summary>
