@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Input;
 using TerminalGame.Utils;
 using TerminalGame.UI.Elements.Modules;
 using Microsoft.Xna.Framework.Media;
-using TerminalGame.States;
 using TerminalGame.Screens;
 using System;
 using System.Reflection;
@@ -23,10 +22,9 @@ namespace TerminalGame
 
         private MusicManager _musicManager;
         private ThemeManager _themeManager;
+        private ScreenManager _screenManager;
 
         private KeyboardState _oldState;
-
-        private StateMachine stateMachine;
 
         public readonly string TitleAndVersion;
         public Version version;
@@ -89,9 +87,14 @@ namespace TerminalGame
             Globals.SoundVolume = 0.5f;
             Globals.MusicVolume = 0.5f;
 
-
-            stateMachine = StateMachine.GetInstance();
-            stateMachine.Initialize(SplashState.GetInstance(), _graphics, new SplashScreen(this), this);
+            _screenManager = ScreenManager.GetInstance();
+            _screenManager.Initialize(_graphics);
+            _screenManager.AddScreen("splash", new SplashScreen(this));
+            _screenManager.AddScreen("mainMenu", new MainMenuScreen(this));
+            _screenManager.AddScreen("settingsMenu", new SettingsScreen(this));
+            _screenManager.AddScreen("gameLoading", new GameLoadingScreen(this));
+            _screenManager.AddScreen("gameRunning", new GameRunningScreen(this));
+            _screenManager.ChangeScreen("splash");
 
             _themeManager = ThemeManager.GetInstance();
 
@@ -159,7 +162,7 @@ namespace TerminalGame
 
             _themeManager.Update(gameTime);
             _musicManager.Update(gameTime);
-            stateMachine.Update(gameTime);
+            _screenManager.Update(gameTime);
 
             _oldState = Keyboard.GetState();
         }
@@ -171,8 +174,8 @@ namespace TerminalGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            
-            stateMachine.Draw(gameTime);
+
+            _screenManager.Draw(gameTime);
         }
     }
 }

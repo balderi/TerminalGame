@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using TerminalGame.States;
 using TerminalGame.UI.Elements.Buttons;
 using TerminalGame.Utils;
 
@@ -122,6 +121,7 @@ namespace TerminalGame.Screens
                 _smokeRect2.Offset(1, 0);
             else
                 _smokeRect2.Offset(-Globals.GameWidth, 0);
+            _continueGame.Enabled = Game.IsGameRunning;
             foreach (var b in BUTTONS)
                 b.Update(gameTime);
 
@@ -139,8 +139,8 @@ namespace TerminalGame.Screens
 
             if (_prevState.IsKeyDown(Keys.Escape) && _newState.IsKeyUp(Keys.Escape))
             {
-                if(Game.IsGameRunning)
-                    StateMachine.GetInstance().ChangeState("gameRunning", new GameRunningScreen(Game));
+                if (Game.IsGameRunning)
+                    ScreenManager.GetInstance().GoBack();
             }
             _prevState = _newState;
         }
@@ -154,7 +154,7 @@ namespace TerminalGame.Screens
         {
             Console.WriteLine("New Game clicked");
             Game.StartNewGame();
-            StateMachine.GetInstance().ChangeState("gameLoading", new GameLoadingScreen(Game));
+            ScreenManager.GetInstance().ChangeScreen("gameLoading");
         }
 
         private void LoadGame_Clicked(ButtonPressedEventArgs e)

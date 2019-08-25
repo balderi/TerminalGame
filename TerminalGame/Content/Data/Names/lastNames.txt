@@ -1676,10 +1676,6 @@ Byrd
 Byrgesen
 Byrne
 Byrnes
-CHOCS
-COKOL
-CPM
-CSR
 Cabaniss
 Cabral
 Caceres
@@ -2599,7 +2595,6 @@ Cusato
 Cushing
 Cusick
 Cusson
-Custsupport
 Cusumano
 Cuthbert
 Cuthill
@@ -2629,12 +2624,6 @@ D'Silva
 D'Soto
 D'Souza
 D'lima
-DALE
-DDOCDB
-DMS
-DMSDB
-DPNBUILD
-DPP
 Da
 Da Gama
 Da Silva
@@ -2734,8 +2723,6 @@ Dasilva
 Dasrath
 Dassani
 Dassie
-DataSupport
-Datacenter
 Datema
 Datta
 Dattalo
@@ -3240,7 +3227,6 @@ Dowser
 Doyle
 Doyon
 Dpierre
-Dpnq&a
 Dpu
 Drabek
 Dracula
@@ -3400,8 +3386,6 @@ Dziamba
 Dziawa
 Dziemian
 Dzioba
-ENG
-ETAS
 Eagles
 Eakes
 Eakins
@@ -4766,8 +4750,6 @@ Gyger
 Gylys
 Gysel
 Gyurcsak
-HDI
-HSI
 Haack
 Haaksman
 Haas
@@ -5543,15 +5525,6 @@ Hyrne
 Hysler
 Hyslop
 Hyte
-IBNTAS
-IC
-IEM
-INFO-MANAGEMENT
-INSP
-IOCNTRL
-IRCMARKET
-IRCMTL
-ITAC
 Iacoviello
 Iacovo
 Ianace
@@ -6598,9 +6571,7 @@ L'Anglais
 L'Ecuyer
 L'Heureux
 L'ecuyer-Demers
-LIBRARIAN
 LLoyd
-LRCRICH
 LaBauve
 LaBelle
 LaBonte
@@ -6736,7 +6707,6 @@ Lanoszka
 Lanoue
 Lanouette
 Lans
-Lansupport
 Lanteigne
 Lanthier
 Lantos
@@ -7321,10 +7291,6 @@ Lystiuk
 Lystuik
 Lytle
 MACKenzie
-MAINT
-MIC
-MMail
-MTL
 Maahs
 Maas
 Mabes
@@ -7402,7 +7368,6 @@ Macoosh
 Macpherson
 Macpost
 Macquistan
-Macsupport
 Madan
 Madani
 Maddix
@@ -8588,10 +8553,6 @@ Myrick
 Myrillas
 Myroon
 Mystkowski
-NCC
-NE-Region
-NTINASH
-NTPADMIN
 Nabors
 Nace
 Nadeau
@@ -8943,13 +8904,6 @@ O'Toole
 O'connor
 O'keefe
 OConnor
-OFCPARM
-OFCPARMS
-OPERATIONS
-OPS
-OPSPLNG
-OTTAWA
-OTTCO
 O Kelly
 Oakley
 Oaks
@@ -9128,10 +9082,6 @@ Ozkan
 Ozmizrak
 Ozmore
 Ozyetis
-PATCOR
-PCBOARDS
-PCBTOOLS
-PKDCD
 Paar
 Pacey
 Pachal
@@ -9345,10 +9295,6 @@ Payne
 Paynter
 Payton
 Pazos
-Pbx
-PcSupport
-Pde
-Pdesupport
 Peacemaker
 Peacocke
 Peake
@@ -9763,8 +9709,6 @@ Priestley
 Prikkel
 Primeau
 Pringle
-Prints
-Printsupport
 Pritchard
 Privett
 Privitera
@@ -9875,8 +9819,6 @@ Quinz
 Quizmaster
 Quon
 Qureshi
-RK
-RTP
 Raab
 Raaflaub
 Rabadi
@@ -10484,15 +10426,6 @@ Rymkiewicz
 Rynders
 Rynties
 Rzepczynski
-SHOP
-SMith
-SOS
-SUPPORT
-SVM-BNRMTVA
-SVM-BNRMTVB
-SWR
-SYS
-SYSINT
 Saad
 Saatcioglu
 Sabadash
@@ -11801,10 +11734,6 @@ Synness
 Syposz
 Syres
 Syrett
-Sysadmin
-Syssupport
-Systems
-Systest
 Szabo
 Szamosi
 Szaplonczay
@@ -11821,8 +11750,6 @@ Szuminski
 Szura
 Szymanski
 Szypulski
-TAS
-TRIAL
 Ta
 Tabaja
 Tabalba
@@ -12239,7 +12166,6 @@ Tremblay
 Tremewan
 Trent
 Trentadue
-Tres-Support
 Trese
 Tresrch
 Trevethan
@@ -12279,7 +12205,6 @@ Trpisovsky
 Truchon
 Trudel
 Trudell
-Truelove
 Truesdale
 Truffer
 Trull
@@ -12308,7 +12233,6 @@ Tsui
 Tsuji
 Tsuk
 Tsunoda
-Ttisupport
 Tu
 Tuan
 Tubb
@@ -12369,8 +12293,6 @@ Tyrrell
 Tyson
 Tzaneteas
 Tzuang
-US
-USER
 Uae
 Uberig
 Uchida
@@ -12400,8 +12322,6 @@ Umphres
 Underwood
 Unger
 Unitt
-Unix
-Unixsupport
 Unkefer
 Unkles
 Unsoy
@@ -12425,8 +12345,6 @@ Usyk
 Utas
 Utsumi
 Uyar
-VMXA
-VO
 Vacher
 Vachon
 Vaculik
@@ -12676,9 +12594,7 @@ Vivian
 Vivier
 Vlad
 Vlahos
-Vmsupport
 Vo
-Voadmin
 Vodicka
 Voduc
 Voelcker
@@ -12721,9 +12637,6 @@ Vuignier
 Vuncannon
 Vuong
 Vyas
-WAR
-WGA
-WPMS
 Wa
 Wacheski
 Wachtstetter

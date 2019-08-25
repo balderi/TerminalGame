@@ -52,6 +52,7 @@ namespace TerminalGame.Parsing
             {
                 case "":
                     {
+                        game.Terminal.Write("");
                         break;
                     }
                 case "echo":
@@ -152,16 +153,10 @@ namespace TerminalGame.Parsing
                         Cd.GetInstance().Init(game, null, token.Args);
                         break;
                     }
-                case "test":
-                    {
-                        if(Player.GetInstance().PlayerComp.FileSystem.TryFindFilePath("testFile", out string path))
-                            game.Terminal.WriteLine(path);
-                        else game.Terminal.WriteLine("nope");
-                        break;
-                    }
                 case "save":
                     {
-                        World.World.GetInstance().Save("testSave.xml");
+                        World.World.GetInstance().Save();
+                        game.Terminal.WriteLine("Game saved.");
                         break;
                     }
                 default:

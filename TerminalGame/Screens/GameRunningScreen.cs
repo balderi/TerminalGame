@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using TerminalGame.States;
 using TerminalGame.Time;
 using TerminalGame.UI.Elements;
 using TerminalGame.UI.Elements.Modules;
@@ -23,6 +22,12 @@ namespace TerminalGame.Screens
 
         public override void Initialize(GraphicsDeviceManager graphics)
         {
+            if (_isInitialized)
+                return;
+
+            Console.WriteLine("gameRunning is not initialized!");
+
+            base.Initialize();
             Game.Player.ConnectedComp = Game.Player.PlayerComp;
 
             Terminal terminal = new Terminal(Game, new Point(2, 2),
@@ -51,8 +56,6 @@ namespace TerminalGame.Screens
 
             Game.CurrentGameSpeed = GameSpeed.Single;
             Game.Terminal = terminal;
-
-            base.Initialize();
         }
 
         protected override void LoadContent()
@@ -103,7 +106,7 @@ namespace TerminalGame.Screens
 
             if(_prevState.IsKeyDown(Keys.Escape) && _newState.IsKeyUp(Keys.Escape))
             {
-                StateMachine.GetInstance().ChangeState("mainMenu", new MainMenuScreen(Game));
+                ScreenManager.GetInstance().ChangeScreen("mainMenu");
             }
 
             _prevState = _newState;
@@ -131,6 +134,8 @@ namespace TerminalGame.Screens
 
         protected override void UnloadContent()
         {
+            foreach (var e in _elements)
+                e.Dispose();
             base.UnloadContent();
         }
 

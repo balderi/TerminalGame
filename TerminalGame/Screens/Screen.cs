@@ -14,20 +14,25 @@ namespace TerminalGame.Screens
         protected List<UIElement> _elements;
         protected SpriteBatch _spriteBatch;
         protected Rectangle _rectangle;
+        protected float _opacity;
+        protected bool _isInitialized;
         public new TerminalGame Game;
 
-        public Screen(Game game) : base(game)
+        public Screen(Game game, bool fadeIn = false) : base(game)
         {
             Game = game as TerminalGame;
             _rectangle = new Rectangle(0, 0, Globals.GameWidth, Globals.GameHeight);
             _elements = new List<UIElement>();
             _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
             Content = Game.Content;
+            _isInitialized = false;
+            _opacity = fadeIn ? 0.0f : 1.0f;
         }
 
         public virtual void Initialize(GraphicsDeviceManager graphics)
         {
             base.Initialize();
+            _isInitialized = true;
         }
 
         protected override void LoadContent()
@@ -55,7 +60,7 @@ namespace TerminalGame.Screens
         /// </summary>
         public virtual void SwitchOn()
         {
-
+            Console.WriteLine("screen turn on");
         }
 
         protected override void OnEnabledChanged(object sender, EventArgs args)

@@ -188,10 +188,11 @@ namespace TerminalGame.World
         /// <summary>
         /// Save the current world to file.
         /// </summary>
-        /// <param name="fileName">Path to the save file.</param>
-        public void Save(string fileName)
+        public void Save()
         {
-            TextWriter writer = new StreamWriter(fileName);
+            if (!Directory.Exists("Saves"))
+                Directory.CreateDirectory("Saves");
+            TextWriter writer = new StreamWriter(@"Saves\save_" + Player.GetInstance().Name + ".tgs");
             XmlSerializer serializer = new XmlSerializer(typeof(World));
             serializer.Serialize(writer, this);
         }

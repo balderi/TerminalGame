@@ -32,6 +32,13 @@ namespace TerminalGame.Programs
                 Kill();
                 return;
             }
+            if(_args.Length < 1)
+            {
+                //TODO: Usage cd
+                Game.Terminal.WriteLine("Too few arguments: cd");
+                Kill();
+                return;
+            }
             if(_args[0] == "..")
             {
                 Player.GetInstance().ConnectedComp.FileSystem.ChangeCurrentDir(Player.GetInstance().ConnectedComp.FileSystem.CurrentDir.Parent);

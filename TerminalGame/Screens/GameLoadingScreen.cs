@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TerminalGame.States;
 using TerminalGame.Utils;
 
 namespace TerminalGame.Screens
@@ -65,7 +64,7 @@ namespace TerminalGame.Screens
             if (_loadingTask.IsCompleted)
             {
                 Console.WriteLine("Done");
-                StateMachine.GetInstance().ChangeState("gameRunning", new GameRunningScreen(Game));
+                ScreenManager.GetInstance().ChangeScreen("gameRunning");
             }
         }
 
