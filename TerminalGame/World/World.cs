@@ -108,6 +108,7 @@ namespace TerminalGame.World
                     comp.Name = Companies.Generator.CompanyGenerator.GenerateName();
                     whoops++;
                 }
+                comp.GenerateComputers();
                 Console.WriteLine(comp.Name + " whoopses: " + whoops.ToString());
                 CompanyList.Add(comp);
             }

@@ -32,10 +32,6 @@ namespace TerminalGame.Companies
             SharePrice = _rnd.Next();
             CompanyValue = _rnd.Next();
             Admin = new Person(AgeRange.Adult);
-            GetComputers = new List<Computer>
-            {
-                Generator.CompanyGenerator.GenerateComputer(this, ComputerType.Server),
-            };
         }
 
         public Company(string name)
@@ -58,6 +54,14 @@ namespace TerminalGame.Companies
         public void Tick()
         {
 
+        }
+
+        public void GenerateComputers()
+        {
+            GetComputers = new List<Computer>
+            {
+                Generator.CompanyGenerator.GenerateComputer(this, ComputerType.Server),
+            };
         }
 
         /// <summary>
