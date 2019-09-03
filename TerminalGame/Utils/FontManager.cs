@@ -60,10 +60,10 @@ namespace TerminalGame.Utils
         {
             if (_fontList.Count < 1)
                 throw new InvalidOperationException("FontList has not been initialized");
-            if (_fontList.TryGetValue(fontKey + Globals.GlobalFontSize.ToString(), out SpriteFont retval))
+            if (_fontList.TryGetValue(fontKey + Globals.Utils.GlobalFontSize.ToString(), out SpriteFont retval))
                 return retval;
             else
-                throw new KeyNotFoundException("FontKey '" + fontKey + Globals.GlobalFontSize.ToString() + "' does not exist in the FontList");
+                throw new KeyNotFoundException("FontKey '" + fontKey + Globals.Utils.GlobalFontSize.ToString() + "' does not exist in the FontList");
         }
     }
 }
