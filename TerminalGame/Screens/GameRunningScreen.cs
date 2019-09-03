@@ -31,19 +31,19 @@ namespace TerminalGame.Screens
             Game.Player.ConnectedComp = Game.Player.PlayerComp;
 
             Terminal terminal = new Terminal(Game, new Point(2, 2),
-                new Point(Globals.GameWidth / 3 - 4, Globals.GameHeight - 4), "Terminal v0.1");
+                new Point(Globals.Settings.GameWidth / 3 - 4, Globals.Settings.GameHeight - 4), "Terminal v0.1");
 
-            NetworkMap networkMap = new NetworkMap(Game, new Point(Globals.GameWidth / 3 + 1, Globals.GameHeight - Globals.GameHeight / 3 + 2),
-                new Point(Globals.GameWidth - terminal.Rectangle.Width - 7, Globals.GameHeight / 3 - 4), "NetworkMap v0.1", 24);
+            NetworkMap networkMap = new NetworkMap(Game, new Point(Globals.Settings.GameWidth / 3 + 1, Globals.Settings.GameHeight - Globals.Settings.GameHeight / 3 + 2),
+                new Point(Globals.Settings.GameWidth - terminal.Rectangle.Width - 7, Globals.Settings.GameHeight / 3 - 4), "NetworkMap v0.1", 24);
 
-            StatusBar statusBar = new StatusBar(Game, new Point(Globals.GameWidth / 3, 1),
-                new Point(Globals.GameWidth - terminal.Rectangle.Width - 5, 52), "status", false, false);
+            StatusBar statusBar = new StatusBar(Game, new Point(Globals.Settings.GameWidth / 3, 1),
+                new Point(Globals.Settings.GameWidth - terminal.Rectangle.Width - 5, 52), "status", false, false);
             
             RemoteView remoteView = new RemoteView(Game, new Point(terminal.Rectangle.Width + 5, statusBar.Rectangle.Height + 3),
-                new Point((int)(Globals.GameWidth * 0.75) - terminal.Rectangle.Width - 7, Globals.GameHeight - statusBar.Rectangle.Height - networkMap.Rectangle.Height - 8), "RemoteView v0.1");
+                new Point((int)(Globals.Settings.GameWidth * 0.75) - terminal.Rectangle.Width - 7, Globals.Settings.GameHeight - statusBar.Rectangle.Height - networkMap.Rectangle.Height - 8), "RemoteView v0.1");
 
             Module notePad = new Module(Game, new Point(remoteView.Rectangle.X + remoteView.Rectangle.Width + 3, statusBar.Rectangle.Height + 3),
-                new Point(Globals.GameWidth - remoteView.Rectangle.X - remoteView.Rectangle.Width - 5, Globals.GameHeight - statusBar.Rectangle.Height - networkMap.Rectangle.Height - 8), "Friendly Neighbourhood Notepad");
+                new Point(Globals.Settings.GameWidth - remoteView.Rectangle.X - remoteView.Rectangle.Width - 5, Globals.Settings.GameHeight - statusBar.Rectangle.Height - networkMap.Rectangle.Height - 8), "Friendly Neighbourhood Notepad");
 
             _elements.Add(terminal);
             _elements.Add(networkMap);

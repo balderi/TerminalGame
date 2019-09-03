@@ -70,6 +70,8 @@ namespace TerminalGame.Files.FileSystem
 
         public void ChangeCurrentDir(File directory)
         {
+            if (directory == null)
+                return;
             if (directory.FileType == FileType.Directory)
                 CurrentDir = directory;
             else throw new ArgumentException("File is not a directory.");

@@ -1,20 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TerminalGame.Utils;
 
-namespace TerminalGame.Utils
+namespace TerminalGame.Globals
 {
-    public static class Globals
+    public static class Utils
     {
         public static FontManager.GlobalFontSize GlobalFontSize;
         private static Texture2D _dummy;
-
-        public static int GameWidth;
-        public static int GameHeight;
-
-        public static float MasterVolume;
-        public static float SoundVolume;
-        public static float MusicVolume;
-
         public static void SetGlobalFontSize(FontManager.GlobalFontSize fontSize = FontManager.GlobalFontSize.normal)
         {
             GlobalFontSize = fontSize;
@@ -33,16 +31,16 @@ namespace TerminalGame.Utils
 
         public static void DrawOuterBorder(SpriteBatch spriteBatch, Rectangle rectangle, Texture2D texture, int borderWidth, Color borderColor)
         {
-            spriteBatch.Draw(texture, new Rectangle(rectangle.Left - borderWidth, rectangle.Top - borderWidth, 
+            spriteBatch.Draw(texture, new Rectangle(rectangle.Left - borderWidth, rectangle.Top - borderWidth,
                                                     borderWidth, rectangle.Height + 2 * borderWidth), borderColor); // Left
 
-            spriteBatch.Draw(texture, new Rectangle(rectangle.Right, rectangle.Top - borderWidth, 
+            spriteBatch.Draw(texture, new Rectangle(rectangle.Right, rectangle.Top - borderWidth,
                                                     borderWidth, rectangle.Height + 2 * borderWidth), borderColor); // Right
 
-            spriteBatch.Draw(texture, new Rectangle(rectangle.Left, rectangle.Top - borderWidth, 
+            spriteBatch.Draw(texture, new Rectangle(rectangle.Left, rectangle.Top - borderWidth,
                                                     rectangle.Width, borderWidth), borderColor); // Top
 
-            spriteBatch.Draw(texture, new Rectangle(rectangle.Left, rectangle.Bottom, 
+            spriteBatch.Draw(texture, new Rectangle(rectangle.Left, rectangle.Bottom,
                                                     rectangle.Width, borderWidth), borderColor); // Bottom
         }
 

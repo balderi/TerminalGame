@@ -8,17 +8,17 @@ namespace TerminalGame.Screens
 {
     class SplashScreen : Screen
     {
-        private readonly string TITLE, VER;
-        private readonly SpriteFont TITLE_FONT, VER_FONT;
-        private Timer _timer;
+        private readonly string _title, _version;
+        private readonly SpriteFont _titleFont, _versionFont;
+        private readonly Timer _timer;
 
         public SplashScreen(Game game) : base(game)
         {
             var tg = game as TerminalGame;
-            TITLE = tg.Title;
-            VER = string.Format("v{0}.{1}", tg.version.Major, tg.version.Minor);
-            TITLE_FONT = FontManager.GetFont("FontXL");
-            VER_FONT = FontManager.GetFont("FontM");
+            _title = tg.Title;
+            _version = tg.Version;
+            _titleFont = FontManager.GetFont("FontXL");
+            _versionFont = FontManager.GetFont("FontM");
             _timer = new Timer(2000);
             _timer.Elapsed += Timer_Tick;
         }
@@ -27,8 +27,8 @@ namespace TerminalGame.Screens
         {
             _spriteBatch.Begin(SpriteSortMode.Immediate, blendState: BlendState.AlphaBlend);
             base.Draw(gameTime);
-            _spriteBatch.DrawString(TITLE_FONT, TITLE, new Vector2(Globals.GameWidth / 2 - TITLE_FONT.MeasureString(TITLE).X / 2, Globals.GameHeight / 2 - TITLE_FONT.MeasureString(TITLE).Y / 2), Color.White);
-            _spriteBatch.DrawString(VER_FONT, VER, new Vector2(Globals.GameWidth / 2 + TITLE_FONT.MeasureString(TITLE).X / 2, Globals.GameHeight / 2), Color.Green);
+            _spriteBatch.DrawString(_titleFont, _title, new Vector2(Globals.Settings.GameWidth / 2 - _titleFont.MeasureString(_title).X / 2, Globals.Settings.GameHeight / 2 - _titleFont.MeasureString(_title).Y / 2), Color.White);
+            _spriteBatch.DrawString(_versionFont, _version, new Vector2(Globals.Settings.GameWidth / 2 + _titleFont.MeasureString(_title).X / 2, Globals.Settings.GameHeight / 2), Color.Green);
             _spriteBatch.End();
         }
 
@@ -51,7 +51,7 @@ namespace TerminalGame.Screens
         private void Timer_Tick(object sender, ElapsedEventArgs e)
         {
             _timer.Stop();
-            ScreenManager.GetInstance().ChangeScreen("mainMenu");
+            ScreenManager.GetInstance().ChangeScreenAndInit("mainMenu");
         }
 
         public override void Update(GameTime gameTime)

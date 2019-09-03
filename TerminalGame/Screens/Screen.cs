@@ -21,7 +21,7 @@ namespace TerminalGame.Screens
         public Screen(Game game, bool fadeIn = false) : base(game)
         {
             Game = game as TerminalGame;
-            _rectangle = new Rectangle(0, 0, Globals.GameWidth, Globals.GameHeight);
+            _rectangle = new Rectangle(0, 0, Globals.Settings.GameWidth, Globals.Settings.GameHeight);
             _elements = new List<UIElement>();
             _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
             Content = Game.Content;

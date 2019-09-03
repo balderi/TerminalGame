@@ -174,11 +174,11 @@ namespace TerminalGame.UI.Elements
             if (!Visible && !_fadingDown && !_fadingUp)
                 return;
 
-            _spriteBatch.Draw(Utils.Globals.DummyTexture(), Rectangle,
+            _spriteBatch.Draw(Globals.Utils.DummyTexture(), Rectangle,
                               BackgroundColor * _opacity);
             
             if(HasBorder)
-                Utils.Globals.DrawOuterBorder(_spriteBatch, Rectangle, Utils.Globals.DummyTexture(), 1,
+                Globals.Utils.DrawOuterBorder(_spriteBatch, Rectangle, Globals.Utils.DummyTexture(), 1,
                                           BorderColor * _opacity);
         }
 

@@ -73,19 +73,19 @@ namespace TerminalGame
             _graphics.IsFullScreen = false;
             _graphics.ApplyChanges();
 
-            Globals.GameHeight = _graphics.PreferredBackBufferHeight;
-            Globals.GameWidth = _graphics.PreferredBackBufferWidth;
+            Globals.Settings.GameHeight = _graphics.PreferredBackBufferHeight;
+            Globals.Settings.GameWidth = _graphics.PreferredBackBufferWidth;
             FontManager.InitializeFonts(Content);
 
             Window.Title = TitleAndVersion;
 
             //TODO: Load this from file
-            Globals.SetGlobalFontSize();
-            Globals.GenerateDummyTexture(GraphicsDevice);
+            Globals.Utils.SetGlobalFontSize();
+            Globals.Utils.GenerateDummyTexture(GraphicsDevice);
             IsMouseVisible = true;
-            Globals.MasterVolume = 0.5f;
-            Globals.SoundVolume = 0.5f;
-            Globals.MusicVolume = 0.5f;
+            Globals.Settings.MasterVolume = 0.5f;
+            Globals.Settings.SoundVolume = 0.5f;
+            Globals.Settings.MusicVolume = 0.5f;
 
             _screenManager = ScreenManager.GetInstance();
             _screenManager.Initialize(_graphics);
@@ -94,6 +94,7 @@ namespace TerminalGame
             _screenManager.AddScreen("settingsMenu", new SettingsScreen(this));
             _screenManager.AddScreen("gameLoading", new GameLoadingScreen(this));
             _screenManager.AddScreen("gameRunning", new GameRunningScreen(this));
+            _screenManager.AddScreen("loadGame", new LoadGameScreen(this));
             _screenManager.ChangeScreen("splash");
 
             _themeManager = ThemeManager.GetInstance();

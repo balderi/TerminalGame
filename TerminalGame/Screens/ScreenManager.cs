@@ -51,6 +51,17 @@ namespace TerminalGame.Screens
                 Console.WriteLine($"Switching to screen {name}");
                 PreviousScreen = CurrentScreen;
                 CurrentScreen = screen;
+                CurrentScreen.SwitchOn();
+            }
+        }
+
+        public void ChangeScreenAndInit(string name)
+        {
+            if (TryGetScreen(name, out Screen screen))
+            {
+                Console.WriteLine($"Switching to screen {name}");
+                PreviousScreen = CurrentScreen;
+                CurrentScreen = screen;
                 CurrentScreen.Initialize(_graphics);
                 CurrentScreen.SwitchOn();
             }

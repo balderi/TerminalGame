@@ -64,7 +64,7 @@ namespace TerminalGame.Screens
             if (_loadingTask.IsCompleted)
             {
                 Console.WriteLine("Done");
-                ScreenManager.GetInstance().ChangeScreen("gameRunning");
+                ScreenManager.GetInstance().ChangeScreenAndInit("gameRunning");
             }
         }
 

@@ -76,6 +76,8 @@
     <Compile Include="Files\FileSystem\Generator\FileSystemGenerator.cs" />
     <Compile Include="Files\FileType.cs" />
     <Compile Include="Files\IFile.cs" />
+    <Compile Include="Globals\Settings.cs" />
+    <Compile Include="Globals\Utils.cs" />
     <Compile Include="Parsing\CommandParser.cs" />
     <Compile Include="Parsing\CommandToken.cs" />
     <Compile Include="People\Utils\AgeRange.cs" />
@@ -97,6 +99,7 @@
     <Compile Include="Programs\Program.cs" />
     <Compile Include="Screens\GameLoadingScreen.cs" />
     <Compile Include="Screens\GameRunningScreen.cs" />
+    <Compile Include="Screens\LoadGameScreen.cs" />
     <Compile Include="Screens\MainMenuScreen.cs" />
     <Compile Include="Screens\Screen.cs" />
     <Compile Include="Screens\ScreenManager.cs" />
@@ -120,7 +123,6 @@
     <Compile Include="UI\Themes\Theme.cs" />
     <Compile Include="UI\Themes\ThemeManager.cs" />
     <Compile Include="Utils\FontManager.cs" />
-    <Compile Include="Utils\Globals.cs" />
     <Compile Include="Computers\Utils\KnownPorts.cs" />
     <Compile Include="Utils\MusicManager.cs" />
     <Compile Include="Utils\Generators.cs" />

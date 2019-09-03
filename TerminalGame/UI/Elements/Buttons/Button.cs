@@ -63,13 +63,13 @@ namespace TerminalGame.UI.Elements.Buttons
             }
 
             _spriteBatch.Begin();
-            _spriteBatch.Draw(Utils.Globals.DummyTexture(), Rectangle,
+            _spriteBatch.Draw(Globals.Utils.DummyTexture(), Rectangle,
                               BackgroundColor * _opacity);
 
             _spriteBatch.DrawString(_font, TEXT, new Vector2(Rectangle.Center.X - _font.MeasureString(TEXT).X / 2, 
                 Rectangle.Center.Y - _font.MeasureString(TEXT).Y / 2), FontColor);
 
-            Utils.Globals.DrawOuterBorder(_spriteBatch, Rectangle, Utils.Globals.DummyTexture(), 1,
+            Globals.Utils.DrawOuterBorder(_spriteBatch, Rectangle, Globals.Utils.DummyTexture(), 1,
                                           BorderColor * _opacity);
             _spriteBatch.End();
         }

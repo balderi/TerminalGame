@@ -68,8 +68,8 @@ namespace TerminalGame.World
         /// </summary>
         public void CreateWorld()
         {
+            DateTime beginWorld = DateTime.Now;
             GameClock.Initialize();
-            //_rnd = new Random(DateTime.Now.Millisecond);
             Computers = new List<Computer>();
             People = new List<Person>();
             CompanyList = new List<Company>();
@@ -93,11 +93,6 @@ namespace TerminalGame.World
 
             Computers.Add(PlayerComp);
 
-            //for (int i = 0; i < 200; i++)
-            //{
-            //    Computers.Add(new Computer("Workstation" + i));
-            //}
-            //Console.WriteLine("Generated {0} computers in {1} seconds.", Computers.Count, (DateTime.Now.Subtract(beginC).TotalSeconds).ToString("N4"));
             DateTime beginCompanies = DateTime.Now;
             for (int i = 0; i < 500; i++)
             {
@@ -131,18 +126,7 @@ namespace TerminalGame.World
             {
                 c.Init();
             }
-            //DateTime beginP = DateTime.Now;
-            ////for (int i = 0; i < 1000; i++)
-            ////    People.Add(new Person());
-            //Parallel.For(0, 5, index =>
-            //{
-            //    for (int i = 0; i < 2000; i++)
-            //    {
-            //        People.Add(new Person());
-            //    }
-            //    Console.WriteLine(index);
-            //});
-            //Console.WriteLine("Generated {0} people in {1} seconds.", People.Count, (DateTime.Now.Subtract(beginP).TotalSeconds).ToString("N4"));
+            Console.WriteLine("Generated world in {0} seconds.", (DateTime.Now.Subtract(beginWorld).TotalSeconds).ToString("N4"));
         }
 
         /// <summary>

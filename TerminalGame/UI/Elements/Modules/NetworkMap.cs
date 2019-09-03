@@ -97,7 +97,7 @@ namespace TerminalGame.UI.Elements.Modules
             if (oldNode != HoverNode)
             {
                 float wat = (1f - (float)(_rnd.NextDouble()) / 100);
-                _nodeHoverSound.Play((Globals.SoundVolume * Globals.MasterVolume), wat, 0f);
+                _nodeHoverSound.Play((Globals.Settings.SoundVolume * Globals.Settings.MasterVolume), wat, 0f);
             }
             if (HoverNode.InfoBox.Rectangle.X + HoverNode.InfoBox.Rectangle.Width >= Game.Window.ClientBounds.Width - 10)
             {
@@ -175,7 +175,7 @@ namespace TerminalGame.UI.Elements.Modules
         private void Node_Click(object sender, MouseEventArgs e)
         {
             float wat = (1f - (float)(_rnd.NextDouble()) / 50);
-            _nodeClickSound.Play((Globals.SoundVolume * Globals.MasterVolume), wat, 0f);
+            _nodeClickSound.Play((Globals.Settings.SoundVolume * Globals.Settings.MasterVolume), wat, 0f);
         }
 
         private void Node_Hover(object sender, MouseEventArgs e)
