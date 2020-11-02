@@ -51,26 +51,18 @@ namespace TerminalGame.UI.Elements.Modules
         {
             try
             {
-                return String.Format(
-                    "Connected to:\n{0}\n" +
-                    "IP: {1}\n" +
-                    "Company: {2}\n" +
-                    "Owner:\n{3}\n" +
-                    "Admin:\n{4}"
-                    , _computer.Name.Replace("§¤§", "\n"), _computer.IP, _computer.Owner.Name, _computer.Owner.Owner.ToString(), _computer.Owner.Admin.ToString()
-                    );
+                return $"Connected to:\n{_computer.Name.Replace("§¤§", "\n")}\nIP: {_computer.IP}\n" +
+                       $"Company: {_computer.Owner.Name}\nOwner:\n{_computer.Owner.Owner}\nAdmin:" +
+                       $"\n{_computer.Owner.Admin}";
             }
             catch(Exception e)
             {
                 Console.WriteLine(e.Message + " - ignore this (localhost has no company).");
-                return String.Format(
-                    "Connected to: {0}\n" +
-                    "          IP: {1}\n" +
-                    "     Company: ?\n" +
-                    "       Owner: ?\n" +
-                    "       Admin: ?\n"
-                    , _computer.Name.Replace("§¤§", "\n"), _computer.IP
-                    );
+                return $"Connected to: {_computer.Name.Replace("§¤§", "\n")}\n" +
+                       $"          IP: {_computer.IP}\n" +
+                        "     Company: ?\n" +
+                        "       Owner: ?\n" +
+                        "       Admin: ?\n";
             }
         }
     }

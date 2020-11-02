@@ -84,8 +84,7 @@ namespace TerminalGame.Programs
             if(_isKill)
             {
                 Console.WriteLine("command: Execution halted!");
-                Game.Terminal.Write("^C");
-                Game.Terminal.WriteLine("command: Execution halted!");
+                Game.Terminal.WriteLine("^C");
                 _timer.Stop();
                 _isKill = false;
                 return;

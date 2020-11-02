@@ -51,7 +51,7 @@ namespace TerminalGame.Programs
                             Kill();
                             return;
                         }
-                        Game.Terminal.WriteLine("Command \"" + _args[1] + "\" is unknown, try \"ip address help\".");
+                        Game.Terminal.WriteLine($"Command \"{_args[1]}\" is unknown, try \"ip address help\".");
                         Kill();
                         return;
                     }
@@ -63,7 +63,7 @@ namespace TerminalGame.Programs
                     }
                 default:
                     {
-                        Game.Terminal.WriteLine("Object \"" + _args[0] + "\" is unknown, try \" ip help\".");
+                        Game.Terminal.WriteLine($"Object \"{_args[0]}\" is unknown, try \" ip help\".");
                         Kill();
                         return;
                     }

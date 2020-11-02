@@ -171,15 +171,7 @@ namespace TerminalGame.Computers
         /// </summary>
         /// <param name="port">The port number as <c>int</c></param>
         /// <returns><c>true</c> if the port is open, otherwise <c>false</c>.</returns>
-        public bool CheckPortOpen(int port)
-        {
-            foreach (int key in OpenPorts)
-            {
-                if (key == port)
-                    return true;
-            }
-            return false;
-        }
+        public bool CheckPortOpen(int port) => OpenPorts.Exists(x => x == port);
 
         /// <summary>
         /// Build the dictionary of open ports from array.

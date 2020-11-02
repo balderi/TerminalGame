@@ -159,6 +159,11 @@ namespace TerminalGame.Parsing
                         game.Terminal.WriteLine("Game saved.");
                         break;
                     }
+                case "nmap":
+                    {
+                        Nmap.GetInstance().Init(game, null, token.Args);
+                        break;
+                    }
                 default:
                     {
                         game.Terminal.WriteLine(token.Command + " is not a recognized command");

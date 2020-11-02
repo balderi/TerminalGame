@@ -44,8 +44,8 @@ namespace TerminalGame
             Content.RootDirectory = "Content";
             version = Assembly.GetEntryAssembly().GetName().Version;
             Title = Assembly.GetEntryAssembly().GetName().Name;
-            Version = string.Format("v{0}.{1}a", version.Major, version.Minor);
-            TitleAndVersion = string.Format("{0} {1}", Title, Version);
+            Version = $"v{version.Major}.{version.Minor}a";
+            TitleAndVersion = $"{Title} {Version}";
             BuildNumber = File.GetLastWriteTime(Assembly.GetExecutingAssembly().Location).ToString("yyyyMMdd").ToString();
             IsFixedTimeStep = true;
             IsGameRunning = false;

@@ -25,9 +25,9 @@ namespace TerminalGame.UI.Elements.Modules
         public override void Initialize()
         {
             base.Initialize();
-            _buildNumber = String.Format("Version {0}\n  Build {1}", Game.Version, Game.BuildNumber);
+            _buildNumber = $"Version {Game.Version}\n  Build {Game.BuildNumber}";
 
-            _playerDeets = "   Name: " + Player.GetInstance().Name + "\nBalance: $" + Player.GetInstance().Balance;
+            _playerDeets = $"   Name: {Player.GetInstance().Name}\nBalance: ${Player.GetInstance().Balance}";
             
             _connectionInfo = "";
             BackgroundColor = _themeManager.CurrentTheme.ModuleHeaderBackgroundColor;

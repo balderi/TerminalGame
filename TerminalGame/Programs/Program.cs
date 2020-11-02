@@ -38,8 +38,9 @@ namespace TerminalGame.Programs
                 _opString = optstring;
                 _args = args;
                 _isInitialized = true;
-                Run();
             }
+
+            Run();
         }
 
         protected abstract void Timer_Tick(object sender, EventArgs e);

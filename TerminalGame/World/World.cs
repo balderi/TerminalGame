@@ -129,6 +129,14 @@ namespace TerminalGame.World
             Console.WriteLine("Generated world in {0} seconds.", (DateTime.Now.Subtract(beginWorld).TotalSeconds).ToString("N4"));
         }
 
+        public bool TryGetComputerByIp(string ip, out Computer computer) => (computer = Computers.Find(x => x.IP == ip)) != null;
+
+        public bool TryGetComputerByName(string name, out Computer computer) => (computer = Computers.Find(x => x.Name == name)) != null;
+
+        public bool TryGetPersonByName(string name, out Person person) => (person = People.Find(x => x.Name == name)) != null;
+
+        public bool TryGetPersonByEmail(string email, out Person person) => (person = People.Find(x => x.Email == email)) != null;
+
         /// <summary>
         /// Update all entities in the current world.
         /// </summary>
@@ -175,8 +183,7 @@ namespace TerminalGame.World
         /// </summary>
         public void Save()
         {
-            if (!Directory.Exists("Saves"))
-                Directory.CreateDirectory("Saves");
+            Utils.IO.CheckAndCreateDirectory("Saves");
             TextWriter writer = new StreamWriter(@"Saves\save_" + Player.GetInstance().Name + ".tgs");
             XmlSerializer serializer = new XmlSerializer(typeof(World));
             serializer.Serialize(writer, this);

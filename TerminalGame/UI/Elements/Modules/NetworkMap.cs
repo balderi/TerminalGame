@@ -153,7 +153,7 @@ namespace TerminalGame.UI.Elements.Modules
                     }
                     if (++attempts > maxAttempts - 1)
                     {
-                        Console.WriteLine("Node for \"{0}\" intersects after {1} attempts; dist: {2} -- ignore overlap and continue.", c.GetPublicName(), attempts, dist);
+                        Console.WriteLine($"Node for \"{c.GetPublicName()}\" intersects after {attempts} attempts; dist: {dist} -- ignore overlap and continue.");
                         break;
                     }
                 }
@@ -169,7 +169,7 @@ namespace TerminalGame.UI.Elements.Modules
                 n.MouseEnter += Node_Enter;
             }
             TimeSpan donzo = DateTime.Now.Subtract(begin);
-            Console.WriteLine("Generated {0} nodes in {1} seconds.", _networkNodes.Count, (donzo.TotalSeconds).ToString("N4"));
+            Console.WriteLine($"Generated {_networkNodes.Count} nodes in {donzo.TotalSeconds:N4} seconds.");
         }
 
         private void Node_Click(object sender, MouseEventArgs e)
