@@ -57,7 +57,7 @@ namespace TerminalGame.Parsing
                     }
                 case "echo":
                     {
-                        game.Terminal.WriteLine(token.Args[0]);
+                        Echo.GetInstance().Init(game, null, token.Args);
                         break;
                     }
                 case "sudo":

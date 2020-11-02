@@ -40,7 +40,8 @@ namespace TerminalGame.Files.FileSystem
         {
             bool getPath(File file, out string pPath)
             {
-                if(file.Name == name)
+                pPath = "";
+                if (file.Name == name)
                 {
                     pPath = file.Name;
                     return true;
@@ -56,7 +57,6 @@ namespace TerminalGame.Files.FileSystem
                         }
                     }
                 }
-                pPath = "";
                 return false;
             }
             if(getPath(RootDir, out string outPath))

@@ -10,6 +10,7 @@ namespace TerminalGame.Globals
     {
         public static int GameWidth;
         public static int GameHeight;
+        public static bool Window;
 
         public static float MasterVolume;
         public static float SoundVolume;

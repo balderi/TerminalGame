@@ -61,6 +61,10 @@ namespace TerminalGame.Screens
         protected override void LoadContent()
         {
             base.LoadContent();
+            if(!IO.CheckAndCreateDirectory("Saves"))
+            {
+                throw new Exception("Error while creating save directory.");
+            }
             _smoke = Content.Load<Texture2D>("Graphics/Textures/Backgrounds/smoke");
             _saveGames = new List<string>();
             int i = 0;
@@ -105,6 +109,7 @@ namespace TerminalGame.Screens
             }
             _prevState = _newState;
         }
+
         public override void Draw(GameTime gameTime)
         {
             if (_smoke == null)

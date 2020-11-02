@@ -83,7 +83,7 @@ namespace TerminalGame
             Globals.Utils.SetGlobalFontSize();
             Globals.Utils.GenerateDummyTexture(GraphicsDevice);
             IsMouseVisible = true;
-            Globals.Settings.MasterVolume = 0.5f;
+            Globals.Settings.MasterVolume = 1.0f;
             Globals.Settings.SoundVolume = 0.5f;
             Globals.Settings.MusicVolume = 0.5f;
 

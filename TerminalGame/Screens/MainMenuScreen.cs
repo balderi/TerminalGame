@@ -165,6 +165,7 @@ namespace TerminalGame.Screens
         private void Settings_Clicked(ButtonPressedEventArgs e)
         {
             Console.WriteLine("Settings clicked");
+            ScreenManager.GetInstance().ChangeScreenAndInit("settingsMenu");
         }
 
         private void Quit_Clicked(ButtonPressedEventArgs e)

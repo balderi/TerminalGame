@@ -1,145 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Features>IOperation</Features>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D7E65758-9116-40A8-BB5E-0B50313BAC5A}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TerminalGame</RootNamespace>
-    <AssemblyName>TerminalGame</AssemblyName>
-    <FileAlignment>512</FileAlignment>
-    <MonoGamePlatform>DesktopGL</MonoGamePlatform>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ProductName>TerminalGame</ProductName>
-    <PublisherName>Redlab Games</PublisherName>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>0.4.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\$(MonoGamePlatform)\$(Platform)\$(Configuration)\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;LINUX</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>false</Prefer32Bit>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>bin\$(MonoGamePlatform)\$(Platform)\$(Configuration)\</OutputPath>
-    <DefineConstants>TRACE;LINUX</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>false</Prefer32Bit>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PublishReadyToRun>false</PublishReadyToRun>
+    <TieredCompilation>false</TieredCompilation>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Companies\Company.cs" />
-    <Compile Include="Companies\Generator\CompanyGenerator.cs" />
-    <Compile Include="Computers\Computer.cs" />
-    <Compile Include="Computers\IComputer.cs" />
-    <Compile Include="Computers\Utils\AccessLevel.cs" />
-    <Compile Include="Computers\Utils\ComputerType.cs" />
-    <Compile Include="Files\File.cs" />
-    <Compile Include="Files\FileSystem\FileSystem.cs" />
-    <Compile Include="Files\FileSystem\Generator\FileSystemGenerator.cs" />
-    <Compile Include="Files\FileType.cs" />
-    <Compile Include="Files\IFile.cs" />
-    <Compile Include="Globals\Settings.cs" />
-    <Compile Include="Globals\Utils.cs" />
-    <Compile Include="Parsing\CommandParser.cs" />
-    <Compile Include="Parsing\CommandToken.cs" />
-    <Compile Include="People\Utils\AgeRange.cs" />
-    <Compile Include="People\Utils\EducationLevel.cs" />
-    <Compile Include="People\Utils\Gender.cs" />
-    <Compile Include="People\Generator\PersonGenerator.cs" />
-    <Compile Include="People\Generator\UserGenerator.cs" />
-    <Compile Include="People\Person.cs" />
-    <Compile Include="People\User.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="Programs\Cd.cs" />
-    <Compile Include="Programs\Connect.cs" />
-    <Compile Include="Programs\Cat.cs" />
-    <Compile Include="Programs\Ip.cs" />
-    <Compile Include="Programs\Ifconfig.cs" />
-    <Compile Include="Programs\Disconnect.cs" />
-    <Compile Include="Programs\IProgram.cs" />
-    <Compile Include="Programs\Ls.cs" />
-    <Compile Include="Programs\Program.cs" />
-    <Compile Include="Screens\GameLoadingScreen.cs" />
-    <Compile Include="Screens\GameRunningScreen.cs" />
-    <Compile Include="Screens\LoadGameScreen.cs" />
-    <Compile Include="Screens\MainMenuScreen.cs" />
-    <Compile Include="Screens\Screen.cs" />
-    <Compile Include="Screens\ScreenManager.cs" />
-    <Compile Include="Screens\SettingsScreen.cs" />
-    <Compile Include="Screens\SplashScreen.cs" />
-    <Compile Include="Time\GameClock.cs" />
-    <Compile Include="Time\GameSpeed.cs" />
-    <Compile Include="UI\Elements\Buttons\Button.cs" />
-    <Compile Include="UI\Elements\Modules\ModuleComponents\NetworkNode.cs" />
-    <Compile Include="UI\Elements\Modules\ModuleComponents\NodeInfoBox.cs" />
-    <Compile Include="UI\Elements\Modules\NetworkMap.cs" />
-    <Compile Include="UI\Elements\Modules\RemoteView.cs" />
-    <Compile Include="UI\Elements\Modules\StatusBar.cs" />
-    <Compile Include="UI\Elements\Modules\Terminal.cs" />
-    <Compile Include="UI\Elements\UIElement.cs" />
-    <Compile Include="UI\Elements\Modules\Module.cs" />
-    <Compile Include="UI\Elements\Modules\ModuleComponents\Header.cs" />
-    <Compile Include="TerminalGame.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\Themes\Theme.cs" />
-    <Compile Include="UI\Themes\ThemeManager.cs" />
-    <Compile Include="Utils\FontManager.cs" />
-    <Compile Include="Computers\Utils\KnownPorts.cs" />
-    <Compile Include="Utils\MusicManager.cs" />
-    <Compile Include="Utils\Generators.cs" />
-    <Compile Include="Utils\TextHandler\Cursor.cs" />
-    <Compile Include="Utils\TextHandler\Extensions.cs" />
-    <Compile Include="Utils\TextHandler\KeyboardInput.cs" />
-    <Compile Include="Utils\TextHandler\Text.cs" />
-    <Compile Include="Utils\TextHandler\TextBox.cs" />
-    <Compile Include="Utils\TextHandler\TextRenderer.cs" />
-    <Compile Include="World\World.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="MonoGame.Framework">
-      <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Xml" />
+    <None Remove="Icon.ico" />
+    <None Remove="Icon.bmp" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
@@ -147,82 +19,12 @@
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
-    <None Include="$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\x86\SDL2.dll">
-      <Link>x86\SDL2.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\x64\SDL2.dll">
-      <Link>x64\SDL2.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\x86\soft_oal.dll">
-      <Link>x86\soft_oal.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\x64\soft_oal.dll">
-      <Link>x64\soft_oal.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\x86\libSDL2-2.0.so.0">
-      <Link>x86\libSDL2-2.0.so.0</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\x64\libSDL2-2.0.so.0">
-      <Link>x64\libSDL2-2.0.so.0</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\x86\libopenal.so.1">
-      <Link>x86\libopenal.so.1</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\x64\libopenal.so.1">
-      <Link>x64\libopenal.so.1</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\libSDL2-2.0.0.dylib">
-      <Link>libSDL2-2.0.0.dylib</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\libopenal.1.dylib">
-      <Link>libopenal.1.dylib</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll.config">
-      <Link>MonoGame.Framework.dll.config</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="app.manifest" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\Settings.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Data\Names\femaleNames.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Data\Names\lastNames.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Data\Names\maleNames.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Icon.png" />
+    <TrimmerRootAssembly Include="Microsoft.Xna.Framework.Content.ContentTypeReader" Visible="false" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
+    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
+  </ItemGroup>
 </Project>

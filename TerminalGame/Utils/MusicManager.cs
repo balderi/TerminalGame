@@ -44,8 +44,12 @@ namespace TerminalGame.Utils
 
         public void Start(string song, bool isRepeating = true)
         {
-            if (_songs.TryGetValue(song, out _currentSong))
+            if (_songs.TryGetValue(song, out _nextSong))
             {
+                if (_nextSong == _currentSong)
+                    return;
+                else
+                    _currentSong = _nextSong;
                 MediaPlayer.Volume = 0;
                 MediaPlayer.IsRepeating = isRepeating;
                 MediaPlayer.Play(_currentSong);
