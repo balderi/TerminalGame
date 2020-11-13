@@ -39,11 +39,24 @@ namespace TerminalGame.Programs
                 Kill();
                 return;
             }
-            if(_args[0] == "..")
+            if (_args[0] == "-")
             {
-                Player.GetInstance().ConnectedComp.FileSystem.ChangeCurrentDir(Player.GetInstance().ConnectedComp.FileSystem.CurrentDir.Parent);
+                Player.GetInstance().ConnectedComp.FileSystem.ChangeCurrentDir(Player.GetInstance().ConnectedComp.FileSystem.LastDir);
                 Kill();
                 return;
+            }
+            if (_args[0].Contains('/'))
+            {
+                try
+                {
+                    Player.GetInstance().ConnectedComp.FileSystem.ChangeCurrentDirFromPath(_args[0]);
+                    Kill();
+                    return;
+                }
+                catch(Exception e)
+                {
+                    Game.Terminal.WriteLine(e.Message);
+                }
             }
             if(Player.GetInstance().ConnectedComp.FileSystem.TryFindFile(_args[0], out File f))
             {

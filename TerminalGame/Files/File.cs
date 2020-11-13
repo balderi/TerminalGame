@@ -137,11 +137,7 @@ namespace TerminalGame.Files
         {
             if(FileType == FileType.Directory)
             {
-                bool findFile(File f)
-                {
-                    return f.Name == name;
-                }
-                return Children.Find(findFile);
+                return Children.Find(f => f.Name == name);
             }
             throw new InvalidOperationException("Cannot get child of file.");
         }
@@ -163,15 +159,7 @@ namespace TerminalGame.Files
                 throw new ArgumentException("Object is not a File"); //impossible!
         }
 
-        public bool FileNameExists(string name)
-        {
-            foreach(File f in Children)
-            {
-                if (f.Name == name)
-                    return true;
-            }
-            return false;
-        }
+        public bool FileNameExists(string name) => Children.Exists(f => f.Name == name);
 
         /// <summary>
         /// Fixes relationship between files and parents
