@@ -1,36 +1,55 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using TerminalGame.People.Utils;
 
 namespace TerminalGame.People
 {
+    [DataContract]
     public class Person
     {
         protected Random        _rnd;
 
+        [DataMember]
         public string           Name        { get; set; }
+        [DataMember]
         public DateTime         DOB         { get; set; }
+        [DataMember]
         public int              Age         { get; set; }
+        [DataMember]
         public Gender           Gender      { get; set; }
+        [DataMember]
         public EducationLevel   Education   { get; set; }
+        [DataMember]
         public AgeRange         AgeRange    { get; set; }
+        [DataMember]
         public string           Email       { get; set; } // TODO: Email provider.
+        [DataMember]
         public int              Phone       { get; set; } // Ehhh, maybe not?
+
+        public Person()
+        {
+
+        }
 
         /// <summary>
         /// Generate a random person.
         /// </summary>
-        public Person()
+        public Person GetRandomPerson()
         {
-            _rnd        = new Random(DateTime.Now.Millisecond);
-            Gender      = (Gender)_rnd.Next(0, 2);
-            AgeRange    = (AgeRange)_rnd.Next(4, 8);
-            Age         = Generator.PersonGenerator.GenerateAge(AgeRange);
-            Education   = Generator.PersonGenerator.GenerateEducationLevel(Age);
-            DOB         = Generator.PersonGenerator.GenerateDOB(Age);
-            Name        = Generator.PersonGenerator.GenerateName(Gender);
+            _rnd = new Random(DateTime.Now.Millisecond);
+            var retval = new Person
+            {
+                Gender = (Gender)_rnd.Next(0, 2),
+                AgeRange = (AgeRange)_rnd.Next(4, 8),
+                Age = Generator.PersonGenerator.GenerateAge(AgeRange),
+                Education = Generator.PersonGenerator.GenerateEducationLevel(Age),
+                DOB = Generator.PersonGenerator.GenerateDOB(Age),
+                Name = Generator.PersonGenerator.GenerateName(Gender),
 
-            Email       = "";
-            Phone       = 0;
+                Email = "",
+                Phone = 0
+            };
+            return retval;
         }
 
         /// <summary>

@@ -57,7 +57,7 @@ namespace TerminalGame.Programs
             if(!MusicManager.GetInstance().IsSongPlaying("hackLoop"))
                 MusicManager.GetInstance().FadeOut(0.005f);
             Console.WriteLine("Attempting connection to host with IP {0}", _args[0]);
-            if(_args[0] == Player.GetInstance().ConnectedComp.IP)
+            if(_args[0] == World.World.GetInstance().Player.ConnectedComp.IP)
             {
                 Game.Terminal.WriteLine("You are already connected to this host");
                 Kill();

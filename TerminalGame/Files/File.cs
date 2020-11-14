@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Xml.Serialization;
 
 namespace TerminalGame.Files
 {
+    [DataContract(IsReference = true)]
     public class File : IFile
-    {        
+    {
+        [DataMember(Order = 0)]
         public string       Name        { get; set; }
+        [DataMember(Order = 1)]
         public string       Contents    { get; set; }
+        [DataMember(Order = 2)]
         public int          Size        { get; set; }
+        [DataMember(Order = 3)]
         public FileType     FileType    { get; set; }
-        [XmlIgnore]
+        [DataMember(Order = 4)]
         public File         Parent      { get; set; }
+        [DataMember(Order = 5)]
         public List<File>   Children    { get; set; }
 
         public File()
@@ -146,7 +151,7 @@ namespace TerminalGame.Files
         /// Allows files to be sorted alphabetically.
         /// </summary>
         /// <param name="other">File to compare to.</param>
-        /// <returns>Less than zero if this FIle precedes <c>other</c> in the sort order.
+        /// <returns>Less than zero if this File precedes <c>other</c> in the sort order.
         /// Zero if this instance occurs in the same position in the sort order as <c>other</c>.
         /// Greater than zero if this instance follows <c>other</c> in the sort order.</returns>
         public int CompareTo(File other)
@@ -171,7 +176,12 @@ namespace TerminalGame.Files
             {
                 foreach(File f in Children)
                 {
+                    Console.WriteLine($"Running FixFile for file {f.Name}");
                     f.Parent = this;
+                    if(f.Parent != this)
+                        Console.WriteLine($"FixFile failed for file {f.Name}");
+                    else
+                        Console.WriteLine($"{f.Name}'s parent is now {f.Parent.Name}");
                     f.FixFile();
                 }
             }

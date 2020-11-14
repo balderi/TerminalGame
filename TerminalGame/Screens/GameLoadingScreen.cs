@@ -8,14 +8,14 @@ namespace TerminalGame.Screens
 {
     class GameLoadingScreen : Screen
     {
-        private string _loading, _loadItem;
+        private string _loading, _loadItem, _saveGamePath;
         private SpriteFont _loadingFont, _loadItemFont;
         private Task _loadingTask;
         private Vector2 _loadPos, _itemPos;
 
-        public GameLoadingScreen(Game game) : base(game)
+        public GameLoadingScreen(Game game, string saveGamePath = null) : base(game)
         {
-
+            _saveGamePath = saveGamePath;
         }
 
         protected override void LoadContent()
@@ -41,14 +41,16 @@ namespace TerminalGame.Screens
             _itemPos = new Vector2(Game.Window.ClientBounds.Width / 2 - _loadItemFont.MeasureString(_loadItem).X / 2,
                 Game.Window.ClientBounds.Height / 2 - _loadItemFont.MeasureString(_loadItem).Y / 2 + _loadingFont.MeasureString(_loading).Y / 2);
 
-            Game.Player = Player.GetInstance();
+            if (_saveGamePath == null)
+            {
+                Console.WriteLine("Creating world");
+                _loadingTask = new Task(() => World.World.GetInstance().CreateWorld());
+            }
+            else
+            {
+                _loadingTask = new Task(() => World.World.GetInstance(_saveGamePath));
+            }
 
-            Game.Player.CreateNewPlayer("testPlayer", "abc123");
-
-            Console.WriteLine("Creating world");
-            Action load = new Action(World.World.GetInstance().CreateWorld);
-
-            _loadingTask = new Task(load);
             _loadingTask.Start();
         }
 
@@ -61,8 +63,9 @@ namespace TerminalGame.Screens
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if (_loadingTask.IsCompleted)
+            if (_loadingTask.Status == TaskStatus.RanToCompletion)
             {
+                ScreenManager.GetInstance().AddScreen("gameRunning", new GameRunningScreen(Game));
                 Console.WriteLine("Done");
                 ScreenManager.GetInstance().ChangeScreenAndInit("gameRunning");
             }

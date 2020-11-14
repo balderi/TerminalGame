@@ -32,7 +32,18 @@ namespace TerminalGame.Screens
             IsInitialized = true;
         }
 
-        public void AddScreen(string key, Screen screen) => Screens.Add(key, screen);
+        public void AddScreen(string key, Screen screen)
+        {
+            if (Screens.ContainsKey(key))
+            {
+                if(Screens.TryGetValue(key, out var val))
+                {
+                    val.Dispose();
+                }
+                Screens.Remove(key);
+            }
+            Screens.Add(key, screen);
+        }
 
         public bool TryGetScreen(string screen, out Screen outScreen)
         {

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TerminalGame.Programs
 {
@@ -31,7 +27,7 @@ namespace TerminalGame.Programs
                 Kill();
                 return;
             }
-            Game.Terminal.WriteLine(Player.GetInstance().ConnectedComp.IP);
+            Game.Terminal.WriteLine(World.World.GetInstance().Player.ConnectedComp.IP);
             Kill();
         }
 

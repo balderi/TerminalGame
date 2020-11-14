@@ -41,7 +41,7 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
             base.Initialize();
             BackgroundColor = Color.Transparent;
 
-            if (Computer == Player.GetInstance().PlayerComp)
+            if (Computer == World.World.GetInstance().Player.PlayerComp)
                 _nMap.PlayerCompNode = this;
 
             _spinnerS = new Point((int)(Rectangle.Width * 1.25));
@@ -64,11 +64,11 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
 
             _currentColor = _themeManager.CurrentTheme.NetworkMapNodeColor * _opacity;
             
-            if (Computer == Player.GetInstance().PlayerComp)
+            if (Computer == World.World.GetInstance().Player.PlayerComp)
             {
                 _currentColor = _themeManager.CurrentTheme.NetworkMapHomeSpinnerColor * _opacity;
             }
-            if (Computer == Player.GetInstance().ConnectedComp)
+            if (Computer == World.World.GetInstance().Player.ConnectedComp)
             {
                 if (_nMap.ConnectedNode != this)
                     _nMap.ConnectedNode = this;
@@ -102,11 +102,11 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
 
             _spriteBatch.Begin();
             base.Draw(gameTime);
-            if (Computer == Player.GetInstance().PlayerComp)
+            if (Computer == World.World.GetInstance().Player.PlayerComp)
             {
                 _spriteBatch.Draw(playerSpinner, new Rectangle(new Point(Rectangle.Location.X + (Rectangle.Width / 2), Rectangle.Location.Y + (Rectangle.Height / 2)), _spinnerS), null, _playerSpinnerColor, _rotationCW, new Vector2(playerSpinner.Width / 2, playerSpinner.Height / 2), SpriteEffects.None, 0);
             }
-            if (Computer == Player.GetInstance().ConnectedComp)
+            if (Computer == World.World.GetInstance().Player.ConnectedComp)
             {
                 if (_nMap.ConnectedNode != this)
                     _nMap.ConnectedNode = this;
@@ -132,7 +132,7 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
             base.OnClick(sender, e);
             if (_nMap.HoverNode != this)
                 return;
-            if (Computer == Player.GetInstance().PlayerComp)
+            if (Computer == World.World.GetInstance().Player.PlayerComp)
                 Game.Terminal.RunCommand("disconnect");
             else
                 Game.Terminal.RunCommand("connect " + Computer.IP);

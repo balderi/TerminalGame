@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using TerminalGame.Computers;
-using TerminalGame.World;
 
 namespace TerminalGame.Programs
 {
@@ -34,7 +29,7 @@ namespace TerminalGame.Programs
             _isKill = false;
             if(_args.Length < 1)
             {
-                _target = Game.Player.ConnectedComp;
+                _target = World.World.GetInstance().Player.ConnectedComp;
             }
             else
             {

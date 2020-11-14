@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TerminalGame.Files;
 
 namespace TerminalGame.Programs
@@ -32,7 +28,7 @@ namespace TerminalGame.Programs
                 Kill();
                 return;
             }
-            if(Player.GetInstance().ConnectedComp.FileSystem.TryFindFile(_args[0], out File f))
+            if(World.World.GetInstance().Player.ConnectedComp.FileSystem.TryFindFile(_args[0], out File f))
             {
                 Game.Terminal.WriteLine(f.ToString());
             }

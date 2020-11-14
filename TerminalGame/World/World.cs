@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml.Serialization;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using TerminalGame.Companies;
 using TerminalGame.Computers;
 using TerminalGame.Computers.Utils;
@@ -14,31 +15,49 @@ using TerminalGame.Time;
 
 namespace TerminalGame.World
 {
+    [DataContract]
     public class World
     {
-        //private Random _rnd;
+        private Random _rnd = new Random();
 
-        /// <summary>
-        /// A list of all computers in the world.
-        /// </summary>
-        public List<Computer> Computers { get; private set; }
+        [DataMember]
+        public DateTime CurrentGameTime { get; set; }
+
+        [DataMember]
+        public Player Player { get; set; }
 
         /// <summary>
         /// A list of all people in the world.
         /// </summary>
-        public List<Person> People { get; private set; }
+        [DataMember]
+        public List<Person> People { get; set; }
+
+        /// <summary>
+        /// A list of all computers in the world.
+        /// </summary>
+        [DataMember]
+        public List<Computer> Computers { get; set; }
 
         /// <summary>
         /// A list of all companies in the world.
         /// </summary>
-        public List<Company> CompanyList { get; private set; }
+        [DataMember]
+        public List<Company> CompanyList { get; set; }
 
         private static World _instance;
 
-        public static World GetInstance()
+        public static World GetInstance(string loadFromFile = "")
         {
             if (_instance == null)
-                _instance = new World();
+            {
+                if (!string.IsNullOrWhiteSpace(loadFromFile))
+                {
+                    _instance = Load(loadFromFile);
+                    _instance.FixWorld();
+                }
+                else
+                    _instance = new World();
+            }
             return _instance;
         }
 
@@ -46,7 +65,7 @@ namespace TerminalGame.World
         {
         }
 
-        private bool CheckName(string name)
+        private bool CheckIfNameExists(string name)
         {
             foreach(Company c in CompanyList)
             {
@@ -70,6 +89,9 @@ namespace TerminalGame.World
         {
             DateTime beginWorld = DateTime.Now;
             GameClock.Initialize();
+            CurrentGameTime = GameClock.GameTime;
+            Player = new Player();
+            Player.CreateNewPlayer("testPlayer", "abc123");
             Computers = new List<Computer>();
             People = new List<Person>();
             CompanyList = new List<Company>();
@@ -86,19 +108,21 @@ namespace TerminalGame.World
             FileSystem pfs = new FileSystem(testRoot);
 
             Company pc = new Company("Unknown", new Person("Unknown", DateTime.Parse("1970-01-01"), (Gender)(-1), (EducationLevel)(-1)), new Person("Unknown", DateTime.Parse("1970-01-01"), (Gender)(-1), (EducationLevel)(-1)), 0, 0); ;
+            //CompanyList.Add(pc);
 
-            Computer PlayerComp = new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation, pc, "127.0.0.1", Player.GetInstance().Password, pfs); //new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation, "127.0.0.1", Player.GetInstance().Password, pfs);
+            Computer PlayerComp = new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation, pc, "127.0.0.1", Player.Password, pfs); //new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation, "127.0.0.1", World.World.GetInstance().Player.Password, pfs);
+            //pc.GetComputers.Add(PlayerComp);
 
-            Player.GetInstance().PlayerComp = PlayerComp;
+            Player.PlayerComp = PlayerComp;
 
             Computers.Add(PlayerComp);
 
             DateTime beginCompanies = DateTime.Now;
             for (int i = 0; i < 500; i++)
             {
-                Company comp = new Company();
+                Company comp = Company.GetRandomCompany();
                 int whoops = 0;
-                while (CheckName(comp.Name))
+                while (CheckIfNameExists(comp.Name))
                 {
                     comp.Name = Companies.Generator.CompanyGenerator.GenerateName();
                     whoops++;
@@ -114,6 +138,7 @@ namespace TerminalGame.World
             foreach (Company c in CompanyList)
             {
                 Computers.AddRange(c.GetComputers);
+                People.AddRange(c.GetPeople);
                 names.Add(c.Name);
             }
 
@@ -142,6 +167,7 @@ namespace TerminalGame.World
         /// </summary>
         public void Tick()
         {
+            CurrentGameTime = GameClock.GameTime;
             foreach (var person in People)
                 person.Tick();
             foreach (var computer in Computers)
@@ -156,13 +182,8 @@ namespace TerminalGame.World
         /// </summary>
         public void FixWorld()
         {
-            if(CompanyList.Count > 0)
-            {
-                foreach(Company c in CompanyList)
-                {
-                    c.FixComputers();
-                }
-            }
+            foreach (Computer c in Computers)
+                c.SetPublicName();
         }
 
         /// <summary>
@@ -171,9 +192,16 @@ namespace TerminalGame.World
         /// <param name="fileName">Path to the save file.</param>
         public static World Load(string fileName)
         {
-            TextReader reader = new StreamReader(fileName);
-            XmlSerializer serializer = new XmlSerializer(typeof(World));
-            World w = (World)serializer.Deserialize(reader);
+            //GameClock.Initialize();
+
+            StreamReader reader = new StreamReader(fileName);
+            JsonSerializer jsonSerializer = new JsonSerializer
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                //Formatting = Newtonsoft.Json.Formatting.Indented
+            };
+            World w = (World)jsonSerializer.Deserialize(reader, typeof(World));
+            GameClock.Initialize(w.CurrentGameTime.ToString());
             w.FixWorld();
             return w;
         }
@@ -184,9 +212,17 @@ namespace TerminalGame.World
         public void Save()
         {
             Utils.IO.CheckAndCreateDirectory("Saves");
-            TextWriter writer = new StreamWriter(@"Saves\save_" + Player.GetInstance().Name + ".tgs");
-            XmlSerializer serializer = new XmlSerializer(typeof(World));
-            serializer.Serialize(writer, this);
+
+            StreamWriter writer = new StreamWriter(@"Saves\save_" + Player.Name + ".tgs");
+            JsonSerializer jsonSerializer = new JsonSerializer
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                //Formatting = Newtonsoft.Json.Formatting.Indented
+            };
+            jsonSerializer.Serialize(writer, this);
+            writer.Flush();
+            writer.Close();
+            Console.WriteLine("*** Done writing to file!");
         }
     }
 }

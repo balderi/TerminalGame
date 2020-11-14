@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Time;
@@ -27,7 +25,7 @@ namespace TerminalGame.UI.Elements.Modules
             base.Initialize();
             _buildNumber = $"Version {Game.Version}\n  Build {Game.BuildNumber}";
 
-            _playerDeets = $"   Name: {Player.GetInstance().Name}\nBalance: ${Player.GetInstance().Balance}";
+            _playerDeets = $"   Name: {World.World.GetInstance().Player.Name}\nBalance: ${World.World.GetInstance().Player.Balance}";
             
             _connectionInfo = "";
             BackgroundColor = _themeManager.CurrentTheme.ModuleHeaderBackgroundColor;
@@ -84,7 +82,7 @@ namespace TerminalGame.UI.Elements.Modules
             base.Update(gameTime);
             foreach (var b in _buttons)
                 b.Update(gameTime);
-            _connectionInfo = Player.GetInstance().ConnectedComp.GetPublicName() + "\n" + Player.GetInstance().ConnectedComp.IP;
+            _connectionInfo = World.World.GetInstance().Player.ConnectedComp.GetPublicName() + "\n" + World.World.GetInstance().Player.ConnectedComp.IP;
         }
 
         protected override void LoadContent()

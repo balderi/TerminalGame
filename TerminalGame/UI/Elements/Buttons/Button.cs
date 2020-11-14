@@ -84,7 +84,7 @@ namespace TerminalGame.UI.Elements.Buttons
         protected override void OnClick(object sender, MouseEventArgs e)
         {
             base.OnClick(this, e);
-            ButtonPressed?.Invoke(_buttonPressed);
+            ButtonPressed?.Invoke(new ButtonPressedEventArgs { Message = TEXT });
         }
 
         protected override void OnMouseEnter(object sender, MouseEventArgs e)
@@ -108,6 +108,7 @@ namespace TerminalGame.UI.Elements.Buttons
     /// </summary>
     public class ButtonPressedEventArgs : EventArgs
     {
+        public string Message { get; set; }
         // TODO: Specify ButtonPressedEventArgs content
     }
 }

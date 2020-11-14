@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
 using TerminalGame.Utils;
 using TerminalGame.Computers.Utils;
 using TerminalGame.Companies;
 using TerminalGame.Files.FileSystem;
-using System.Xml.Serialization;
+using System.Runtime.Serialization;
 
 namespace TerminalGame.Computers
 {
+    [DataContract(IsReference = true)]
     public class Computer : IComputer
     {
+        // TODO: Value determining difficulty to break in/get traced/whatevs.
+
         #region fields
         private readonly int[] _defaultPorts = { 22, 25, 80, 443 };
         private bool _isInitialized;
@@ -22,21 +23,35 @@ namespace TerminalGame.Computers
         /// Returns computer name with split-identifier.
         /// To get the proper name, use the <c>GetPublicName</c> method instead.
         /// </summary>
+        [DataMember]
         public string                   Name                { get; set; }
+        [DataMember]
         public string                   IP                  { get; set; }
+        [DataMember]
         public string                   RootPassword        { get; set; }
+        [DataMember]
         public bool                     IsPlayerConnected   { get; set; }
+        [DataMember]
         public bool                     PlayerHasRoot       { get; set; }
+        [DataMember]
         public bool                     IsMissionObjective  { get; set; }
+        [DataMember]
         public bool                     IsShownOnMap        { get; set; }
+        [DataMember]
         public bool                     IsOnline            { get; set; }
+        [DataMember]
         public List<int>                OpenPorts           { get; set; }
+        [DataMember]
         public float                    MapX                { get; set; }
+        [DataMember]
         public float                    MapY                { get; set; }
+        [DataMember]
         public AccessLevel              AccessLevel         { get; set; }
+        [DataMember]
         public ComputerType             ComputerType        { get; set; }
-        [XmlIgnore]
+        [DataMember]
         public Company                  Owner               { get; set; }
+        [DataMember]
         public FileSystem               FileSystem          { get; set; }
         #endregion
 
@@ -86,11 +101,7 @@ namespace TerminalGame.Computers
                 IsMissionObjective = false;
                 IsShownOnMap = true;
                 IsOnline = true;
-                if(Name.Contains("§¤§"))
-                    _publicName = Name.Replace("§¤§", "\n");
-                else
-                    _publicName = Name + "\n" + ComputerType.ToString();
-
+                SetPublicName();
                 _isInitialized = true;
             }
         }
@@ -98,6 +109,14 @@ namespace TerminalGame.Computers
         public string GetPublicName()
         {
             return _publicName;
+        }
+
+        public void SetPublicName()
+        {
+            if (Name.Contains("§¤§"))
+                _publicName = Name.Replace("§¤§", "\n");
+            else
+                _publicName = Name + "\n" + ComputerType.ToString();
         }
 
         /// <summary>
@@ -108,8 +127,8 @@ namespace TerminalGame.Computers
         {
             if (IsOnline)
             {
-                Player.GetInstance().ConnectedComp.Disconnect();
-                Player.GetInstance().ConnectedComp = this;
+                World.World.GetInstance().Player.ConnectedComp.Disconnect();
+                World.World.GetInstance().Player.ConnectedComp = this;
                 return true;
             }
 
@@ -121,7 +140,7 @@ namespace TerminalGame.Computers
         /// </summary>
         public void Disconnect()
         {
-            Player.GetInstance().ConnectedComp = Player.GetInstance().PlayerComp;
+            World.World.GetInstance().Player.ConnectedComp = World.World.GetInstance().Player.PlayerComp;
         }
 
         /// <summary>

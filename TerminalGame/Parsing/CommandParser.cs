@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using TerminalGame.Programs;
-using TerminalGame.Utils;
 
 namespace TerminalGame.Parsing
 {

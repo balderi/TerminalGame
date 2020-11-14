@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TerminalGame.Programs
 {
@@ -25,7 +21,7 @@ namespace TerminalGame.Programs
         protected override void Run()
         {
             _isKill = false;
-            Game.Terminal.WriteLine(Player.GetInstance().ConnectedComp.FileSystem.CurrentDir.ListChildren());
+            Game.Terminal.WriteLine(World.World.GetInstance().Player.ConnectedComp.FileSystem.CurrentDir.ListChildren());
             Kill();
         }
 

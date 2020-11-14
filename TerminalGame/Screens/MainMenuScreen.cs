@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using TerminalGame.UI.Elements.Buttons;
 using TerminalGame.Utils;
 
@@ -153,6 +152,7 @@ namespace TerminalGame.Screens
         {
             Console.WriteLine("New Game clicked");
             Game.StartNewGame();
+            ScreenManager.GetInstance().AddScreen("gameLoading", new GameLoadingScreen(Game));
             ScreenManager.GetInstance().ChangeScreenAndInit("gameLoading");
         }
 

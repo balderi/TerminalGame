@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TerminalGame.Utils;
 
 namespace TerminalGame.Programs
@@ -33,13 +29,13 @@ namespace TerminalGame.Programs
                 Kill();
                 return;
             }
-            if(Player.GetInstance().ConnectedComp == Player.GetInstance().PlayerComp)
+            if(World.World.GetInstance().Player.ConnectedComp == World.World.GetInstance().Player.PlayerComp)
             {
                 Game.Terminal.WriteLine("Cannot disconnect from gateway");
                 Kill();
                 return;
             }
-            Player.GetInstance().PlayerComp.Connect();
+            World.World.GetInstance().Player.PlayerComp.Connect();
             Game.Terminal.WriteLine("Disconnected");
             Kill();
             MusicManager.GetInstance().ChangeSong("gameBgm", 0.5f);

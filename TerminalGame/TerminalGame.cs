@@ -33,10 +33,8 @@ namespace TerminalGame
         public string Version { get; private set; }
         public string BuildNumber { get; private set; }
         public bool IsGameRunning { get; set; }
-        public Player Player { get; set; }
         public GameSpeed CurrentGameSpeed { get; set; }
         public Terminal Terminal { get; set; }
-        //public static object Companies { get; internal set; }
 
         public TerminalGame()
         {
@@ -92,8 +90,8 @@ namespace TerminalGame
             _screenManager.AddScreen("splash", new SplashScreen(this));
             _screenManager.AddScreen("mainMenu", new MainMenuScreen(this));
             _screenManager.AddScreen("settingsMenu", new SettingsScreen(this));
-            _screenManager.AddScreen("gameLoading", new GameLoadingScreen(this));
-            _screenManager.AddScreen("gameRunning", new GameRunningScreen(this));
+            //_screenManager.AddScreen("gameLoading", new GameLoadingScreen(this));
+            //_screenManager.AddScreen("gameRunning", new GameRunningScreen(this));
             _screenManager.AddScreen("loadGame", new LoadGameScreen(this));
             _screenManager.ChangeScreen("splash");
 

@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Computers;
 using TerminalGame.UI.Elements.Modules.ModuleComponents;
-using TerminalGame.Utils;
 
 namespace TerminalGame.UI.Elements.Modules
 {
@@ -77,10 +76,10 @@ namespace TerminalGame.UI.Elements.Modules
                 if(n != PlayerCompNode && n != HoverNode && n != ConnectedNode)
                     n.Draw(gameTime);
             }
-            PlayerCompNode.Draw(gameTime);
-            ConnectedNode.Draw(gameTime);
-            if(HoverNode != null)
-                HoverNode.Draw(gameTime);
+            PlayerCompNode?.Draw(gameTime);
+            ConnectedNode?.Draw(gameTime);
+            //if(HoverNode != null)
+                HoverNode?.Draw(gameTime);
             base.ScissorDraw(gameTime);
         }
 
@@ -112,6 +111,7 @@ namespace TerminalGame.UI.Elements.Modules
         public void GenerateMapNoOverlap(int maxAttempts)
         {
             DateTime begin = DateTime.Now;
+            bool loading = false;
             foreach (Computer c in _world.Computers)
             {
                 Rectangle tempRect;
@@ -119,6 +119,13 @@ namespace TerminalGame.UI.Elements.Modules
                 int x = 0;
                 int y = 0;
                 bool intersects = true;
+
+                if (c.MapX != 0.0f && c.MapY != 0.0f)
+                {
+                    intersects = false;
+                    loading = true;
+                }
+
                 // Prevent the nodes from overlapping on the map
                 // More elegant way of doing this?
                 while (intersects)
@@ -158,9 +165,17 @@ namespace TerminalGame.UI.Elements.Modules
                     }
                 }
 
-                //casts to float are NOT redundant!!!
-                c.MapX = (float)x / (float)Rectangle.X;
-                c.MapY = (float)y / (float)Rectangle.Y;
+                if(!loading)
+                {
+                    //casts to float are NOT redundant!!!
+                    c.MapX = (float)x / (float)Rectangle.X;
+                    c.MapY = (float)y / (float)Rectangle.Y;
+                }
+                else
+                {
+                    x = (int)(c.MapX * Rectangle.X);
+                    y = (int)(c.MapY * Rectangle.Y);
+                }
 
                 NetworkNode n = new NetworkNode(Game, this, new Point(x, y), _nodeSize, c, _nodeTexture, _networkNodeSpinners, false);
                 _networkNodes.Add(n);
@@ -169,7 +184,10 @@ namespace TerminalGame.UI.Elements.Modules
                 n.MouseEnter += Node_Enter;
             }
             TimeSpan donzo = DateTime.Now.Subtract(begin);
-            Console.WriteLine($"Generated {_networkNodes.Count} nodes in {donzo.TotalSeconds:N4} seconds.");
+            if(loading)
+                Console.WriteLine($"Loaded {_networkNodes.Count} nodes in {donzo.TotalSeconds:N4} seconds.");
+            else
+                Console.WriteLine($"Generated {_networkNodes.Count} nodes in {donzo.TotalSeconds:N4} seconds.");
         }
 
         private void Node_Click(object sender, MouseEventArgs e)

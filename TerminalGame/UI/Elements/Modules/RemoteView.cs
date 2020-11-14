@@ -21,7 +21,7 @@ namespace TerminalGame.UI.Elements.Modules
         {
             base.Initialize();
             _font = FontManager.GetFont("FontM");
-            _player = Player.GetInstance();
+            _player = World.World.GetInstance().Player;
             _computer = _player.ConnectedComp;
             _text = SetString();
         }
@@ -57,6 +57,9 @@ namespace TerminalGame.UI.Elements.Modules
             }
             catch(Exception e)
             {
+                //Console.WriteLine("Trying to fix the world...");
+                //World.World.GetInstance().FixWorld();
+                //return SetString();
                 Console.WriteLine(e.Message + " - ignore this (localhost has no company).");
                 return $"Connected to: {_computer.Name.Replace("§¤§", "\n")}\n" +
                        $"          IP: {_computer.IP}\n" +

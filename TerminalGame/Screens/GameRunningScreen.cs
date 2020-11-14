@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using TerminalGame.Time;
 using TerminalGame.UI.Elements;
 using TerminalGame.UI.Elements.Modules;
@@ -28,7 +27,9 @@ namespace TerminalGame.Screens
             Console.WriteLine("gameRunning is not initialized!");
 
             base.Initialize();
-            Game.Player.ConnectedComp = Game.Player.PlayerComp;
+
+            World.World.GetInstance().Player.ConnectedComp = World.World.GetInstance().Player.PlayerComp;
+
 
             Terminal terminal = new Terminal(Game, new Point(2, 2),
                 new Point(Globals.Settings.GameWidth / 3 - 4, Globals.Settings.GameHeight - 4), "Terminal v0.1");
@@ -67,6 +68,7 @@ namespace TerminalGame.Screens
         public override void Update(GameTime gameTime)
         {
             GameClock.Tick(Game.CurrentGameSpeed);
+            World.World.GetInstance().Tick();
 
             _newState = Keyboard.GetState();
 

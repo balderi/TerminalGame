@@ -1,9 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -72,6 +69,7 @@ namespace TerminalGame.Screens
             {
                 Button b = new Button(Game, Path.GetFileNameWithoutExtension(file), new Point(100, 200 + (i++ * 75)), new Point(400, 50), false);
                 BUTTONS.Add(b);
+                b.ButtonPressed += SaveGameButtonClicked;
             }
         }
 
@@ -148,6 +146,13 @@ namespace TerminalGame.Screens
         {
             Console.WriteLine("Back clicked");
             ScreenManager.GetInstance().GoBack();
+        }
+
+        private void SaveGameButtonClicked(ButtonPressedEventArgs e)
+        {
+            Console.WriteLine($"{e.Message} clicked");
+            ScreenManager.GetInstance().AddScreen("gameLoading", new GameLoadingScreen(Game, $"Saves/{e.Message}.tgs"));
+            ScreenManager.GetInstance().ChangeScreenAndInit("gameLoading");
         }
     }
 }

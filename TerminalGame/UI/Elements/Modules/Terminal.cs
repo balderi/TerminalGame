@@ -30,7 +30,7 @@ namespace TerminalGame.UI.Elements.Modules
         {
             KeyboardInput.Initialize(Game, 500f, 20);
 
-            _computer = Player.GetInstance().ConnectedComp;
+            _computer = World.World.GetInstance().Player.ConnectedComp;
 
             _terminalFont = FontManager.GetFont("FontS");
 
@@ -160,7 +160,7 @@ namespace TerminalGame.UI.Elements.Modules
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            Computer computer = Player.GetInstance().ConnectedComp;
+            Computer computer = World.World.GetInstance().Player.ConnectedComp;
             if(_computer != computer)
                 UpdateTextBox();
             KeyboardInput.Update();
@@ -177,7 +177,7 @@ namespace TerminalGame.UI.Elements.Modules
         {
             _textBox.Dispose();
             _textBox = null;
-            _computer = Player.GetInstance().ConnectedComp;
+            _computer = World.World.GetInstance().Player.ConnectedComp;
             _promptText = BuildPrompt();
             _promptWidth = (int)_terminalFont.MeasureString(_promptText).X;
             int tbHeight = (int)_terminalFont.MeasureString("A").Y;

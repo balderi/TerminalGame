@@ -16,9 +16,9 @@ namespace TerminalGame.Time
 
         public static DateTime GameTime;
 
-        public static void Initialize()
+        public static void Initialize(string dateString = "2000-01-01T00:00:00.0000000Z")
         {
-            GameTime = DateTime.Parse("2000-01-01T00:00:00.0000000Z");
+            GameTime = DateTime.Parse(dateString);
             _dayChange = new DayChangeEventArgs();
         }
 

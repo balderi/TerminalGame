@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TerminalGame.Files.FileSystem
 {
@@ -40,6 +36,11 @@ namespace TerminalGame.Files.FileSystem
                     result = CurrentDir;
                 else
                     result = CurrentDir.Parent;
+                return true;
+            }
+            if (name == "/")
+            {
+                result = RootDir;
                 return true;
             }
 

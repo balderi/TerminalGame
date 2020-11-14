@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using TerminalGame.UI.Elements;
-using TerminalGame.Utils;
 
 namespace TerminalGame.Screens
 {

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TerminalGame.Files;
 
 namespace TerminalGame.Programs
@@ -41,15 +37,15 @@ namespace TerminalGame.Programs
             }
             if (_args[0] == "-")
             {
-                Player.GetInstance().ConnectedComp.FileSystem.ChangeCurrentDir(Player.GetInstance().ConnectedComp.FileSystem.LastDir);
+                World.World.GetInstance().Player.ConnectedComp.FileSystem.ChangeCurrentDir(World.World.GetInstance().Player.ConnectedComp.FileSystem.LastDir);
                 Kill();
                 return;
             }
-            if (_args[0].Contains('/'))
+            if (_args[0].Length > 1 && _args[0].Contains('/'))
             {
                 try
                 {
-                    Player.GetInstance().ConnectedComp.FileSystem.ChangeCurrentDirFromPath(_args[0]);
+                    World.World.GetInstance().Player.ConnectedComp.FileSystem.ChangeCurrentDirFromPath(_args[0]);
                     Kill();
                     return;
                 }
@@ -58,10 +54,10 @@ namespace TerminalGame.Programs
                     Game.Terminal.WriteLine(e.Message);
                 }
             }
-            if(Player.GetInstance().ConnectedComp.FileSystem.TryFindFile(_args[0], out File f))
+            if(World.World.GetInstance().Player.ConnectedComp.FileSystem.TryFindFile(_args[0], out File f))
             {
                 if (f.FileType == FileType.Directory)
-                    Player.GetInstance().ConnectedComp.FileSystem.ChangeCurrentDir(f);
+                    World.World.GetInstance().Player.ConnectedComp.FileSystem.ChangeCurrentDir(f);
                 else
                     Game.Terminal.WriteLine($"cd: {_args[0]}: Not a directory");
             }
