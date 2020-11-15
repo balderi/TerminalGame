@@ -41,12 +41,18 @@ namespace TerminalGame.Companies
         [DataMember]
         public List<Person> GetPeople { get; set; } = new List<Person>();
 
+        public TerminalGame Game { get; set; }
+
         public Company()
         {
 
         }
 
-        public static Company GetRandomCompany() => new Company(new Person(AgeRange.MiddleAged), new Person(AgeRange.Adult));
+        public static Company GetRandomCompany(TerminalGame game) => 
+            new Company(new Person(AgeRange.MiddleAged), new Person(AgeRange.Adult))
+            {
+                Game = game
+            };
 
         public Company(string name)
         {
@@ -89,7 +95,7 @@ namespace TerminalGame.Companies
         {
             GetComputers = new List<Computer>
             {
-                Generator.CompanyGenerator.GenerateComputer(this, ComputerType.Server),
+                Generator.CompanyGenerator.GenerateComputer(this, Game, ComputerType.Server),
             };
         }
     }

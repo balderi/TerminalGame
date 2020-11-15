@@ -72,6 +72,10 @@ namespace TerminalGame.UI.Elements.Modules
 
         public override void ScissorDraw(GameTime gameTime)
         {
+            if (!World.World.GetInstance().Player.PlayerComp.FileSystem.TryFindFileFromPath("bin/netmap", out var a, out var b))
+            {
+                return;
+            }
             foreach (NetworkNode n in _networkNodes)
             {
                 if(n != PlayerCompNode && n != HoverNode && n != ConnectedNode)
@@ -87,6 +91,8 @@ namespace TerminalGame.UI.Elements.Modules
         {
             NetworkNode oldNode = HoverNode;
             base.Update(gameTime);
+            if (!World.World.GetInstance().Player.PlayerComp.FileSystem.TryFindFileFromPath("bin/netmap", out var a, out var b))
+                return;
             foreach (NetworkNode n in _networkNodes)
             {
                 n.Update(gameTime);
@@ -208,6 +214,10 @@ namespace TerminalGame.UI.Elements.Modules
 
         public override void Draw(GameTime gameTime)
         {
+            if (!World.World.GetInstance().Player.PlayerComp.FileSystem.TryFindFileFromPath("bin/netmap", out var a, out var b))
+            {
+                return;
+            }
             base.Draw(gameTime);
         }
     }

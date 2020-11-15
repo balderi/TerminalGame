@@ -6,6 +6,6 @@ namespace TerminalGame.Files
     {
         void Rename(string name);
         void AddFile(File file);
-        void RemoveFile(File file);
+        void DeleteFile(File file);
     }
 }

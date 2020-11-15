@@ -41,6 +41,7 @@ namespace TerminalGame.World
         /// </summary>
         [DataMember]
         public List<Company> CompanyList { get; set; }
+        public TerminalGame Game { get; set; }
 
         private static World _instance;
 
@@ -82,9 +83,10 @@ namespace TerminalGame.World
         /// <summary>
         /// Generate a new, random world.
         /// </summary>
-        public void CreateWorld()
+        public void CreateWorld(TerminalGame game, int companies)
         {
             DateTime beginWorld = DateTime.Now;
+            Game = game;
             GameClock.Initialize();
             CurrentGameTime = GameClock.GameTime;
             Player = new Player();
@@ -103,19 +105,26 @@ namespace TerminalGame.World
             Files.File testFile2 = new Files.File("testFile2", "test 2", FileType.Text);
             testRoot.AddFile(testFile2);
             FileSystem pfs = new FileSystem(testRoot);
+            var bin = new Files.File("bin");
+            bin.AddFile(new Files.File("terminal", "terminal executable", FileType.Binary, 48374));
+            bin.AddFile(new Files.File("notepad", "notepad executable", FileType.Binary, 7522));
+            bin.AddFile(new Files.File("remoteview", "remoteview executable", FileType.Binary, 61325));
+            bin.AddFile(new Files.File("netmap", "netmap executable", FileType.Binary, 879820));
+            pfs.RootDir.AddFile(bin);
 
             Company pc = new Company("Unknown", new Person("Unknown", DateTime.Parse("1970-01-01"), (Gender)(-1), (EducationLevel)(-1)), new Person("Unknown", DateTime.Parse("1970-01-01"), (Gender)(-1), (EducationLevel)(-1)), 0, 0); ;
 
-            Computer PlayerComp = new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation, pc, "127.0.0.1", Player.Password, pfs); //new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation, "127.0.0.1", World.World.GetInstance().Player.Password, pfs);
-
-            Player.PlayerComp = PlayerComp;
+            Computer PlayerComp = new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation, pc, "127.0.0.1", Player.Password, pfs)
+            {
+                Game = game
+            };
 
             Computers.Add(PlayerComp);
 
             DateTime beginCompanies = DateTime.Now;
-            for (int i = 0; i < 500; i++)
+            for (int i = 0; i < companies; i++)
             {
-                Company comp = Company.GetRandomCompany();
+                Company comp = Company.GetRandomCompany(game);
                 int whoops = 0;
                 while (CheckIfNameExists(comp.Name))
                 {
@@ -144,12 +153,18 @@ namespace TerminalGame.World
 
             foreach (Computer c in Computers)
             {
-                c.Init();
+                c.Init(Game);
                 if(c.Owner == CompanyList[35])
                 {
                     c.IsMissionObjective = true;
                 }
             }
+
+            PlayerComp.PlayerHasRoot = true;
+            PlayerComp.AccessLevel = AccessLevel.Root;
+
+            Player.PlayerComp = PlayerComp;
+
             Console.WriteLine("Generated world in {0} seconds.", (DateTime.Now.Subtract(beginWorld).TotalSeconds).ToString("N4"));
         }
 
@@ -181,7 +196,10 @@ namespace TerminalGame.World
         public void FixWorld()
         {
             foreach (Computer c in Computers)
+            {
                 c.SetPublicName();
+                c.Game = Game; // just in case...
+            }
         }
 
         /// <summary>

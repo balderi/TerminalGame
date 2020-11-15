@@ -41,6 +41,7 @@ namespace TerminalGame.Screens
         {
             base.SwitchOn();
             MusicManager.GetInstance().Start("mainMenuBgm");
+            Game.IsGameRunning = false;
         }
 
         public override void Draw(GameTime gameTime)

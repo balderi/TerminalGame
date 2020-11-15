@@ -76,6 +76,7 @@ namespace TerminalGame.Screens
         {
             base.SwitchOn();
             MusicManager.GetInstance().Start("mainMenuBgm");
+            _continueGame.Enabled = Game.IsGameRunning;
         }
 
         public override void Draw(GameTime gameTime)

@@ -76,12 +76,6 @@ namespace TerminalGame.UI.Elements.Modules
                 " (" + ((int)(_terminalOutputArea.Width / _terminalFont.MeasureString("A").X)).ToString() + ")");
         }
 
-        protected override void UnloadContent()
-        {
-            Unload(); // Unsubscribe from text event
-            base.UnloadContent();
-        }
-
         private string BuildPrompt()
         {
             string retval = _computer.AccessLevel.ToString().ToLower() + "@" + _computer.IP + ":";
@@ -158,9 +152,20 @@ namespace TerminalGame.UI.Elements.Modules
             return string.Join("\n", temp);
         }
 
+        public void Clear()
+        {
+            _output.Clear();
+        }
+
         protected override void LoadContent()
         {
             base.LoadContent();
+        }
+
+        protected override void UnloadContent()
+        {
+            Unload(); // Unsubscribe from text event
+            base.UnloadContent();
         }
 
         public override void Update(GameTime gameTime)

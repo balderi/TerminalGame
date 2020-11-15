@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace TerminalGame.Files.FileSystem
 {
@@ -50,10 +51,26 @@ namespace TerminalGame.Files.FileSystem
 
         public bool TryFindFileFromPath(string filePath, out string path, out string file)
         {
-            // E.g. cat some/dir/with/file, where file is a valid file
-
             path = "";
             file = "";
+            var split = filePath.Split('/');
+            var destdir = split.Length - 1;
+            var potentialPath = "/" + string.Join('/', split[0..destdir]) + "/";
+            var potentialFile = split[destdir];
+
+            if(TryFindFilePath(potentialFile, out string actualPath))
+            {
+                if(actualPath == potentialPath)
+                {
+                    path = potentialPath;
+                    ChangeCurrentDirFromPath(path);
+                    if(TryFindFile(potentialFile, out File f))
+                    {
+                        file = potentialFile;
+                        return true;
+                    }
+                }
+            }
             return false;
         }
 
@@ -64,7 +81,6 @@ namespace TerminalGame.Files.FileSystem
                 pPath = "";
                 if (file.Name == name)
                 {
-                    pPath = file.Name;
                     return true;
                 }
                 if(file.FileType == FileType.Directory)
@@ -105,7 +121,7 @@ namespace TerminalGame.Files.FileSystem
                     }
                     else
                     {
-                        CurrentDir = currentDir;
+                        CurrentDir = lastDir;
                         throw new ArgumentException("Invalid path.");
                     }
                 }

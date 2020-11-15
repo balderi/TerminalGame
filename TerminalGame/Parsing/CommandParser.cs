@@ -81,11 +81,13 @@ namespace TerminalGame.Parsing
                     }
                 case "pwd":
                     {
+                        game.Terminal.WriteLine($"{World.World.GetInstance().Player.ConnectedComp.FileSystem.CurrentDir.Name}");
                         break;
                     }
                 case "cls":
                 case "clear":
                     {
+                        game.Terminal.Clear();
                         break;
                     }
                 case "help":
@@ -122,6 +124,7 @@ namespace TerminalGame.Parsing
                     }
                 case "rm":
                     {
+                        Rm.GetInstance().Init(game, null, token.Args);
                         break;
                     }
                 case "rmdir":

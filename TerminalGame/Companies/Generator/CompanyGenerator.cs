@@ -17,7 +17,7 @@ namespace TerminalGame.Companies.Generator
 
         public static string Lengths = $"{aName.Length}, {bName.Length}, {suffix.Length}";
 
-        public static Computer GenerateComputer(Company company, ComputerType type)
+        public static Computer GenerateComputer(Company company, TerminalGame game, ComputerType type)
         {
             string fullType;
             switch(type)
@@ -49,7 +49,10 @@ namespace TerminalGame.Companies.Generator
                     }
             }
             FileSystem gfs = Files.FileSystem.Generator.FileSystemGenerator.GenerateDefaultFilesystem();
-            return new Computer(company.Name + "§¤§" + fullType, new int[] { 21, 22, 67, 80, 110, 443, 27015 }, type, company, fileSystem: gfs);
+            return new Computer(company.Name + "§¤§" + fullType, new int[] { 21, 22, 67, 80, 110, 443, 27015 }, type, company, fileSystem: gfs)
+            {
+                Game = game
+            };
         }
 
         public static string GenerateName()

@@ -73,6 +73,7 @@ namespace TerminalGame.Computers
 
         [DataMember]
         public FileSystem FileSystem { get; set; }
+        public TerminalGame Game { get; set; }
         #endregion
 
         public event EventHandler<ConnectedEventArgs> OnConnected;
@@ -116,15 +117,16 @@ namespace TerminalGame.Computers
             Owner = owner;
         }
 
-        public void Init()
+        public void Init(TerminalGame game)
         {
             if(!_isInitialized)
             {
                 IsPlayerConnected = false;
-                PlayerHasRoot = false;
+                PlayerHasRoot = true;
                 IsMissionObjective = false;
                 IsShownOnMap = true;
                 IsOnline = true;
+                Game = game;
                 SetPublicName();
                 _isInitialized = true;
             }
@@ -150,6 +152,7 @@ namespace TerminalGame.Computers
             {
                 World.World.GetInstance().Player.ConnectedComp.Disconnect();
                 World.World.GetInstance().Player.ConnectedComp = this;
+                IsPlayerConnected = true;
                 OnConnected?.Invoke(this, new ConnectedEventArgs(World.World.GetInstance().CurrentGameTime));
                 PerformIllegalAction(); // TEMP
                 return true;
@@ -164,6 +167,7 @@ namespace TerminalGame.Computers
         public void Disconnect()
         {
             World.World.GetInstance().Player.ConnectedComp = World.World.GetInstance().Player.PlayerComp;
+            IsPlayerConnected = false;
             _activeTracer.StopTrace();
             OnDisconnected?.Invoke(this, new DisconnectedEventArgs(World.World.GetInstance().CurrentGameTime));
         }
@@ -243,7 +247,16 @@ namespace TerminalGame.Computers
 
         public void Tick()
         {
-            // TODO: update computer if necessary
+            if(FileSystem.RootDir == null)
+            {
+                if(IsPlayerConnected)
+                {
+                    Disconnect();
+                    Game.Terminal.WriteLine("Connection closed by remote host");
+                    MusicManager.GetInstance().ChangeSong("gameBgm", 0.5f);
+                }
+                IsOnline = false;
+            }
         }
     }
 }

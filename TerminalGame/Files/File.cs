@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace TerminalGame.Files
@@ -83,9 +84,9 @@ namespace TerminalGame.Files
         /// Remove a file from the list of children.
         /// </summary>
         /// <param name="file">File to remove.</param>
-        public void RemoveFile(File file)
+        public void DeleteFile(File file)
         {
-            if (FileType == FileType.Directory)
+            if (FileType != FileType.Directory)
             {
                 if (Children.Contains(file))
                     Children.Remove(file);
@@ -93,7 +94,48 @@ namespace TerminalGame.Files
                     throw new ArgumentException(file.Name + " does not exist.");
             }
             else
-                throw new InvalidOperationException(Name + " is not a directory.");
+                throw new InvalidOperationException(Name + " is a directory.");
+        }
+
+        public void DeleteDirectory(File dir, bool recurse)
+        {
+            if(FileType == FileType.Directory)
+            {
+                if (dir.Children.Count > 0)
+                {
+                    if(recurse)
+                    {
+                        dir.Purge();
+                    }
+                }
+                else
+                    Children.Remove(dir);
+            }
+            else
+                Children.Remove(dir);
+        }
+
+        public void Purge()
+        {
+            Contents = null;
+            FileType = 0;
+            Name = null;
+            Size = 0;
+
+            if (Children != null)
+            {
+                while(Children.Count > 0)
+                {
+                    var c = Children.FirstOrDefault();
+                    if(c != null)
+                    {
+                        c.Purge();
+                        Children.Remove(c);
+                    }
+                }
+            }
+            Parent?.Children.Remove(this);
+            Parent = null;
         }
 
         public string GetFullPath()

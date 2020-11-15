@@ -44,7 +44,7 @@ namespace TerminalGame.Screens
             if (_saveGamePath == null)
             {
                 Console.WriteLine("Creating world");
-                _loadingTask = new Task(() => World.World.GetInstance().CreateWorld());
+                _loadingTask = new Task(() => World.World.GetInstance().CreateWorld(Game, 100));
             }
             else
             {
