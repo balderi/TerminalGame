@@ -46,15 +46,14 @@ namespace TerminalGame.World
 
         public static World GetInstance(string loadFromFile = "")
         {
+            if (!string.IsNullOrWhiteSpace(loadFromFile))
+            {
+                _instance = Load(loadFromFile);
+                _instance.FixWorld();
+            }
             if (_instance == null)
             {
-                if (!string.IsNullOrWhiteSpace(loadFromFile))
-                {
-                    _instance = Load(loadFromFile);
-                    _instance.FixWorld();
-                }
-                else
-                    _instance = new World();
+                _instance = new World();
             }
             return _instance;
         }
