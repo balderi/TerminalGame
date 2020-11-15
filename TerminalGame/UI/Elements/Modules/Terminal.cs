@@ -78,7 +78,7 @@ namespace TerminalGame.UI.Elements.Modules
 
         protected override void UnloadContent()
         {
-            _textBox.Dispose();
+            Unload(); // Unsubscribe from text event
             base.UnloadContent();
         }
 
@@ -191,6 +191,7 @@ namespace TerminalGame.UI.Elements.Modules
                  new Point(Rectangle.Width - _promptWidth, tbHeight));
             _textBox = new TextBox(_terminalInputArea, (int)(Rectangle.Width / _terminalFont.MeasureString("A").X) * 10,
                 "", GraphicsDevice, _terminalFont, Color.White, Color.Gray, 30);
+            
             _textBox.Renderer.Color = Color.White * _opacity;
             _textBox.Active = true;
             _textBox.EnterDown += Enter_Pressed;

@@ -195,6 +195,10 @@ namespace TerminalGame.Utils.TextHandler
             KeyDown = null;
             KeyPressed = null;
             KeyUp = null;
+        }
+
+        public static void Unload()
+        {
             game.Window.TextInput -= TextEntered;
         }
     }
