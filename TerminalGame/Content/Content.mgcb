@@ -43,6 +43,12 @@
 /processorParam:Quality=Best
 /build:Audio/Sounds/hover1.wav
 
+#begin Audio/Sounds/traceWarn.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sounds/traceWarn.wav;Audio/Sounds/traceWarn.wav
+
 #begin Fonts/fontllarge.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor

@@ -18,8 +18,6 @@ namespace TerminalGame.World
     [DataContract]
     public class World
     {
-        private Random _rnd = new Random();
-
         [DataMember]
         public DateTime CurrentGameTime { get; set; }
 
@@ -108,10 +106,8 @@ namespace TerminalGame.World
             FileSystem pfs = new FileSystem(testRoot);
 
             Company pc = new Company("Unknown", new Person("Unknown", DateTime.Parse("1970-01-01"), (Gender)(-1), (EducationLevel)(-1)), new Person("Unknown", DateTime.Parse("1970-01-01"), (Gender)(-1), (EducationLevel)(-1)), 0, 0); ;
-            //CompanyList.Add(pc);
 
             Computer PlayerComp = new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation, pc, "127.0.0.1", Player.Password, pfs); //new Computer("localhost", new int[] { 69, 1337 }, ComputerType.Workstation, "127.0.0.1", World.World.GetInstance().Player.Password, pfs);
-            //pc.GetComputers.Add(PlayerComp);
 
             Player.PlayerComp = PlayerComp;
 
@@ -177,8 +173,7 @@ namespace TerminalGame.World
         }
 
         /// <summary>
-        /// Fixes relationship between companies, computers and files
-        /// which are stripped when saving, to prevent circular dependencies
+        /// Sets the public names of computers, which is usually done during creation.
         /// </summary>
         public void FixWorld()
         {
@@ -217,7 +212,7 @@ namespace TerminalGame.World
             JsonSerializer jsonSerializer = new JsonSerializer
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                //Formatting = Newtonsoft.Json.Formatting.Indented
+                Formatting = Newtonsoft.Json.Formatting.Indented
             };
             jsonSerializer.Serialize(writer, this);
             writer.Flush();

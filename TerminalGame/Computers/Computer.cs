@@ -4,6 +4,10 @@ using TerminalGame.Computers.Utils;
 using TerminalGame.Companies;
 using TerminalGame.Files.FileSystem;
 using System.Runtime.Serialization;
+using TerminalGame.Tracers;
+using TerminalGame.Computers.Events;
+using System;
+using System.Linq;
 
 namespace TerminalGame.Computers
 {
@@ -16,6 +20,8 @@ namespace TerminalGame.Computers
         private readonly int[] _defaultPorts = { 22, 25, 80, 443 };
         private bool _isInitialized;
         private string _publicName;
+        private static Random _rnd = new Random(); // TEMP
+        private ActiveTracer _activeTracer = new ActiveTracer((float)_rnd.NextDouble()); // TODO: base trace time on computer difficulty
         #endregion
 
         #region properties
@@ -24,40 +30,58 @@ namespace TerminalGame.Computers
         /// To get the proper name, use the <c>GetPublicName</c> method instead.
         /// </summary>
         [DataMember]
-        public string                   Name                { get; set; }
+        public string Name { get; set; }
+
         [DataMember]
-        public string                   IP                  { get; set; }
+        public string IP { get; set; }
+
         [DataMember]
-        public string                   RootPassword        { get; set; }
+        public string RootPassword { get; set; }
+
         [DataMember]
-        public bool                     IsPlayerConnected   { get; set; }
+        public bool IsPlayerConnected { get; set; }
+
         [DataMember]
-        public bool                     PlayerHasRoot       { get; set; }
+        public bool PlayerHasRoot { get; set; }
+
         [DataMember]
-        public bool                     IsMissionObjective  { get; set; }
+        public bool IsMissionObjective { get; set; }
+
         [DataMember]
-        public bool                     IsShownOnMap        { get; set; }
+        public bool IsShownOnMap { get; set; }
+
         [DataMember]
-        public bool                     IsOnline            { get; set; }
+        public bool IsOnline { get; set; }
+
         [DataMember]
-        public List<int>                OpenPorts           { get; set; }
+        public List<int> OpenPorts { get; set; }
+
         [DataMember]
-        public float                    MapX                { get; set; }
+        public float MapX { get; set; }
+
         [DataMember]
-        public float                    MapY                { get; set; }
+        public float MapY { get; set; }
+
         [DataMember]
-        public AccessLevel              AccessLevel         { get; set; }
+        public AccessLevel AccessLevel { get; set; }
+
         [DataMember]
-        public ComputerType             ComputerType        { get; set; }
+        public ComputerType ComputerType { get; set; }
+
         [DataMember]
-        public Company                  Owner               { get; set; }
+        public Company Owner { get; set; }
+
         [DataMember]
-        public FileSystem               FileSystem          { get; set; }
+        public FileSystem FileSystem { get; set; }
         #endregion
+
+        public event EventHandler<ConnectedEventArgs> OnConnected;
+        public event EventHandler<DisconnectedEventArgs> OnDisconnected;
+        public event EventHandler<IllegalActionEventArgs> OnIllegalAction;
 
         public Computer()
         {
-
+            
         }
 
         public Computer(string name, string ip = "", string rootPassword = "", FileSystem fileSystem = null)
@@ -113,10 +137,7 @@ namespace TerminalGame.Computers
 
         public void SetPublicName()
         {
-            if (Name.Contains("§¤§"))
-                _publicName = Name.Replace("§¤§", "\n");
-            else
-                _publicName = Name + "\n" + ComputerType.ToString();
+            _publicName = Name.Contains("§¤§") ? Name.Replace("§¤§", "\n") : Name + "\n" + ComputerType.ToString();
         }
 
         /// <summary>
@@ -129,6 +150,8 @@ namespace TerminalGame.Computers
             {
                 World.World.GetInstance().Player.ConnectedComp.Disconnect();
                 World.World.GetInstance().Player.ConnectedComp = this;
+                OnConnected?.Invoke(this, new ConnectedEventArgs(World.World.GetInstance().CurrentGameTime));
+                PerformIllegalAction(); // TEMP
                 return true;
             }
 
@@ -141,6 +164,8 @@ namespace TerminalGame.Computers
         public void Disconnect()
         {
             World.World.GetInstance().Player.ConnectedComp = World.World.GetInstance().Player.PlayerComp;
+            _activeTracer.StopTrace();
+            OnDisconnected?.Invoke(this, new DisconnectedEventArgs(World.World.GetInstance().CurrentGameTime));
         }
 
         /// <summary>
@@ -152,6 +177,18 @@ namespace TerminalGame.Computers
         public bool Login(string user, string pass)
         {
             return true;
+        }
+
+        /// <summary>
+        /// To be called when a user performs an illegal action on this computer.
+        /// </summary>
+        public void PerformIllegalAction()
+        {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            if(this != World.World.GetInstance().Player.PlayerComp)
+                _activeTracer.StartTrace();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            OnIllegalAction?.Invoke(this, new IllegalActionEventArgs(World.World.GetInstance().CurrentGameTime));
         }
 
         /// <summary>
@@ -180,9 +217,9 @@ namespace TerminalGame.Computers
         public void RemoveAsObjective() => IsMissionObjective = false;
 
         /// <summary>
-        /// Get a list of open ports on the computer as a <c>int, string</c> dictionary.
+        /// Get a list of open ports on the computer.
         /// </summary>
-        /// <returns>A list of open ports as a <c>int, string</c> dictionary.</returns>
+        /// <returns>A list of open ports.</returns>
         public List<int> GetOpenPorts() => OpenPorts;
 
         /// <summary>
@@ -193,20 +230,11 @@ namespace TerminalGame.Computers
         public bool CheckPortOpen(int port) => OpenPorts.Exists(x => x == port);
 
         /// <summary>
-        /// Build the dictionary of open ports from array.
+        /// Build a list of open ports from array.
         /// </summary>
         /// <param name="ports"><c>int array</c> of open ports.</param>
-        /// <returns>A list of open ports as a <c>int, string</c> dictionary.</returns>
-        /// <remarks>This should probably be private.</remarks>
-        public List<int> BuildPorts(int[] ports)
-        {
-            var retval = new List<int>();
-            foreach (int port in ports)
-            {
-                retval.Add(port);
-            }
-            return retval;
-        }
+        /// <returns>A list of open ports.</returns>
+        public List<int> BuildPorts(int[] ports) =>  ports.ToList();
 
         public override string ToString()
         {
@@ -216,18 +244,6 @@ namespace TerminalGame.Computers
         public void Tick()
         {
             // TODO: update computer if necessary
-        }
-
-        public static Computer Load()
-        {
-            var c = new Computer("temp", "0.0.0.0", "temp"); // TEMP
-            c.Init(); // TEMP
-            return c; // TEMP
-        }
-
-        public void Save(string fileName)
-        {
-            // TODO: save computer
         }
     }
 }

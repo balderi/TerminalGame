@@ -10,6 +10,7 @@ using System.Reflection;
 using TerminalGame.UI.Themes;
 using TerminalGame.Time;
 using System.IO;
+using Microsoft.Xna.Framework.Audio;
 
 namespace TerminalGame
 {
@@ -23,6 +24,7 @@ namespace TerminalGame
         private MusicManager _musicManager;
         private ThemeManager _themeManager;
         private ScreenManager _screenManager;
+        private SoundManager _soundManager;
 
         private KeyboardState _oldState;
 
@@ -93,6 +95,7 @@ namespace TerminalGame
             //_screenManager.AddScreen("gameLoading", new GameLoadingScreen(this));
             //_screenManager.AddScreen("gameRunning", new GameRunningScreen(this));
             _screenManager.AddScreen("loadGame", new LoadGameScreen(this));
+            _screenManager.AddScreen("gameOver", new GameOverScreen(this));
             _screenManager.ChangeScreen("splash");
 
             _themeManager = ThemeManager.GetInstance();
@@ -119,6 +122,12 @@ namespace TerminalGame
             _musicManager.AddSong("mainMenuBgm", Content.Load<Song>("Audio/Music/mainmenu"));
             _musicManager.AddSong("gameBgm", Content.Load<Song>("Audio/Music/ambientbgm1_2"));
             _musicManager.AddSong("hackLoop", Content.Load<Song>("Audio/Music/hackloop1"));
+
+            _soundManager = SoundManager.GetInstance();
+            _soundManager.AddSound("nodeClick", Content.Load<SoundEffect>("Audio/Sounds/click1"));
+            _soundManager.AddSound("nodeHover", Content.Load<SoundEffect>("Audio/Sounds/hover1"));
+            _soundManager.AddSound("traceWarn", Content.Load<SoundEffect>("Audio/Sounds/traceWarn"));
+
             Console.WriteLine("load done");
         }
 

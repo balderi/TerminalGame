@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using TerminalGame.Computers;
 using TerminalGame.UI.Elements.Modules.ModuleComponents;
+using TerminalGame.Utils;
 
 namespace TerminalGame.UI.Elements.Modules
 {
@@ -64,8 +65,8 @@ namespace TerminalGame.UI.Elements.Modules
         protected override void LoadContent()
         {
             _nodeTexture = Content.Load<Texture2D>("Graphics/Textures/nmapComputer-2");
-            _nodeClickSound = Content.Load<SoundEffect>("Audio/Sounds/click1");
-            _nodeHoverSound = Content.Load<SoundEffect>("Audio/Sounds/hover1");
+            _nodeClickSound = SoundManager.GetInstance().GetSound("nodeClick");
+            _nodeHoverSound = SoundManager.GetInstance().GetSound("nodeHover");
             base.LoadContent();
         }
 
@@ -78,8 +79,7 @@ namespace TerminalGame.UI.Elements.Modules
             }
             PlayerCompNode?.Draw(gameTime);
             ConnectedNode?.Draw(gameTime);
-            //if(HoverNode != null)
-                HoverNode?.Draw(gameTime);
+            HoverNode?.Draw(gameTime);
             base.ScissorDraw(gameTime);
         }
 
@@ -193,7 +193,7 @@ namespace TerminalGame.UI.Elements.Modules
         private void Node_Click(object sender, MouseEventArgs e)
         {
             float wat = (1f - (float)(_rnd.NextDouble()) / 50);
-            _nodeClickSound.Play((Globals.Settings.SoundVolume * Globals.Settings.MasterVolume), wat, 0f);
+            _nodeClickSound.Play(Globals.Settings.SoundVolume * Globals.Settings.MasterVolume, wat, 0f);
         }
 
         private void Node_Hover(object sender, MouseEventArgs e)

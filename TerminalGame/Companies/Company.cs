@@ -18,21 +18,28 @@ namespace TerminalGame.Companies
         // TODO: Company size (int or enum?) determining number of employees, shares, whatevs.
 
         [DataMember]
-        public string           Name            { get; set; }
+        public string Name { get; set; }
+
         [DataMember]
-        public Person           Owner           { get; set; }
+        public Person Owner { get; set; }
+
         [DataMember]
-        public Person           Admin           { get; set; }
+        public Person Admin { get; set; }
+
         [DataMember]
-        public int              NumberOfShares  { get; set; }
+        public int NumberOfShares { get; set; }
+
         [DataMember]
-        public int              SharePrice      { get; set; }
+        public int SharePrice { get; set; }
+
         [DataMember]
-        public int              CompanyValue    { get; set; }
+        public int CompanyValue { get; set; }
+
         [DataMember]
-        public List<Computer>   GetComputers    { get; set; } = new List<Computer>();
+        public List<Computer> GetComputers { get; set; } = new List<Computer>();
+
         [DataMember]
-        public List<Person>     GetPeople       { get; set; } = new List<Person>();
+        public List<Person> GetPeople { get; set; } = new List<Person>();
 
         public Company()
         {
@@ -43,7 +50,7 @@ namespace TerminalGame.Companies
 
         public Company(string name)
         {
-            Name            = name;
+            Name = name;
         }
 
         public Company(Person owner, Person admin)
@@ -63,14 +70,14 @@ namespace TerminalGame.Companies
 
         public Company(string name, int numShares, int sharePrice) : this(name)
         {
-            NumberOfShares  = numShares;
-            SharePrice      = sharePrice;
+            NumberOfShares = numShares;
+            SharePrice = sharePrice;
         }
 
         public Company(string name, Person owner, Person admin, int numShares, int sharePrice) : this(name, numShares, sharePrice)
         {
-            Owner           = owner;
-            Admin           = admin;
+            Owner = owner;
+            Admin = admin;
         }
 
         public void Tick()
@@ -84,23 +91,6 @@ namespace TerminalGame.Companies
             {
                 Generator.CompanyGenerator.GenerateComputer(this, ComputerType.Server),
             };
-        }
-
-        /// <summary>
-        /// Fixes relationship between companies and computers
-        /// which are stripped when saving, to prevent circular dependencies
-        /// </summary>
-        public void FixComputers(World.World world)
-        {
-            if(GetComputers.Count > 0)
-            {
-                foreach(Computer c in GetComputers)
-                {
-                    c.Owner = this;
-                    c.FileSystem.RootDir.FixFile();
-                    Console.WriteLine($"Fixed computer for {c.Owner.Name}");
-                }
-            }
         }
     }
 }

@@ -166,27 +166,6 @@ namespace TerminalGame.Files
 
         public bool FileNameExists(string name) => Children.Exists(f => f.Name == name);
 
-        /// <summary>
-        /// Fixes relationship between files and parents
-        /// which are stripped when saving, to prevent circular dependencies
-        /// </summary>
-        public void FixFile()
-        {
-            if(Children.Count > 0)
-            {
-                foreach(File f in Children)
-                {
-                    Console.WriteLine($"Running FixFile for file {f.Name}");
-                    f.Parent = this;
-                    if(f.Parent != this)
-                        Console.WriteLine($"FixFile failed for file {f.Name}");
-                    else
-                        Console.WriteLine($"{f.Name}'s parent is now {f.Parent.Name}");
-                    f.FixFile();
-                }
-            }
-        }
-
         public override bool Equals(object obj)
         {
             var file = obj as File;
