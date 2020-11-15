@@ -102,7 +102,7 @@ namespace TerminalGame
 
             Theme test = new Theme("test", new Color(51, 51, 55), Color.Black * 0.75f,
                 Color.LightGray, new Color(63, 63, 63), Color.White, new Color(80, 80, 80),
-                Color.RoyalBlue, Color.Blue, Color.DarkOrange, Color.Green, Color.Red);
+                Color.RoyalBlue, Color.Blue, Color.DarkOrange, Color.Green, Color.Gold, Color.Red);
 
             _themeManager.AddTheme(test);
             _themeManager.ChangeTheme("test");

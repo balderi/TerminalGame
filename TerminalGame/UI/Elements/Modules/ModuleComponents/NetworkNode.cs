@@ -12,7 +12,7 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
         private readonly Texture2D _texture;
         private readonly Dictionary<string, Texture2D> _networkNodeSpinners;
         //private Texture2D _spinner;
-        private Color _currentColor, _connectedSpinnerColor, _playerSpinnerColor, _hoverSpinnerColor;
+        private Color _currentColor, _connectedSpinnerColor, _playerSpinnerColor, _hoverSpinnerColor, _missionObjectiveSpinnerColor;
         private float _rotationCW, _rotationCCW;
         private Point _spinnerS, _spinnerN, _spinnerL;
         private readonly NetworkMap _nMap;
@@ -61,12 +61,17 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
             _connectedSpinnerColor = _themeManager.CurrentTheme.NetworkMapConnectedSpinnerColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 2) + 1) * 0.5f + 0.2f);
             _playerSpinnerColor = _themeManager.CurrentTheme.NetworkMapHomeSpinnerColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1) + 1) * 0.5f + 0.2f);
             _hoverSpinnerColor = _themeManager.CurrentTheme.NetworkMapHoverSpinnerColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1.5) + 1) * 0.5f + 0.2f);
+            _missionObjectiveSpinnerColor = _themeManager.CurrentTheme.NetworkMapMissionObjectiveSpinnerColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1.5) + 1) * 0.5f + 0.2f);
 
             _currentColor = _themeManager.CurrentTheme.NetworkMapNodeColor * _opacity;
             
             if (Computer == World.World.GetInstance().Player.PlayerComp)
             {
                 _currentColor = _themeManager.CurrentTheme.NetworkMapHomeSpinnerColor * _opacity;
+            }
+            if(Computer.IsMissionObjective)
+            {
+                _currentColor = _themeManager.CurrentTheme.NetworkMapMissionObjectiveSpinnerColor * _opacity;
             }
             if (Computer == World.World.GetInstance().Player.ConnectedComp)
             {
@@ -105,6 +110,10 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
             if (Computer == World.World.GetInstance().Player.PlayerComp)
             {
                 _spriteBatch.Draw(playerSpinner, new Rectangle(new Point(Rectangle.Location.X + (Rectangle.Width / 2), Rectangle.Location.Y + (Rectangle.Height / 2)), _spinnerS), null, _playerSpinnerColor, _rotationCW, new Vector2(playerSpinner.Width / 2, playerSpinner.Height / 2), SpriteEffects.None, 0);
+            }
+            if(Computer.IsMissionObjective)
+            {
+                _spriteBatch.Draw(missionSpinner, new Rectangle(new Point(Rectangle.Location.X + (Rectangle.Width / 2), Rectangle.Location.Y + (Rectangle.Height / 2)), _spinnerS), null, _missionObjectiveSpinnerColor, _rotationCW, new Vector2(hoverSpinner.Width / 2, hoverSpinner.Height / 2), SpriteEffects.None, 0);
             }
             if (Computer == World.World.GetInstance().Player.ConnectedComp)
             {

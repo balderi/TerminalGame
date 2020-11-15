@@ -195,6 +195,7 @@ namespace TerminalGame.Utils.TextHandler
             KeyDown = null;
             KeyPressed = null;
             KeyUp = null;
+            game.Window.TextInput -= TextEntered;
         }
     }
 }

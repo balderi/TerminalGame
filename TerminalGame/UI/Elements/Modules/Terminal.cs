@@ -76,6 +76,12 @@ namespace TerminalGame.UI.Elements.Modules
                 " (" + ((int)(_terminalOutputArea.Width / _terminalFont.MeasureString("A").X)).ToString() + ")");
         }
 
+        protected override void UnloadContent()
+        {
+            _textBox.Dispose();
+            base.UnloadContent();
+        }
+
         private string BuildPrompt()
         {
             string retval = _computer.AccessLevel.ToString().ToLower() + "@" + _computer.IP + ":";

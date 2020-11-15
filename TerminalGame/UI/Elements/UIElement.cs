@@ -179,7 +179,7 @@ namespace TerminalGame.UI.Elements
             
             if(HasBorder)
                 Globals.Utils.DrawOuterBorder(_spriteBatch, Rectangle, Globals.Utils.DummyTexture(), 1,
-                                          BorderColor * _opacity);
+                                          _themeManager.CurrentTheme.ModuleOutlineColor * _opacity);
         }
 
         /// <summary>

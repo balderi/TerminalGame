@@ -146,6 +146,10 @@ namespace TerminalGame.World
             foreach (Computer c in Computers)
             {
                 c.Init();
+                if(c.Owner == CompanyList[35])
+                {
+                    c.IsMissionObjective = true;
+                }
             }
             Console.WriteLine("Generated world in {0} seconds.", (DateTime.Now.Subtract(beginWorld).TotalSeconds).ToString("N4"));
         }

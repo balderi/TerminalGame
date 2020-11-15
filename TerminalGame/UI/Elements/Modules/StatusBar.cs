@@ -28,7 +28,6 @@ namespace TerminalGame.UI.Elements.Modules
             _playerDeets = $"   Name: {World.World.GetInstance().Player.Name}\nBalance: ${World.World.GetInstance().Player.Balance}";
             
             _connectionInfo = "";
-            BackgroundColor = _themeManager.CurrentTheme.ModuleHeaderBackgroundColor;
             _titleFont = FontManager.GetFont("FontM");
             _playerDetailFont = FontManager.GetFont("FontXS");
             FontColor = _themeManager.CurrentTheme.ModuleFontColor;
@@ -63,6 +62,7 @@ namespace TerminalGame.UI.Elements.Modules
 
         public override void ScissorDraw(GameTime gameTime)
         {
+            BackgroundColor = _themeManager.CurrentTheme.ModuleHeaderBackgroundColor;
             _spriteBatch.DrawString(_titleFont, GameClock.GameTime.ToString("yyyy/MM/dd"), new Vector2(Rectangle.X + 5, Rectangle.Y + 5), FontColor * _opacity);
             _spriteBatch.DrawString(_titleFont, GameClock.GameTime.ToString("HH:mm"), new Vector2(Rectangle.X + 5, Rectangle.Y + 25), FontColor * _opacity);
             foreach (var b in _buttons)
