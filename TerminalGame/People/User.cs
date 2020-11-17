@@ -1,21 +1,22 @@
 ﻿using System;
 using TerminalGame.People.Utils;
 using TerminalGame.Computers.Utils;
+using System.Runtime.Serialization;
 
 namespace TerminalGame.People
 {
     public class User : Person
     {
-        public string       Username        { get; set; }
-        public string       Password        { get; set; }
-        public AccessLevel  AccessLevel     { get; set; }
+        [DataMember]
+        public string Username { get; set; }
+        [DataMember]
+        public string Password { get; set; }
+        [DataMember]
+        public AccessLevel AccessLevel { get; set; }
 
-        /// <summary>
-        /// Generate a random user.
-        /// </summary>
         public User()
         {
-            // TODO: Generate user.
+
         }
 
         /// <summary>
@@ -24,7 +25,8 @@ namespace TerminalGame.People
         /// <param name="ageRange">The general age range the user should be in.</param>
         public User(AgeRange ageRange) : base(ageRange)
         {
-            // TODO: Generate user.
+            Username = Generator.UserGenerator.GenerateUsername(Name);
+            Password = Generator.PasswordGenerator.GeneratePassword(false);
         }
 
         /// <summary>
@@ -36,13 +38,8 @@ namespace TerminalGame.People
         /// <param name="education">User's level of education.</param>
         public User(string name, DateTime dob, Gender gender, EducationLevel education) : base(name, dob, gender, education)
         {
-            Name        = name;
-            DOB         = dob;
-            Gender      = gender;
-            Education   = education;
-
-            // TODO: Calculate age.
-            // TODO: Calculate age range.
+            Username = Generator.UserGenerator.GenerateUsername(Name);
+            Password = Generator.PasswordGenerator.GeneratePassword(false);
         }
     }
 }

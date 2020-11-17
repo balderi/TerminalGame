@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Threading;
 using TerminalGame.Computers;
 using TerminalGame.Computers.Utils;
 using TerminalGame.People;

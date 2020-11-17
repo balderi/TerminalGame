@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using TerminalGame.Computers;
 using TerminalGame.Computers.Utils;
 using TerminalGame.Files.FileSystem;
@@ -57,6 +58,7 @@ namespace TerminalGame.Companies.Generator
 
         public static string GenerateName()
         {
+            Thread.Sleep(2);
             _rnd = new Random(DateTime.Now.Millisecond);
             switch (_rnd.Next(0, 8))
             {

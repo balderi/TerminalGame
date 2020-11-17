@@ -53,6 +53,7 @@ namespace TerminalGame.Files.FileSystem
         {
             path = "";
             file = "";
+            var origin = CurrentDir;
             var split = filePath.Split('/');
             var destdir = split.Length - 1;
             var potentialPath = "/" + string.Join('/', split[0..destdir]) + "/";
@@ -67,10 +68,12 @@ namespace TerminalGame.Files.FileSystem
                     if(TryFindFile(potentialFile, out File f))
                     {
                         file = potentialFile;
+                        CurrentDir = origin;
                         return true;
                     }
                 }
             }
+            CurrentDir = origin;
             return false;
         }
 

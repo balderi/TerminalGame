@@ -11,33 +11,56 @@ namespace TerminalGame.Tracers
 {
     class ActiveTracer
     {
-        public float TraceSpeed { get; set; }
+        public double TraceSpeed { get; set; }
         public bool IsActive { get; set; }
         public int Counter { get; set; }
-        private readonly int _delay;
+        private int _delay;
         private System.Timers.Timer _timer;
 
-        public ActiveTracer(float traceSpeed)
+        private static ActiveTracer _instance;
+
+        public static ActiveTracer GetInstance()
+        {
+            if (_instance == null)
+                _instance = new ActiveTracer();
+            return _instance;
+        }
+
+        private ActiveTracer()
+        {
+            
+        }
+
+        public string GetTracePercentage()
+        {
+            if(IsActive)
+            {
+                return $"{(float)Counter/10:N1}%";
+            }
+            else
+            {
+                return "no trace";
+            }
+        }
+
+        public async Task StartTrace(double traceSpeed)
         {
             Counter = 0;
-            if (traceSpeed > 1f)
-                TraceSpeed = 1f;
-            else if (traceSpeed < 0f)
-                TraceSpeed = 0f;
+            if (traceSpeed > 1.0)
+                TraceSpeed = 1.0;
+            else if (traceSpeed < 0.0)
+                TraceSpeed = 0.0;
             else
                 TraceSpeed = traceSpeed;
 
-            _delay = (int)(5000 * TraceSpeed);
+            _delay = (int)(500 * TraceSpeed);
             if (_delay < 10)
                 _delay = 10;
-
+            _timer?.Dispose();
             _timer = new System.Timers.Timer(_delay);
             _timer.Elapsed += Timer_tick;
-        }
 
-        public async Task StartTrace()
-        {
-            Console.WriteLine("Trace started!");
+            Console.WriteLine($"Trace started! (delay: {_delay}ms)");
             IsActive = true;
             _timer.Start();
             await DoTrace();
@@ -46,30 +69,33 @@ namespace TerminalGame.Tracers
 
         public void StopTrace()
         {
-            Console.WriteLine("Active trace stopped");
+            if (!IsActive)
+                return;
 
-            if (Counter > 99)
-            {
-                // TODO: Fire an event to determine what happens when the trace completes
-                Screens.ScreenManager.GetInstance().ChangeScreen("gameOver");
-            }
             IsActive = false;
             _timer.Stop();
+
+            if (Counter > 999)
+            {
+                // TODO: Fire an event to determine what happens when the trace completes
+                //Screens.ScreenManager.GetInstance().ChangeScreen("gameOver");
+                World.World.GetInstance().Player.ConnectedComp.Disconnect(true);
+            }
+
             Counter = 0;
+            Console.WriteLine($"Active trace stopped (counter: {Counter})");
         }
 
         private void Timer_tick(object sender, ElapsedEventArgs e)
         {
-            Console.WriteLine("Active trace at {0}%", Counter);
-            if (Counter < 100)
+            if (Counter < 1000)
                 Counter++;
-            else
-                StopTrace();
         }
 
         private async Task DoTrace()
         {
-            while (Counter < 100 && IsActive)
+            await Task.Delay(1000);
+            while (Counter < 1000 && IsActive)
             {
                 try
                 {
@@ -79,10 +105,12 @@ namespace TerminalGame.Tracers
                 {
                     Console.WriteLine(e.Message);
                 }
+                Console.WriteLine($"Active trace at {GetTracePercentage()}");
                 ThemeManager.GetInstance().CurrentTheme.Flash();
-                await Task.Delay(50 * (110 - Counter));
+                await Task.Delay(5 * (1100 - Counter));
             }
-            StopTrace();
+            if(IsActive)
+                StopTrace();
         }
     }
 }

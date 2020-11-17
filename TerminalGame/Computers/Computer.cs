@@ -8,6 +8,7 @@ using TerminalGame.Tracers;
 using TerminalGame.Computers.Events;
 using System;
 using System.Linq;
+using TerminalGame.People;
 
 namespace TerminalGame.Computers
 {
@@ -20,8 +21,7 @@ namespace TerminalGame.Computers
         private readonly int[] _defaultPorts = { 22, 25, 80, 443 };
         private bool _isInitialized;
         private string _publicName;
-        private static Random _rnd = new Random(); // TEMP
-        private ActiveTracer _activeTracer = new ActiveTracer((float)_rnd.NextDouble()); // TODO: base trace time on computer difficulty
+        private Random _rnd = new Random(); // TEMP
         #endregion
 
         #region properties
@@ -73,6 +73,13 @@ namespace TerminalGame.Computers
 
         [DataMember]
         public FileSystem FileSystem { get; set; }
+
+        [DataMember]
+        public double TraceTime { get; set; }
+
+        [DataMember]
+        public List<User> Users { get; set; }
+
         public TerminalGame Game { get; set; }
         #endregion
 
@@ -100,6 +107,8 @@ namespace TerminalGame.Computers
                 RootPassword = rootPassword;
 
             FileSystem = fileSystem;
+
+            TraceTime = _rnd.NextDouble();
 
             _isInitialized = false;
         }
@@ -164,12 +173,18 @@ namespace TerminalGame.Computers
         /// <summary>
         /// Disconnect the player from this computer
         /// </summary>
-        public void Disconnect()
+        public void Disconnect(bool forced = false)
         {
             World.World.GetInstance().Player.ConnectedComp = World.World.GetInstance().Player.PlayerComp;
             IsPlayerConnected = false;
-            _activeTracer.StopTrace();
+            if(ActiveTracer.GetInstance().IsActive)
+                ActiveTracer.GetInstance().StopTrace();
             OnDisconnected?.Invoke(this, new DisconnectedEventArgs(World.World.GetInstance().CurrentGameTime));
+            if(forced)
+            {
+                Game.Terminal.WriteLine("Connection closed by remote host");
+                MusicManager.GetInstance().ChangeSong("gameBgm", 0.5f);
+            }
         }
 
         /// <summary>
@@ -190,7 +205,7 @@ namespace TerminalGame.Computers
         {
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             if(this != World.World.GetInstance().Player.PlayerComp)
-                _activeTracer.StartTrace();
+                ActiveTracer.GetInstance().StartTrace(TraceTime); // TODO: base tracetime on computer difficulty or something
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             OnIllegalAction?.Invoke(this, new IllegalActionEventArgs(World.World.GetInstance().CurrentGameTime));
         }
@@ -251,9 +266,7 @@ namespace TerminalGame.Computers
             {
                 if(IsPlayerConnected)
                 {
-                    Disconnect();
-                    Game.Terminal.WriteLine("Connection closed by remote host");
-                    MusicManager.GetInstance().ChangeSong("gameBgm", 0.5f);
+                    Disconnect(true);
                 }
                 IsOnline = false;
             }

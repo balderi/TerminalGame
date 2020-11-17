@@ -20,5 +20,17 @@ namespace TerminalGame.Utils
 
             return true;
         }
+
+        public static string CheckSaveName(string playerName)
+        {
+            int i = 1;
+            string fileNameBase = $"Saves/save_{playerName}";
+            string tryName = fileNameBase;
+            while(File.Exists($"{tryName}.tgs"))
+            {
+                tryName = $"{fileNameBase}({i++})";
+            }
+            return tryName + ".tgs";
+        }
     }
 }

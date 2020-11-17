@@ -21,7 +21,7 @@ namespace TerminalGame.Programs
         protected override void Run()
         {
             _isKill = false;
-            Game.Terminal.WriteLine(World.World.GetInstance().Player.ConnectedComp.FileSystem.CurrentDir.ListChildren());
+            Game.Terminal.WriteLine(World.World.GetInstance().Player.ConnectedComp.FileSystem.CurrentDir.ListChildrenDetails());
             Kill();
         }
 

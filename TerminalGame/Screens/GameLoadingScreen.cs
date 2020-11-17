@@ -40,7 +40,7 @@ namespace TerminalGame.Screens
                 Game.Window.ClientBounds.Height / 2 - _loadingFont.MeasureString(_loading).Y / 2);
             _itemPos = new Vector2(Game.Window.ClientBounds.Width / 2 - _loadItemFont.MeasureString(_loadItem).X / 2,
                 Game.Window.ClientBounds.Height / 2 - _loadItemFont.MeasureString(_loadItem).Y / 2 + _loadingFont.MeasureString(_loading).Y / 2);
-
+            
             if (_saveGamePath == null)
             {
                 Console.WriteLine("Creating world");

@@ -73,7 +73,7 @@ namespace TerminalGame.Programs
                 "Connected to " + _args[0], "Error: no response from host", "Error: Host does not exist",
                 "You are already connected to this host" };
             _timer.AutoReset = true;
-            _timer.Interval = 250;
+            _timer.Interval = 500;
             _timer.Enabled = true;
             _counter = 1;
             Game.Terminal.WriteLine(_connection[0]);

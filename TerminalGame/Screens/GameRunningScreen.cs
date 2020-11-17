@@ -30,7 +30,6 @@ namespace TerminalGame.Screens
 
             World.World.GetInstance().Player.ConnectedComp = World.World.GetInstance().Player.PlayerComp;
 
-
             Terminal terminal = new Terminal(Game, new Point(2, 2),
                 new Point(Globals.Settings.GameWidth / 3 - 4, Globals.Settings.GameHeight - 4), "Terminal v0.1");
 
@@ -44,13 +43,16 @@ namespace TerminalGame.Screens
                 new Point((int)(Globals.Settings.GameWidth * 0.75) - terminal.Rectangle.Width - 7, Globals.Settings.GameHeight - statusBar.Rectangle.Height - networkMap.Rectangle.Height - 8), "RemoteView v0.1");
 
             Module notePad = new Module(Game, new Point(remoteView.Rectangle.X + remoteView.Rectangle.Width + 3, statusBar.Rectangle.Height + 3),
-                new Point(Globals.Settings.GameWidth - remoteView.Rectangle.X - remoteView.Rectangle.Width - 5, Globals.Settings.GameHeight - statusBar.Rectangle.Height - networkMap.Rectangle.Height - 8), "Friendly Neighbourhood Notepad");
+                new Point(Globals.Settings.GameWidth - remoteView.Rectangle.X - remoteView.Rectangle.Width - 5, Globals.Settings.GameHeight - statusBar.Rectangle.Height - networkMap.Rectangle.Height - 8 - 53), "Friendly Neighbourhood Notepad");
+
+            TraceTracker traceTracker = new TraceTracker(Game, new Point(notePad.Rectangle.X, notePad.Rectangle.Bottom + 3), new Point(notePad.Rectangle.Width, 50), "TraceTracker v0.1");
 
             _elements.Add(terminal);
             _elements.Add(networkMap);
             _elements.Add(statusBar);
             _elements.Add(remoteView);
             _elements.Add(notePad);
+            _elements.Add(traceTracker);
 
             foreach (var m in _elements)
                 m.Initialize();

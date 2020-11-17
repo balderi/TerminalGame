@@ -2,40 +2,56 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
+using TerminalGame.People;
 
 namespace TerminalGame.Files
 {
     [DataContract(IsReference = true)]
     public class File : IFile
     {
-        [DataMember(Order = 0)]
-        public string       Name        { get; set; }
-        [DataMember(Order = 1)]
-        public string       Contents    { get; set; }
-        [DataMember(Order = 2)]
-        public int          Size        { get; set; }
-        [DataMember(Order = 3)]
-        public FileType     FileType    { get; set; }
-        [DataMember(Order = 4)]
-        public File         Parent      { get; set; }
-        [DataMember(Order = 5)]
-        public List<File>   Children    { get; set; }
+        [DataMember]
+        public string Name { get; set; }
+        [DataMember]
+        public string Contents { get; set; }
+        [DataMember]
+        public int Size { get; set; }
+        [DataMember]
+        public FileType FileType { get; set; }
+        [DataMember]
+        public FilePermissionLevel ReadLevel { get; set; }
+        [DataMember]
+        public FilePermissionLevel WriteLevel { get; set; }
+        [DataMember]
+        public FilePermissionLevel ExecuteLevel { get; set; }
+        [DataMember]
+        public File Parent { get; set; }
+        [DataMember]
+        public List<File> Children { get; set; }
+        [DataMember]
+        public User Owner { get; set; }
 
         public File()
         {
 
         }
 
-        public File(string name)
+        public File(string name, User owner = null, FilePermissionLevel readLevel = 0,
+            FilePermissionLevel writeLevel = 0, FilePermissionLevel executeLevel = 0)
         {
             Name = name;
             Contents = "dir";
             FileType = FileType.Directory;
             Size = -1;
             Children = new List<File>();
+            ReadLevel = readLevel;
+            WriteLevel = writeLevel;
+            ExecuteLevel = executeLevel;
+            Owner = owner;
         }
 
-        public File(string name, string contents, FileType fileType)
+        public File(string name, string contents, FileType fileType, User owner = null, FilePermissionLevel readLevel = 0, 
+            FilePermissionLevel writeLevel = 0, FilePermissionLevel executeLevel = 0)
         {
             if (fileType == FileType.Directory)
                 throw new ArgumentException("Directory file type cannot have contents.");
@@ -44,9 +60,14 @@ namespace TerminalGame.Files
             Contents = contents;
             FileType = fileType;
             Size = Contents.Length;
+            ReadLevel = readLevel;
+            WriteLevel = writeLevel;
+            ExecuteLevel = executeLevel;
+            Owner = owner;
         }
 
-        public File(string name, string contents, FileType fileType, int size) : this(name, contents, fileType)
+        public File(string name, string contents, FileType fileType, int size, User owner = null, FilePermissionLevel readLevel = 0,
+            FilePermissionLevel writeLevel = 0, FilePermissionLevel executeLevel = 0) : this(name, contents, fileType, owner, readLevel, writeLevel, executeLevel)
         {
             Size = size;
         }
@@ -146,6 +167,37 @@ namespace TerminalGame.Files
             return retval;
         }
 
+        public string GetFileDetails(string nameOverride = null)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (FileType == FileType.Directory)
+                sb.Append('d');
+            else
+                sb.Append('-');
+            for(int i = 0; i < 3; i++)
+            {
+                if (ReadLevel >= (FilePermissionLevel)i)
+                    sb.Append('r');
+                else
+                    sb.Append('-');
+
+                if(WriteLevel >= (FilePermissionLevel)i)
+                    sb.Append('w');
+                else
+                    sb.Append('-');
+
+                if (ExecuteLevel >= (FilePermissionLevel)i)
+                    sb.Append('x');
+                else
+                    sb.Append('-');
+            }
+            if (string.IsNullOrEmpty(nameOverride))
+                sb.AppendLine($"  {Name}");
+            else
+                sb.AppendLine($"  {nameOverride}");
+            return sb.ToString();
+        }
+
         /// <summary>
         /// Returns the contents of the file.
         /// </summary>
@@ -178,6 +230,26 @@ namespace TerminalGame.Files
                 return retval;
             }
             return Name;
+        }
+
+        public string ListChildrenDetails()
+        {
+            if (FileType == FileType.Directory)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append(GetFileDetails("."));
+                if (Parent != null)
+                    sb.Append(Parent.GetFileDetails(".."));
+                if (Children.Count > 0)
+                {
+                    foreach (var c in Children)
+                    {
+                        sb.Append(c.GetFileDetails());
+                    }
+                }
+                return sb.ToString();
+            }
+            return GetFileDetails();
         }
 
         public File GetChild(string name)

@@ -58,16 +58,16 @@ namespace TerminalGame.People
         /// <param name="ageRange">The general age range the person should be in.</param>
         public Person(AgeRange ageRange)
         {
-            _rnd        = new Random(DateTime.Now.Millisecond);
-            Gender      = (Gender)_rnd.Next(0, 2);
-            AgeRange    = ageRange;
-            Age         = Generator.PersonGenerator.GenerateAge(AgeRange);
-            Education   = Generator.PersonGenerator.GenerateEducationLevel(Age);
-            DOB         = Generator.PersonGenerator.GenerateDOB(Age);
-            Name        = Generator.PersonGenerator.GenerateName(Gender);
+            _rnd = new Random(DateTime.Now.Millisecond);
+            Gender = (Gender)_rnd.Next(0, 2);
+            AgeRange = ageRange;
+            Age = Generator.PersonGenerator.GenerateAge(AgeRange);
+            Education = Generator.PersonGenerator.GenerateEducationLevel(Age);
+            DOB = Generator.PersonGenerator.GenerateDOB(Age);
+            Name = Generator.PersonGenerator.GenerateName(Gender);
 
-            Email       = "";
-            Phone       = 0;
+            Email = "";
+            Phone = 0;
         }
 
         /// <summary>
@@ -79,15 +79,15 @@ namespace TerminalGame.People
         /// <param name="education">Person's level of education.</param>
         public Person(string name, DateTime dob, Gender gender, EducationLevel education)
         {
-            Name        = name;
-            DOB         = dob;
-            Gender      = gender;
-            Education   = education;
-            Age         = Generator.PersonGenerator.GenerateAge(dob);
-            AgeRange    = Generator.PersonGenerator.GenerateAgeRange(Age);
+            Name = name;
+            DOB = dob;
+            Gender = gender;
+            Education = education;
+            Age = Generator.PersonGenerator.GenerateAge(dob);
+            AgeRange = Generator.PersonGenerator.GenerateAgeRange(Age);
 
-            Email       = "";
-            Phone       = 0;
+            Email = "";
+            Phone = 0;
         }
 
         public int GetCurrentAge() => Generator.PersonGenerator.GenerateAge(DOB);

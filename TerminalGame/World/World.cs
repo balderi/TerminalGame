@@ -124,6 +124,7 @@ namespace TerminalGame.World
             DateTime beginCompanies = DateTime.Now;
             for (int i = 0; i < companies; i++)
             {
+                Console.Write($"Creating company {i}/{companies}...");
                 Company comp = Company.GetRandomCompany(game);
                 int whoops = 0;
                 while (CheckIfNameExists(comp.Name))
@@ -132,7 +133,7 @@ namespace TerminalGame.World
                     whoops++;
                 }
                 comp.GenerateComputers();
-                Console.WriteLine(comp.Name + " whoopses: " + whoops.ToString());
+                Console.WriteLine($"Done: {comp.Name}, whoopses: {whoops}.");
                 CompanyList.Add(comp);
             }
             Console.WriteLine("Generated {0} companies in {1} seconds.", CompanyList.Count, (DateTime.Now.Subtract(beginCompanies).TotalSeconds).ToString("N4"));
@@ -228,12 +229,13 @@ namespace TerminalGame.World
         public void Save()
         {
             Utils.IO.CheckAndCreateDirectory("Saves");
-
-            StreamWriter writer = new StreamWriter(@"Saves\save_" + Player.Name + ".tgs");
+            var fileName = Utils.IO.CheckSaveName(Player.Name);
+            Console.WriteLine($"*** Writing to file {fileName}...");
+            StreamWriter writer = new StreamWriter(fileName);
             JsonSerializer jsonSerializer = new JsonSerializer
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                Formatting = Newtonsoft.Json.Formatting.Indented
+                Formatting = Formatting.Indented
             };
             jsonSerializer.Serialize(writer, this);
             writer.Flush();

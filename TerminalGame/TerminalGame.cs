@@ -118,17 +118,21 @@ namespace TerminalGame
         /// </summary>
         protected override void LoadContent()
         {
+            Console.Write("Loading music... ");
+
             _musicManager = MusicManager.GetInstance();
             _musicManager.AddSong("mainMenuBgm", Content.Load<Song>("Audio/Music/mainmenu"));
             _musicManager.AddSong("gameBgm", Content.Load<Song>("Audio/Music/ambientbgm1_2"));
             _musicManager.AddSong("hackLoop", Content.Load<Song>("Audio/Music/hackloop1"));
+
+            Console.Write("done\nLoading sounds... ");
 
             _soundManager = SoundManager.GetInstance();
             _soundManager.AddSound("nodeClick", Content.Load<SoundEffect>("Audio/Sounds/click1"));
             _soundManager.AddSound("nodeHover", Content.Load<SoundEffect>("Audio/Sounds/hover1"));
             _soundManager.AddSound("traceWarn", Content.Load<SoundEffect>("Audio/Sounds/traceWarn"));
 
-            Console.WriteLine("load done");
+            Console.WriteLine("done");
         }
 
         /// <summary>
