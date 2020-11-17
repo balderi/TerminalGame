@@ -55,6 +55,13 @@ namespace TerminalGameTest.Files.FileSystem.Tests
         {
             Assert.IsNotNull(fs3.RootDir);
             Assert.IsTrue(fs3.RootDir.ListChildren() == ".\ndir");
+            Assert.IsTrue(fs3.CurrentDir.ListChildren() == ".\ndir");
+            fs3.ChangeCurrentDirFromPath("dir");
+            Assert.IsNotNull(fs3.CurrentDir);
+            Assert.AreEqual("dir", fs3.CurrentDir.Name);
+            Assert.IsTrue(fs3.CurrentDir.ListChildren() == ".\n..\nd1file1\nd1file2\ndir2");
+            fs3.ChangeCurrentDirFromPath("..");
+            Assert.IsTrue(fs3.CurrentDir.ListChildren() == ".\ndir");
         }
 
         [Test]
