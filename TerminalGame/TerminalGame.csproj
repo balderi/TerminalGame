@@ -12,6 +12,8 @@
     <Authors>Balder Ivarsen</Authors>
     <Company>Redlab Solutions</Company>
     <Copyright />
+    <AssemblyVersion>0.5.0.0</AssemblyVersion>
+    <FileVersion>0.5.0.0</FileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
