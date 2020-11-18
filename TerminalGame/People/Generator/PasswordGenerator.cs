@@ -6,7 +6,7 @@ namespace TerminalGame.People.Generator
 {
     public class PasswordGenerator
     {
-        private static Random _rnd = new Random();
+        private static readonly Random _rnd = new Random();
 
         public static string GeneratePassword(bool random = true)
         {

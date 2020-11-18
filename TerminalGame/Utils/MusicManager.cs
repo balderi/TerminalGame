@@ -13,7 +13,7 @@ namespace TerminalGame.Utils
 
         private static MusicManager _instance;
 
-        private Dictionary<string, Song> _songs;
+        private readonly Dictionary<string, Song> _songs;
 
         public static MusicManager GetInstance()
         {

@@ -11,7 +11,6 @@ namespace TerminalGame.Screens
 {
     class LoadGameScreen : Screen
     {
-        private List<string> _saveGames;
         private readonly List<Button> BUTTONS;
         private readonly Button _backButton;
         private readonly string _gameTitle, _binary, _version;
@@ -63,7 +62,6 @@ namespace TerminalGame.Screens
                 throw new Exception("Error while creating save directory.");
             }
             _smoke = Content.Load<Texture2D>("Graphics/Textures/Backgrounds/smoke");
-            _saveGames = new List<string>();
             int i = 0;
             foreach (string file in Directory.EnumerateFiles("Saves"))
             {

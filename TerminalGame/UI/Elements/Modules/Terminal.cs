@@ -120,6 +120,7 @@ namespace TerminalGame.UI.Elements.Modules
 
         private void Enter_Pressed(object sender, KeyEventArgs e)
         {
+            Console.WriteLine("Enter pressed");
             _histIndex = -1;
             if (_history[0] != _textBox.Text.String)
             {
@@ -186,6 +187,10 @@ namespace TerminalGame.UI.Elements.Modules
         /// </summary>
         private void UpdateTextBox()
         {
+            _textBox.EnterDown -= Enter_Pressed;
+            _textBox.UpArrow -= Up_Pressed;
+            _textBox.DnArrow -= Down_Pressed;
+            _textBox.TabDown -= Tab_Pressed;
             _textBox.Dispose();
             _textBox = null;
             _computer = World.World.GetInstance().Player.ConnectedComp;

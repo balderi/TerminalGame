@@ -11,7 +11,7 @@ namespace TerminalGame.Companies
     [DataContract(IsReference = true)]
     public class Company
     {
-        private Random _rnd;
+        private readonly Random _rnd;
 
         // TODO: Both owner and admin should be user. Or rework person to have passwords or something.
 

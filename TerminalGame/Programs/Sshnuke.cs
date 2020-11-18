@@ -5,9 +5,9 @@ namespace TerminalGame.Programs
 {
     class Sshnuke : Program
     {
-        private string[] _textToWrite;
+        private readonly string[] _textToWrite;
         private int _counter;
-        private Computer _pComp, _cComp;
+        private Computer _cComp;
 
         private static Sshnuke _instance;
 
@@ -38,7 +38,6 @@ namespace TerminalGame.Programs
 
         protected override void Run()
         {
-            _pComp = World.World.GetInstance().Player.PlayerComp;
             _cComp = World.World.GetInstance().Player.ConnectedComp;
             _counter = 0;
             _cComp.PerformIllegalAction();

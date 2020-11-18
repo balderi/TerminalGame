@@ -64,7 +64,7 @@ namespace TerminalGame.Files.FileSystem
                 {
                     path = potentialPath;
                     ChangeCurrentDirFromPath(path);
-                    if (TryFindFile(potentialFile, out File f))
+                    if (TryFindFile(potentialFile, out _))
                     {
                         file = potentialFile;
                         CurrentDir = origin;

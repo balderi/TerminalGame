@@ -10,8 +10,8 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents.RemoteViewData
     {
         private Computer _computer;
         private string _text;
-        private SpriteFont _font;
-        private float _opacity;
+        private readonly SpriteFont _font;
+        private readonly float _opacity;
 
         public DefaultView(Computer computer)
         {

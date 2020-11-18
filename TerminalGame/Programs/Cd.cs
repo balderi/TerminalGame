@@ -30,7 +30,6 @@ namespace TerminalGame.Programs
             }
             if (_args.Length < 1)
             {
-                //TODO: Usage cd
                 Game.Terminal.WriteLine("Too few arguments: cd");
                 Kill();
                 return;

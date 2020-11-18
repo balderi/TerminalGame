@@ -245,7 +245,7 @@ namespace TerminalGame.Utils.TextHandler
             int sc = Cursor.SelectedChar.Value;
             int min = Math.Min(sc, tc);
             int max = Math.Max(sc, tc);
-            string result = Text.String.Substring(min, max - min);
+            string result = Text.String[min..max];
 
             if (!fakeForCopy)
             {

@@ -282,8 +282,7 @@ namespace TerminalGame.Files
 
         public override bool Equals(object obj)
         {
-            var file = obj as File;
-            return file != null &&
+            return obj is File file &&
                    Name == file.Name &&
                    Contents == file.Contents &&
                    Size == file.Size &&
@@ -294,14 +293,7 @@ namespace TerminalGame.Files
 
         public override int GetHashCode()
         {
-            var hashCode = 1411017911;
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Contents);
-            hashCode = hashCode * -1521134295 + Size.GetHashCode();
-            hashCode = hashCode * -1521134295 + FileType.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<File>.Default.GetHashCode(Parent);
-            hashCode = hashCode * -1521134295 + EqualityComparer<List<File>>.Default.GetHashCode(Children);
-            return hashCode;
+            return HashCode.Combine(Name, Contents, Size, FileType, Parent, Children);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace TerminalGame.Utils
     public static class Generators
     {
         private static readonly string _chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        private static Random _rnd = new Random(DateTime.Now.Millisecond);
+        private static readonly Random _rnd = new Random(DateTime.Now.Millisecond);
 
         public static string GeneratePassword(int length = 8)
         {

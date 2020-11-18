@@ -187,14 +187,14 @@ namespace TerminalGame.Utils.TextHandler
                     {
                         // Have to split a word.
                         // Render line and return start of new line.
-                        tempText = t.Substring(start, iCount - start);
+                        tempText = t[start..(iCount  - start)];
                         spriteBatch.DrawString(Font, tempText, new Vector2(0.0f, height), Color);
                         return iCount + 1;
                     }
 
                     // Have a character we can split on.
                     // Render line and return start of new line.
-                    tempText = t.Substring(start, breakLocation - start);
+                    tempText = t[start..(breakLocation - start)];
                     spriteBatch.DrawString(Font, tempText, new Vector2(0.0f, height), Color);
                     return breakLocation + 1;
                 }
@@ -206,7 +206,7 @@ namespace TerminalGame.Utils.TextHandler
                     case '\r':
                     case '\n':
                         //Render line and return start of new line.
-                        tempText = t.Substring(start, iCount - start);
+                        tempText = t[start..(iCount - start)];
                         spriteBatch.DrawString(Font, tempText, new Vector2(0.0f, height), Color);
                         return iCount + 1;
                     // These characters are good break locations.
@@ -219,7 +219,7 @@ namespace TerminalGame.Utils.TextHandler
 
             // We hit the end of the text box render line and return
             // _textData.Length so RenderText knows to return.
-            tempText = t.Substring(start, box.Text.Length - start);
+            tempText = t[start..(box.Text.Length - start)];
             spriteBatch.DrawString(Font, tempText, new Vector2(0.0f, height), Color);
             return box.Text.Length;
         }

@@ -23,7 +23,7 @@ namespace TerminalGame.Computers
         private readonly int[] _defaultPorts = { 22, 25, 80, 443 };
         private bool _isInitialized;
         private string _publicName;
-        private Random _rnd = new Random(); // TEMP
+        private readonly Random _rnd = new Random(); // TEMP
         #endregion
 
         #region properties

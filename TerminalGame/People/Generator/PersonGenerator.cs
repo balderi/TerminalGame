@@ -9,10 +9,10 @@ namespace TerminalGame.People.Generator
 {
     public static class PersonGenerator
     {
-        private static Random _rnd = new Random(DateTime.Now.Millisecond);
-        private static List<string> _last = File.ReadLines("Content/Data/Names/lastNames.txt").ToList();
-        private static List<string> _fNames = File.ReadLines("Content/Data/Names/femaleNames.txt").ToList();
-        private static List<string> _mNames = File.ReadLines("Content/Data/Names/maleNames.txt").ToList();
+        private static readonly Random _rnd = new Random(DateTime.Now.Millisecond);
+        private static readonly List<string> _last = File.ReadLines("Content/Data/Names/lastNames.txt").ToList();
+        private static readonly List<string> _fNames = File.ReadLines("Content/Data/Names/femaleNames.txt").ToList();
+        private static readonly List<string> _mNames = File.ReadLines("Content/Data/Names/maleNames.txt").ToList();
 
         public static EducationLevel GenerateEducationLevel(int age)
         {

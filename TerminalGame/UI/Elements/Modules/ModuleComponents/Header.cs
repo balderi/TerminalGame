@@ -8,10 +8,9 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
     {
         #region fields
         private readonly string TEXT;
-        private readonly GraphicsDevice GRAPHICS;
-        private SpriteFont _titleFont;
+        private readonly SpriteFont _titleFont;
         private Vector2 _titlePos;
-        private ThemeManager _themeManager;
+        private readonly ThemeManager _themeManager;
         #endregion
 
         #region properties
@@ -28,12 +27,11 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
         /// <param name="x">Position X</param>
         /// <param name="y">Position Y</param>
         /// <param name="graphicsDevice"><c>GraphicsDevice</c> used to generate dummy textures (mainly for the background)</param>
-        public Header(string text, SpriteFont titleFont, int width, int height, int x, int y, GraphicsDevice graphicsDevice)
+        public Header(string text, SpriteFont titleFont, int width, int height, int x, int y)
         {
             _themeManager = ThemeManager.GetInstance();
             TEXT = text;
             Rectangle = new Rectangle(x, y, width, height);
-            GRAPHICS = graphicsDevice;
             _titleFont = titleFont;
             _titlePos = new Vector2(Rectangle.X + 5f, Rectangle.Y + (Rectangle.Height / 2) - (_titleFont.LineSpacing / 2));
         }

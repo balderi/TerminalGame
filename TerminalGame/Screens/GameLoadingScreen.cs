@@ -8,7 +8,9 @@ namespace TerminalGame.Screens
 {
     class GameLoadingScreen : Screen
     {
-        private string _loading, _loadItem, _saveGamePath;
+        private string _loading;
+        private string _loadItem;
+        private readonly string _saveGamePath;
         private SpriteFont _loadingFont, _loadItemFont;
         private Task _loadingTask;
         private Vector2 _loadPos, _itemPos;

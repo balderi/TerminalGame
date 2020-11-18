@@ -5,7 +5,7 @@ namespace TerminalGame.Programs
 {
     class Nmap : Program
     {
-        private Random _rnd;
+        private readonly Random _rnd;
         private Computer _target;
         private string[] _textToWrite;
         private int _latency, _counter;
