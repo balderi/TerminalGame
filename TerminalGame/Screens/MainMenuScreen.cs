@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
 using TerminalGame.UI.Elements.Buttons;
 using TerminalGame.Utils;
 
@@ -91,17 +91,17 @@ namespace TerminalGame.Screens
             _spriteBatch.Draw(_smoke, _smokeRect1, Color.White * 0.1f);
             _spriteBatch.Draw(_smoke, _smokeRect2, Color.White * 0.2f);
 
-            _spriteBatch.DrawString(FontManager.GetFont("FontS"), _binary, 
+            _spriteBatch.DrawString(FontManager.GetFont("FontS"), _binary,
                 new Vector2(_binaryXpos, Game.Window.ClientBounds.Height - FontManager.GetFont("FontS").MeasureString("A").Y), Color.Green * 0.25f);
             Vector2 textMiddlePoint = _titleFont.MeasureString(_gameTitle) / 2;
             Vector2 position = new Vector2((Game.Window.ClientBounds.Width - textMiddlePoint.X - 15), textMiddlePoint.Y + 15);
-            Vector2 position2 = new Vector2((Game.Window.ClientBounds.Width - textMiddlePoint.X - 15) + Generators.ShakeStuff(3), 
+            Vector2 position2 = new Vector2((Game.Window.ClientBounds.Width - textMiddlePoint.X - 15) + Generators.ShakeStuff(3),
                 textMiddlePoint.Y + 15 + Generators.ShakeStuff(3));
-            Vector2 position3 = new Vector2((Game.Window.ClientBounds.Width - _versionFont.MeasureString(_version).X / 2 - 20), 
+            Vector2 position3 = new Vector2((Game.Window.ClientBounds.Width - _versionFont.MeasureString(_version).X / 2 - 20),
                 position.Y + _titleFont.MeasureString(_gameTitle).Y / 2 - 15);
             _spriteBatch.DrawString(_titleFont, _gameTitle, position2, Color.Green, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
             _spriteBatch.DrawString(_titleFont, _gameTitle, position, Color.LightGray, 0, textMiddlePoint, 1.0f, SpriteEffects.None, 0.5f);
-            _spriteBatch.DrawString(_versionFont, _version, position3, Color.Green, 0, 
+            _spriteBatch.DrawString(_versionFont, _version, position3, Color.Green, 0,
                 _versionFont.MeasureString(_version) / 2, 1.0f, SpriteEffects.None, 0.5f);
             foreach (var b in BUTTONS)
                 b.Draw(gameTime);

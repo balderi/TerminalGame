@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace TerminalGame.UI.Elements.Buttons
 {
@@ -13,7 +13,7 @@ namespace TerminalGame.UI.Elements.Buttons
         public delegate void ButtonPressedEventHandler(ButtonPressedEventArgs e);
         public event ButtonPressedEventHandler ButtonPressed;
 
-        public Button(Game game, string text, Point location, Point size, bool fadeIn = true) : 
+        public Button(Game game, string text, Point location, Point size, bool fadeIn = true) :
             base(game, location, size, fadeIn: fadeIn)
         {
             BorderColor = Color.White * _opacity;
@@ -66,7 +66,7 @@ namespace TerminalGame.UI.Elements.Buttons
             _spriteBatch.Draw(Globals.Utils.DummyTexture(), Rectangle,
                               BackgroundColor * _opacity);
 
-            _spriteBatch.DrawString(_font, TEXT, new Vector2(Rectangle.Center.X - _font.MeasureString(TEXT).X / 2, 
+            _spriteBatch.DrawString(_font, TEXT, new Vector2(Rectangle.Center.X - _font.MeasureString(TEXT).X / 2,
                 Rectangle.Center.Y - _font.MeasureString(TEXT).Y / 2), FontColor);
 
             Globals.Utils.DrawOuterBorder(_spriteBatch, Rectangle, Globals.Utils.DummyTexture(), 1,

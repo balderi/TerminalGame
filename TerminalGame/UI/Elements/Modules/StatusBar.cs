@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using TerminalGame.Time;
 using TerminalGame.UI.Elements.Buttons;
 using TerminalGame.Utils;
@@ -26,20 +26,20 @@ namespace TerminalGame.UI.Elements.Modules
             _buildNumber = $"Version {Game.Version}\n  Build {Game.BuildNumber}";
 
             _playerDeets = $"   Name: {World.World.GetInstance().Player.Name}\nBalance: ${World.World.GetInstance().Player.Balance}";
-            
+
             _connectionInfo = "";
             _titleFont = FontManager.GetFont("FontM");
             _playerDetailFont = FontManager.GetFont("FontXS");
             FontColor = _themeManager.CurrentTheme.ModuleFontColor;
-            
+
             _dateWidth = _titleFont.MeasureString(GameClock.GameTime.ToShortDateString()).X;
 
             // TODO: Make a SplitButton to replace this.
-            _pause    = new Button(Game, "||", new Point(Rectangle.X + 10 + (int)_dateWidth, Rectangle.Y + 5), new Point(35));
+            _pause = new Button(Game, "||", new Point(Rectangle.X + 10 + (int)_dateWidth, Rectangle.Y + 5), new Point(35));
             _realTime = new Button(Game, "RT", new Point(Rectangle.X + 10 + (int)_dateWidth + 40, Rectangle.Y + 5), new Point(35));
-            _single   = new Button(Game, ">", new Point(Rectangle.X + 10 + (int)_dateWidth + 80, Rectangle.Y + 5), new Point(35));
-            _double   = new Button(Game, ">>", new Point(Rectangle.X + 10 + (int)_dateWidth + 120, Rectangle.Y + 5), new Point(35));
-            _triple   = new Button(Game, ">>>", new Point(Rectangle.X + 10 + (int)_dateWidth + 160, Rectangle.Y + 5), new Point(35));
+            _single = new Button(Game, ">", new Point(Rectangle.X + 10 + (int)_dateWidth + 80, Rectangle.Y + 5), new Point(35));
+            _double = new Button(Game, ">>", new Point(Rectangle.X + 10 + (int)_dateWidth + 120, Rectangle.Y + 5), new Point(35));
+            _triple = new Button(Game, ">>>", new Point(Rectangle.X + 10 + (int)_dateWidth + 160, Rectangle.Y + 5), new Point(35));
 
             _pause.ButtonPressed += Pause_clicked;
             _realTime.ButtonPressed += RealTime_clicked;

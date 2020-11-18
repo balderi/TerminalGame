@@ -22,7 +22,7 @@ namespace TerminalGame.Programs
 
         private Connect()
         {
-            
+
         }
 
         public override void Kill()
@@ -30,7 +30,7 @@ namespace TerminalGame.Programs
             if (_success)
             {
                 if (!MusicManager.GetInstance().IsSongPlaying("hackLoop"))
-                   MusicManager.GetInstance().ChangeSong("hackLoop", 0.1f);
+                    MusicManager.GetInstance().ChangeSong("hackLoop", 0.1f);
             }
             else
                 MusicManager.GetInstance().FadeIn(0.01f);
@@ -54,10 +54,10 @@ namespace TerminalGame.Programs
                 Kill();
                 return;
             }
-            if(!MusicManager.GetInstance().IsSongPlaying("hackLoop"))
+            if (!MusicManager.GetInstance().IsSongPlaying("hackLoop"))
                 MusicManager.GetInstance().FadeOut(0.005f);
             Console.WriteLine("Attempting connection to host with IP {0}", _args[0]);
-            if(_args[0] == World.World.GetInstance().Player.ConnectedComp.IP)
+            if (_args[0] == World.World.GetInstance().Player.ConnectedComp.IP)
             {
                 Game.Terminal.WriteLine("You are already connected to this host");
                 Kill();
@@ -81,7 +81,7 @@ namespace TerminalGame.Programs
 
         protected override void Timer_Tick(object sender, EventArgs e)
         {
-            if(_isKill)
+            if (_isKill)
             {
                 Console.WriteLine("command: Execution halted!");
                 Game.Terminal.WriteLine("^C");
@@ -90,22 +90,22 @@ namespace TerminalGame.Programs
                 return;
             }
 
-            if(_counter < 4)
+            if (_counter < 4)
                 Game.Terminal.Write(_connection[_counter]);
             else
             {
-                foreach(Computer c in World.World.GetInstance().Computers)
+                foreach (Computer c in World.World.GetInstance().Computers)
                 {
                     if (c.IP == _args[0])
                     {
-                        if(c.IsPlayerConnected)
+                        if (c.IsPlayerConnected)
                         {
                             Game.Terminal.WriteLine(_connection[7]);
                             Kill();
                             _timer.Stop();
                             return;
                         }
-                        if(c.Connect())
+                        if (c.Connect())
                         {
                             Console.WriteLine("Connection established to {1}@{0}", c.IP, c.GetPublicName());
                             _success = true;

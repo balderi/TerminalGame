@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Timers;
-using TerminalGame.Utils;
-using TerminalGame.UI.Themes;
 using System.Threading.Tasks;
+using System.Timers;
+using TerminalGame.UI.Themes;
+using TerminalGame.Utils;
 
 namespace TerminalGame.Tracers
 {
@@ -28,14 +25,14 @@ namespace TerminalGame.Tracers
 
         private ActiveTracer()
         {
-            
+
         }
 
         public string GetTracePercentage()
         {
-            if(IsActive)
+            if (IsActive)
             {
-                return $"{(float)Counter/10:N1}%";
+                return $"{(float)Counter / 10:N1}%";
             }
             else
             {
@@ -109,7 +106,7 @@ namespace TerminalGame.Tracers
                 ThemeManager.GetInstance().CurrentTheme.Flash();
                 await Task.Delay(5 * (1100 - Counter));
             }
-            if(IsActive)
+            if (IsActive)
                 StopTrace();
         }
     }

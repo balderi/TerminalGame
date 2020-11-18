@@ -31,7 +31,7 @@ namespace TerminalGame.UI.Elements.Modules
                                     (int)(headerFont.LineSpacing * 1.25), Rectangle.X, Rectangle.Y, GraphicsDevice);
             }
         }
-        
+
         public override void Initialize()
         {
             base.Initialize();

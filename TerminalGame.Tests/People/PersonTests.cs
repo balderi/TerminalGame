@@ -1,8 +1,5 @@
 ﻿using NUnit.Framework;
-using TerminalGame.People;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using TerminalGame.People.Utils;
 
 namespace TerminalGame.People.Tests

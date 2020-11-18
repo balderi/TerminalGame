@@ -1,6 +1,6 @@
-﻿using System.Timers;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Timers;
 using TerminalGame.Utils;
 
 namespace TerminalGame.Screens

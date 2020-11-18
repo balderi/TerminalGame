@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace TerminalGame.Files.FileSystem
 {
@@ -31,7 +30,7 @@ namespace TerminalGame.Files.FileSystem
                 result = CurrentDir;
                 return true;
             }
-            if(name == "..")
+            if (name == "..")
             {
                 if (CurrentDir.Parent == null) // we're at root (/), nowhere else to go
                     result = CurrentDir;
@@ -59,13 +58,13 @@ namespace TerminalGame.Files.FileSystem
             var potentialPath = "/" + string.Join('/', split[0..destdir]) + "/";
             var potentialFile = split[destdir];
 
-            if(TryFindFilePath(potentialFile, out string actualPath))
+            if (TryFindFilePath(potentialFile, out string actualPath))
             {
-                if(actualPath == potentialPath)
+                if (actualPath == potentialPath)
                 {
                     path = potentialPath;
                     ChangeCurrentDirFromPath(path);
-                    if(TryFindFile(potentialFile, out File f))
+                    if (TryFindFile(potentialFile, out File f))
                     {
                         file = potentialFile;
                         CurrentDir = origin;
@@ -86,9 +85,9 @@ namespace TerminalGame.Files.FileSystem
                 {
                     return true;
                 }
-                if(file.FileType == FileType.Directory)
+                if (file.FileType == FileType.Directory)
                 {
-                    foreach(var f in file.Children)
+                    foreach (var f in file.Children)
                     {
                         if (getPath(f, out string tempPath))
                         {
@@ -99,7 +98,7 @@ namespace TerminalGame.Files.FileSystem
                 }
                 return false;
             }
-            if(getPath(RootDir, out string outPath))
+            if (getPath(RootDir, out string outPath))
             {
                 path = outPath;
                 return true;
@@ -114,11 +113,11 @@ namespace TerminalGame.Files.FileSystem
             var currentDir = CurrentDir;
             var lastDir = LastDir;
 
-            foreach(var dir in splitPath)
+            foreach (var dir in splitPath)
             {
-                if(TryFindFile(dir, out File directory))
+                if (TryFindFile(dir, out File directory))
                 {
-                    if(directory.FileType == FileType.Directory)
+                    if (directory.FileType == FileType.Directory)
                     {
                         ChangeCurrentDir(directory);
                     }

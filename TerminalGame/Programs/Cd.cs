@@ -28,7 +28,7 @@ namespace TerminalGame.Programs
                 Kill();
                 return;
             }
-            if(_args.Length < 1)
+            if (_args.Length < 1)
             {
                 //TODO: Usage cd
                 Game.Terminal.WriteLine("Too few arguments: cd");
@@ -49,12 +49,12 @@ namespace TerminalGame.Programs
                     Kill();
                     return;
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Game.Terminal.WriteLine(e.Message);
                 }
             }
-            if(World.World.GetInstance().Player.ConnectedComp.FileSystem.TryFindFile(_args[0], out File f))
+            if (World.World.GetInstance().Player.ConnectedComp.FileSystem.TryFindFile(_args[0], out File f))
             {
                 if (f.FileType == FileType.Directory)
                     World.World.GetInstance().Player.ConnectedComp.FileSystem.ChangeCurrentDir(f);

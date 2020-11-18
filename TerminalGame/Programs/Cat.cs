@@ -28,7 +28,7 @@ namespace TerminalGame.Programs
                 Kill();
                 return;
             }
-            if(World.World.GetInstance().Player.ConnectedComp.FileSystem.TryFindFile(_args[0], out File f))
+            if (World.World.GetInstance().Player.ConnectedComp.FileSystem.TryFindFile(_args[0], out File f))
             {
                 Game.Terminal.WriteLine(f.ToString());
             }

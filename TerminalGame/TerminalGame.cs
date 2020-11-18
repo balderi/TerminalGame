@@ -1,16 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using TerminalGame.Utils;
-using TerminalGame.UI.Elements.Modules;
 using Microsoft.Xna.Framework.Media;
-using TerminalGame.Screens;
 using System;
-using System.Reflection;
-using TerminalGame.UI.Themes;
-using TerminalGame.Time;
 using System.IO;
-using Microsoft.Xna.Framework.Audio;
+using System.Reflection;
+using TerminalGame.Screens;
+using TerminalGame.Time;
+using TerminalGame.UI.Elements.Modules;
+using TerminalGame.UI.Themes;
+using TerminalGame.Utils;
 
 namespace TerminalGame
 {
@@ -106,7 +106,7 @@ namespace TerminalGame
 
             _themeManager.AddTheme(test);
             _themeManager.ChangeTheme("test");
-           
+
             Console.WriteLine("init done");
 
             Console.WriteLine(Companies.Generator.CompanyGenerator.Lengths);

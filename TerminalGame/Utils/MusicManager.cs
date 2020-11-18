@@ -37,7 +37,7 @@ namespace TerminalGame.Utils
 
         public bool IsSongPlaying(string name)
         {
-            if(_songs.TryGetValue(name, out Song song))
+            if (_songs.TryGetValue(name, out Song song))
                 return _currentSong == song;
             return false;
         }
@@ -67,7 +67,7 @@ namespace TerminalGame.Utils
             {
                 if (_currentSong == _nextSong)
                     return;
-                
+
                 _delta = delta;
                 FadeOut(delta);
             }
@@ -101,7 +101,7 @@ namespace TerminalGame.Utils
 
         public void Update(GameTime gameTime)
         {
-            if(_isFadingOut)
+            if (_isFadingOut)
             {
                 float volume = MediaPlayer.Volume;
                 volume -= _delta * _musicChangeSpeed;
@@ -109,7 +109,7 @@ namespace TerminalGame.Utils
                 {
                     volume = 0.0f;
                     _isFadingOut = false;
-                    if(_nextSong != null)
+                    if (_nextSong != null)
                     {
                         MediaPlayer.Stop();
                         _currentSong = _nextSong;
@@ -117,7 +117,7 @@ namespace TerminalGame.Utils
                         MediaPlayer.Play(_currentSong);
                         _isFadingIn = true;
                     }
-                    if(!_isPlaying)
+                    if (!_isPlaying)
                     {
                         MediaPlayer.Stop();
                     }
@@ -125,7 +125,7 @@ namespace TerminalGame.Utils
                 MediaPlayer.Volume = volume;
             }
 
-            if(_isFadingIn)
+            if (_isFadingIn)
             {
                 float volume = MediaPlayer.Volume;
                 volume += _delta * _musicChangeSpeed;

@@ -7,24 +7,24 @@ namespace TerminalGame.People
     [DataContract]
     public class Person
     {
-        protected Random        _rnd;
+        protected Random _rnd;
 
         [DataMember]
-        public string           Name        { get; set; }
+        public string Name { get; set; }
         [DataMember]
-        public DateTime         DOB         { get; set; }
+        public DateTime DOB { get; set; }
         [DataMember]
-        public int              Age         { get; set; }
+        public int Age { get; set; }
         [DataMember]
-        public Gender           Gender      { get; set; }
+        public Gender Gender { get; set; }
         [DataMember]
-        public EducationLevel   Education   { get; set; }
+        public EducationLevel Education { get; set; }
         [DataMember]
-        public AgeRange         AgeRange    { get; set; }
+        public AgeRange AgeRange { get; set; }
         [DataMember]
-        public string           Email       { get; set; } // TODO: Email provider.
+        public string Email { get; set; } // TODO: Email provider.
         [DataMember]
-        public int              Phone       { get; set; } // Ehhh, maybe not?
+        public int Phone { get; set; } // Ehhh, maybe not?
 
         public Person()
         {

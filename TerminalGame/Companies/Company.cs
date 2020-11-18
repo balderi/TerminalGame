@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Threading;
 using TerminalGame.Computers;
 using TerminalGame.Computers.Utils;
 using TerminalGame.People;
@@ -12,7 +11,7 @@ namespace TerminalGame.Companies
     [DataContract(IsReference = true)]
     public class Company
     {
-        private Random  _rnd;
+        private Random _rnd;
 
         // TODO: Both owner and admin should be user. Or rework person to have passwords or something.
 
@@ -49,7 +48,7 @@ namespace TerminalGame.Companies
 
         }
 
-        public static Company GetRandomCompany(TerminalGame game) => 
+        public static Company GetRandomCompany(TerminalGame game) =>
             new Company(new Person(AgeRange.MiddleAged), new Person(AgeRange.Adult))
             {
                 Game = game

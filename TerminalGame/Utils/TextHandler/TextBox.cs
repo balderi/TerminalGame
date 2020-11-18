@@ -1,9 +1,9 @@
 ﻿//From https://github.com/UnterrainerInformatik/Monogame-Textbox <3 -b
 
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace TerminalGame.Utils.TextHandler
 {
@@ -25,20 +25,20 @@ namespace TerminalGame.Utils.TextHandler
             get { return Renderer.Area; }
             set { Renderer.Area = value; }
         }
-        
+
         public readonly Text Text;
         public readonly TextRenderer Renderer;
         public readonly Cursor Cursor;
-        
+
         public event EventHandler<KeyboardInput.KeyEventArgs> EnterDown;
         public event EventHandler<KeyboardInput.KeyEventArgs> UpArrow;
         public event EventHandler<KeyboardInput.KeyEventArgs> DnArrow;
         public event EventHandler<KeyboardInput.KeyEventArgs> TabDown;
 
         private string clipboard;
-        
+
         public bool Active { get; set; }
-        
+
         public TextBox(Rectangle area, int maxCharacters, string text, GraphicsDevice graphicsDevice,
             SpriteFont spriteFont,
             Color cursorColor, Color selectionColor, int ticksPerToggle)
@@ -57,17 +57,17 @@ namespace TerminalGame.Utils.TextHandler
                 Color = Color.Black
             };
 
-            Cursor = new Cursor(this, cursorColor, selectionColor, new Rectangle(0, 5, (int)spriteFont.MeasureString("_").Length()/2, (int)spriteFont.MeasureString("_").Length() / 2), ticksPerToggle);
+            Cursor = new Cursor(this, cursorColor, selectionColor, new Rectangle(0, 5, (int)spriteFont.MeasureString("_").Length() / 2, (int)spriteFont.MeasureString("_").Length() / 2), ticksPerToggle);
 
             KeyboardInput.CharPressed += CharacterTyped;
             KeyboardInput.KeyPressed += KeyPressed;
         }
-        
+
         public void Dispose()
         {
             KeyboardInput.Dispose();
         }
-        
+
         public void Clear()
         {
             Text.RemoveCharacters(0, Text.Length);
@@ -180,7 +180,7 @@ namespace TerminalGame.Utils.TextHandler
                         }
                         break;
                     case Keys.D2:
-                        if(KeyboardInput.CtrlDown && KeyboardInput.AltDown)
+                        if (KeyboardInput.CtrlDown && KeyboardInput.AltDown)
                         {
                             if (Text.Length < Text.MaxLength)
                             {
@@ -258,12 +258,12 @@ namespace TerminalGame.Utils.TextHandler
             }
             return result;
         }
-        
+
         public static bool IsLegalCharacter(SpriteFont font, char c)
         {
             return font.Characters.Contains(c) || c == '\r' || c == '\n';
         }
-        
+
         public static int IndexOfNextCharAfterWhitespace(int pos, char[] characters)
         {
             char[] chars = characters;
@@ -322,7 +322,7 @@ namespace TerminalGame.Utils.TextHandler
             Renderer.Update();
             Cursor.Update();
         }
-        
+
         public void Draw(SpriteBatch spriteBatch)
         {
             Renderer.Draw(spriteBatch);

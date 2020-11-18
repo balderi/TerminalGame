@@ -50,7 +50,7 @@ namespace TerminalGame.Files
             Owner = owner;
         }
 
-        public File(string name, string contents, FileType fileType, User owner = null, FilePermissionLevel readLevel = 0, 
+        public File(string name, string contents, FileType fileType, User owner = null, FilePermissionLevel readLevel = 0,
             FilePermissionLevel writeLevel = 0, FilePermissionLevel executeLevel = 0)
         {
             if (fileType == FileType.Directory)
@@ -120,11 +120,11 @@ namespace TerminalGame.Files
 
         public void DeleteDirectory(File dir, bool recurse)
         {
-            if(FileType == FileType.Directory)
+            if (FileType == FileType.Directory)
             {
                 if (dir.Children.Count > 0)
                 {
-                    if(recurse)
+                    if (recurse)
                     {
                         dir.Purge();
                     }
@@ -145,10 +145,10 @@ namespace TerminalGame.Files
 
             if (Children != null)
             {
-                while(Children.Count > 0)
+                while (Children.Count > 0)
                 {
                     var c = Children.FirstOrDefault();
-                    if(c != null)
+                    if (c != null)
                     {
                         c.Purge();
                         Children.Remove(c);
@@ -174,14 +174,14 @@ namespace TerminalGame.Files
                 sb.Append('d');
             else
                 sb.Append('-');
-            for(int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++)
             {
                 if (ReadLevel >= (FilePermissionLevel)i)
                     sb.Append('r');
                 else
                     sb.Append('-');
 
-                if(WriteLevel >= (FilePermissionLevel)i)
+                if (WriteLevel >= (FilePermissionLevel)i)
                     sb.Append('w');
                 else
                     sb.Append('-');
@@ -204,7 +204,7 @@ namespace TerminalGame.Files
         /// <returns>File contents as string.</returns>
         public override string ToString()
         {
-            if(FileType == FileType.Directory)
+            if (FileType == FileType.Directory)
             {
                 return Name + " is a directory.";
             }
@@ -254,7 +254,7 @@ namespace TerminalGame.Files
 
         public File GetChild(string name)
         {
-            if(FileType == FileType.Directory)
+            if (FileType == FileType.Directory)
             {
                 return Children.Find(f => f.Name == name);
             }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TerminalGame.Programs
 {
@@ -17,7 +15,7 @@ namespace TerminalGame.Programs
 
         private Rm()
         {
-            
+
         }
 
         protected override void Run()
@@ -31,14 +29,14 @@ namespace TerminalGame.Programs
                 Kill();
                 return;
             }
-            if(_args.Length > 2)
+            if (_args.Length > 2)
             {
                 Game.Terminal.WriteLine("rm: too many operands");
                 Game.Terminal.WriteLine("Try 'rm --help' for more information.");
                 Kill();
                 return;
             }
-            if(_args[0] == "--help")
+            if (_args[0] == "--help")
             {
                 Game.Terminal.WriteLine("Usage: rm [OPTION]... [FILE]...");
                 Game.Terminal.WriteLine("Remove (unlink) the FILE.");
@@ -51,9 +49,9 @@ namespace TerminalGame.Programs
                 Kill();
                 return;
             }
-            if(_args[0] == "-r" || _args[0] == "--recursive")
+            if (_args[0] == "-r" || _args[0] == "--recursive")
             {
-                if(comp.FileSystem.TryFindFile(_args[1], out var file))
+                if (comp.FileSystem.TryFindFile(_args[1], out var file))
                 {
                     if (!comp.PlayerHasRoot)
                     {
@@ -87,7 +85,7 @@ namespace TerminalGame.Programs
                         Kill();
                         return;
                     }
-                    if(file.FileType == Files.FileType.Directory)
+                    if (file.FileType == Files.FileType.Directory)
                     {
                         Game.Terminal.WriteLine($"rm: cannot remove '{_args[0]}': Is a directory");
                         Kill();

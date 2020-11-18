@@ -46,7 +46,7 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
         public void Draw(SpriteBatch spriteBatch, float opacity)
         {
             spriteBatch.Draw(Globals.Utils.DummyTexture(), Rectangle, _themeManager.CurrentTheme.ModuleHeaderBackgroundColor * opacity);
-            spriteBatch.DrawString(_titleFont, TEXT, _titlePos , _themeManager.CurrentTheme.ModuleHeaderFontColor * opacity);
+            spriteBatch.DrawString(_titleFont, TEXT, _titlePos, _themeManager.CurrentTheme.ModuleHeaderFontColor * opacity);
         }
     }
 }

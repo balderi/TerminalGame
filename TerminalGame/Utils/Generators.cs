@@ -10,7 +10,7 @@ namespace TerminalGame.Utils
         public static string GeneratePassword(int length = 8)
         {
             string retval = "";
-            for(int i = 0; i < length; i++)
+            for (int i = 0; i < length; i++)
             {
                 retval += _chars[_rnd.Next(0, _chars.Length)];
             }

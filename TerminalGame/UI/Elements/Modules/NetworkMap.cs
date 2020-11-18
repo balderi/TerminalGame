@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 using TerminalGame.Computers;
 using TerminalGame.UI.Elements.Modules.ModuleComponents;
 using TerminalGame.Utils;
@@ -74,7 +74,7 @@ namespace TerminalGame.UI.Elements.Modules
         {
             foreach (NetworkNode n in _networkNodes)
             {
-                if(n != PlayerCompNode && n != HoverNode && n != ConnectedNode)
+                if (n != PlayerCompNode && n != HoverNode && n != ConnectedNode)
                     n.Draw(gameTime);
             }
             PlayerCompNode?.Draw(gameTime);
@@ -102,7 +102,7 @@ namespace TerminalGame.UI.Elements.Modules
             {
                 HoverNode.InfoBox.ChangeLocation(new Point(HoverNode.Rectangle.Location.X - HoverNode.InfoBox.Rectangle.Width - 20, HoverNode.Rectangle.Location.Y));
             }
-            while(HoverNode.InfoBox.Rectangle.Y + HoverNode.InfoBox.Rectangle.Height > Rectangle.Y + Rectangle.Height - 2)
+            while (HoverNode.InfoBox.Rectangle.Y + HoverNode.InfoBox.Rectangle.Height > Rectangle.Y + Rectangle.Height - 2)
             {
                 HoverNode.InfoBox.ChangeLocation(new Point(HoverNode.InfoBox.Rectangle.X, HoverNode.InfoBox.Rectangle.Y - 1));
             }
@@ -165,7 +165,7 @@ namespace TerminalGame.UI.Elements.Modules
                     }
                 }
 
-                if(!loading)
+                if (!loading)
                 {
                     //casts to float are NOT redundant!!!
                     c.MapX = (float)x / (float)Rectangle.X;
@@ -184,7 +184,7 @@ namespace TerminalGame.UI.Elements.Modules
                 n.MouseEnter += Node_Enter;
             }
             TimeSpan donzo = DateTime.Now.Subtract(begin);
-            if(loading)
+            if (loading)
                 Console.WriteLine($"Loaded {_networkNodes.Count} nodes in {donzo.TotalSeconds:N4} seconds.");
             else
                 Console.WriteLine($"Generated {_networkNodes.Count} nodes in {donzo.TotalSeconds:N4} seconds.");

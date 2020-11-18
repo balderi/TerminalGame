@@ -29,7 +29,7 @@ namespace TerminalGame.Programs
                 Kill();
                 return;
             }
-            if(World.World.GetInstance().Player.ConnectedComp == World.World.GetInstance().Player.PlayerComp)
+            if (World.World.GetInstance().Player.ConnectedComp == World.World.GetInstance().Player.PlayerComp)
             {
                 Game.Terminal.WriteLine("Cannot disconnect from gateway");
                 Kill();

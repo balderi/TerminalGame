@@ -41,7 +41,7 @@ namespace TerminalGame.Utils.TextHandler
             batch?.Dispose();
             batch = null;
         }
-        
+
         public TextRenderer(TextBox box)
         {
             this.box = box;

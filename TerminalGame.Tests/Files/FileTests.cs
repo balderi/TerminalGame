@@ -1,8 +1,4 @@
 ﻿using NUnit.Framework;
-using TerminalGame.Files;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TerminalGame.Files.Tests
 {

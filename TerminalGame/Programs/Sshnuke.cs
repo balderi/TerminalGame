@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using TerminalGame.Computers;
 
 namespace TerminalGame.Programs
@@ -51,19 +49,19 @@ namespace TerminalGame.Programs
 
         protected override void Timer_Tick(object sender, EventArgs e)
         {
-            if(_counter == 3 && !_cComp.CheckPortOpen(22))
+            if (_counter == 3 && !_cComp.CheckPortOpen(22))
             {
                 Game.Terminal.WriteLine("sshnuke: error: port 22 not open");
                 Kill();
                 return;
             }
-            if(_counter == 9)
+            if (_counter == 9)
             {
                 _timer.Interval = 500;
                 _cComp.RootPassword = "password"; // TODO: Change password of root user whenever that is implemented...
                 _cComp.PlayerHasRoot = true;
             }
-            if(_counter == _textToWrite.Length)
+            if (_counter == _textToWrite.Length)
             {
                 Kill();
                 return;

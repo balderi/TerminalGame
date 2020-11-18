@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-using TerminalGame.Utils;
-using TerminalGame.Computers.Utils;
-using TerminalGame.Companies;
-using TerminalGame.Files.FileSystem;
-using System.Runtime.Serialization;
-using TerminalGame.Tracers;
-using TerminalGame.Computers.Events;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
+using TerminalGame.Companies;
+using TerminalGame.Computers.Events;
+using TerminalGame.Computers.Utils;
+using TerminalGame.Files.FileSystem;
 using TerminalGame.People;
+using TerminalGame.Tracers;
 using TerminalGame.UI.Elements.Modules.ModuleComponents.RemoteViewData;
 using TerminalGame.UI.Elements.Modules.ModuleComponents.RemoteViewData.Generators;
+using TerminalGame.Utils;
 
 namespace TerminalGame.Computers
 {
@@ -94,7 +94,7 @@ namespace TerminalGame.Computers
 
         public Computer()
         {
-            
+
         }
 
         public Computer(string name, string ip = "", string rootPassword = "", FileSystem fileSystem = null)
@@ -124,7 +124,7 @@ namespace TerminalGame.Computers
             ComputerType = type;
         }
 
-        public Computer (string name, int[] ports, ComputerType type, Company owner, string ip = "", string rootPassword = "", FileSystem fileSystem = null) : this(name, ip, rootPassword, fileSystem)
+        public Computer(string name, int[] ports, ComputerType type, Company owner, string ip = "", string rootPassword = "", FileSystem fileSystem = null) : this(name, ip, rootPassword, fileSystem)
         {
             OpenPorts = BuildPorts(ports);
             ComputerType = type;
@@ -133,7 +133,7 @@ namespace TerminalGame.Computers
 
         public void Init(TerminalGame game)
         {
-            if(!_isInitialized)
+            if (!_isInitialized)
             {
                 if (ViewData == null)
                     ViewData = RemoteViewDataGenerator.GetDefaultViewData(this);
@@ -183,10 +183,10 @@ namespace TerminalGame.Computers
         {
             World.World.GetInstance().Player.ConnectedComp = World.World.GetInstance().Player.PlayerComp;
             IsPlayerConnected = false;
-            if(ActiveTracer.GetInstance().IsActive)
+            if (ActiveTracer.GetInstance().IsActive)
                 ActiveTracer.GetInstance().StopTrace();
             OnDisconnected?.Invoke(this, new DisconnectedEventArgs(World.World.GetInstance().CurrentGameTime));
-            if(forced)
+            if (forced)
             {
                 Game.Terminal.WriteLine("Connection closed by remote host");
                 MusicManager.GetInstance().ChangeSong("gameBgm", 0.5f);
@@ -210,7 +210,7 @@ namespace TerminalGame.Computers
         public void PerformIllegalAction()
         {
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            if(this != World.World.GetInstance().Player.PlayerComp)
+            if (this != World.World.GetInstance().Player.PlayerComp)
                 ActiveTracer.GetInstance().StartTrace(TraceTime); // TODO: base tracetime on computer difficulty or something
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             OnIllegalAction?.Invoke(this, new IllegalActionEventArgs(World.World.GetInstance().CurrentGameTime));
@@ -259,7 +259,7 @@ namespace TerminalGame.Computers
         /// </summary>
         /// <param name="ports"><c>int array</c> of open ports.</param>
         /// <returns>A list of open ports.</returns>
-        public List<int> BuildPorts(int[] ports) =>  ports.ToList();
+        public List<int> BuildPorts(int[] ports) => ports.ToList();
 
         public override string ToString()
         {
@@ -268,9 +268,9 @@ namespace TerminalGame.Computers
 
         public void Tick()
         {
-            if(FileSystem.RootDir == null)
+            if (FileSystem.RootDir == null)
             {
-                if(IsPlayerConnected)
+                if (IsPlayerConnected)
                 {
                     Disconnect(true);
                 }

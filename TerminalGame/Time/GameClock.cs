@@ -5,10 +5,10 @@ namespace TerminalGame.Time
     public static class GameClock
     {                                               // 1 real second =
         private const double REAL_TIME = 0.016;     // 1 sec
-        private const double SINGLE    = 0.016;     // 1 min
-        private const double DOUBLE    = 0.528;     // 33 min
-        private const double TRIPLE    = 5.280;     // 333 min
-        
+        private const double SINGLE = 0.016;     // 1 min
+        private const double DOUBLE = 0.528;     // 33 min
+        private const double TRIPLE = 5.280;     // 333 min
+
         private static DayChangeEventArgs _dayChange;
 
         public delegate void DayChangeEventHandler(DayChangeEventArgs e);
@@ -30,7 +30,7 @@ namespace TerminalGame.Time
         public static void Tick(GameSpeed gameSpeed)
         {
             int _currentDay = GameTime.Day;
-            switch(gameSpeed)
+            switch (gameSpeed)
             {
                 case GameSpeed.Paused:
                     {

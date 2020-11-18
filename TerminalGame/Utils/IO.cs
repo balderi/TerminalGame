@@ -6,7 +6,7 @@ namespace TerminalGame.Utils
     {
         public static bool CheckAndCreateDirectory(string path)
         {
-            if(!Directory.Exists(path))
+            if (!Directory.Exists(path))
             {
                 try
                 {
@@ -26,7 +26,7 @@ namespace TerminalGame.Utils
             int i = 1;
             string fileNameBase = $"Saves/save_{playerName}";
             string tryName = fileNameBase;
-            while(File.Exists($"{tryName}.tgs"))
+            while (File.Exists($"{tryName}.tgs"))
             {
                 tryName = $"{fileNameBase}({i++})";
             }

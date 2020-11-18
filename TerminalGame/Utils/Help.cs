@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TerminalGame.Utils
+﻿namespace TerminalGame.Utils
 {
     public class Help
     {

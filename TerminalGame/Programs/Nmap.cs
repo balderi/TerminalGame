@@ -27,13 +27,13 @@ namespace TerminalGame.Programs
         protected override void Run()
         {
             _isKill = false;
-            if(_args.Length < 1)
+            if (_args.Length < 1)
             {
                 _target = World.World.GetInstance().Player.ConnectedComp;
             }
             else
             {
-                if(World.World.GetInstance().TryGetComputerByIp(_args[0], out var computer))
+                if (World.World.GetInstance().TryGetComputerByIp(_args[0], out var computer))
                 {
                     _target = computer;
                 }
@@ -82,14 +82,14 @@ namespace TerminalGame.Programs
                 return;
             }
 
-            if(_counter == _textToWrite.Length)
+            if (_counter == _textToWrite.Length)
             {
                 Kill();
                 _timer.Stop();
                 return;
             }
 
-            if(_counter == 5)
+            if (_counter == 5)
             {
                 foreach (var port in _target.OpenPorts)
                 {

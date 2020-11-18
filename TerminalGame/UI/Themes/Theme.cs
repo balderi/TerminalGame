@@ -21,10 +21,10 @@ namespace TerminalGame.UI.Themes
         public Color NetworkMapMissionObjectiveSpinnerColor { get; private set; }
         public Color WarningColor { get; private set; }
 
-        public Theme(string themeName, Color? statusBarBackgroundColor = null, Color? moduleBackgroundColor = null, 
-            Color? moduleFontColor = null, Color? moduleHeaderBackgroundColor = null, Color? moduleHeaderFontColor = null, 
+        public Theme(string themeName, Color? statusBarBackgroundColor = null, Color? moduleBackgroundColor = null,
+            Color? moduleFontColor = null, Color? moduleHeaderBackgroundColor = null, Color? moduleHeaderFontColor = null,
             Color? moduleOutlineColor = null, Color? networkMapNodeColor = null, Color? networkMapHomeSpinnerColor = null,
-            Color? networkMapHoverSpinnerColor = null, Color? networkMapConnectedSpinnerColor = null, 
+            Color? networkMapHoverSpinnerColor = null, Color? networkMapConnectedSpinnerColor = null,
             Color? networkMapMissionObjectiveSpinnerColor = null, Color? warningColor = null)
         {
             ThemeName = themeName;

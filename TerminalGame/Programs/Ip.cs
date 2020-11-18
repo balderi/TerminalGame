@@ -30,18 +30,18 @@ namespace TerminalGame.Programs
             }
 
             // for ease of adding more ip objects later, if needed
-            switch(_args[0])
+            switch (_args[0])
             {
                 case "addr":
                 case "address":
                     {
-                        if(_args[1] == "show")
+                        if (_args[1] == "show")
                         {
                             Game.Terminal.WriteLine(World.World.GetInstance().Player.ConnectedComp.IP);
                             Kill();
                             return;
                         }
-                        if(_args[1] == "help")
+                        if (_args[1] == "help")
                         {
                             Game.Terminal.WriteLine("Usage: ip address [ show ]");
                             Kill();

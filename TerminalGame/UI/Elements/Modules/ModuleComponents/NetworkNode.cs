@@ -16,23 +16,23 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
         private float _rotationCW, _rotationCCW;
         private Point _spinnerS, _spinnerN, _spinnerL;
         private readonly NetworkMap _nMap;
-        
+
         public Computer Computer { get; private set; }
         public bool IsHovering { get; private set; }
         public NodeInfoBox InfoBox { get; private set; }
 
-        public NetworkNode(Game game, NetworkMap map, Point location, Point size, Computer computer, Texture2D texture, 
-            Dictionary<string, Texture2D> spinners, bool hasBorder = true, bool fadeIn = true) : 
+        public NetworkNode(Game game, NetworkMap map, Point location, Point size, Computer computer, Texture2D texture,
+            Dictionary<string, Texture2D> spinners, bool hasBorder = true, bool fadeIn = true) :
             base(game, location, size, hasBorder, fadeIn)
         {
             Computer = computer;
             _texture = texture;
             _networkNodeSpinners = spinners;
             _nMap = map;
-            _selectionRect = new Rectangle(new Point(Rectangle.Location.X + 4, Rectangle.Location.Y + 4), 
+            _selectionRect = new Rectangle(new Point(Rectangle.Location.X + 4, Rectangle.Location.Y + 4),
                 new Point(Rectangle.Width - 8, Rectangle.Height - 8));
-            InfoBox = new NodeInfoBox(Game, new Point(Rectangle.X + Rectangle.Width + 20, Rectangle.Y), 
-                new Point((int)FontManager.GetFont("FontXS").MeasureString(Computer.ToString()).X + 10, 
+            InfoBox = new NodeInfoBox(Game, new Point(Rectangle.X + Rectangle.Width + 20, Rectangle.Y),
+                new Point((int)FontManager.GetFont("FontXS").MeasureString(Computer.ToString()).X + 10,
                 FontManager.GetFont("FontS").LineSpacing * 3), Computer.ToString(), true, false);
         }
 
@@ -64,12 +64,12 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
             _missionObjectiveSpinnerColor = _themeManager.CurrentTheme.NetworkMapMissionObjectiveSpinnerColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1.5) + 1) * 0.5f + 0.2f);
 
             _currentColor = _themeManager.CurrentTheme.NetworkMapNodeColor * _opacity;
-            
+
             if (Computer == World.World.GetInstance().Player.PlayerComp)
             {
                 _currentColor = _themeManager.CurrentTheme.NetworkMapHomeSpinnerColor * _opacity;
             }
-            if(Computer.IsMissionObjective)
+            if (Computer.IsMissionObjective)
             {
                 _currentColor = _themeManager.CurrentTheme.NetworkMapMissionObjectiveSpinnerColor * _opacity;
             }
@@ -82,7 +82,7 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
             }
             if (_isHovering && _nMap.HoverNode == this)
             {
-                 _currentColor = _themeManager.CurrentTheme.NetworkMapHoverSpinnerColor * _opacity;
+                _currentColor = _themeManager.CurrentTheme.NetworkMapHoverSpinnerColor * _opacity;
 
             }
 
@@ -99,7 +99,7 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
         {
             if (!Computer.IsShownOnMap)
                 return;
-            
+
             _networkNodeSpinners.TryGetValue("ConnectedSpinner", out Texture2D connectedSpinner);
             _networkNodeSpinners.TryGetValue("PlayerSpinner", out Texture2D playerSpinner);
             _networkNodeSpinners.TryGetValue("HoverSpinner", out Texture2D hoverSpinner);
@@ -111,7 +111,7 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
             {
                 _spriteBatch.Draw(playerSpinner, new Rectangle(new Point(Rectangle.Location.X + (Rectangle.Width / 2), Rectangle.Location.Y + (Rectangle.Height / 2)), _spinnerS), null, _playerSpinnerColor, _rotationCW, new Vector2(playerSpinner.Width / 2, playerSpinner.Height / 2), SpriteEffects.None, 0);
             }
-            if(Computer.IsMissionObjective)
+            if (Computer.IsMissionObjective)
             {
                 _spriteBatch.Draw(missionSpinner, new Rectangle(new Point(Rectangle.Location.X + (Rectangle.Width / 2), Rectangle.Location.Y + (Rectangle.Height / 2)), _spinnerS), null, _missionObjectiveSpinnerColor, _rotationCW, new Vector2(hoverSpinner.Width / 2, hoverSpinner.Height / 2), SpriteEffects.None, 0);
             }

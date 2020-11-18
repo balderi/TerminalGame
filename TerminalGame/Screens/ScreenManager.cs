@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 
 namespace TerminalGame.Screens
@@ -36,7 +36,7 @@ namespace TerminalGame.Screens
         {
             if (Screens.ContainsKey(key))
             {
-                if(Screens.TryGetValue(key, out var val))
+                if (Screens.TryGetValue(key, out var val))
                 {
                     val.Dispose();
                 }
@@ -47,7 +47,7 @@ namespace TerminalGame.Screens
 
         public bool TryGetScreen(string screen, out Screen outScreen)
         {
-            if(Screens.TryGetValue(screen, out Screen retval))
+            if (Screens.TryGetValue(screen, out Screen retval))
             {
                 outScreen = retval;
                 return true;
@@ -57,7 +57,7 @@ namespace TerminalGame.Screens
 
         public void ChangeScreen(string name)
         {
-            if(TryGetScreen(name, out Screen screen))
+            if (TryGetScreen(name, out Screen screen))
             {
                 Console.WriteLine($"Switching to screen {name}");
                 PreviousScreen = CurrentScreen;

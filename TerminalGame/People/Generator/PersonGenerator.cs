@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using TerminalGame.Time;
 using TerminalGame.People.Utils;
+using TerminalGame.Time;
 
 namespace TerminalGame.People.Generator
 {
@@ -31,9 +31,9 @@ namespace TerminalGame.People.Generator
         public static string GenerateName(Gender gender)
         {
             string retval = "";
-            if(gender == Gender.Female)
+            if (gender == Gender.Female)
             {
-                
+
                 retval += _fNames[_rnd.Next(0, _fNames.Count)];
             }
             else
@@ -90,7 +90,7 @@ namespace TerminalGame.People.Generator
 
         public static int GenerateAge(AgeRange ageRange)
         {
-            switch(ageRange)
+            switch (ageRange)
             {
                 case AgeRange.Infant:
                     {

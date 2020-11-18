@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TerminalGame.Programs
 {
@@ -22,13 +20,13 @@ namespace TerminalGame.Programs
 
         protected override void Run()
         {
-            if(_args.Length < 1)
+            if (_args.Length < 1)
             {
                 Game.Terminal.WriteLine("mkdir: missing operand");
                 Kill();
                 return;
             }
-            if(_args.Length > 1)
+            if (_args.Length > 1)
             {
                 Game.Terminal.WriteLine("mkdir: too many operands");
                 Kill();

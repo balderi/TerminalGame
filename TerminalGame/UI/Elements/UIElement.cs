@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Content;
 using System;
 using TerminalGame.UI.Themes;
 
@@ -96,7 +96,7 @@ namespace TerminalGame.UI.Elements
         public override void Initialize()
         {
             BackgroundColor = _themeManager.CurrentTheme.ModuleBackgroundColor;
-            BorderColor     = _themeManager.CurrentTheme.ModuleOutlineColor;
+            BorderColor = _themeManager.CurrentTheme.ModuleOutlineColor;
             base.Initialize();
         }
 
@@ -119,11 +119,11 @@ namespace TerminalGame.UI.Elements
 
             if (!Enabled)
                 return;
-            
-            _previousMouseState = _currentMouseState;
-            _currentMouseState  = Mouse.GetState();
 
-            var mouseRectangle  = new Rectangle(_currentMouseState.X, 
+            _previousMouseState = _currentMouseState;
+            _currentMouseState = Mouse.GetState();
+
+            var mouseRectangle = new Rectangle(_currentMouseState.X,
                                                 _currentMouseState.Y, 1, 1);
 
             _isHovering = false;
@@ -176,8 +176,8 @@ namespace TerminalGame.UI.Elements
 
             _spriteBatch.Draw(Globals.Utils.DummyTexture(), Rectangle,
                               BackgroundColor * _opacity);
-            
-            if(HasBorder)
+
+            if (HasBorder)
                 Globals.Utils.DrawOuterBorder(_spriteBatch, Rectangle, Globals.Utils.DummyTexture(), 1,
                                           _themeManager.CurrentTheme.ModuleOutlineColor * _opacity);
         }
@@ -189,7 +189,7 @@ namespace TerminalGame.UI.Elements
         {
             _fadeTarget = 0.5f;
             _fadingDown = true;
-            _fadingUp   = false;
+            _fadingUp = false;
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace TerminalGame.UI.Elements
         public void UnDim()
         {
             _fadeTarget = 1.0f;
-            _fadingUp   = true;
+            _fadingUp = true;
             _fadingDown = false;
         }
 
@@ -209,7 +209,7 @@ namespace TerminalGame.UI.Elements
         {
             _fadeTarget = 0.0f;
             _fadingDown = true;
-            _fadingUp   = false;
+            _fadingUp = false;
         }
 
         /// <summary>
@@ -218,7 +218,7 @@ namespace TerminalGame.UI.Elements
         public void FadeIn()
         {
             _fadeTarget = 1.0f;
-            _fadingUp   = true;
+            _fadingUp = true;
             _fadingDown = false;
         }
 
@@ -232,13 +232,13 @@ namespace TerminalGame.UI.Elements
             _opacity += delta;
             if (_opacity > 1.0f)
             {
-                _opacity  = 1.0f;
+                _opacity = 1.0f;
                 _fadingUp = false;
                 return;
             }
             if (_opacity > target)
             {
-                _opacity  = target;
+                _opacity = target;
                 _fadingUp = false;
                 return;
             }
@@ -254,13 +254,13 @@ namespace TerminalGame.UI.Elements
             _opacity -= delta;
             if (_opacity < 0.0f)
             {
-                _opacity    = 0.0f;
+                _opacity = 0.0f;
                 _fadingDown = false;
                 return;
             }
             if (_opacity < target)
             {
-                _opacity    = target;
+                _opacity = target;
                 _fadingDown = false;
                 return;
             }

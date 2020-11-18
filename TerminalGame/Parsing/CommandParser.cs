@@ -32,7 +32,7 @@ namespace TerminalGame.Parsing
         {
             if (textArg)
             {
-                if(!command.Contains("\""))
+                if (!command.Contains("\""))
                 {
                     token = new CommandToken { Command = "error", Args = new string[0] };
                     return false;

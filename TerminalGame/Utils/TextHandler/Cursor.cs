@@ -65,7 +65,7 @@ namespace TerminalGame.Utils.TextHandler
 
         private int textCursor;
         private int? selectedChar;
-        
+
         public Cursor(TextBox textBox, Color color, Color selection, Rectangle icon, int ticksPerBlink)
         {
             this.textBox = textBox;
@@ -77,7 +77,7 @@ namespace TerminalGame.Utils.TextHandler
             this.ticksPerBlink = ticksPerBlink;
             ticks = 0;
         }
-        
+
         public void Update()
         {
             ticks++;
@@ -90,7 +90,7 @@ namespace TerminalGame.Utils.TextHandler
             visible = !visible;
             ticks = 0;
         }
-        
+
         public void Draw(SpriteBatch spriteBatch)
         {
             // Top left corner of the text area.

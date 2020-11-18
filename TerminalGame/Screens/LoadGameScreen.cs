@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using TerminalGame.UI.Elements.Buttons;
 using TerminalGame.Utils;
 
@@ -58,14 +58,14 @@ namespace TerminalGame.Screens
         protected override void LoadContent()
         {
             base.LoadContent();
-            if(!IO.CheckAndCreateDirectory("Saves"))
+            if (!IO.CheckAndCreateDirectory("Saves"))
             {
                 throw new Exception("Error while creating save directory.");
             }
             _smoke = Content.Load<Texture2D>("Graphics/Textures/Backgrounds/smoke");
             _saveGames = new List<string>();
             int i = 0;
-            foreach(string file in Directory.EnumerateFiles("Saves"))
+            foreach (string file in Directory.EnumerateFiles("Saves"))
             {
                 Button b = new Button(Game, Path.GetFileNameWithoutExtension(file), new Point(100, 200 + (i++ * 75)), new Point(400, 50), false);
                 BUTTONS.Add(b);

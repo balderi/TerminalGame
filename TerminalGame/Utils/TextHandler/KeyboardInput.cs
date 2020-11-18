@@ -1,9 +1,9 @@
 ﻿//From https://github.com/UnterrainerInformatik/Monogame-Textbox <3 -b
 
-using System;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Linq;
 
 namespace TerminalGame.Utils.TextHandler
 {
@@ -31,31 +31,31 @@ namespace TerminalGame.Utils.TextHandler
         public class CharacterEventArgs : EventArgs
         {
             public char Character { get; private set; }
-            
+
             public CharacterEventArgs(char character)
             {
                 Character = character;
             }
         }
-        
+
         public class KeyEventArgs : EventArgs
         {
             public Keys KeyCode { get; private set; }
-            
+
             public KeyEventArgs(Keys keyCode)
             {
                 KeyCode = keyCode;
             }
         }
-        
+
         public delegate void CharEnteredHandler(object sender, CharacterEventArgs e, KeyboardState ks);
-        
+
         public delegate void KeyEventHandler(object sender, KeyEventArgs e, KeyboardState ks);
-        
+
         public static readonly char[] SPECIAL_CHARACTERS = { '\a', '\b', '\n', '\r', '\f', '\t', '\v' };
 
         private static Game game;
-        
+
         public static event CharEnteredHandler CharPressed;
         public static event KeyEventHandler KeyPressed;
         public static event KeyEventHandler KeyDown;
@@ -69,7 +69,7 @@ namespace TerminalGame.Utils.TextHandler
         private static int repsPerSec;
         private static DateTime lastRep = DateTime.Now;
         private static bool filterSpecialCharacters;
-        
+
         public static void Initialize(Game g, float timeUntilRepInMilliseconds, int repsPerSecond,
             bool filterSpecialCharactersFromCharPressed = true)
         {
@@ -115,7 +115,7 @@ namespace TerminalGame.Utils.TextHandler
                 return state.IsKeyDown(Keys.LeftAlt) || state.IsKeyDown(Keys.RightAlt);
             }
         }
-        
+
         private static void TextEntered(object sender, TextInputEventArgs e)
         {
             if (CharPressed != null)
@@ -126,7 +126,7 @@ namespace TerminalGame.Utils.TextHandler
                 }
             }
         }
-        
+
         public static void Update()
         {
             KeyboardState keyState = Keyboard.GetState();
@@ -188,7 +188,7 @@ namespace TerminalGame.Utils.TextHandler
         {
             return prevKeyState.IsKeyDown(key) && keyState.IsKeyUp(key);
         }
-        
+
         public static void Dispose()
         {
             CharPressed = null;

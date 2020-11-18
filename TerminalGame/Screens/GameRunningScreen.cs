@@ -1,7 +1,7 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using TerminalGame.Time;
 using TerminalGame.UI.Elements;
 using TerminalGame.UI.Elements.Modules;
@@ -38,7 +38,7 @@ namespace TerminalGame.Screens
 
             StatusBar statusBar = new StatusBar(Game, new Point(Globals.Settings.GameWidth / 3, 1),
                 new Point(Globals.Settings.GameWidth - terminal.Rectangle.Width - 5, 52), "status", false, false);
-            
+
             RemoteView remoteView = new RemoteView(Game, new Point(terminal.Rectangle.Width + 5, statusBar.Rectangle.Height + 3),
                 new Point((int)(Globals.Settings.GameWidth * 0.75) - terminal.Rectangle.Width - 7, Globals.Settings.GameHeight - statusBar.Rectangle.Height - networkMap.Rectangle.Height - 8), "RemoteView v0.1");
 
@@ -108,7 +108,7 @@ namespace TerminalGame.Screens
                 }
             }
 
-            if(_prevState.IsKeyDown(Keys.Escape) && _newState.IsKeyUp(Keys.Escape))
+            if (_prevState.IsKeyDown(Keys.Escape) && _newState.IsKeyUp(Keys.Escape))
             {
                 ScreenManager.GetInstance().ChangeScreen("mainMenu");
             }

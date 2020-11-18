@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using TerminalGame.Utils;
 
 namespace TerminalGame.People.Generator
@@ -13,7 +11,7 @@ namespace TerminalGame.People.Generator
         public static string GeneratePassword(bool random = true)
         {
             if (random)
-                return Generators.GeneratePassword(_rnd.Next(4,12));
+                return Generators.GeneratePassword(_rnd.Next(4, 12));
             else
             {
                 var pw = File.ReadAllLines("Content/Data/passwords.txt");

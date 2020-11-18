@@ -43,13 +43,13 @@ namespace TerminalGame.Utils.TextHandler
                 IsDirty = true;
             }
         }
-        
+
         public int MaxLength { get; }
-        
+
         public bool IsDirty { get; set; }
 
         private readonly char[] _char;
-        
+
         public Text(int maxLength)
         {
             MaxLength = maxLength;
@@ -58,7 +58,7 @@ namespace TerminalGame.Utils.TextHandler
 
             IsDirty = true;
         }
-        
+
         public void InsertCharacter(int location, char character)
         {
             ValidateEditRange(location, location);
@@ -80,7 +80,7 @@ namespace TerminalGame.Utils.TextHandler
             Length++;
             IsDirty = true;
         }
-        
+
         public void Replace(int start, int end, string replacement)
         {
             ValidateEditRange(start, end);
@@ -95,7 +95,7 @@ namespace TerminalGame.Utils.TextHandler
 
             IsDirty = true;
         }
-        
+
         public void RemoveCharacters(int start, int end)
         {
             ValidateEditRange(start, end);

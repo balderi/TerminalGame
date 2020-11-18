@@ -22,7 +22,7 @@ namespace TerminalGame.UI.Themes
 
         public static ThemeManager GetInstance()
         {
-            if(_instance == null)
+            if (_instance == null)
             {
                 _instance = new ThemeManager();
             }
@@ -36,7 +36,7 @@ namespace TerminalGame.UI.Themes
 
         public void ChangeTheme(string themeName)
         {
-            foreach(Theme t in Themes)
+            foreach (Theme t in Themes)
             {
                 if (t.ThemeName.ToLower() == themeName.ToLower())
                     CurrentTheme = t;

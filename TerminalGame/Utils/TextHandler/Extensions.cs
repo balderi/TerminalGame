@@ -11,7 +11,7 @@ namespace TerminalGame.Utils.TextHandler
     public static class Extensions
     {
         private static Texture2D pixel;
-        
+
         public static Texture2D GetWhitePixel(this SpriteBatch spriteBatch)
         {
             if (pixel == null)
@@ -22,7 +22,7 @@ namespace TerminalGame.Utils.TextHandler
             }
             return pixel;
         }
-        
+
         public static int Clamp(this int value, int min, int max)
         {
             if (value > max)

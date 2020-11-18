@@ -1,7 +1,7 @@
 ﻿using System;
-using TerminalGame.People.Utils;
-using TerminalGame.Computers.Utils;
 using System.Runtime.Serialization;
+using TerminalGame.Computers.Utils;
+using TerminalGame.People.Utils;
 
 namespace TerminalGame.People
 {

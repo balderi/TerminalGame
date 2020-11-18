@@ -1,19 +1,18 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
 using TerminalGame.Companies;
 using TerminalGame.Computers;
 using TerminalGame.Computers.Utils;
 using TerminalGame.Files;
 using TerminalGame.Files.FileSystem;
+using TerminalGame.Files.FileSystem.Generator;
 using TerminalGame.People;
 using TerminalGame.People.Utils;
 using TerminalGame.Time;
-using TerminalGame.Utils;
-using TerminalGame.Files.FileSystem.Generator;
 
 namespace TerminalGame.World
 {
@@ -67,7 +66,7 @@ namespace TerminalGame.World
 
         private bool CheckIfNameExists(string name)
         {
-            foreach(Company c in CompanyList)
+            foreach (Company c in CompanyList)
             {
                 if (c.Name == name)
                     return true;
@@ -156,13 +155,13 @@ namespace TerminalGame.World
 
             List<string> test = SortByLength(names.AsEnumerable()).ToList();
 
-            foreach(string s in test)
+            foreach (string s in test)
                 Console.WriteLine(s);
 
             foreach (Computer c in Computers)
             {
                 c.Init(Game);
-                if(c.Owner == CompanyList[35])
+                if (c.Owner == CompanyList[35])
                 {
                     c.IsMissionObjective = true;
                 }
