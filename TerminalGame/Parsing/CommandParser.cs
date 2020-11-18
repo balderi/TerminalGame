@@ -133,10 +133,12 @@ namespace TerminalGame.Parsing
                     }
                 case "mkdir":
                     {
+                        Mkdir.GetInstance().Init(game, null, token.Args);
                         break;
                     }
                 case "touch":
                     {
+                        Touch.GetInstance().Init(game, null, token.Args);
                         break;
                     }
                 case "cat":
