@@ -1,108 +1,107 @@
 ﻿using System;
-using System.Threading;
 using TerminalGame.Computers;
 
 namespace TerminalGame.Programs
 {
-    class Nmap
+    class Nmap : Program
     {
-        private static Player _player = Player.GetInstance();
-        private static OS.OS _os = OS.OS.GetInstance();
-        private static Computer _playerComp = Player.GetInstance().PlayersComputer;
-        private static Computer _remoteComp;
-        private static UI.Modules.Terminal _terminal = _os.Terminal;
-        private static string[] _textToWrite;
-        private static Random _rnd;
+        private Random _rnd;
+        private Computer _target;
+        private string[] _textToWrite;
+        private int _latency, _counter;
 
-        public static int Execute(string ip = null)
+        private static Nmap _instance;
+
+        public static Nmap GetInstance()
         {
-            _rnd = new Random(DateTime.Now.Millisecond);
-            // TODO: Make latency dependent on distance from player computer. Maybe make this a property of computers.
-            int latency = _rnd.Next(10, 99);
-            _terminal.BlockInput();
-            //_player.PlayersComputer.FileSystem.ChangeDir("/");
-            //_player.PlayersComputer.FileSystem.ChangeDir("bin");
-            if (_player.PlayersComputer.FileSystem.TryFindFile("nmap", false))
+            if (_instance == null)
+                _instance = new Nmap();
+            return _instance;
+        }
+
+        private Nmap()
+        {
+            _rnd = new Random();
+        }
+
+        protected override void Run()
+        {
+            _isKill = false;
+            if(_args.Length < 1)
             {
-                //_player.PlayersComputer.FileSystem.ChangeDir("/");
-                if (String.IsNullOrEmpty(ip))
-                {
-                    _remoteComp = _player.ConnectedComputer;
-                    ip = _remoteComp.Name;
-                }
-
-                _terminal.Write("\nStarting Nmap scan for " + ip);
-                Thread.Sleep(20 * latency);
-                if (HostExists(ip))
-                {
-                    _textToWrite = new string[]
-                    {
-                        "\nNmap scan report for " + _remoteComp.Name + " (" + _remoteComp.IP + ")",
-                        "\nHost is up (0." + latency + "s latency).",
-                        "\nNot shown: " + (1000 - _remoteComp.OpenPorts.Count) + " filtered ports",
-                        "\n",
-                        "\nPORT   STATE  SERVICE",
-                        "\n",
-                        "\n",
-                        "\nDevice type: " + _remoteComp.ComputerType,
-                        "\nNo exact OS matches for host (test conditions non-ideal).",
-                        "\n",
-                        "\nNmap done: 1 IP address (1 host up) scanned",
-                        "\n",
-                    };
-
-                    for (int i = 0; i < _textToWrite.Length; i++)
-                    {
-                        if (i == 5)
-                        {
-                            foreach (var port in _remoteComp.OpenPorts)
-                            {
-                                _terminal.Write("\n" + PrettyPrintPorts(port.Key, port.Value));
-                                Thread.Sleep(5 * latency);
-                            }
-                        }
-                        else
-                        {
-                            if (_textToWrite[i].Contains("\n"))
-                                _terminal.Write(_textToWrite[i]);
-                            else
-                                _terminal.WritePartialLine(_textToWrite[i]);
-                            Thread.Sleep((int)(latency * _playerComp.Speed));
-                        }
-                    }
-                }
-                else
-                {
-                    Thread.Sleep(20 * latency);
-                    _terminal.Write("\nNo response from host " + ip + ".");
-                }
-
-                _terminal.UnblockInput();
-                return 0;
+                _target = World.World.GetInstance().Player.ConnectedComp;
             }
             else
             {
-                _terminal.Write("\nThe program \'nmap\' is currently not installed");
-                _terminal.UnblockInput();
-                //_player.PlayersComputer.FileSystem.ChangeDir("/");
-                return 1;
-            }
-        }
-
-        static bool HostExists(string ip)
-        {
-            foreach(var comp in Computers.Computers.GetInstance().ComputerList)
-            {
-                if (comp.IP == ip || comp.Name == ip)
+                if(World.World.GetInstance().TryGetComputerByIp(_args[0], out var computer))
                 {
-                    _remoteComp = comp;
-                    return true;
+                    _target = computer;
+                }
+                else
+                {
+                    Game.Terminal.WriteLine("Error: Host does not exist");
+                    Kill();
+                    return;
                 }
             }
-            return false;
+
+            Game.Terminal.WriteLine($"Starting Nmap scan for {_target.IP}");
+
+            _counter = 0;
+            _latency = _rnd.Next(10, 99);
+
+            _textToWrite = new string[]
+                    {
+                        $"Nmap scan report for {_target.Name.Replace("§¤§", " ")} ({_target.IP})",
+                        $"Host is up (0.{_latency}s latency).",
+                        $"Not shown: {1000 - _target.OpenPorts.Count} filtered ports",
+                        "",
+                        "PORT   STATE  SERVICE",
+                        "",
+                        "",
+                        $"Device type: " + _target.ComputerType,
+                        "No exact OS matches for host (test conditions non-ideal).",
+                        "",
+                        "Nmap done: 1 IP address (1 host up) scanned",
+                        "",
+                    };
+
+            _timer.AutoReset = true;
+            _timer.Interval = 20 * _latency;
+            _timer.Start();
         }
 
-        static string PrettyPrintPorts(int port, string service)
+        protected override void Timer_Tick(object sender, EventArgs e)
+        {
+            if (_isKill)
+            {
+                Console.WriteLine("command: Execution halted!");
+                Game.Terminal.WriteLine("^C");
+                _timer.Stop();
+                _isKill = false;
+                return;
+            }
+
+            if(_counter == _textToWrite.Length)
+            {
+                Kill();
+                _timer.Stop();
+                return;
+            }
+
+            if(_counter == 5)
+            {
+                foreach (var port in _target.OpenPorts)
+                {
+                    Game.Terminal.WriteLine(PrettyPrintPorts(port, ((Computers.Utils.KnownPorts)port).ToString()));
+                }
+            }
+
+            Game.Terminal.WriteLine(_textToWrite[_counter++]);
+            _timer.Interval = _latency;
+        }
+
+        private string PrettyPrintPorts(int port, string service)
         {
             string retval = "";
             retval += port + Spaces(port.ToString(), 7);
@@ -111,10 +110,10 @@ namespace TerminalGame.Programs
             return retval;
         }
 
-        static string Spaces(string text, int length)
+        private string Spaces(string text, int length)
         {
             string retval = "";
-            for(int i = 0; i < (length - text.Length); i++)
+            for (int i = 0; i < (length - text.Length); i++)
             {
                 retval += " ";
             }

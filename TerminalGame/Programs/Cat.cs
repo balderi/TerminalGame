@@ -1,33 +1,47 @@
 ﻿using System;
+using TerminalGame.Files;
 
 namespace TerminalGame.Programs
 {
-    class Cat
+    class Cat : Program
     {
-        private static Player _player = Player.GetInstance();
-        private static OS.OS _os = OS.OS.GetInstance();
-        private static UI.Modules.Terminal _terminal = _os.Terminal;
+        private static Cat _instance;
 
-        public static void Execute(string filename = null)
+        public static Cat GetInstance()
         {
-            if (_player.ConnectedComputer.PlayerHasRoot)
+            if (_instance == null)
+                _instance = new Cat();
+            return _instance;
+        }
+
+        private Cat()
+        {
+
+        }
+
+        protected override void Run()
+        {
+            _isKill = false;
+            if (_args.Length > 1)
             {
-                if (!String.IsNullOrEmpty(filename))
-                {
-                    if (_player.ConnectedComputer.FileSystem.TryFindFile(filename, false))
-                    {
-                        _player.ConnectedComputer.GenerateLog(_player.PlayersComputer, "accessed file", _player.ConnectedComputer.FileSystem.FindFile(filename, false));
-                        _terminal.Write("\n" + _player.ConnectedComputer.FileSystem.FindFile(filename, false).Execute());
-                        return;
-                    }
-                    _terminal.Write("\ncat: no such file or directory");
-                    return;
-                }
-                _terminal.Write("\nUsage: cat [FILE]");
+                Game.Terminal.WriteLine("Too many arguments: cat");
+                Kill();
                 return;
             }
+            if(World.World.GetInstance().Player.ConnectedComp.FileSystem.TryFindFile(_args[0], out File f))
+            {
+                Game.Terminal.WriteLine(f.ToString());
+            }
             else
-                _terminal.Write("\ncat: Permission denied");
+            {
+                Game.Terminal.WriteLine($"cat: {_args[0]}: no such file or directory");
+            }
+            Kill();
+        }
+
+        protected override void Timer_Tick(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

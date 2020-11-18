@@ -1,80 +1,131 @@
 ﻿using System;
-using System.Threading;
+using System.Text.RegularExpressions;
 using TerminalGame.Computers;
-using TerminalGame.Utilities;
+using TerminalGame.Utils;
 
 namespace TerminalGame.Programs
 {
-    class Connect
+    class Connect : Program
     {
-        private static Player _player = Player.GetInstance();
-        private static OS.OS _os = OS.OS.GetInstance();
-        private static Computer _playerComp = Player.GetInstance().PlayersComputer;
-        private static UI.Modules.Terminal _terminal = _os.Terminal;
-        private static string[] _textToWrite;
-        private static string _ip;
+        private string[] _connection;
+        private int _counter;
+        private bool _success;
 
-        public static void Execute(string ip = null)
+        private static Connect _instance;
+
+        public static Connect GetInstance()
         {
-            if (!String.IsNullOrEmpty(ip))
+            if (_instance == null)
+                _instance = new Connect();
+            return _instance;
+        }
+
+        private Connect()
+        {
+            
+        }
+
+        public override void Kill()
+        {
+            if (_success)
             {
-                _terminal.BlockInput();
-                _ip = ip;
-
-                if (ip == _player.ConnectedComputer.IP || ip == _player.ConnectedComputer.Name)
-                {
-                    _terminal.Write("\nYou are already connected to " + _player.ConnectedComputer.Name + "@" + _player.ConnectedComputer.IP);
-                    _terminal.UnblockInput();
-                    return;
-                }
-
-                _textToWrite = new string[]
-                {
-                    "\nEstablishing connection to " + ip,
-                    ".",
-                    ".",
-                    "."
-                };
-
-                _os.NetworkMap.IsActive = false;
-                bool conn = false;
-
-                for (int i = 0; i < _textToWrite.Length; i++)
-                {
-                    if (_textToWrite[i].Contains("\n"))
-                        _terminal.Write(_textToWrite[i]);
-                    else
-                        _terminal.WritePartialLine(_textToWrite[i]);
-                    Thread.Sleep((int)(500 * _playerComp.Speed));
-                }
-
-                foreach (Computer c in Computers.Computers.GetInstance().ComputerList)
-                {
-                    if (_ip == c.IP || _ip == c.Name)
-                    {
-                        conn = true;
-                        c.Connect(false);
-                        _terminal.Write("\nConnection established");
-
-                        GameManager.GetInstance().SetIntensity(1);
-                    }
-                }
-
-                if (!conn)
-                {
-                    _terminal.Write("\nCould not connect to " + _ip);
-
-                    GameManager.GetInstance().ResetIntensity();
-                }
-
-                _os.NetworkMap.IsActive = true;
-                _terminal.UnblockInput();
+                if (!MusicManager.GetInstance().IsSongPlaying("hackLoop"))
+                   MusicManager.GetInstance().ChangeSong("hackLoop", 0.1f);
             }
             else
+                MusicManager.GetInstance().FadeIn(0.01f);
+
+            base.Kill();
+        }
+
+        protected override void Run()
+        {
+            _success = false;
+            _isKill = false;
+            if (_args.Length < 1)
             {
-                _terminal.Write("\nUsage: connect [IP]");
+                Game.Terminal.WriteLine("Usage: connect [ IP ]");
+                Kill();
                 return;
             }
+            if (_args.Length > 1)
+            {
+                Game.Terminal.WriteLine("Too many arguments: connect");
+                Kill();
+                return;
+            }
+            if(!MusicManager.GetInstance().IsSongPlaying("hackLoop"))
+                MusicManager.GetInstance().FadeOut(0.005f);
+            Console.WriteLine("Attempting connection to host with IP {0}", _args[0]);
+            if(_args[0] == World.World.GetInstance().Player.ConnectedComp.IP)
+            {
+                Game.Terminal.WriteLine("You are already connected to this host");
+                Kill();
+                return;
+            }
+            if (!Regex.Match(_args[0], @"[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+").Success)
+            {
+                Game.Terminal.WriteLine("connect: Invalid IP");
+                Kill();
+                return;
+            }
+            _connection = new string[] { "Connecting to " + _args[0], ".", ".", ".",
+                "Connected to " + _args[0], "Error: no response from host", "Error: Host does not exist",
+                "You are already connected to this host" };
+            _timer.AutoReset = true;
+            _timer.Interval = 500;
+            _timer.Enabled = true;
+            _counter = 1;
+            Game.Terminal.WriteLine(_connection[0]);
+        }
+
+        protected override void Timer_Tick(object sender, EventArgs e)
+        {
+            if(_isKill)
+            {
+                Console.WriteLine("command: Execution halted!");
+                Game.Terminal.WriteLine("^C");
+                _timer.Stop();
+                _isKill = false;
+                return;
+            }
+
+            if(_counter < 4)
+                Game.Terminal.Write(_connection[_counter]);
+            else
+            {
+                foreach(Computer c in World.World.GetInstance().Computers)
+                {
+                    if (c.IP == _args[0])
+                    {
+                        if(c.IsPlayerConnected)
+                        {
+                            Game.Terminal.WriteLine(_connection[7]);
+                            Kill();
+                            _timer.Stop();
+                            return;
+                        }
+                        if(c.Connect())
+                        {
+                            Console.WriteLine("Connection established to {1}@{0}", c.IP, c.GetPublicName());
+                            _success = true;
+                            Game.Terminal.WriteLine(_connection[4]);
+                            Kill();
+                            _timer.Stop();
+                            return;
+                        }
+                        Game.Terminal.WriteLine(_connection[5]);
+                        Kill();
+                        _timer.Stop();
+                        return;
+                    }
+                }
+                Game.Terminal.WriteLine(_connection[6]);
+                Kill();
+                _timer.Stop();
+                return;
+            }
+            _counter++;
         }
     }
 }

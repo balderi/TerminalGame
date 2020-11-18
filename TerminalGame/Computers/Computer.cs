@@ -1,159 +1,219 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using TerminalGame.Utils;
+using TerminalGame.Computers.Utils;
+using TerminalGame.Companies;
+using TerminalGame.Files.FileSystem;
+using System.Runtime.Serialization;
+using TerminalGame.Tracers;
+using TerminalGame.Computers.Events;
 using System;
-using TerminalGame.Computers.FileSystems;
-using System.Collections.Generic;
-using TerminalGame.Utilities;
+using System.Linq;
+using TerminalGame.People;
+using TerminalGame.UI.Elements.Modules.ModuleComponents.RemoteViewData;
+using TerminalGame.UI.Elements.Modules.ModuleComponents.RemoteViewData.Generators;
 
 namespace TerminalGame.Computers
 {
-    class Computer
+    [DataContract(IsReference = true)]
+    public class Computer : IComputer
     {
-        public enum Type { Workstation, Server, Mainframe, Laptop }
-        public enum AccessLevel { root, user }
-        public Type ComputerType { get; private set; }
-        public AccessLevel Access { get; private set; }
-        public float Speed { get; private set; }
-        public string IP { get; private set; }
-        public string Name { get; private set; }
-        public string RootPassword { get; private set; }
-        public bool IsPlayerConnected { get; private set; }
-        public bool PlayerHasRoot { get; private set; }
-        public bool IsMissionObjective { get; private set; }
-        public bool IsShownOnMap { get; private set; }
-        public FileSystem FileSystem { get; private set; }
-        public List<Computer> LinkedComputers { get; private set; }
-        public string LinksToLoad { get; set; }
-        public Dictionary<int, string> OpenPorts { get; private set; }
-        public RemoteUI RemoteUI { get; private set; }
-        public float MapX { get; set; }
-        public float MapY { get; set; }
-        public float TraceTime { get; private set; }
-        public ActiveTracer Tracer { get; private set; }
+        // TODO: Value determining difficulty to break in/get traced/whatevs.
 
-        public event EventHandler<ConnectEventArgs> Connected;
-        public event EventHandler<ConnectEventArgs> Disonnected;
-        
+        #region fields
         private readonly int[] _defaultPorts = { 22, 25, 80, 443 };
-        private Random _random;
+        private bool _isInitialized;
+        private string _publicName;
+        private Random _rnd = new Random(); // TEMP
+        #endregion
 
-        public Computer(Type type, string ip, string name, string rootPassword, float traceTime)
-        {
-            ComputerType = type;
-            IP = ip;
-            Name = name;
-            RootPassword = rootPassword;
-            TraceTime = traceTime;
-            RemoteUI = CreateRemoteUI();
-            LinkedComputers = new List<Computer>();
-            Initialize();
-        }
-
-        public Computer(Type type, string ip, string name, string rootPassword, float traceTime, RemoteUI remoteUI) : this(type, ip, name, rootPassword, traceTime)
-        {
-            ComputerType = type;
-            IP = ip;
-            Name = name;
-            RootPassword = rootPassword;
-            RemoteUI = remoteUI;
-            LinkedComputers = new List<Computer>();
-            Initialize();
-        }
-
-        public Computer(Type type, string ip, string name, string rootPassword, float traceTime, FileSystem fileSystem) : this(type, ip, name, rootPassword, traceTime)
-        {
-            FileSystem = fileSystem;
-        }
-
-        public Computer(Type type, string ip, string name, string rootPassword, float traceTime, FileSystem fileSystem, int[] openPorts) : this(type, ip, name, rootPassword, traceTime, fileSystem)
-        {
-            OpenPorts = BuildPorts(openPorts);
-        }
-
-        private void Initialize()
-        {
-            IsShownOnMap = true;
-            _random = new Random(DateTime.Now.Millisecond);
-            if(OpenPorts == null)
-                OpenPorts = BuildPorts(_defaultPorts);
-            if(FileSystem == null)
-            {
-                FileSystem fs = new FileSystem();
-                fs.BuildBasicFileSystem();
-                FileSystem = fs;
-            }
-            Tracer = new ActiveTracer(TraceTime);
-        }
-
-        public void LoadLinks()
-        {
-            if(!String.IsNullOrEmpty(LinksToLoad))
-            {
-                string[] temp = LinksToLoad.Trim().Split(' ');
-                foreach(string s in temp)
-                {
-                    Link(Computers.GetInstance().ComputerList[Convert.ToInt32(s)]);
-                }
-            }
-        }
-
-        public void AbortTrace()
-        {
-            Tracer.StopTrace();
-        }
-
+        #region properties
         /// <summary>
-        /// Sets the player's current connection to this computer
+        /// Returns computer name with split-identifier.
+        /// To get the proper name, use the <c>GetPublicName</c> method instead.
         /// </summary>
-        /// <param name="GoingHome">Don't disconnect before connecting. Only used during game start, as there is no computer to disconnect from</param>
-        public void Connect(bool GoingHome = false)
+        [DataMember]
+        public string Name { get; set; }
+
+        [DataMember]
+        public string IP { get; set; }
+
+        [DataMember]
+        public string RootPassword { get; set; }
+
+        [DataMember]
+        public bool IsPlayerConnected { get; set; }
+
+        [DataMember]
+        public bool PlayerHasRoot { get; set; }
+
+        [DataMember]
+        public bool IsMissionObjective { get; set; }
+
+        [DataMember]
+        public bool IsShownOnMap { get; set; }
+
+        [DataMember]
+        public bool IsOnline { get; set; }
+
+        [DataMember]
+        public List<int> OpenPorts { get; set; }
+
+        [DataMember]
+        public float MapX { get; set; }
+
+        [DataMember]
+        public float MapY { get; set; }
+
+        [DataMember]
+        public AccessLevel AccessLevel { get; set; }
+
+        [DataMember]
+        public ComputerType ComputerType { get; set; }
+
+        [DataMember]
+        public Company Owner { get; set; }
+
+        [DataMember]
+        public FileSystem FileSystem { get; set; }
+
+        [DataMember]
+        public double TraceTime { get; set; }
+
+        [DataMember]
+        public List<User> Users { get; set; }
+
+        [DataMember]
+        public IRemoteViewData ViewData { get; set; }
+
+        public TerminalGame Game { get; set; }
+        #endregion
+
+        public event EventHandler<ConnectedEventArgs> OnConnected;
+        public event EventHandler<DisconnectedEventArgs> OnDisconnected;
+        public event EventHandler<IllegalActionEventArgs> OnIllegalAction;
+
+        public Computer()
         {
-            if (GoingHome)
-            {
-                Player.GetInstance().ConnectedComputer = this;
-                IsPlayerConnected = true;
-            }
+            
+        }
+
+        public Computer(string name, string ip = "", string rootPassword = "", FileSystem fileSystem = null)
+        {
+            Name = name;
+
+            if (string.IsNullOrWhiteSpace(ip))
+                IP = Generators.GenerateIP();
             else
+                IP = ip;
+
+            if (string.IsNullOrWhiteSpace(rootPassword))
+                RootPassword = Generators.GeneratePassword();
+            else
+                RootPassword = rootPassword;
+
+            FileSystem = fileSystem;
+
+            TraceTime = _rnd.NextDouble();
+
+            _isInitialized = false;
+        }
+
+        public Computer(string name, int[] ports, ComputerType type, string ip = "", string rootPassword = "", FileSystem fileSystem = null) : this(name, ip, rootPassword, fileSystem)
+        {
+            OpenPorts = BuildPorts(ports);
+            ComputerType = type;
+        }
+
+        public Computer (string name, int[] ports, ComputerType type, Company owner, string ip = "", string rootPassword = "", FileSystem fileSystem = null) : this(name, ip, rootPassword, fileSystem)
+        {
+            OpenPorts = BuildPorts(ports);
+            ComputerType = type;
+            Owner = owner;
+        }
+
+        public void Init(TerminalGame game)
+        {
+            if(!_isInitialized)
             {
-                Player.GetInstance().ConnectedComputer.Disconnect(true);
-                Player.GetInstance().ConnectedComputer = this;
-                IsPlayerConnected = true;
+                if (ViewData == null)
+                    ViewData = RemoteViewDataGenerator.GetDefaultViewData(this);
+                IsPlayerConnected = false;
+                PlayerHasRoot = false;
+                IsMissionObjective = false;
+                IsShownOnMap = true;
+                IsOnline = true;
+                Game = game;
+                SetPublicName();
+                _isInitialized = true;
             }
-            Connected?.Invoke(null, new ConnectEventArgs(IP, PlayerHasRoot));
-            Console.WriteLine("CONN: Connected to " + IP);
+        }
+
+        public string GetPublicName()
+        {
+            return _publicName;
+        }
+
+        public void SetPublicName()
+        {
+            _publicName = Name.Contains("§¤§") ? Name.Replace("§¤§", "\n") : Name + "\n" + ComputerType.ToString();
         }
 
         /// <summary>
-        /// Disconnects the player from this computer.
+        /// Connect the player to this computer
         /// </summary>
-        /// <param name="reconnect">Only set to true when called from Connect.</param>
-        public void Disconnect(bool reconnect = false)
+        /// <returns><c>true</c> if connection sucessful. <c>false</c> otherwise.</returns>
+        public bool Connect()
         {
-            IsPlayerConnected = false;
-            Tracer.StopTrace();
-            Disonnected?.Invoke(null, new ConnectEventArgs(IP, PlayerHasRoot));
-            Console.WriteLine("DISC: Disconnecting from " + IP);
-            if (!reconnect)
+            if (IsOnline)
             {
-                Player.GetInstance().PlayersComputer.Connect(true);
-            }
-        }
-
-        public void DoOffensiveAction()
-        {
-            if (!PlayerHasRoot)
-            {
-                Tracer.StartTrace();
-            }
-        }
-
-        public bool Login(string user, string pass)
-        {
-            if((user == "root" || user == "admin") && pass == RootPassword)
-            {
-                GetRoot();
+                World.World.GetInstance().Player.ConnectedComp.Disconnect();
+                World.World.GetInstance().Player.ConnectedComp = this;
+                IsPlayerConnected = true;
+                OnConnected?.Invoke(this, new ConnectedEventArgs(World.World.GetInstance().CurrentGameTime));
                 return true;
             }
+
             return false;
+        }
+
+        /// <summary>
+        /// Disconnect the player from this computer
+        /// </summary>
+        public void Disconnect(bool forced = false)
+        {
+            World.World.GetInstance().Player.ConnectedComp = World.World.GetInstance().Player.PlayerComp;
+            IsPlayerConnected = false;
+            if(ActiveTracer.GetInstance().IsActive)
+                ActiveTracer.GetInstance().StopTrace();
+            OnDisconnected?.Invoke(this, new DisconnectedEventArgs(World.World.GetInstance().CurrentGameTime));
+            if(forced)
+            {
+                Game.Terminal.WriteLine("Connection closed by remote host");
+                MusicManager.GetInstance().ChangeSong("gameBgm", 0.5f);
+            }
+        }
+
+        /// <summary>
+        /// Attempt to log in on this computer
+        /// </summary>
+        /// <param name="user">Username</param>
+        /// <param name="pass">Password</param>
+        /// <returns><c>true</c> if user/pass combination is correct, <c>false</c> otherwise</returns>
+        public bool Login(string user, string pass)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// To be called when a user performs an illegal action on this computer.
+        /// </summary>
+        public void PerformIllegalAction()
+        {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            if(this != World.World.GetInstance().Player.PlayerComp)
+                ActiveTracer.GetInstance().StartTrace(TraceTime); // TODO: base tracetime on computer difficulty or something
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            OnIllegalAction?.Invoke(this, new IllegalActionEventArgs(World.World.GetInstance().CurrentGameTime));
         }
 
         /// <summary>
@@ -182,139 +242,40 @@ namespace TerminalGame.Computers
         public void RemoveAsObjective() => IsMissionObjective = false;
 
         /// <summary>
-        /// Get a list of open ports on the computer as a <c>int, string</c> dictionary.
+        /// Get a list of open ports on the computer.
         /// </summary>
-        /// <returns>A list of open ports as a <c>int, string</c> dictionary.</returns>
-        public Dictionary<int, string> GetOpenPorts() => OpenPorts;
+        /// <returns>A list of open ports.</returns>
+        public List<int> GetOpenPorts() => OpenPorts;
 
         /// <summary>
         /// Checks whether or nat a given port is open on the computer.
         /// </summary>
         /// <param name="port">The port number as <c>int</c></param>
         /// <returns><c>true</c> if the port is open, otherwise <c>false</c>.</returns>
-        public bool CheckPortOpen(int port)
-        {
-            foreach(int key in OpenPorts.Keys)
-            {
-                if (key == port)
-                    return true;
-            }
-            return false;
-        }
+        public bool CheckPortOpen(int port) => OpenPorts.Exists(x => x == port);
 
         /// <summary>
-        /// Build the dictionary of open ports from array.
+        /// Build a list of open ports from array.
         /// </summary>
         /// <param name="ports"><c>int array</c> of open ports.</param>
-        /// <returns>A list of open ports as a <c>int, string</c> dictionary.</returns>
-        /// <remarks>This should probably be private.</remarks>
-        public Dictionary<int,string> BuildPorts(int[] ports)
+        /// <returns>A list of open ports.</returns>
+        public List<int> BuildPorts(int[] ports) =>  ports.ToList();
+
+        public override string ToString()
         {
-            var retval = new Dictionary<int, string>();
-            foreach(int port in ports)
+            return _publicName + "\n" + IP;
+        }
+
+        public void Tick()
+        {
+            if(FileSystem.RootDir == null)
             {
-                retval.Add(port, Enum.IsDefined(typeof(KnownPorts), port) ? ((KnownPorts)port).ToString() : "Unknown");
+                if(IsPlayerConnected)
+                {
+                    Disconnect(true);
+                }
+                IsOnline = false;
             }
-            return retval;
         }
-
-        public int[] GetPortsArray()
-        {
-            int length = OpenPorts.Count;
-            var retval = new int[length];
-            int i = 0;
-            foreach(KeyValuePair<int, string> port in OpenPorts)
-            {
-                retval[i++] = port.Key;
-            }
-            return retval;
-        }
-
-        public string GetPortsString()
-        {
-            string retval = "";
-            var ports = GetPortsArray();
-            int length = ports.Length;
-            for(int i = 0; i < length; i++)
-            {
-                retval += " " + ports[i];
-            }
-
-            return retval;
-        }
-
-        private RemoteUI CreateRemoteUI()
-        {
-            return new RemoteUI(this);
-        }
-
-        /// <summary>
-        /// Set the speed of the computer.
-        /// </summary>
-        /// <param name="speed">The new computer speed.</param>
-        /// <remarks>This is not fully implemented yet.</remarks>
-        public void SetSpeed(float speed) => Speed = speed;
-
-        /// <summary>
-        /// Change the speed of the comuter by a percentage.
-        /// </summary>
-        /// <param name="changePercentage">The percentage to change the speed by.</param>
-        public void ChangeSpeed(float changePercentage) => Speed *= (1 + changePercentage);
-
-        /// <summary>
-        /// Set a new password.
-        /// </summary>
-        /// <param name="password">The new password.</param>
-        public void ChangePassword(string password) => RootPassword = password;
-
-        /// <summary>
-        /// Link this computer to a different computer.
-        /// Also creates a visual link in the for of a line on the network map.
-        /// </summary>
-        /// <param name="computer">The computer to link this to.</param>
-        /// <remarks>Not fully implemented.</remarks>
-        public void Link(Computer computer)
-        {
-            if (!LinkedComputers.Contains(computer))
-                LinkedComputers.Add(computer);
-        }
-
-        /// <summary>
-        /// For generic actions
-        /// </summary>
-        /// <param name="Source">Source system</param>
-        /// <param name="Action">The action performed e.g. gained root</param>
-        public void GenerateLog(Computer Source, string Action)
-        {
-            FileSystem.AddFileToDir("log", String.Format("{0} {1} {2}", DateTime.Now.ToShortTimeString(), Source.IP, Action).Replace(' ', '_'), String.Format("{0} {1}", DateTime.Now.ToShortTimeString(), Source.IP, Action));
-        }
-
-        /// <summary>
-        /// For actions on files
-        /// </summary>
-        /// <param name="Source">Source system</param>
-        /// <param name="Action">The action performed e.g. deleted file</param>
-        /// <param name="AffectedFile">The affected file</param>
-        public void GenerateLog(Computer Source, string Action, File AffectedFile)
-        {
-            FileSystem.AddFileToDir("log", String.Format("{0} {1} {2}", DateTime.Now.ToShortTimeString(), Source.IP, Action, AffectedFile.Name).Replace(' ', '_'), String.Format("{0} {1}", DateTime.Now.ToShortTimeString(), Source.IP, Action, AffectedFile.Name));
-        }
-
-        /// <summary>
-        /// For traffic routing logs, when e.g. used as proxy
-        /// </summary>
-        /// <param name="Source">Source system</param>
-        /// <param name="Dest">Destination system</param>
-        public void GenerateLog(Computer Source, Computer Dest)
-        {
-
-        }
-
-        /// <summary>
-        /// Grant the player eleveted (root) permission on this computer.
-        /// </summary>
-        public void GetRoot() => PlayerHasRoot = true;
-
-        public void Update(GameTime gameTime) => Access = PlayerHasRoot ? AccessLevel.root : AccessLevel.user;
     }
 }
