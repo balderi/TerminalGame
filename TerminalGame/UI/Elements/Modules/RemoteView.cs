@@ -6,11 +6,11 @@ using TerminalGame.Utils;
 
 namespace TerminalGame.UI.Elements.Modules
 {
-    class RemoteView : Module
+    public class RemoteView : Module
     {
         private Player _player;
         private Computer _computer;
-        private string _text;
+        //private string _text;
         private SpriteFont _font;
 
         public RemoteView(Game game, Point location, Point size, string title, bool hasHeader = true, bool hasBorder = true) : base(game, location, size, title, hasHeader, hasBorder)
@@ -23,13 +23,14 @@ namespace TerminalGame.UI.Elements.Modules
             _font = FontManager.GetFont("FontM");
             _player = World.World.GetInstance().Player;
             _computer = _player.ConnectedComp;
-            _text = SetString();
+            //_text = SetString();
         }
 
         public override void ScissorDraw(GameTime gameTime)
         {
             base.ScissorDraw(gameTime);
-            _spriteBatch.DrawString(_font, _text, new Vector2(Rectangle.X + 5, Rectangle.Y + 25), Color.White * _opacity);
+            _computer?.ViewData.Draw(_spriteBatch, Rectangle);
+            //_spriteBatch.DrawString(_font, _text, new Vector2(Rectangle.X + 5, Rectangle.Y + 25), Color.White * _opacity);
         }
 
         public override void Update(GameTime gameTime)
@@ -38,35 +39,14 @@ namespace TerminalGame.UI.Elements.Modules
             if (_computer != _player.ConnectedComp)
             {
                 _computer = _player.ConnectedComp;
-                _text = SetString();
+                _computer.ViewData.Update(gameTime);
+                //_text = SetString();
             }
         }
 
         protected override void LoadContent()
         {
             base.LoadContent();
-        }
-
-        private string SetString()
-        {
-            try
-            {
-                return $"Connected to:\n{_computer.Name.Replace("§¤§", "\n")}\nIP: {_computer.IP}\n" +
-                       $"Company: {_computer.Owner.Name}\nOwner:\n{_computer.Owner.Owner}\nAdmin:" +
-                       $"\n{_computer.Owner.Admin}";
-            }
-            catch(Exception e)
-            {
-                //Console.WriteLine("Trying to fix the world...");
-                //World.World.GetInstance().FixWorld();
-                //return SetString();
-                Console.WriteLine(e.Message + " - ignore this (localhost has no company).");
-                return $"Connected to: {_computer.Name.Replace("§¤§", "\n")}\n" +
-                       $"          IP: {_computer.IP}\n" +
-                        "     Company: ?\n" +
-                        "       Owner: ?\n" +
-                        "       Admin: ?\n";
-            }
         }
     }
 }

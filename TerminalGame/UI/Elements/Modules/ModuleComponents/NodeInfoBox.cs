@@ -4,7 +4,7 @@ using TerminalGame.Utils;
 
 namespace TerminalGame.UI.Elements.Modules.ModuleComponents
 {
-    class NodeInfoBox : UIElement
+    public class NodeInfoBox : UIElement
     {
         private SpriteFont _labelFont;
         private readonly string _text;

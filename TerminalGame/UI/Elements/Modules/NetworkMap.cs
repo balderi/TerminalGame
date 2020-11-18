@@ -9,7 +9,7 @@ using TerminalGame.Utils;
 
 namespace TerminalGame.UI.Elements.Modules
 {
-    class NetworkMap : Module
+    public class NetworkMap : Module
     {
         private World.World _world;
         private List<NetworkNode> _networkNodes;

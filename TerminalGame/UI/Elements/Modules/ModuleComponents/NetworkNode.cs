@@ -7,7 +7,7 @@ using TerminalGame.Utils;
 
 namespace TerminalGame.UI.Elements.Modules.ModuleComponents
 {
-    class NetworkNode : UIElement
+    public class NetworkNode : UIElement
     {
         private readonly Texture2D _texture;
         private readonly Dictionary<string, Texture2D> _networkNodeSpinners;

@@ -7,7 +7,7 @@ using TerminalGame.Utils;
 
 namespace TerminalGame.UI.Elements.Modules
 {
-    class StatusBar : Module
+    public class StatusBar : Module
     {
         private double _dateWidth;
         private Button _pause, _realTime, _single, _double, _triple;

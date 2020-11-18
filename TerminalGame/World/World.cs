@@ -12,6 +12,8 @@ using TerminalGame.Files.FileSystem;
 using TerminalGame.People;
 using TerminalGame.People.Utils;
 using TerminalGame.Time;
+using TerminalGame.Utils;
+using TerminalGame.Files.FileSystem.Generator;
 
 namespace TerminalGame.World
 {
@@ -111,6 +113,11 @@ namespace TerminalGame.World
             bin.AddFile(new Files.File("remoteview", "remoteview executable", FileType.Binary, 61325));
             bin.AddFile(new Files.File("netmap", "netmap executable", FileType.Binary, 879820));
             pfs.RootDir.AddFile(bin);
+
+            Company mCorp = new Company("Mission Corp");
+            Computer mComp = new Computer("Mission Hub", new int[] { 80 }, ComputerType.Server, mCorp, "123.123.123.123", "swordfish", FileSystemGenerator.GenerateDefaultFilesystem());
+            mCorp.GetComputers.Add(mComp);
+            CompanyList.Add(mCorp);
 
             Company pc = new Company("Unknown", new Person("Unknown", DateTime.Parse("1970-01-01"), (Gender)(-1), (EducationLevel)(-1)), new Person("Unknown", DateTime.Parse("1970-01-01"), (Gender)(-1), (EducationLevel)(-1)), 0, 0); ;
 

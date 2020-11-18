@@ -169,7 +169,7 @@ namespace TerminalGame.Files
 
         public string GetFileDetails(string nameOverride = null)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder(" ");
             if (FileType == FileType.Directory)
                 sb.Append('d');
             else

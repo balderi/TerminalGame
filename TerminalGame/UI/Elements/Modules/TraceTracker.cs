@@ -8,7 +8,7 @@ using TerminalGame.Utils;
 
 namespace TerminalGame.UI.Elements.Modules
 {
-    class TraceTracker : Module
+    public class TraceTracker : Module
     {
         private string _text;
         private SpriteFont _font;

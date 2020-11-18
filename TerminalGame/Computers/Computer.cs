@@ -9,6 +9,8 @@ using TerminalGame.Computers.Events;
 using System;
 using System.Linq;
 using TerminalGame.People;
+using TerminalGame.UI.Elements.Modules.ModuleComponents.RemoteViewData;
+using TerminalGame.UI.Elements.Modules.ModuleComponents.RemoteViewData.Generators;
 
 namespace TerminalGame.Computers
 {
@@ -80,6 +82,9 @@ namespace TerminalGame.Computers
         [DataMember]
         public List<User> Users { get; set; }
 
+        [DataMember]
+        public IRemoteViewData ViewData { get; set; }
+
         public TerminalGame Game { get; set; }
         #endregion
 
@@ -130,6 +135,8 @@ namespace TerminalGame.Computers
         {
             if(!_isInitialized)
             {
+                if (ViewData == null)
+                    ViewData = RemoteViewDataGenerator.GetDefaultViewData(this);
                 IsPlayerConnected = false;
                 PlayerHasRoot = true;
                 IsMissionObjective = false;
