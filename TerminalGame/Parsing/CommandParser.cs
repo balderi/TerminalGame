@@ -92,6 +92,7 @@ namespace TerminalGame.Parsing
                     }
                 case "help":
                     {
+                        game.Terminal.WriteLine(Utils.Help.GetHelp());
                         break;
                     }
                 case "reboot":
