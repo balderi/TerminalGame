@@ -28,7 +28,7 @@ namespace TerminalGame.UI.Elements.Modules
             {
                 SpriteFont headerFont = Utils.FontManager.GetFont("FontXS");
                 _header = new Header(_title, headerFont, Rectangle.Width,
-                                    (int)(headerFont.LineSpacing * 1.25), Rectangle.X, Rectangle.Y, GraphicsDevice);
+                                    (int)(headerFont.LineSpacing * 1.25), Rectangle.X, Rectangle.Y);
             }
         }
 
