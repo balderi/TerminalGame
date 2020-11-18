@@ -138,7 +138,7 @@ namespace TerminalGame.Computers
                 if (ViewData == null)
                     ViewData = RemoteViewDataGenerator.GetDefaultViewData(this);
                 IsPlayerConnected = false;
-                PlayerHasRoot = true;
+                PlayerHasRoot = false;
                 IsMissionObjective = false;
                 IsShownOnMap = true;
                 IsOnline = true;
@@ -170,7 +170,6 @@ namespace TerminalGame.Computers
                 World.World.GetInstance().Player.ConnectedComp = this;
                 IsPlayerConnected = true;
                 OnConnected?.Invoke(this, new ConnectedEventArgs(World.World.GetInstance().CurrentGameTime));
-                PerformIllegalAction(); // TEMP
                 return true;
             }
 

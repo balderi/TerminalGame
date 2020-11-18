@@ -26,6 +26,9 @@ namespace TerminalGame.Programs
             _opString = null;
             _args = null;
             _isInitialized = false;
+            _timer.Stop();
+            _timer.Elapsed -= Timer_Tick;
+            _timer.Dispose();
         }
 
         public virtual void Init(TerminalGame game, string optstring = null, string[] args = null)

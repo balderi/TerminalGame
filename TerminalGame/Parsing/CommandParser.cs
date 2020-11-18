@@ -168,6 +168,11 @@ namespace TerminalGame.Parsing
                         Nmap.GetInstance().Init(game, null, token.Args);
                         break;
                     }
+                case "sshnuke":
+                    {
+                        Sshnuke.GetIsntance().Init(game, null, token.Args);
+                        break;
+                    }
                 default:
                     {
                         game.Terminal.WriteLine(token.Command + " is not a recognized command");
