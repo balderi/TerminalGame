@@ -222,6 +222,7 @@ namespace TerminalGame.Files
                 string retval = Parent == null ? "." : ".\n..";
                 if (Children.Count > 0)
                 {
+                    Children.Sort();
                     foreach (var c in Children)
                     {
                         retval += "\n" + c.Name;
@@ -242,6 +243,7 @@ namespace TerminalGame.Files
                     sb.Append(Parent.GetFileDetails(".."));
                 if (Children.Count > 0)
                 {
+                    Children.Sort();
                     foreach (var c in Children)
                     {
                         sb.Append(c.GetFileDetails());
