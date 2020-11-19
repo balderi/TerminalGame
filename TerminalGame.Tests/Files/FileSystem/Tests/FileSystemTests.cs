@@ -99,7 +99,7 @@ namespace TerminalGameTest.Files.FileSystem.Tests
         {
             Assert.IsTrue(fs3.TryFindFileFromPath("dir/d1file1", out var path, out var file));
             Assert.AreEqual("/dir/", path);
-            Assert.AreEqual("d1file1", file);
+            Assert.AreEqual("d1file1", file.Name);
         }
 
         [Test]
@@ -107,7 +107,7 @@ namespace TerminalGameTest.Files.FileSystem.Tests
         {
             Assert.IsTrue(fs3.TryFindFileFromPath("dir/dir2/d2file1", out var path, out var file));
             Assert.AreEqual("/dir/dir2/", path);
-            Assert.AreEqual("d2file1", file);
+            Assert.AreEqual("d2file1", file.Name);
         }
 
         [Test]
@@ -115,7 +115,7 @@ namespace TerminalGameTest.Files.FileSystem.Tests
         {
             Assert.IsTrue(fs3.TryFindFileFromPath("dir/dir2", out var path, out var file));
             Assert.AreEqual("/dir/", path);
-            Assert.AreEqual("dir2", file);
+            Assert.AreEqual("dir2", file.Name);
         }
 
         [Test]

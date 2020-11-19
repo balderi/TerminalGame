@@ -48,10 +48,10 @@ namespace TerminalGame.Files.FileSystem
             return result != null;
         }
 
-        public bool TryFindFileFromPath(string filePath, out string path, out string file)
+        public bool TryFindFileFromPath(string filePath, out string path, out File file)
         {
             path = "";
-            file = "";
+            file = null;
             var origin = CurrentDir;
             var split = filePath.Split('/');
             var destdir = split.Length - 1;
@@ -64,9 +64,9 @@ namespace TerminalGame.Files.FileSystem
                 {
                     path = potentialPath;
                     ChangeCurrentDirFromPath(path);
-                    if (TryFindFile(potentialFile, out _))
+                    if (TryFindFile(potentialFile, out File f))
                     {
-                        file = potentialFile;
+                        file = f;
                         CurrentDir = origin;
                         return true;
                     }

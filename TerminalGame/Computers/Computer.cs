@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using TerminalGame.Companies;
 using TerminalGame.Computers.Events;
+using TerminalGame.Computers.Logging;
 using TerminalGame.Computers.Utils;
 using TerminalGame.Files.FileSystem;
 using TerminalGame.People;
@@ -168,6 +169,7 @@ namespace TerminalGame.Computers
             {
                 World.World.GetInstance().Player.ConnectedComp.Disconnect();
                 World.World.GetInstance().Player.ConnectedComp = this;
+                Logger.CreateLog(this, "connect", $"{World.World.GetInstance().Player.PlayerComp.IP} - connection established");
                 IsPlayerConnected = true;
                 OnConnected?.Invoke(this, new ConnectedEventArgs(World.World.GetInstance().CurrentGameTime));
                 return true;
@@ -183,6 +185,7 @@ namespace TerminalGame.Computers
         {
             World.World.GetInstance().Player.ConnectedComp = World.World.GetInstance().Player.PlayerComp;
             IsPlayerConnected = false;
+            Logger.CreateLog(this, "disconnect", $"{World.World.GetInstance().Player.PlayerComp.IP} - connection terminated");
             if (ActiveTracer.GetInstance().IsActive)
                 ActiveTracer.GetInstance().StopTrace();
             OnDisconnected?.Invoke(this, new DisconnectedEventArgs(World.World.GetInstance().CurrentGameTime));
