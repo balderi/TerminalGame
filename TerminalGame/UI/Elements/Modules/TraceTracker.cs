@@ -24,7 +24,7 @@ namespace TerminalGame.UI.Elements.Modules
         public override void ScissorDraw(GameTime gameTime)
         {
             base.ScissorDraw(gameTime);
-            _spriteBatch.DrawString(_font, _text, new Vector2(Rectangle.X + 5, Rectangle.Y + 25), Color.White * _opacity);
+            _spriteBatch.DrawString(_font, _text, new Vector2(Rectangle.X + 5, Rectangle.Y + 25), Color.White * Opacity);
         }
 
         public override void Update(GameTime gameTime)

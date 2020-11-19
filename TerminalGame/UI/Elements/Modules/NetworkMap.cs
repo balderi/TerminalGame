@@ -89,6 +89,7 @@ namespace TerminalGame.UI.Elements.Modules
             base.Update(gameTime);
             foreach (NetworkNode n in _networkNodes)
             {
+                n.Opacity = Opacity;
                 n.Update(gameTime);
             }
             if (HoverNode == null)

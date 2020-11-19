@@ -53,7 +53,7 @@ namespace TerminalGame.UI.Elements.Modules
 
             _textBox = new TextBox(_terminalInputArea, (int)(Rectangle.Width / _terminalFont.MeasureString("A").X) * 10,
                 "", GraphicsDevice, _terminalFont, Color.White, Color.Gray, 30);
-            _textBox.Renderer.Color = Color.White * _opacity;
+            _textBox.Renderer.Color = Color.White * Opacity;
             _textBox.Active = true;
             _textBox.EnterDown += Enter_Pressed;
             _textBox.UpArrow += Up_Pressed;
@@ -177,9 +177,9 @@ namespace TerminalGame.UI.Elements.Modules
             if (_computer != computer)
                 UpdateTextBox();
             KeyboardInput.Update();
-            _textBox.Renderer.Color = Color.White * _opacity;
-            _textBox.Cursor.Color = Color.White * _opacity;
-            _textBox.Cursor.Selection = Color.Gray * _opacity;
+            _textBox.Renderer.Color = Color.White * Opacity;
+            _textBox.Cursor.Color = Color.White * Opacity;
+            _textBox.Cursor.Selection = Color.Gray * Opacity;
             _textBox.Update();
         }
 
@@ -203,7 +203,7 @@ namespace TerminalGame.UI.Elements.Modules
             _textBox = new TextBox(_terminalInputArea, (int)(Rectangle.Width / _terminalFont.MeasureString("A").X) * 10,
                 "", GraphicsDevice, _terminalFont, Color.White, Color.Gray, 30);
 
-            _textBox.Renderer.Color = Color.White * _opacity;
+            _textBox.Renderer.Color = Color.White * Opacity;
             _textBox.Active = true;
             _textBox.EnterDown += Enter_Pressed;
             _textBox.UpArrow += Up_Pressed;
@@ -272,10 +272,10 @@ namespace TerminalGame.UI.Elements.Modules
             string text = HistoryToString(_output);
             _spriteBatch.DrawString(_terminalFont, text,
                 new Vector2(_terminalOutputArea.X, _terminalOutputArea.Y + _terminalOutputArea.Height - _terminalFont.MeasureString(text).Y),
-                Color.White * _opacity);
+                Color.White * Opacity);
             _spriteBatch.DrawString(_terminalFont, _promptText,
                 new Vector2(Rectangle.X + 2, Rectangle.Y + Rectangle.Height - (int)_terminalFont.MeasureString("A").Y),
-                Color.White * _opacity);
+                Color.White * Opacity);
             _textBox.Draw(_spriteBatch);
         }
 

@@ -69,7 +69,7 @@ namespace TerminalGame.UI.Elements.Modules
             _spriteBatch.GraphicsDevice.ScissorRectangle = Rectangle;
             ScissorDraw(gameTime);
             if (_hasHeader)
-                _header.Draw(_spriteBatch, _opacity);
+                _header.Draw(_spriteBatch, Opacity);
             _spriteBatch.End();
             _spriteBatch.GraphicsDevice.ScissorRectangle = currentRect;
         }

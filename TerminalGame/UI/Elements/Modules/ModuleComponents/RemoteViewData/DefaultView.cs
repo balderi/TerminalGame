@@ -11,19 +11,17 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents.RemoteViewData
         private Computer _computer;
         private string _text;
         private readonly SpriteFont _font;
-        private readonly float _opacity;
 
         public DefaultView(Computer computer)
         {
             _computer = computer;
             _text = SetString();
             _font = FontManager.GetFont("FontM");
-            _opacity = 1;
         }
 
-        public void Draw(SpriteBatch spriteBatch, Rectangle remoteViewRectangle)
+        public void Draw(SpriteBatch spriteBatch, Rectangle remoteViewRectangle, float opacity)
         {
-            spriteBatch.DrawString(_font, _text, new Vector2(remoteViewRectangle.X + 5, remoteViewRectangle.Y + 25), Color.White * _opacity);
+            spriteBatch.DrawString(_font, _text, new Vector2(remoteViewRectangle.X + 5, remoteViewRectangle.Y + 25), Color.White * opacity);
         }
 
         public void Update(GameTime gameTime)

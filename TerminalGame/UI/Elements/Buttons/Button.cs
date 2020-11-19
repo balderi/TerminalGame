@@ -16,7 +16,7 @@ namespace TerminalGame.UI.Elements.Buttons
         public Button(Game game, string text, Point location, Point size, bool fadeIn = true) :
             base(game, location, size, fadeIn: fadeIn)
         {
-            BorderColor = Color.White * _opacity;
+            BorderColor = Color.White * Opacity;
             TEXT = text;
             _font = Utils.FontManager.GetFont("FontL");
             _buttonPressed = new ButtonPressedEventArgs();
@@ -38,39 +38,39 @@ namespace TerminalGame.UI.Elements.Buttons
                 return;
             if (Enabled)
             {
-                FontColor = Color.White * _opacity;
+                FontColor = Color.White * Opacity;
                 if (_mouseLeftDown)
                 {
-                    BackgroundColor = Color.Green * _opacity;
-                    BorderColor = Color.LimeGreen * _opacity;
+                    BackgroundColor = Color.Green * Opacity;
+                    BorderColor = Color.LimeGreen * Opacity;
                 }
                 else if (_isHovering)
                 {
-                    BackgroundColor = Color.DarkGray * _opacity;
-                    BorderColor = Color.Green * _opacity;
+                    BackgroundColor = Color.DarkGray * Opacity;
+                    BorderColor = Color.Green * Opacity;
                 }
                 else
                 {
-                    BackgroundColor = Color.Gray * _opacity;
-                    BorderColor = Color.LimeGreen * _opacity;
+                    BackgroundColor = Color.Gray * Opacity;
+                    BorderColor = Color.LimeGreen * Opacity;
                 }
             }
             else
             {
-                FontColor = Color.LightGray * _opacity;
-                BackgroundColor = Color.DimGray * _opacity;
-                BorderColor = Color.DarkOliveGreen * _opacity;
+                FontColor = Color.LightGray * Opacity;
+                BackgroundColor = Color.DimGray * Opacity;
+                BorderColor = Color.DarkOliveGreen * Opacity;
             }
 
             _spriteBatch.Begin();
             _spriteBatch.Draw(Globals.Utils.DummyTexture(), Rectangle,
-                              BackgroundColor * _opacity);
+                              BackgroundColor * Opacity);
 
             _spriteBatch.DrawString(_font, TEXT, new Vector2(Rectangle.Center.X - _font.MeasureString(TEXT).X / 2,
                 Rectangle.Center.Y - _font.MeasureString(TEXT).Y / 2), FontColor);
 
             Globals.Utils.DrawOuterBorder(_spriteBatch, Rectangle, Globals.Utils.DummyTexture(), 1,
-                                          BorderColor * _opacity);
+                                          BorderColor * Opacity);
             _spriteBatch.End();
         }
 

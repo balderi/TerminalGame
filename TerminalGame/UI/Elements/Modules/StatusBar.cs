@@ -63,25 +63,28 @@ namespace TerminalGame.UI.Elements.Modules
         public override void ScissorDraw(GameTime gameTime)
         {
             BackgroundColor = _themeManager.CurrentTheme.ModuleHeaderBackgroundColor;
-            _spriteBatch.DrawString(_titleFont, GameClock.GameTime.ToString("yyyy/MM/dd"), new Vector2(Rectangle.X + 5, Rectangle.Y + 5), FontColor * _opacity);
-            _spriteBatch.DrawString(_titleFont, GameClock.GameTime.ToString("HH:mm"), new Vector2(Rectangle.X + 5, Rectangle.Y + 25), FontColor * _opacity);
+            _spriteBatch.DrawString(_titleFont, GameClock.GameTime.ToString("yyyy/MM/dd"), new Vector2(Rectangle.X + 5, Rectangle.Y + 5), FontColor * Opacity);
+            _spriteBatch.DrawString(_titleFont, GameClock.GameTime.ToString("HH:mm"), new Vector2(Rectangle.X + 5, Rectangle.Y + 25), FontColor * Opacity);
             foreach (var b in _buttons)
                 b.Draw(gameTime);
             _spriteBatch.DrawString(_playerDetailFont, _connectionInfo, new Vector2(_buttons[4].Rectangle.X + _buttons[4].Rectangle.Width + 10,
-                    5), _themeManager.CurrentTheme.ModuleHeaderFontColor);
+                    5), _themeManager.CurrentTheme.ModuleHeaderFontColor * Opacity);
             _spriteBatch.DrawString(_playerDetailFont, _buildNumber,
                 new Vector2(Rectangle.Right - _playerDetailFont.MeasureString(_buildNumber).Length() - 5, 5),
-                _themeManager.CurrentTheme.ModuleHeaderFontColor);
+                _themeManager.CurrentTheme.ModuleHeaderFontColor * Opacity);
             _spriteBatch.DrawString(_playerDetailFont, _playerDeets,
                 new Vector2(Rectangle.Right - _playerDetailFont.MeasureString(_buildNumber).Length() - 5 - _playerDetailFont.MeasureString(_playerDeets).Length() - 20, 5),
-                _themeManager.CurrentTheme.ModuleHeaderFontColor);
+                _themeManager.CurrentTheme.ModuleHeaderFontColor * Opacity);
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
             foreach (var b in _buttons)
+            {
+                b.Opacity = Opacity;
                 b.Update(gameTime);
+            }
             _connectionInfo = World.World.GetInstance().Player.ConnectedComp.GetPublicName() + "\n" + World.World.GetInstance().Player.ConnectedComp.IP;
         }
 

@@ -11,7 +11,7 @@ namespace TerminalGame.UI.Elements
     {
         #region fields
         protected SpriteBatch _spriteBatch;
-        protected float _opacity, _fadeTarget;
+        protected float _fadeTarget;
         protected bool _fadingUp, _fadingDown, _isHovering, _newMouseHoverState, _previousMouseHoverState, _mouseLeftDown, _mouseRightDown, _fadeIn;
         protected MouseState _previousMouseState, _currentMouseState;
         protected readonly MouseEventArgs _hover, _leftClick, _rightClick, _enter, _leave, _leftDn, _leftUp, _rightDn, _rightUp;
@@ -28,6 +28,7 @@ namespace TerminalGame.UI.Elements
         public Color BackgroundColor { get; set; }
         public Color BorderColor { get; set; }
         public Color FontColor { get; set; }
+        public float Opacity { get; set; }
         public bool HasBorder { get; protected set; }
         #endregion
 
@@ -62,12 +63,12 @@ namespace TerminalGame.UI.Elements
             _fadeTarget = 1;
             if (_fadeIn)
             {
-                _opacity = 0;
+                Opacity = 0;
                 _fadingUp = true;
             }
             else
             {
-                _opacity = 1;
+                Opacity = 1;
                 _fadingUp = false;
             }
             _fadingDown = false;
@@ -175,11 +176,11 @@ namespace TerminalGame.UI.Elements
                 return;
 
             _spriteBatch.Draw(Globals.Utils.DummyTexture(), Rectangle,
-                              BackgroundColor * _opacity);
+                              BackgroundColor * Opacity);
 
             if (HasBorder)
                 Globals.Utils.DrawOuterBorder(_spriteBatch, Rectangle, Globals.Utils.DummyTexture(), 1,
-                                          _themeManager.CurrentTheme.ModuleOutlineColor * _opacity);
+                                          _themeManager.CurrentTheme.ModuleOutlineColor * Opacity);
         }
 
         /// <summary>
@@ -229,16 +230,16 @@ namespace TerminalGame.UI.Elements
         /// <param name="delta">Fade speed</param>
         private void FadeUp(float target, float delta = 0.01f)
         {
-            _opacity += delta;
-            if (_opacity > 1.0f)
+            Opacity += delta;
+            if (Opacity > 1.0f)
             {
-                _opacity = 1.0f;
+                Opacity = 1.0f;
                 _fadingUp = false;
                 return;
             }
-            if (_opacity > target)
+            if (Opacity > target)
             {
-                _opacity = target;
+                Opacity = target;
                 _fadingUp = false;
                 return;
             }
@@ -251,16 +252,16 @@ namespace TerminalGame.UI.Elements
         /// <param name="delta">Fade speed</param>
         private void FadeDown(float target, float delta = 0.01f)
         {
-            _opacity -= delta;
-            if (_opacity < 0.0f)
+            Opacity -= delta;
+            if (Opacity < 0.0f)
             {
-                _opacity = 0.0f;
+                Opacity = 0.0f;
                 _fadingDown = false;
                 return;
             }
-            if (_opacity < target)
+            if (Opacity < target)
             {
-                _opacity = target;
+                Opacity = target;
                 _fadingDown = false;
                 return;
             }

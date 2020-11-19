@@ -63,26 +63,26 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
             _hoverSpinnerColor = _themeManager.CurrentTheme.NetworkMapHoverSpinnerColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1.5) + 1) * 0.5f + 0.2f);
             _missionObjectiveSpinnerColor = _themeManager.CurrentTheme.NetworkMapMissionObjectiveSpinnerColor * ((float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds * 1.5) + 1) * 0.5f + 0.2f);
 
-            _currentColor = _themeManager.CurrentTheme.NetworkMapNodeColor * _opacity;
+            _currentColor = _themeManager.CurrentTheme.NetworkMapNodeColor * Opacity;
 
             if (Computer == World.World.GetInstance().Player.PlayerComp)
             {
-                _currentColor = _themeManager.CurrentTheme.NetworkMapHomeSpinnerColor * _opacity;
+                _currentColor = _themeManager.CurrentTheme.NetworkMapHomeSpinnerColor * Opacity;
             }
             if (Computer.IsMissionObjective)
             {
-                _currentColor = _themeManager.CurrentTheme.NetworkMapMissionObjectiveSpinnerColor * _opacity;
+                _currentColor = _themeManager.CurrentTheme.NetworkMapMissionObjectiveSpinnerColor * Opacity;
             }
             if (Computer == World.World.GetInstance().Player.ConnectedComp)
             {
                 if (_nMap.ConnectedNode != this)
                     _nMap.ConnectedNode = this;
-                _currentColor = _themeManager.CurrentTheme.NetworkMapConnectedSpinnerColor * _opacity;
+                _currentColor = _themeManager.CurrentTheme.NetworkMapConnectedSpinnerColor * Opacity;
 
             }
             if (_isHovering && _nMap.HoverNode == this)
             {
-                _currentColor = _themeManager.CurrentTheme.NetworkMapHoverSpinnerColor * _opacity;
+                _currentColor = _themeManager.CurrentTheme.NetworkMapHoverSpinnerColor * Opacity;
 
             }
 
@@ -109,25 +109,25 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
             base.Draw(gameTime);
             if (Computer == World.World.GetInstance().Player.PlayerComp)
             {
-                _spriteBatch.Draw(playerSpinner, new Rectangle(new Point(Rectangle.Location.X + (Rectangle.Width / 2), Rectangle.Location.Y + (Rectangle.Height / 2)), _spinnerS), null, _playerSpinnerColor, _rotationCW, new Vector2(playerSpinner.Width / 2, playerSpinner.Height / 2), SpriteEffects.None, 0);
+                _spriteBatch.Draw(playerSpinner, new Rectangle(new Point(Rectangle.Location.X + (Rectangle.Width / 2), Rectangle.Location.Y + (Rectangle.Height / 2)), _spinnerS), null, _playerSpinnerColor * Opacity, _rotationCW, new Vector2(playerSpinner.Width / 2, playerSpinner.Height / 2), SpriteEffects.None, 0);
             }
             if (Computer.IsMissionObjective)
             {
-                _spriteBatch.Draw(missionSpinner, new Rectangle(new Point(Rectangle.Location.X + (Rectangle.Width / 2), Rectangle.Location.Y + (Rectangle.Height / 2)), _spinnerS), null, _missionObjectiveSpinnerColor, _rotationCW, new Vector2(hoverSpinner.Width / 2, hoverSpinner.Height / 2), SpriteEffects.None, 0);
+                _spriteBatch.Draw(missionSpinner, new Rectangle(new Point(Rectangle.Location.X + (Rectangle.Width / 2), Rectangle.Location.Y + (Rectangle.Height / 2)), _spinnerS), null, _missionObjectiveSpinnerColor * Opacity, _rotationCW, new Vector2(hoverSpinner.Width / 2, hoverSpinner.Height / 2), SpriteEffects.None, 0);
             }
             if (Computer == World.World.GetInstance().Player.ConnectedComp)
             {
                 if (_nMap.ConnectedNode != this)
                     _nMap.ConnectedNode = this;
-                _spriteBatch.Draw(connectedSpinner, new Rectangle(new Point(Rectangle.Location.X + (Rectangle.Width / 2), Rectangle.Location.Y + (Rectangle.Height / 2)), _spinnerN), null, _connectedSpinnerColor, _rotationCCW, new Vector2(connectedSpinner.Width / 2, connectedSpinner.Height / 2), SpriteEffects.None, 0);
+                _spriteBatch.Draw(connectedSpinner, new Rectangle(new Point(Rectangle.Location.X + (Rectangle.Width / 2), Rectangle.Location.Y + (Rectangle.Height / 2)), _spinnerN), null, _connectedSpinnerColor * Opacity, _rotationCCW, new Vector2(connectedSpinner.Width / 2, connectedSpinner.Height / 2), SpriteEffects.None, 0);
 
             }
             if (_isHovering && _nMap.HoverNode == this)
             {
-                _spriteBatch.Draw(hoverSpinner, new Rectangle(new Point(Rectangle.Location.X + (Rectangle.Width / 2), Rectangle.Location.Y + (Rectangle.Height / 2)), _spinnerL), null, _hoverSpinnerColor, _rotationCW, new Vector2(hoverSpinner.Width / 2, hoverSpinner.Height / 2), SpriteEffects.None, 0);
+                _spriteBatch.Draw(hoverSpinner, new Rectangle(new Point(Rectangle.Location.X + (Rectangle.Width / 2), Rectangle.Location.Y + (Rectangle.Height / 2)), _spinnerL), null, _hoverSpinnerColor * Opacity, _rotationCW, new Vector2(hoverSpinner.Width / 2, hoverSpinner.Height / 2), SpriteEffects.None, 0);
                 InfoBox.Draw(gameTime);
             }
-            _spriteBatch.Draw(_texture, Rectangle, _currentColor);
+            _spriteBatch.Draw(_texture, Rectangle, _currentColor * Opacity);
             _spriteBatch.End();
         }
 
@@ -142,9 +142,9 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
             if (_nMap.HoverNode != this)
                 return;
             if (Computer == World.World.GetInstance().Player.PlayerComp)
-                Game.Terminal.RunCommand("disconnect");
+                Game.Terminal.RunAndPrintCommand("disconnect");
             else
-                Game.Terminal.RunCommand("connect " + Computer.IP);
+                Game.Terminal.RunAndPrintCommand("connect " + Computer.IP);
         }
 
         protected override void OnMouseEnter(object sender, MouseEventArgs e)
@@ -168,7 +168,7 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents
             base.OnLeftButtonDown(sender, e);
             if (_nMap.HoverNode != this)
                 return;
-            _currentColor = Color.Red * _opacity;
+            _currentColor = Color.Red * Opacity;
         }
     }
 }

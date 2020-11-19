@@ -7,6 +7,6 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents.RemoteViewData
     {
         public void Update(GameTime gameTime);
 
-        public void Draw(SpriteBatch spriteBatch, Rectangle remoteViewRectangle);
+        public void Draw(SpriteBatch spriteBatch, Rectangle remoteViewRectangle, float opacity);
     }
 }
