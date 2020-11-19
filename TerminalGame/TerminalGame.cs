@@ -62,7 +62,7 @@ namespace TerminalGame
         protected override void Initialize()
         {
             base.Initialize();
-
+            
             CurrentGameSpeed = GameSpeed.Paused;
 
             _oldState = Keyboard.GetState();

@@ -60,6 +60,8 @@ namespace TerminalGame.UI.Elements.Modules
             _textBox.DnArrow += Down_Pressed;
             _textBox.TabDown += Tab_Pressed;
 
+            UpdateTextBox();
+
             _maxChars = (int)(_terminalOutputArea.Width / _terminalFont.MeasureString("A").X);
             _maxCharsP = (int)((_terminalOutputArea.Width - _promptWidth) / _terminalFont.MeasureString("A").X);
 
@@ -120,7 +122,6 @@ namespace TerminalGame.UI.Elements.Modules
 
         private void Enter_Pressed(object sender, KeyEventArgs e)
         {
-            Console.WriteLine("Enter pressed");
             _histIndex = -1;
             if (_history[0] != _textBox.Text.String)
             {
