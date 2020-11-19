@@ -11,6 +11,7 @@ using TerminalGame.Time;
 using TerminalGame.UI.Elements.Modules;
 using TerminalGame.UI.Themes;
 using TerminalGame.Utils;
+using TerminalGame.Utils.TextHandler;
 
 namespace TerminalGame
 {
@@ -46,7 +47,7 @@ namespace TerminalGame
             Title = Assembly.GetEntryAssembly().GetName().Name;
             Version = $"v{version.Major}.{version.Minor}a";
             TitleAndVersion = $"{Title} {Version}";
-            BuildNumber = File.GetLastWriteTime(Assembly.GetExecutingAssembly().Location).ToString("yyyyMMdd").ToString();
+            BuildNumber = File.GetLastWriteTime(Assembly.GetExecutingAssembly().Location).ToString("yyyyMMdd");
             IsFixedTimeStep = true;
             IsGameRunning = false;
             _graphics.SynchronizeWithVerticalRetrace = true;
@@ -107,6 +108,8 @@ namespace TerminalGame
             _themeManager.AddTheme(test);
             _themeManager.ChangeTheme("test");
 
+            KeyboardInput.Initialize(this, 500f, 20);
+            
             Console.WriteLine("init done");
 
             Console.WriteLine(Companies.Generator.CompanyGenerator.Lengths);
@@ -157,6 +160,8 @@ namespace TerminalGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            KeyboardInput.Update();
+
             if (_oldState.IsKeyDown(Keys.M) && Keyboard.GetState().IsKeyUp(Keys.M) && Keyboard.GetState().IsKeyDown(Keys.LeftControl))
             {
                 MediaPlayer.IsMuted = !MediaPlayer.IsMuted;

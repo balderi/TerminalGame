@@ -4,9 +4,9 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents.RemoteViewData.Gener
 {
     public static class RemoteViewDataGenerator
     {
-        public static DefaultView GetDefaultViewData(Computer computer)
+        public static RemoteViewData GetDefaultViewData(Computer computer)
         {
-            return new DefaultView(computer);
+            return new RemoteViewData(computer);
         }
     }
 }

@@ -152,9 +152,8 @@ namespace TerminalGame.Screens
         private void NewGame_Clicked(ButtonPressedEventArgs e)
         {
             Console.WriteLine("New Game clicked");
-            Game.StartNewGame();
-            ScreenManager.GetInstance().AddScreen("gameLoading", new GameLoadingScreen(Game));
-            ScreenManager.GetInstance().ChangeScreenAndInit("gameLoading");
+            ScreenManager.GetInstance().AddScreen("newGame", new NewGameScreen(Game));
+            ScreenManager.GetInstance().ChangeScreenAndInit("newGame");
         }
 
         private void LoadGame_Clicked(ButtonPressedEventArgs e)

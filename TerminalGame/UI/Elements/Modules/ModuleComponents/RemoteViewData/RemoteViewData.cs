@@ -1,45 +1,47 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Text;
 using TerminalGame.Computers;
 using TerminalGame.Utils;
 
 namespace TerminalGame.UI.Elements.Modules.ModuleComponents.RemoteViewData
 {
-    public class DefaultView : IRemoteViewData
+    [DataContract]
+    public class RemoteViewData : IRemoteViewData
     {
-        private Computer _computer;
+        [DataMember]
+        public Computer Computer;
+
         private string _text;
         private readonly SpriteFont _font;
 
-        public DefaultView(Computer computer)
+        public RemoteViewData(Computer computer)
         {
-            _computer = computer;
+            Computer = computer;
             _text = SetString();
             _font = FontManager.GetFont("FontM");
         }
 
-        public void Draw(SpriteBatch spriteBatch, Rectangle remoteViewRectangle, float opacity)
+        public virtual void Draw(SpriteBatch spriteBatch, Rectangle remoteViewRectangle, float opacity)
         {
             spriteBatch.DrawString(_font, _text, new Vector2(remoteViewRectangle.X + 5, remoteViewRectangle.Y + 25), Color.White * opacity);
         }
 
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
-            if (_computer != World.World.GetInstance().Player.ConnectedComp)
-            {
-                _computer = World.World.GetInstance().Player.ConnectedComp;
-                _text = SetString();
-            }
+            //_text = SetString();
         }
 
         private string SetString()
         {
             try
             {
-                return $"Connected to:\n{_computer.Name.Replace("§¤§", "\n")}\nIP: {_computer.IP}\n" +
-                       $"Company: {_computer.Owner.Name}\nOwner:\n{_computer.Owner.Owner}\nAdmin:" +
-                       $"\n{_computer.Owner.Admin}";
+                return $"Connected to:\n{Computer.Name.Replace("§¤§", "\n")}\nIP: {Computer.IP}\n" +
+                       $"Company: {Computer.Owner.Name}\nOwner:\n{Computer.Owner.Owner}\nAdmin:" +
+                       $"\n{Computer.Owner.Admin}";
             }
             catch (Exception e)
             {
@@ -47,8 +49,8 @@ namespace TerminalGame.UI.Elements.Modules.ModuleComponents.RemoteViewData
                 //World.World.GetInstance().FixWorld();
                 //return SetString();
                 Console.WriteLine(e.Message + " - ignore this (localhost has no company).");
-                return $"Connected to: {_computer.Name.Replace("§¤§", "\n")}\n" +
-                       $"          IP: {_computer.IP}\n" +
+                return $"Connected to: {Computer.Name.Replace("§¤§", "\n")}\n" +
+                       $"          IP: {Computer.IP}\n" +
                         "     Company: ?\n" +
                         "       Owner: ?\n" +
                         "       Admin: ?\n";

@@ -23,7 +23,7 @@ namespace TerminalGame.World
         public DateTime CurrentGameTime { get; set; }
 
         [DataMember]
-        public Player Player { get; set; }
+        public Player Player { get { return Player.GetInstance(); } set { Player = value; } }
 
         /// <summary>
         /// A list of all people in the world.
@@ -90,8 +90,7 @@ namespace TerminalGame.World
             Game = game;
             GameClock.Initialize();
             CurrentGameTime = GameClock.GameTime;
-            Player = new Player();
-            Player.CreateNewPlayer("testPlayer", "abc123");
+            //Player.GetInstance().CreateNewPlayer("testPlayer", "abc123");
             Computers = new List<Computer>();
             People = new List<Person>();
             CompanyList = new List<Company>();
@@ -170,7 +169,7 @@ namespace TerminalGame.World
             PlayerComp.PlayerHasRoot = true;
             PlayerComp.AccessLevel = AccessLevel.Root;
 
-            Player.PlayerComp = PlayerComp;
+            Player.GetInstance().PlayerComp = PlayerComp;
 
             Console.WriteLine("Generated world in {0} seconds.", (DateTime.Now.Subtract(beginWorld).TotalSeconds).ToString("N4"));
         }
@@ -235,7 +234,7 @@ namespace TerminalGame.World
         public void Save()
         {
             Utils.IO.CheckAndCreateDirectory("Saves");
-            var fileName = Utils.IO.CheckSaveName(Player.Name);
+            var fileName = $"Saves/save_{Player.Name}.tgs";
             Console.WriteLine($"*** Writing to file {fileName}...");
             StreamWriter writer = new StreamWriter(fileName);
             JsonSerializer jsonSerializer = new JsonSerializer

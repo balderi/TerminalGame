@@ -84,7 +84,7 @@ namespace TerminalGame.Computers
         public List<User> Users { get; set; }
 
         [DataMember]
-        public IRemoteViewData ViewData { get; set; }
+        public RemoteViewData ViewData { get; set; }
 
         public TerminalGame Game { get; set; }
         #endregion

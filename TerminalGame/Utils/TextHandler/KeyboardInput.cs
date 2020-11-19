@@ -77,7 +77,14 @@ namespace TerminalGame.Utils.TextHandler
             timeUntilRepInMillis = timeUntilRepInMilliseconds;
             repsPerSec = repsPerSecond;
             filterSpecialCharacters = filterSpecialCharactersFromCharPressed;
-            game.Window.TextInput += TextEntered;
+            try
+            {
+                game.Window.TextInput -= TextEntered;
+            }
+            finally
+            {
+                game.Window.TextInput += TextEntered;
+            }
         }
 
         /// <summary>

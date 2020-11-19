@@ -176,7 +176,6 @@ namespace TerminalGame.UI.Elements.Modules
             Computer computer = World.World.GetInstance().Player.ConnectedComp;
             if (_computer != computer)
                 UpdateTextBox();
-            KeyboardInput.Update();
             _textBox.Renderer.Color = Color.White * Opacity;
             _textBox.Cursor.Color = Color.White * Opacity;
             _textBox.Cursor.Selection = Color.Gray * Opacity;

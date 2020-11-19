@@ -7,38 +7,38 @@ namespace TerminalGame
     [DataContract]
     public class Player
     {
-        [DataMember(Order = 0)]
+        [DataMember]
         public string Name { get; set; }
-        [DataMember(Order = 1)]
+        [DataMember]
         public string Password { get; set; }
-        [DataMember(Order = 2)]
+        [DataMember]
         public int Balance { get; set; }
-        [DataMember(Order = 3)]
+        [DataMember]
         public Computer PlayerComp { get; set; }
-        [DataMember(Order = 4)]
+        [DataMember]
         public Computer ConnectedComp { get; set; }
 
-        public Player()
-        {
+        //public Player()
+        //{
 
+        //}
+
+        private static Player _instance;
+
+        public static Player GetInstance()
+        {
+            if (_instance == null)
+                _instance = new Player();
+            return _instance;
         }
 
-        //private static Player _instance;
-
-        //public static Player GetInstance()
-        //{
-        //    if (_instance == null)
-        //        _instance = new Player();
-        //    return _instance;
-        //}
-
-        //private Player()
-        //{
-        //    //if (PlayerComp == null)
-        //    //    PlayerComp = World.World.GetInstance().Computers.Find(c => c.Name == "localhost");
-        //    //if (ConnectedComp == null)
-        //    //    PlayerComp = PlayerComp;
-        //}
+        private Player()
+        {
+            //if (PlayerComp == null)
+            //    PlayerComp = World.World.GetInstance().Computers.Find(c => c.Name == "localhost");
+            //if (ConnectedComp == null)
+            //    PlayerComp = PlayerComp;
+        }
 
         public void CreateNewPlayer(string name, string password, int balance = 1000)
         {
